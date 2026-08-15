@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>수영 기록 관리표 - 2026-01-01</title>
+  <meta name="description" content="수영 종목별 기록(핀접영, 핀자유, 자유형, 배영, 평영, 접영) 관리 및 편집 시스템">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-left">
+        <div class="header-badge">GMDC SWIM CLUB</div>
+        <h1>수영 기록 관리표</h1>
+        <span class="header-date" id="tableDateBadge">기준일: 2026-01-01</span>
+      </div>
+      <div class="header-actions">
+        <button id="btnToggleSticky" class="btn btn-sticky active" title="스크롤 시 상단 조합 패널 1, 2, 3 고정 토글">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="17" x2="12" y2="22"></line><path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V6h1a1 1 0 0 0 0-2H8a1 1 0 0 0 0 2h1v4.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24Z"></path></svg>
+          <span id="stickyBtnLabel">조합패널 고정 ON</span>
+        </button>
+        <button id="btnCopyTsv" class="btn btn-secondary" title="클립보드에 복사하여 엑셀에 바로 붙여넣을 수 있습니다.">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          엑셀 복사
+        </button>
+        <button id="btnExportCsv" class="btn btn-secondary" title="CSV 파일로 다운로드합니다.">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          CSV 내보내기
+        </button>
+        <button id="btnResetData" class="btn btn-danger" title="초기 데이터로 되돌립니다.">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+          초기화
+        </button>
+      </div>
+    </header>
+
+    <!-- Relay Optimal Combination Panels -->
+    <section class="combo-grid is-sticky" id="comboGrid">
+      <!-- Combo 1: 핀계영 -->
+      <div class="combo-card" id="comboFinCard">
+        <div class="combo-header">
+          <div class="combo-title-area">
+            <span class="combo-badge badge-fin">조합 1</span>
+            <h2 class="combo-title">핀계영 (혼성)</h2>
+          </div>
+          <span class="combo-condition">조건: 도합나이 240세↑ · 남3+여3 · 핀자유만</span>
+        </div>
+        <div class="combo-metrics">
+          <div class="metric-item">
+            <span class="metric-label">도합 기록</span>
+            <span class="metric-value" id="combo1Time">-</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-label">도합 나이</span>
+            <span class="metric-value" id="combo1Age">-</span>
+          </div>
+        </div>
+        <div class="combo-members-section">
+          <div class="members-title">선발 멤버 (6명)</div>
+          <div class="combo-members-list" id="combo1Members">
+            <span class="combo-empty-msg">기록 분석 중...</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Combo 2: 남계영 -->
+      <div class="combo-card" id="comboMaleCard">
+        <div class="combo-header">
+          <div class="combo-title-area">
+            <span class="combo-badge badge-male">조합 2</span>
+            <h2 class="combo-title">남계영 (배·평·접·자)</h2>
+          </div>
+          <span class="combo-condition">조건: 도합나이 160세↑ · 남4 (배/평/접/자 각 1명)</span>
+        </div>
+        <div class="combo-metrics">
+          <div class="metric-item">
+            <span class="metric-label">도합 기록</span>
+            <span class="metric-value" id="combo2Time">-</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-label">도합 나이</span>
+            <span class="metric-value" id="combo2Age">-</span>
+          </div>
+        </div>
+        <div class="combo-members-section">
+          <div class="members-title">종목별 선발 멤버 (4명)</div>
+          <div class="combo-members-list" id="combo2Members">
+            <span class="combo-empty-msg">기록 분석 중...</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Combo 3: 여계영 -->
+      <div class="combo-card" id="comboFemaleCard">
+        <div class="combo-header">
+          <div class="combo-title-area">
+            <span class="combo-badge badge-female">조합 3</span>
+            <h2 class="combo-title">여계영 (배·평·접·자)</h2>
+          </div>
+          <span class="combo-condition">조건: 도합나이 160세↑ · 여4 (배/평/접/자 각 1명)</span>
+        </div>
+        <div class="combo-metrics">
+          <div class="metric-item">
+            <span class="metric-label">도합 기록</span>
+            <span class="metric-value" id="combo3Time">-</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-label">도합 나이</span>
+            <span class="metric-value" id="combo3Age">-</span>
+          </div>
+        </div>
+        <div class="combo-members-section">
+          <div class="members-title">종목별 선발 멤버 (4명)</div>
+          <div class="combo-members-list" id="combo3Members">
+            <span class="combo-empty-msg">기록 분석 중...</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Control Toolbar -->
+    <section class="toolbar">
+      <div class="toolbar-left">
+        <div class="search-box">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="searchInput" placeholder="이름 또는 나이 검색..." autocomplete="off">
+        </div>
+        <div class="filter-group">
+          <button class="filter-btn active" data-filter="all">전체</button>
+          <button class="filter-btn" data-filter="남">남성</button>
+          <button class="filter-btn" data-filter="여">여성</button>
+          <button class="filter-btn" data-filter="recorded">기록 보유자</button>
+        </div>
+      </div>
+      <div class="toolbar-right">
+        <button id="btnAddRow" class="btn btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          회원 추가
+        </button>
+      </div>
+    </section>
+
+    <!-- Guide / Legend Bar -->
+    <div class="notice-bar">
+      <div class="notice-legend">
+        <span class="legend-item"><span class="legend-dot dot-blue"></span><strong>작년기록 (파란색):</strong> 기존 등록 데이터</span>
+        <span class="legend-item"><span class="legend-dot dot-red"></span><strong>희망기록 (붉은색):</strong> 새로 입력/수정한 데이터</span>
+        <span class="legend-tip">※ 기록 삭제 시 작년기록이 존재하면 자동으로 작년기록으로 원복됩니다.</span>
+      </div>
+      <div class="save-status" id="saveStatus">
+        <span class="status-dot"></span>
+        <span id="saveStatusText">자동 저장 활성화</span>
+      </div>
+    </div>
+
+    <!-- Table Container -->
+    <main class="table-card">
+      <div class="table-responsive" id="tableContainer">
+        <table class="record-table" id="recordTable">
+          <thead>
+            <tr>
+              <th class="col-no" data-sort="no">번호</th>
+              <th class="col-age" data-sort="age">2026-01-01</th>
+              <th class="col-gender" data-sort="gender">성별</th>
+              <th class="col-name" data-sort="name">이름</th>
+              <th class="col-record" data-sort="finFly">핀접영</th>
+              <th class="col-record" data-sort="finFree">핀자유</th>
+              <th class="col-record" data-sort="free">자유형</th>
+              <th class="col-record" data-sort="back">배영</th>
+              <th class="col-record" data-sort="breast">평영</th>
+              <th class="col-record" data-sort="fly">접영</th>
+              <th class="col-actions">관리</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <!-- Rendered by JavaScript -->
+          </tbody>
+        </table>
+      </div>
+    </main>
+
+    <!-- Footer Information -->
+    <footer class="app-footer">
+      <p>💡 Tip: 엑셀에서 복사한 데이터를 표에 직접 붙여넣기(Ctrl+V)하거나 [엑셀 복사] 버튼으로 스프레드시트로 전송할 수 있습니다.</p>
+    </footer>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast"></div>
+
+  <!-- Deadline Notice Modal Popup -->
+  <div id="noticeModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          마감 일정 안내
+        </div>
+        <button id="btnModalCloseX" class="modal-close-btn" title="닫기" aria-label="닫기">&times;</button>
+      </div>
+      <div class="modal-body">
+        <h3 class="modal-title" id="modalTitle">"17일(화) 6:00PM까지 자유롭게 수정해주세요"</h3>
+        <p class="modal-desc">이후에는 문서작성 시간을 확보하기 위해, 마감하겠습니다.</p>
+        <div class="modal-tip-box">
+          💡 입력하신 모든 기록(희망기록)은 실시간으로 클라우드에 자동 저장되며 상단 계영 최적 조합에 즉시 반영됩니다.
+        </div>
+      </div>
+      <div class="modal-footer">
+        <label class="modal-checkbox-label">
+          <input type="checkbox" id="chkHideToday" />
+          <span>오늘하루 보이지 않기</span>
+        </label>
+        <button id="btnModalConfirm" class="btn btn-primary">확인</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
