@@ -146,12 +146,9 @@ const searchInput = document.getElementById('searchInput');
 const filterBtns = document.querySelectorAll('.filter-btn');
 const btnAddRow = document.getElementById('btnAddRow');
 const btnExportCsv = document.getElementById('btnExportCsv');
-const btnCopyTsv = document.getElementById('btnCopyTsv');
 const toastEl = document.getElementById('toast');
 const saveStatusText = document.getElementById('saveStatusText');
-const btnToggleSticky = document.getElementById('btnToggleSticky');
 const comboGrid = document.getElementById('comboGrid');
-const stickyBtnLabel = document.getElementById('stickyBtnLabel');
 
 // Events View DOM (Side-by-Side Matrices & List)
 const maleMatrixBody = document.getElementById('maleMatrixBody');
@@ -168,19 +165,6 @@ const eventsGroupSelect = document.getElementById('eventsGroupSelect');
 const eventsTableBody = document.getElementById('eventsTableBody');
 const eventsFilteredCount = document.getElementById('eventsFilteredCount');
 
-// History DOM & State
-let historyList = [];
-let historyFilter = 'all';
-
-const btnOpenHistory = document.getElementById('btnOpenHistory');
-const historyModal = document.getElementById('historyModal');
-const btnHistoryCloseX = document.getElementById('btnHistoryCloseX');
-const btnHistoryClose = document.getElementById('btnHistoryClose');
-const btnRefreshHistory = document.getElementById('btnRefreshHistory');
-const historyCountBadge = document.getElementById('historyCountBadge');
-const historyListContainer = document.getElementById('historyListContainer');
-const historyFilterBtns = document.querySelectorAll('.history-filter-btn');
-
 // Init application
 function init() {
   initStickyPreference();
@@ -192,7 +176,6 @@ function init() {
   handleUrlRouting();
   renderAll();
   initFirebaseSync();
-  initHistoryListener();
 }
 
 function initRecordsViewMode() {
@@ -268,13 +251,7 @@ async function logChangeHistory(type, swimmerName, field, fieldName, oldVal, new
     device: navigator.userAgent.includes('Mobile') ? '모바일' : 'PC'
   };
 
-  // Local update
-  historyList.unshift(logData);
-  if (historyList.length > 50) historyList.pop();
-  updateHistoryBadge();
-  renderHistoryList();
-
-  // Save to Firestore
+  // Save directly to Firestore for server history reference
   if (db) {
     try {
       const colRef = collection(db, HISTORY_COL_NAME);
@@ -283,83 +260,6 @@ async function logChangeHistory(type, swimmerName, field, fieldName, oldVal, new
       console.error('Firestore 히스토리 저장 오류:', err);
     }
   }
-}
-
-// Real-time Firestore History Listener
-function initHistoryListener() {
-  if (!db) return;
-  try {
-    const colRef = collection(db, HISTORY_COL_NAME);
-    const q = query(colRef, orderBy("timestamp", "desc"), limit(50));
-    onSnapshot(q, (snapshot) => {
-      const list = [];
-      snapshot.forEach(docSnap => {
-        list.push({ id: docSnap.id, ...docSnap.data() });
-      });
-      if (list.length > 0) {
-        historyList = list;
-        updateHistoryBadge();
-        renderHistoryList();
-      }
-    }, (err) => {
-      console.warn('History onSnapshot warning:', err);
-    });
-  } catch (e) {
-    console.error('initHistoryListener error:', e);
-  }
-}
-
-function updateHistoryBadge() {
-  if (historyCountBadge) {
-    historyCountBadge.textContent = historyList.length;
-    historyCountBadge.style.display = historyList.length > 0 ? 'inline-block' : 'none';
-  }
-}
-
-function renderHistoryList() {
-  if (!historyListContainer) return;
-
-  let filtered = [...historyList];
-  if (historyFilter !== 'all') {
-    if (historyFilter === 'MEMBER') {
-      filtered = filtered.filter(h => h.type === 'MEMBER' || h.type === 'DELETE');
-    } else {
-      filtered = filtered.filter(h => h.type === historyFilter);
-    }
-  }
-
-  if (filtered.length === 0) {
-    historyListContainer.innerHTML = `
-      <div class="history-empty">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--text-subtle);"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-        <span>기록된 변경 히스토리가 없습니다.</span>
-      </div>
-    `;
-    return;
-  }
-
-  historyListContainer.innerHTML = filtered.map(item => {
-    return `
-      <div class="history-item type-${item.type}">
-        <div class="history-item-top">
-          <div class="history-item-meta">
-            <span class="history-type-chip chip-${item.type}">${escapeHtml(item.typeLabel || '수정')}</span>
-            <span class="history-swimmer-name">${escapeHtml(item.swimmerName)}</span>
-            <span style="font-size:11px; color:#64748b;">(${escapeHtml(item.device || 'PC')})</span>
-          </div>
-          <span class="history-time-stamp">${escapeHtml(item.timeFormatted || new Date(item.timestamp).toLocaleTimeString())}</span>
-        </div>
-        <div class="history-change-detail">
-          ${item.fieldName ? `<strong>${escapeHtml(item.fieldName)}:</strong>` : ''}
-          ${item.prevVal || item.newVal ? `
-            <span class="val-prev">${escapeHtml(item.prevVal || '(빈값)')}</span>
-            <span class="val-arrow">➔</span>
-            <span class="val-new">${escapeHtml(item.newVal || '(삭제)')}</span>
-          ` : `<span>${escapeHtml(item.message || '')}</span>`}
-        </div>
-      </div>
-    `;
-  }).join('');
 }
 
 function renderAll() {
@@ -610,13 +510,11 @@ function applyStickyState(pinned) {
   if (comboGrid) {
     comboGrid.classList.toggle('is-sticky', pinned);
   }
-  if (btnToggleSticky) {
-    btnToggleSticky.classList.toggle('active', pinned);
-    btnToggleSticky.title = pinned ? '스크롤 시 상단 조합 패널 고정 해제' : '스크롤 시 상단 조합 패널 고정 활성화';
-  }
-  if (stickyBtnLabel) {
-    stickyBtnLabel.textContent = pinned ? '조합패널 고정 ON' : '조합패널 고정 OFF';
-  }
+  const pinBtns = document.querySelectorAll('.btn-panel-pin');
+  pinBtns.forEach(btn => {
+    btn.classList.toggle('active', pinned);
+    btn.title = pinned ? '조합 패널 고정 해제 (클릭 시 고정 해제)' : '조합 패널 고정 활성화 (클릭 시 상단 고정)';
+  });
 }
 
 // Filter and Sort Data for Records View
@@ -1210,35 +1108,6 @@ function bindEvents() {
   if (btnToggleRecords) btnToggleRecords.addEventListener('click', () => switchView('records'));
   if (btnToggleEvents) btnToggleEvents.addEventListener('click', () => switchView('events'));
 
-  // History Modal Open / Close / Filter
-  if (btnOpenHistory) {
-    btnOpenHistory.addEventListener('click', () => {
-      if (historyModal) historyModal.classList.add('show');
-      renderHistoryList();
-    });
-  }
-  if (btnHistoryCloseX) btnHistoryCloseX.addEventListener('click', () => historyModal && historyModal.classList.remove('show'));
-  if (btnHistoryClose) btnHistoryClose.addEventListener('click', () => historyModal && historyModal.classList.remove('show'));
-  if (historyModal) {
-    historyModal.addEventListener('click', (e) => {
-      if (e.target === historyModal) historyModal.classList.remove('show');
-    });
-  }
-  if (btnRefreshHistory) {
-    btnRefreshHistory.addEventListener('click', () => {
-      renderHistoryList();
-      showToast('🔄 히스토리 목록이 갱신되었습니다.');
-    });
-  }
-  historyFilterBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      historyFilterBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      historyFilter = btn.dataset.historyFilter;
-      renderHistoryList();
-    });
-  });
-
   // Records View Mode (간단히 vs 자세히)
   if (btnRecordsModeSimple) {
     btnRecordsModeSimple.addEventListener('click', () => {
@@ -1541,21 +1410,20 @@ function bindEvents() {
     showToast('새 회원이 추가되었습니다.');
   });
 
-  // Toggle Sticky Panel Button
-  if (btnToggleSticky) {
-    btnToggleSticky.addEventListener('click', () => {
+  // Panel Pin Buttons (Synchronized across all panels)
+  document.querySelectorAll('.btn-panel-pin').forEach(btn => {
+    btn.addEventListener('click', () => {
       isStickyPinned = !isStickyPinned;
       applyStickyState(isStickyPinned);
       localStorage.setItem(STICKY_STORAGE_KEY, isStickyPinned ? '1' : '0');
       showToast(isStickyPinned ? '📌 상단 조합 패널이 고정되었습니다.' : '🔓 상단 조합 패널 고정이 해제되었습니다.');
     });
+  });
+
+  // Export CSV Button (Save Icon)
+  if (btnExportCsv) {
+    btnExportCsv.addEventListener('click', exportToCsv);
   }
-
-  // Export CSV Button
-  btnExportCsv.addEventListener('click', exportToCsv);
-
-  // Copy TSV Button for Excel
-  btnCopyTsv.addEventListener('click', copyToClipboardTsv);
 
   // Column Header Sorting
   document.querySelectorAll('.record-table th[data-sort]').forEach(th => {
