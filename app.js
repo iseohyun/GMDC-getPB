@@ -119,7 +119,6 @@ let sortColumn = null;
 let sortDirection = 'asc';
 
 // Events View State
-let matrixGenderTab = '남'; // '남' | '여' | 'all'
 let eventsSearchQuery = '';
 let eventsGenderFilter = 'all';
 let eventsGroupFilter = 'all';
@@ -127,13 +126,11 @@ let eventsGroupFilter = 'all';
 let isStickyPinned = true;
 let saveTimeout = null;
 
-// DOM Elements
-const tabNavRecords = document.getElementById('tabNavRecords');
-const tabNavEvents = document.getElementById('tabNavEvents');
+// Header Toggle Buttons & View Containers
+const btnToggleRecords = document.getElementById('btnToggleRecords');
+const btnToggleEvents = document.getElementById('btnToggleEvents');
 const viewRecords = document.getElementById('viewRecords');
 const viewEvents = document.getElementById('viewEvents');
-const btnJumpToEvents = document.getElementById('btnJumpToEvents');
-const btnJumpToRecords = document.getElementById('btnJumpToRecords');
 
 // Records View DOM
 const tableBody = document.getElementById('tableBody');
@@ -148,10 +145,12 @@ const btnToggleSticky = document.getElementById('btnToggleSticky');
 const comboGrid = document.getElementById('comboGrid');
 const stickyBtnLabel = document.getElementById('stickyBtnLabel');
 
-// Events View DOM
-const summaryMatrixBody = document.getElementById('summaryMatrixBody');
-const summaryMatrixFoot = document.getElementById('summaryMatrixFoot');
-const matrixGenderTabs = document.querySelectorAll('.matrix-tab-btn');
+// Events View DOM (Side-by-Side Matrices)
+const maleMatrixBody = document.getElementById('maleMatrixBody');
+const maleMatrixFoot = document.getElementById('maleMatrixFoot');
+const femaleMatrixBody = document.getElementById('femaleMatrixBody');
+const femaleMatrixFoot = document.getElementById('femaleMatrixFoot');
+
 const eventsSearchInput = document.getElementById('eventsSearchInput');
 const eventsFilterBtns = document.querySelectorAll('.events-filter-btn');
 const eventsGroupSelect = document.getElementById('eventsGroupSelect');
@@ -172,7 +171,7 @@ function init() {
 function renderAll() {
   renderTable();
   updateStats();
-  renderSummaryMatrix();
+  renderSummaryMatrices();
   renderEventsTable();
 }
 
@@ -182,7 +181,6 @@ function loadLocalData() {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
       const parsed = JSON.parse(saved);
-      // Merge with default records to ensure all fields (group, birthId, event1, event2) exist
       records = mergeWithDefaultData(parsed);
     } else {
       records = JSON.parse(JSON.stringify(DEFAULT_RECORDS));
@@ -248,7 +246,7 @@ function initFirebaseSync() {
             renderAll();
           } else {
             updateStats();
-            renderSummaryMatrix();
+            renderSummaryMatrices();
           }
         }
       }
@@ -331,17 +329,17 @@ function switchView(viewName) {
   window.location.hash = viewName;
 
   if (viewName === 'events') {
-    tabNavRecords.classList.remove('active');
-    tabNavEvents.classList.add('active');
-    viewRecords.classList.remove('active');
-    viewEvents.classList.add('active');
-    renderSummaryMatrix();
+    if (btnToggleRecords) btnToggleRecords.classList.remove('active');
+    if (btnToggleEvents) btnToggleEvents.classList.add('active');
+    if (viewRecords) viewRecords.classList.remove('active');
+    if (viewEvents) viewEvents.classList.add('active');
+    renderSummaryMatrices();
     renderEventsTable();
   } else {
-    tabNavRecords.classList.add('active');
-    tabNavEvents.classList.remove('active');
-    viewRecords.classList.add('active');
-    viewEvents.classList.remove('active');
+    if (btnToggleRecords) btnToggleRecords.classList.add('active');
+    if (btnToggleEvents) btnToggleEvents.classList.remove('active');
+    if (viewRecords) viewRecords.classList.add('active');
+    if (viewEvents) viewEvents.classList.remove('active');
     renderTable();
     updateStats();
   }
@@ -580,17 +578,20 @@ function renderTable() {
 }
 
 // ============================================================
-// SUMMARY MATRIX SECTION (성별별 가로: 종목, 세로: 그룹)
+// SIDE-BY-SIDE SUMMARY MATRICES (남성 / 여성 각각 좌우 표시, 숫자만 + hover 툴팁)
 // ============================================================
-function renderSummaryMatrix() {
-  if (!summaryMatrixBody || !summaryMatrixFoot) return;
+function renderSummaryMatrices() {
+  if (maleMatrixBody && maleMatrixFoot) {
+    renderSingleGenderMatrix('남', maleMatrixBody, maleMatrixFoot);
+  }
+  if (femaleMatrixBody && femaleMatrixFoot) {
+    renderSingleGenderMatrix('여', femaleMatrixBody, femaleMatrixFoot);
+  }
+}
 
-  const targetGender = matrixGenderTab; // '남', '여', or 'all'
-  const filteredList = targetGender === 'all' 
-    ? records 
-    : records.filter(r => r.gender === targetGender);
-
-  summaryMatrixBody.innerHTML = '';
+function renderSingleGenderMatrix(gender, bodyEl, footEl) {
+  bodyEl.innerHTML = '';
+  const filteredList = records.filter(r => r.gender === gender);
 
   const colTotals = {
     '핀자유형 50': 0,
@@ -610,47 +611,52 @@ function renderSummaryMatrix() {
     tr.innerHTML = `<td class="matrix-cell-group">${groupName}</td>`;
 
     EVENT_OPTIONS.forEach(eventName => {
-      // Swimmers in this group who entered this event
       const eventSwimmers = groupMembers.filter(r => r.event1 === eventName || r.event2 === eventName);
       const count = eventSwimmers.length;
       groupRowTotal += count;
       colTotals[eventName] += count;
 
-      const swimmersChips = eventSwimmers.map(s => `
-        <span class="matrix-swimmer-chip ${s.gender === '남' ? 'male' : 'female'}">
-          ${escapeHtml(s.name)}
-        </span>
-      `).join('');
-
-      tr.innerHTML += `
-        <td class="matrix-cell">
-          <div class="matrix-count-badge ${count > 0 ? 'has-count' : ''}">
-            ${count > 0 ? `${count}명` : '-'}
-          </div>
-          <div class="matrix-swimmers-list">
-            ${swimmersChips}
-          </div>
-        </td>
-      `;
+      if (count > 0) {
+        const namesList = eventSwimmers.map(s => s.name).join(', ');
+        tr.innerHTML += `
+          <td class="matrix-cell has-count" title="${groupName} · ${eventName} (${count}명): ${namesList}">
+            <span class="matrix-num">${count}</span>
+            <div class="matrix-hover-tooltip">
+              <div class="tooltip-header">${groupName} · ${eventName} (${count}명)</div>
+              <div class="tooltip-list">
+                ${eventSwimmers.map(s => `
+                  <span class="tooltip-chip ${gender === '남' ? 'male' : 'female'}">${escapeHtml(s.name)}</span>
+                `).join('')}
+              </div>
+            </div>
+          </td>
+        `;
+      } else {
+        tr.innerHTML += `
+          <td class="matrix-cell is-empty">
+            <span class="matrix-num-empty">-</span>
+          </td>
+        `;
+      }
     });
 
     grandTotal += groupRowTotal;
     tr.innerHTML += `
-      <td class="matrix-cell" style="text-align:center; font-weight:800; background:#f8fafc; color:var(--secondary);">
-        ${groupRowTotal > 0 ? `${groupRowTotal}건` : '-'}
+      <td class="matrix-cell" style="font-weight:800; background:#f8fafc; color:var(--secondary);">
+        ${groupRowTotal > 0 ? groupRowTotal : '-'}
       </td>
     `;
-    summaryMatrixBody.appendChild(tr);
+    bodyEl.appendChild(tr);
   });
 
-  // Render Footer Total Row
-  summaryMatrixFoot.innerHTML = `
+  // Footer Row
+  footEl.innerHTML = `
     <tr>
-      <th>합계</th>
+      <th>계</th>
       ${EVENT_OPTIONS.map(ev => `
-        <td>${colTotals[ev] > 0 ? `${colTotals[ev]}건` : '-'}</td>
+        <td>${colTotals[ev] > 0 ? colTotals[ev] : '-'}</td>
       `).join('')}
-      <td style="color:var(--primary); font-size:14px; font-weight:900;">${grandTotal}건</td>
+      <td style="color:${gender === '남' ? '#0284c7' : '#e11d48'}; font-weight:900;">${grandTotal}</td>
     </tr>
   `;
 }
@@ -1006,21 +1012,9 @@ function jumpToSwimmerPB(id) {
 
 // Event Bindings
 function bindEvents() {
-  // Tab Switchers
-  if (tabNavRecords) tabNavRecords.addEventListener('click', () => switchView('records'));
-  if (tabNavEvents) tabNavEvents.addEventListener('click', () => switchView('events'));
-  if (btnJumpToEvents) btnJumpToEvents.addEventListener('click', () => switchView('events'));
-  if (btnJumpToRecords) btnJumpToRecords.addEventListener('click', () => switchView('records'));
-
-  // Matrix Gender Tab Switcher
-  matrixGenderTabs.forEach(btn => {
-    btn.addEventListener('click', () => {
-      matrixGenderTabs.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      matrixGenderTab = btn.dataset.matrixGender;
-      renderSummaryMatrix();
-    });
-  });
+  // Header View Toggle Buttons
+  if (btnToggleRecords) btnToggleRecords.addEventListener('click', () => switchView('records'));
+  if (btnToggleEvents) btnToggleEvents.addEventListener('click', () => switchView('events'));
 
   // Events Table Dropdown Change Delegation
   if (eventsTableBody) {
@@ -1036,9 +1030,9 @@ function bindEvents() {
       record[field] = target.value;
       target.classList.toggle('has-event', !!target.value);
 
-      // Re-render summary matrix & PB table
+      // Re-render summary matrices & PB table
       saveData();
-      renderSummaryMatrix();
+      renderSummaryMatrices();
       renderEventsTable();
       renderTable();
       showToast(`'${record.name}'의 ${field === 'event1' ? '종목 1' : '종목 2'}이(가) 변경되었습니다.`);
@@ -1181,7 +1175,7 @@ function bindEvents() {
         genderBadge.className = `gender-badge ${record.gender === '남' ? 'male' : 'female'}`;
         saveData();
         updateStats();
-        renderSummaryMatrix();
+        renderSummaryMatrices();
       }
       return;
     }

@@ -11,13 +11,29 @@
 </head>
 <body>
   <div class="app-container">
-    <!-- Main Top Header -->
+    <!-- Main Top Header with View Toggle -->
     <header class="app-header">
       <div class="header-left">
         <div class="header-badge">GMDC SWIM CLUB</div>
         <h1>수영 기록 & 출전 경기 관리표</h1>
         <span class="header-date" id="tableDateBadge">기준일: 2026-01-01</span>
       </div>
+
+      <!-- Segmented View Toggle in Header -->
+      <div class="header-center">
+        <div class="header-view-toggle">
+          <button class="view-toggle-btn active" id="btnToggleRecords" data-view="records" title="개인 PB 기록표 보기">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+            <span>개인 PB</span>
+          </button>
+          <button class="view-toggle-btn" id="btnToggleEvents" data-view="events" title="대회 출전 경기 보기 (37명)">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="M9 12h6"></path><path d="M9 16h6"></path></svg>
+            <span>출전 경기</span>
+            <span class="toggle-count-badge">37명</span>
+          </button>
+        </div>
+      </div>
+
       <div class="header-actions">
         <button id="btnToggleSticky" class="btn btn-sticky active" title="스크롤 시 상단 조합 패널 1, 2, 3 고정 토글">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="17" x2="12" y2="22"></line><path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V6h1a1 1 0 0 0 0-2H8a1 1 0 0 0 0 2h1v4.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24Z"></path></svg>
@@ -33,19 +49,6 @@
         </button>
       </div>
     </header>
-
-    <!-- Navigation Tabs: 개인 PB 보기 vs 출전 경기 보기 -->
-    <nav class="app-nav">
-      <button class="nav-tab-btn active" id="tabNavRecords" data-tab="records">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-        <span>개인 PB 기록표</span>
-      </button>
-      <button class="nav-tab-btn" id="tabNavEvents" data-tab="events">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="M9 12h6"></path><path d="M9 16h6"></path></svg>
-        <span>출전 경기 보기</span>
-        <span class="nav-tab-badge">37명</span>
-      </button>
-    </nav>
 
     <!-- ========================================== -->
     <!-- VIEW 1: 개인 PB 기록표 (Records View)        -->
@@ -154,10 +157,6 @@
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
             회원 추가
           </button>
-          <button id="btnJumpToEvents" class="btn btn-jump" title="대회 출전 경기 보기 페이지로 이동">
-            <span>출전 경기 보기</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-          </button>
         </div>
       </section>
 
@@ -212,52 +211,72 @@
     <!-- VIEW 2: 출전 경기 보기 (Events View)         -->
     <!-- ========================================== -->
     <div id="viewEvents" class="view-content">
-      <!-- Events Overview Top Bar -->
-      <section class="events-top-banner">
-        <div class="events-banner-info">
-          <h2>🏊 대회 출전 종목 현황 및 요약</h2>
-          <p>출전 가능 종목: <strong>핀자유형 50, 핀접영 50, 자유형 50, 배영 50, 평영 50, 접영 50</strong> (1인당 최대 2종목)</p>
+      <!-- Side-by-Side Summary Matrices (남성 / 여성 좌우 동시 배치) -->
+      <section class="matrices-container">
+        <!-- 👨 Male Matrix Card -->
+        <div class="matrix-card male-card">
+          <div class="matrix-card-header">
+            <div class="matrix-title-area">
+              <span class="matrix-badge male">남성부</span>
+              <h3>👨 남성 출전 요약</h3>
+            </div>
+            <span class="matrix-tip">💡 숫자에 마우스 오버 시 명단 확인</span>
+          </div>
+          <div class="table-responsive">
+            <table class="summary-matrix-table" id="maleMatrixTable">
+              <thead>
+                <tr>
+                  <th class="matrix-th-group">그룹</th>
+                  <th class="matrix-th-event">핀자유</th>
+                  <th class="matrix-th-event">핀접영</th>
+                  <th class="matrix-th-event">자유형</th>
+                  <th class="matrix-th-event">배영</th>
+                  <th class="matrix-th-event">평영</th>
+                  <th class="matrix-th-event">접영</th>
+                  <th class="matrix-th-total">계</th>
+                </tr>
+              </thead>
+              <tbody id="maleMatrixBody">
+                <!-- Rendered by JS -->
+              </tbody>
+              <tfoot id="maleMatrixFoot">
+                <!-- Total row rendered by JS -->
+              </tfoot>
+            </table>
+          </div>
         </div>
-        <button id="btnJumpToRecords" class="btn btn-jump-reverse" title="개인 PB 기록표 페이지로 이동">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-          <span>개인 PB 기록 보기</span>
-        </button>
-      </section>
 
-      <!-- Summary Matrix Section (성별별 가로: 종목, 세로: 그룹) -->
-      <section class="summary-matrix-card">
-        <div class="matrix-card-header">
-          <div class="matrix-title-area">
-            <span class="matrix-badge">현황 요약</span>
-            <h3>성별 및 그룹별 출전 종목 매트릭스</h3>
+        <!-- 👩 Female Matrix Card -->
+        <div class="matrix-card female-card">
+          <div class="matrix-card-header">
+            <div class="matrix-title-area">
+              <span class="matrix-badge female">여성부</span>
+              <h3>👩 여성 출전 요약</h3>
+            </div>
+            <span class="matrix-tip">💡 숫자에 마우스 오버 시 명단 확인</span>
           </div>
-          <div class="matrix-gender-tabs">
-            <button class="matrix-tab-btn active" data-matrix-gender="남">👨 남성 요약</button>
-            <button class="matrix-tab-btn" data-matrix-gender="여">👩 여성 요약</button>
-            <button class="matrix-tab-btn" data-matrix-gender="all">📊 전체 통합</button>
+          <div class="table-responsive">
+            <table class="summary-matrix-table" id="femaleMatrixTable">
+              <thead>
+                <tr>
+                  <th class="matrix-th-group">그룹</th>
+                  <th class="matrix-th-event">핀자유</th>
+                  <th class="matrix-th-event">핀접영</th>
+                  <th class="matrix-th-event">자유형</th>
+                  <th class="matrix-th-event">배영</th>
+                  <th class="matrix-th-event">평영</th>
+                  <th class="matrix-th-event">접영</th>
+                  <th class="matrix-th-total">계</th>
+                </tr>
+              </thead>
+              <tbody id="femaleMatrixBody">
+                <!-- Rendered by JS -->
+              </tbody>
+              <tfoot id="femaleMatrixFoot">
+                <!-- Total row rendered by JS -->
+              </tfoot>
+            </table>
           </div>
-        </div>
-        <div class="table-responsive">
-          <table class="summary-matrix-table" id="summaryMatrixTable">
-            <thead>
-              <tr>
-                <th class="matrix-th-group">그룹</th>
-                <th class="matrix-th-event">핀자유형 50</th>
-                <th class="matrix-th-event">핀접영 50</th>
-                <th class="matrix-th-event">자유형 50</th>
-                <th class="matrix-th-event">배영 50</th>
-                <th class="matrix-th-event">평영 50</th>
-                <th class="matrix-th-event">접영 50</th>
-                <th class="matrix-th-total">그룹별 출전계</th>
-              </tr>
-            </thead>
-            <tbody id="summaryMatrixBody">
-              <!-- Rendered by JavaScript -->
-            </tbody>
-            <tfoot id="summaryMatrixFoot">
-              <!-- Total row rendered by JS -->
-            </tfoot>
-          </table>
         </div>
       </section>
 
@@ -321,7 +340,7 @@
 
       <!-- Footer Information -->
       <footer class="app-footer">
-        <p>💡 Tip: 출전 종목을 변경하시면 상단 [성별 및 그룹별 출전 종목 매트릭스]에 실시간으로 반영됩니다.</p>
+        <p>💡 Tip: 출전 종목을 변경하시면 상단 [남성/여성 출전 요약표]에 실시간으로 반영됩니다.</p>
       </footer>
     </div>
   </div>
