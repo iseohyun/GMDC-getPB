@@ -230,7 +230,7 @@ function updateDeadlineCountdown() {
   const isUrgent = diff < 3600000; // 1시간 이내
   badge.className = `header-date ${isUrgent ? 'is-urgent' : 'is-active'}`;
   badge.innerHTML = `⏳ ${timeStr}`;
-  badge.title = `입력 마감 시한: 8월 17일 18:00:00 (이후 입력 및 수정 불가)`;
+  badge.title = `클릭하여 마감 일정 안내 보기 (마감 시한: 8월 17일 18:00)`;
 }
 
 function initRecordsViewMode() {
@@ -545,6 +545,14 @@ function initNoticeModal() {
 
   if (btnCloseX) btnCloseX.addEventListener('click', closeModal);
   if (btnConfirm) btnConfirm.addEventListener('click', closeModal);
+
+  // Click on deadline countdown badge to view notice modal
+  const tableDateBadge = document.getElementById('tableDateBadge');
+  if (tableDateBadge) {
+    tableDateBadge.addEventListener('click', () => {
+      modal.classList.add('show');
+    });
+  }
 
   modal.addEventListener('click', (e) => {
     if (e.target === modal) {
