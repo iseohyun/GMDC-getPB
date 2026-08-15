@@ -1,12 +1,12 @@
 /**
- * GMDC 수영 기록 관리 시스템
- * Firebase Cloud Firestore 실시간 연동 & 계영 최적 조합 연산 시스템
+ * GMDC 수영 기록 및 대회 출전 관리 시스템
+ * Firebase Cloud Firestore 실시간 연동, 계영 최적 조합 연산, 출전 종목 현황 매트릭스
  */
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getFirestore, doc, setDoc, onSnapshot, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-// Firebase Configuration provided by user
+// Firebase Configuration
 const firebaseConfig = {
   apiKey: "AIzaSyBA0ykFrEfU9YS33Zp_HNf3OnBX39WCEkA",
   authDomain: "gmdc-swim-records.firebaseapp.com",
@@ -20,7 +20,6 @@ const firebaseConfig = {
 // Initialize Firebase App & Firestore
 let db = null;
 let DOC_REF = null;
-let isFirebaseConnected = false;
 
 try {
   const app = initializeApp(firebaseConfig);
@@ -31,46 +30,60 @@ try {
 }
 
 const STORAGE_KEY = 'gmdc_swim_records_v1';
+const STICKY_STORAGE_KEY = 'gmdc_sticky_pinned';
+const MODAL_STORAGE_KEY = 'gmdc_hide_notice_modal_date';
 
-// Initial 37 Swimmer Records (작년 기준 데이터)
+// 6 Available Competition Events (출전 가능 종목)
+const EVENT_OPTIONS = [
+  '핀자유형 50',
+  '핀접영 50',
+  '자유형 50',
+  '배영 50',
+  '평영 50',
+  '접영 50'
+];
+
+const GROUPS = ['1그룹', '2그룹', '3그룹', '4그룹', '5그룹', '6그룹'];
+
+// Initial 37 Swimmer Records (출전 그룹, 생년월일 식별코드, 출전 종목 1/2, PB 기록)
 const DEFAULT_RECORDS = [
-  { id: 1, age: '15', gender: '남', name: '박슬우', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 2, age: '15', gender: '남', name: '이지훈', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 3, age: '16', gender: '남', name: '이채율', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 4, age: '17', gender: '남', name: '조성찬', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 5, age: '17', gender: '여', name: '이지호', finFly: '', finFree: '31.07', free: '36.78', back: '', breast: '', fly: '' },
-  { id: 6, age: '24', gender: '여', name: '추성비', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 7, age: '24', gender: '여', name: '이영경', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 8, age: '33', gender: '남', name: '안재홍', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 9, age: '38', gender: '여', name: '노언영', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 10, age: '37', gender: '여', name: '최이슬', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 11, age: '43', gender: '남', name: '고석보', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 12, age: '44', gender: '남', name: '김기용', finFly: '', finFree: '', free: '35.69', back: '', breast: '41.65', fly: '' },
-  { id: 13, age: '42', gender: '남', name: '김준영', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 14, age: '44', gender: '남', name: '손철수', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 15, age: '44', gender: '남', name: '안상준', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 16, age: '41', gender: '남', name: '양승진', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 17, age: '44', gender: '남', name: '이도형', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 18, age: '42', gender: '남', name: '정서현', finFly: '', finFree: '27.92', free: '33.59', back: '', breast: '', fly: '' },
-  { id: 19, age: '47', gender: '여', name: '김상희', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 20, age: '43', gender: '여', name: '박다유', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 21, age: '48', gender: '여', name: '손혜정', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 22, age: '40', gender: '여', name: '심민경', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 23, age: '42', gender: '여', name: '여수연', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 24, age: '44', gender: '여', name: '이미영', finFly: '', finFree: '30.42', free: '', back: '', breast: '', fly: '57.17' },
-  { id: 25, age: '41', gender: '여', name: '이은희', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 26, age: '50', gender: '남', name: '박재홍', finFly: '30.29', finFree: '28.08', free: '', back: '', breast: '', fly: '' },
-  { id: 27, age: '57', gender: '남', name: '박진홍', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 28, age: '50', gender: '남', name: '서충근', finFly: '', finFree: '27.43', free: '', back: '', breast: '', fly: '99.99' },
-  { id: 29, age: '50', gender: '남', name: '성지경', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 30, age: '51', gender: '남', name: '이경열', finFly: '', finFree: '', free: '', back: '', breast: '43.51', fly: '' },
-  { id: 31, age: '53', gender: '여', name: '김애란', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 32, age: '58', gender: '여', name: '박선화', finFly: '', finFree: '33.64', free: '46.66', back: '', breast: '', fly: '' },
-  { id: 33, age: '56', gender: '여', name: '전경미', finFly: '', finFree: '32.42', free: '', back: '55.88', breast: '', fly: '' },
-  { id: 34, age: '62', gender: '남', name: '박봉권', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 35, age: '63', gender: '남', name: '성환용', finFly: '', finFree: '99.99', free: '', back: '', breast: '', fly: '' },
-  { id: 36, age: '59', gender: '여', name: '송원자', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 37, age: '62', gender: '여', name: '최지희', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' }
+  { id: 1, age: '15', group: '1그룹', gender: '남', name: '박슬우', birthId: '20100223-3', event1: '자유형 50', event2: '접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 2, age: '15', group: '1그룹', gender: '남', name: '이지훈', birthId: '20100908-3', event1: '자유형 50', event2: '접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 3, age: '16', group: '1그룹', gender: '남', name: '이채율', birthId: '20090814-3', event1: '핀자유형 50', event2: '배영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 4, age: '17', group: '1그룹', gender: '남', name: '조성찬', birthId: '20080718-3', event1: '자유형 50', event2: '접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 5, age: '17', group: '1그룹', gender: '여', name: '이지호', birthId: '20080506-4', event1: '핀자유형 50', event2: '자유형 50', finFly: '', finFree: '31.07', free: '36.78', back: '', breast: '', fly: '' },
+  { id: 6, age: '24', group: '2그룹', gender: '여', name: '추성비', birthId: '20010521-4', event1: '자유형 50', event2: '접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 7, age: '24', group: '2그룹', gender: '여', name: '이영경', birthId: '20011204-4', event1: '자유형 50', event2: '접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 8, age: '33', group: '3그룹', gender: '남', name: '안재홍', birthId: '19920211-1', event1: '자유형 50', event2: '', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 9, age: '38', group: '3그룹', gender: '여', name: '노언영', birthId: '19870712-2', event1: '자유형 50', event2: '평영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 10, age: '37', group: '3그룹', gender: '여', name: '최이슬', birthId: '19881213-2', event1: '자유형 50', event2: '접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 11, age: '43', group: '4그룹', gender: '남', name: '고석보', birthId: '19821227-1', event1: '핀접영 50', event2: '자유형 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 12, age: '44', group: '4그룹', gender: '남', name: '김기용', birthId: '19810929-1', event1: '핀자유형 50', event2: '핀접영 50', finFly: '', finFree: '', free: '35.69', back: '', breast: '41.65', fly: '' },
+  { id: 13, age: '42', group: '4그룹', gender: '남', name: '김준영', birthId: '19830201-1', event1: '자유형 50', event2: '평영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 14, age: '44', group: '4그룹', gender: '남', name: '손철수', birthId: '19810217-1', event1: '핀자유형 50', event2: '자유형 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 15, age: '44', group: '4그룹', gender: '남', name: '안상준', birthId: '19811115-1', event1: '자유형 50', event2: '', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 16, age: '41', group: '4그룹', gender: '남', name: '양승진', birthId: '19840221-1', event1: '자유형 50', event2: '', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 17, age: '44', group: '4그룹', gender: '남', name: '이도형', birthId: '19810823-1', event1: '자유형 50', event2: '평영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 18, age: '42', group: '4그룹', gender: '남', name: '정서현', birthId: '19830903-1', event1: '평영 50', event2: '배영 50', finFly: '', finFree: '27.92', free: '33.59', back: '', breast: '', fly: '' },
+  { id: 19, age: '47', group: '4그룹', gender: '여', name: '김상희', birthId: '19780602-2', event1: '핀자유형 50', event2: '', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 20, age: '43', group: '4그룹', gender: '여', name: '박다유', birthId: '19820825-2', event1: '자유형 50', event2: '배영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 21, age: '48', group: '4그룹', gender: '여', name: '손혜정', birthId: '19770415-2', event1: '핀자유형 50', event2: '핀접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 22, age: '40', group: '4그룹', gender: '여', name: '심민경', birthId: '19850520-2', event1: '자유형 50', event2: '배영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 23, age: '42', group: '4그룹', gender: '여', name: '여수연', birthId: '19830209-2', event1: '핀자유형 50', event2: '핀접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 24, age: '44', group: '4그룹', gender: '여', name: '이미영', birthId: '19811014-2', event1: '핀자유형 50', event2: '핀접영 50', finFly: '', finFree: '30.42', free: '', back: '', breast: '', fly: '57.17' },
+  { id: 25, age: '41', group: '4그룹', gender: '여', name: '이은희', birthId: '19840528-2', event1: '배영 50', event2: '평영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 26, age: '50', group: '5그룹', gender: '남', name: '박재홍', birthId: '19750715-1', event1: '핀자유형 50', event2: '핀접영 50', finFly: '30.29', finFree: '28.08', free: '', back: '', breast: '', fly: '' },
+  { id: 27, age: '57', group: '5그룹', gender: '남', name: '박진홍', birthId: '19681220-1', event1: '핀자유형 50', event2: '핀접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 28, age: '50', group: '5그룹', gender: '남', name: '서충근', birthId: '19750724-1', event1: '핀자유형 50', event2: '', finFly: '', finFree: '27.43', free: '', back: '', breast: '', fly: '99.99' },
+  { id: 29, age: '50', group: '5그룹', gender: '남', name: '성지경', birthId: '19750223-1', event1: '핀자유형 50', event2: '핀접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 30, age: '51', group: '5그룹', gender: '남', name: '이경열', birthId: '19740501-1', event1: '핀자유형 50', event2: '평영 50', finFly: '', finFree: '', free: '', back: '', breast: '43.51', fly: '' },
+  { id: 31, age: '53', group: '5그룹', gender: '여', name: '김애란', birthId: '19720727-2', event1: '자유형 50', event2: '배영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 32, age: '58', group: '5그룹', gender: '여', name: '박선화', birthId: '19671212-2', event1: '핀자유형 50', event2: '평영 50', finFly: '', finFree: '33.64', free: '46.66', back: '', breast: '', fly: '' },
+  { id: 33, age: '56', group: '5그룹', gender: '여', name: '전경미', birthId: '19690201-2', event1: '핀자유형 50', event2: '핀접영 50', finFly: '', finFree: '32.42', free: '', back: '55.88', breast: '', fly: '' },
+  { id: 34, age: '62', group: '6그룹', gender: '남', name: '박봉권', birthId: '19630807-1', event1: '평영 50', event2: '배영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 35, age: '63', group: '6그룹', gender: '남', name: '성환용', birthId: '19620713-1', event1: '핀자유형 50', event2: '', finFly: '', finFree: '99.99', free: '', back: '', breast: '', fly: '' },
+  { id: 36, age: '59', group: '6그룹', gender: '여', name: '송원자', birthId: '19660325-2', event1: '자유형 50', event2: '평영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 37, age: '62', group: '6그룹', gender: '여', name: '최지희', birthId: '19630705-2', event1: '자유형 50', event2: '핀자유형 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' }
 ];
 
 // Baseline Map of Last Year's Records (Original 37 swimmers)
@@ -99,13 +112,30 @@ const STROKE_NAMES = {
 
 // Application State
 let records = [];
+let currentView = 'records'; // 'records' | 'events'
 let searchQuery = '';
 let currentFilter = 'all'; // 'all', '남', '여', 'recorded'
 let sortColumn = null;
-let sortDirection = 'asc'; // 'asc' or 'desc'
+let sortDirection = 'asc';
+
+// Events View State
+let matrixGenderTab = '남'; // '남' | '여' | 'all'
+let eventsSearchQuery = '';
+let eventsGenderFilter = 'all';
+let eventsGroupFilter = 'all';
+
+let isStickyPinned = true;
 let saveTimeout = null;
 
 // DOM Elements
+const tabNavRecords = document.getElementById('tabNavRecords');
+const tabNavEvents = document.getElementById('tabNavEvents');
+const viewRecords = document.getElementById('viewRecords');
+const viewEvents = document.getElementById('viewEvents');
+const btnJumpToEvents = document.getElementById('btnJumpToEvents');
+const btnJumpToRecords = document.getElementById('btnJumpToRecords');
+
+// Records View DOM
 const tableBody = document.getElementById('tableBody');
 const searchInput = document.getElementById('searchInput');
 const filterBtns = document.querySelectorAll('.filter-btn');
@@ -118,9 +148,15 @@ const btnToggleSticky = document.getElementById('btnToggleSticky');
 const comboGrid = document.getElementById('comboGrid');
 const stickyBtnLabel = document.getElementById('stickyBtnLabel');
 
-const STICKY_STORAGE_KEY = 'gmdc_sticky_pinned';
-const MODAL_STORAGE_KEY = 'gmdc_hide_notice_modal_date';
-let isStickyPinned = true; // Default: Pinned (고정 기본)
+// Events View DOM
+const summaryMatrixBody = document.getElementById('summaryMatrixBody');
+const summaryMatrixFoot = document.getElementById('summaryMatrixFoot');
+const matrixGenderTabs = document.querySelectorAll('.matrix-tab-btn');
+const eventsSearchInput = document.getElementById('eventsSearchInput');
+const eventsFilterBtns = document.querySelectorAll('.events-filter-btn');
+const eventsGroupSelect = document.getElementById('eventsGroupSelect');
+const eventsTableBody = document.getElementById('eventsTableBody');
+const eventsFilteredCount = document.getElementById('eventsFilteredCount');
 
 // Init application
 function init() {
@@ -128,73 +164,16 @@ function init() {
   initNoticeModal();
   loadLocalData();
   bindEvents();
-  renderTable();
-  updateStats();
+  handleUrlRouting();
+  renderAll();
   initFirebaseSync();
 }
 
-// Initialize Notice Modal Popup
-function initNoticeModal() {
-  const modal = document.getElementById('noticeModal');
-  const btnCloseX = document.getElementById('btnModalCloseX');
-  const btnConfirm = document.getElementById('btnModalConfirm');
-  const chkHideToday = document.getElementById('chkHideToday');
-
-  if (!modal) return;
-
-  const todayStr = new Date().toDateString(); // e.g. "Sun Aug 16 2026"
-  const savedDate = localStorage.getItem(MODAL_STORAGE_KEY);
-
-  // Show modal if not hidden for today
-  if (savedDate !== todayStr) {
-    setTimeout(() => {
-      modal.classList.add('show');
-    }, 200);
-  }
-
-  function closeModal() {
-    if (chkHideToday && chkHideToday.checked) {
-      localStorage.setItem(MODAL_STORAGE_KEY, todayStr);
-    }
-    modal.classList.remove('show');
-  }
-
-  if (btnCloseX) btnCloseX.addEventListener('click', closeModal);
-  if (btnConfirm) btnConfirm.addEventListener('click', closeModal);
-
-  // Close when clicking overlay backdrop
-  modal.addEventListener('click', (e) => {
-    if (e.target === modal) {
-      closeModal();
-    }
-  });
-
-  // Close on Escape key
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && modal.classList.contains('show')) {
-      closeModal();
-    }
-  });
-}
-
-// Initialize Sticky Panel Preference
-function initStickyPreference() {
-  const saved = localStorage.getItem(STICKY_STORAGE_KEY);
-  isStickyPinned = saved !== '0'; // Default is true unless explicitly set to '0'
-  applyStickyState(isStickyPinned);
-}
-
-function applyStickyState(pinned) {
-  if (comboGrid) {
-    comboGrid.classList.toggle('is-sticky', pinned);
-  }
-  if (btnToggleSticky) {
-    btnToggleSticky.classList.toggle('active', pinned);
-    btnToggleSticky.title = pinned ? '스크롤 시 상단 조합 패널 고정 해제' : '스크롤 시 상단 조합 패널 고정 활성화';
-  }
-  if (stickyBtnLabel) {
-    stickyBtnLabel.textContent = pinned ? '조합패널 고정 ON' : '조합패널 고정 OFF';
-  }
+function renderAll() {
+  renderTable();
+  updateStats();
+  renderSummaryMatrix();
+  renderEventsTable();
 }
 
 // 1. Load Local Cache First (for instant startup)
@@ -202,7 +181,9 @@ function loadLocalData() {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
-      records = JSON.parse(saved);
+      const parsed = JSON.parse(saved);
+      // Merge with default records to ensure all fields (group, birthId, event1, event2) exist
+      records = mergeWithDefaultData(parsed);
     } else {
       records = JSON.parse(JSON.stringify(DEFAULT_RECORDS));
     }
@@ -212,11 +193,36 @@ function loadLocalData() {
   }
 }
 
+// Merge helper to guarantee group, birthId, event1, event2 are preserved
+function mergeWithDefaultData(remoteList) {
+  if (!Array.isArray(remoteList)) return JSON.parse(JSON.stringify(DEFAULT_RECORDS));
+
+  return remoteList.map(item => {
+    const def = DEFAULT_RECORDS.find(d => d.id === item.id || d.name === item.name) || {};
+    return {
+      id: item.id || def.id || 0,
+      age: item.age !== undefined ? item.age : (def.age || ''),
+      group: item.group || def.group || '1그룹',
+      gender: item.gender || def.gender || '남',
+      name: item.name || def.name || '',
+      birthId: item.birthId || def.birthId || '',
+      event1: item.event1 !== undefined ? item.event1 : (def.event1 || ''),
+      event2: item.event2 !== undefined ? item.event2 : (def.event2 || ''),
+      finFly: item.finFly !== undefined ? item.finFly : (def.finFly || ''),
+      finFree: item.finFree !== undefined ? item.finFree : (def.finFree || ''),
+      free: item.free !== undefined ? item.free : (def.free || ''),
+      back: item.back !== undefined ? item.back : (def.back || ''),
+      breast: item.breast !== undefined ? item.breast : (def.breast || ''),
+      fly: item.fly !== undefined ? item.fly : (def.fly || '')
+    };
+  });
+}
+
 // 2. Real-time Firebase Firestore Sync Listener
 function initFirebaseSync() {
   if (!db || !DOC_REF) {
     if (saveStatusText) {
-      saveStatusText.innerHTML = `<span style="color:#d97706;">⚠️ 로컬 저장 모드 (Firebase 미연결)</span>`;
+      saveStatusText.innerHTML = `<span style="color:#d97706;">⚠️ 로컬 저장 모드</span>`;
     }
     return;
   }
@@ -226,31 +232,30 @@ function initFirebaseSync() {
   }
 
   onSnapshot(DOC_REF, (docSnap) => {
-    isFirebaseConnected = true;
     if (docSnap.exists()) {
       const data = docSnap.data();
       if (data && Array.isArray(data.records)) {
-        // Check if data actually changed to prevent focus flickering
-        const isDataChanged = JSON.stringify(records) !== JSON.stringify(data.records);
+        const merged = mergeWithDefaultData(data.records);
+        const isDataChanged = JSON.stringify(records) !== JSON.stringify(merged);
         if (isDataChanged) {
-          records = data.records;
+          records = merged;
           localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
           
-          // Don't re-render entire table if user is currently typing in an input
           const activeEl = document.activeElement;
-          const isUserTyping = activeEl && activeEl.classList && activeEl.classList.contains('cell-input');
+          const isUserTyping = activeEl && activeEl.classList && (activeEl.classList.contains('cell-input') || activeEl.classList.contains('event-select'));
           
           if (!isUserTyping) {
-            renderTable();
+            renderAll();
+          } else {
+            updateStats();
+            renderSummaryMatrix();
           }
-          updateStats();
         }
       }
       if (saveStatusText) {
         saveStatusText.innerHTML = `<span class="status-dot"></span><span>Firebase 클라우드 동기화 (${new Date().toLocaleTimeString('ko-KR')})</span>`;
       }
     } else {
-      // Document does not exist yet: initialize Firestore with DEFAULT_RECORDS
       console.log('Firebase에 초기 데이터 생성 중...');
       syncToFirestore(DEFAULT_RECORDS);
       if (saveStatusText) {
@@ -260,7 +265,7 @@ function initFirebaseSync() {
   }, (error) => {
     console.error('Firebase onSnapshot 에러:', error);
     if (saveStatusText) {
-      saveStatusText.innerHTML = `<span style="color:#ef4444;">⚠️ Firebase 접근 권한 확인 필요 (로컬 저장 유지)</span>`;
+      saveStatusText.innerHTML = `<span style="color:#ef4444;">⚠️ Firebase 접근 권한 확인 필요</span>`;
     }
     showToast('⚠️ Firebase 보안 규칙(Rules)을 테스트 모드로 설정해 주세요.');
   });
@@ -278,7 +283,6 @@ function saveData() {
     saveStatusText.innerHTML = `<span>⏳ 저장 중...</span>`;
   }
 
-  // Debounce Firestore write
   clearTimeout(saveTimeout);
   saveTimeout = setTimeout(() => {
     syncToFirestore(records);
@@ -321,20 +325,121 @@ function showToast(message, duration = 2800) {
   }, duration);
 }
 
-// Filter and Sort Data
+// View Navigation & URL hash routing
+function switchView(viewName) {
+  currentView = viewName;
+  window.location.hash = viewName;
+
+  if (viewName === 'events') {
+    tabNavRecords.classList.remove('active');
+    tabNavEvents.classList.add('active');
+    viewRecords.classList.remove('active');
+    viewEvents.classList.add('active');
+    renderSummaryMatrix();
+    renderEventsTable();
+  } else {
+    tabNavRecords.classList.add('active');
+    tabNavEvents.classList.remove('active');
+    viewRecords.classList.add('active');
+    viewEvents.classList.remove('active');
+    renderTable();
+    updateStats();
+  }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function handleUrlRouting() {
+  const hash = window.location.hash.replace('#', '');
+  if (hash === 'events') {
+    switchView('events');
+  } else {
+    switchView('records');
+  }
+
+  window.addEventListener('hashchange', () => {
+    const newHash = window.location.hash.replace('#', '');
+    if (newHash === 'events' && currentView !== 'events') {
+      switchView('events');
+    } else if (newHash !== 'events' && currentView !== 'records') {
+      switchView('records');
+    }
+  });
+}
+
+// Initialize Notice Modal Popup
+function initNoticeModal() {
+  const modal = document.getElementById('noticeModal');
+  const btnCloseX = document.getElementById('btnModalCloseX');
+  const btnConfirm = document.getElementById('btnModalConfirm');
+  const chkHideToday = document.getElementById('chkHideToday');
+
+  if (!modal) return;
+
+  const todayStr = new Date().toDateString();
+  const savedDate = localStorage.getItem(MODAL_STORAGE_KEY);
+
+  if (savedDate !== todayStr) {
+    setTimeout(() => {
+      modal.classList.add('show');
+    }, 200);
+  }
+
+  function closeModal() {
+    if (chkHideToday && chkHideToday.checked) {
+      localStorage.setItem(MODAL_STORAGE_KEY, todayStr);
+    }
+    modal.classList.remove('show');
+  }
+
+  if (btnCloseX) btnCloseX.addEventListener('click', closeModal);
+  if (btnConfirm) btnConfirm.addEventListener('click', closeModal);
+
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      closeModal();
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('show')) {
+      closeModal();
+    }
+  });
+}
+
+// Initialize Sticky Panel Preference
+function initStickyPreference() {
+  const saved = localStorage.getItem(STICKY_STORAGE_KEY);
+  isStickyPinned = saved !== '0';
+  applyStickyState(isStickyPinned);
+}
+
+function applyStickyState(pinned) {
+  if (comboGrid) {
+    comboGrid.classList.toggle('is-sticky', pinned);
+  }
+  if (btnToggleSticky) {
+    btnToggleSticky.classList.toggle('active', pinned);
+    btnToggleSticky.title = pinned ? '스크롤 시 상단 조합 패널 고정 해제' : '스크롤 시 상단 조합 패널 고정 활성화';
+  }
+  if (stickyBtnLabel) {
+    stickyBtnLabel.textContent = pinned ? '조합패널 고정 ON' : '조합패널 고정 OFF';
+  }
+}
+
+// Filter and Sort Data for Records View
 function getProcessedRecords() {
   let list = [...records];
 
-  // 1. Search Query Filter (Name or Age)
   if (searchQuery.trim()) {
     const q = searchQuery.trim().toLowerCase();
     list = list.filter(item => 
       (item.name && item.name.toLowerCase().includes(q)) ||
-      (item.age && item.age.toString().includes(q))
+      (item.age && item.age.toString().includes(q)) ||
+      (item.group && item.group.toLowerCase().includes(q))
     );
   }
 
-  // 2. Category Filter
   if (currentFilter === '남') {
     list = list.filter(item => item.gender === '남');
   } else if (currentFilter === '여') {
@@ -345,7 +450,6 @@ function getProcessedRecords() {
     );
   }
 
-  // 3. Sorting
   if (sortColumn) {
     list.sort((a, b) => {
       let valA = a[sortColumn] || '';
@@ -363,7 +467,6 @@ function getProcessedRecords() {
         return sortDirection === 'asc' ? numA - numB : numB - numA;
       }
 
-      // Record column sort (numeric seconds, empty values at the bottom)
       if (STROKE_FIELDS.includes(sortColumn)) {
         const numA = parseFloat(valA);
         const numB = parseFloat(valB);
@@ -377,7 +480,6 @@ function getProcessedRecords() {
         return sortDirection === 'asc' ? numA - numB : numB - numA;
       }
 
-      // String comparison
       return sortDirection === 'asc' 
         ? String(valA).localeCompare(String(valB), 'ko')
         : String(valB).localeCompare(String(valA), 'ko');
@@ -387,16 +489,15 @@ function getProcessedRecords() {
   return list;
 }
 
-// Render Table
+// Render PB Records Table
 function renderTable() {
   const processed = getProcessedRecords();
-
   tableBody.innerHTML = '';
 
   if (processed.length === 0) {
     const emptyRow = document.createElement('tr');
     emptyRow.innerHTML = `
-      <td colspan="11" style="padding: 40px; color: var(--text-muted); font-size: 14px;">
+      <td colspan="13" style="padding: 40px; color: var(--text-muted); font-size: 14px; text-align: center;">
         일치하는 데이터가 없습니다.
       </td>
     `;
@@ -408,9 +509,17 @@ function renderTable() {
     const tr = document.createElement('tr');
     tr.dataset.id = item.id;
 
-    // Build Row HTML
+    // Events summary tags
+    const eventsList = [item.event1, item.event2].filter(Boolean);
+    const eventsTagHtml = eventsList.length > 0
+      ? `<div class="pb-events-tag-container">${eventsList.map(e => `<span class="pb-event-chip">${escapeHtml(e)}</span>`).join('')}</div>`
+      : `<span class="pb-event-chip empty">미신청</span>`;
+
     tr.innerHTML = `
       <td class="col-no">${item.id}</td>
+      <td class="col-group">
+        <span class="group-badge">${escapeHtml(item.group || '-')}</span>
+      </td>
       <td class="col-age">
         <input type="text" class="cell-input age-input" data-id="${item.id}" data-field="age" value="${escapeHtml(item.age || '')}" placeholder="나이" inputmode="numeric" />
       </td>
@@ -456,6 +565,9 @@ function renderTable() {
           </td>
         `;
       }).join('')}
+      <td class="col-events-summary">
+        ${eventsTagHtml}
+      </td>
       <td class="col-actions">
         <button class="btn-icon-danger" data-delete-id="${item.id}" title="회원 삭제">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
@@ -464,6 +576,181 @@ function renderTable() {
     `;
 
     tableBody.appendChild(tr);
+  });
+}
+
+// ============================================================
+// SUMMARY MATRIX SECTION (성별별 가로: 종목, 세로: 그룹)
+// ============================================================
+function renderSummaryMatrix() {
+  if (!summaryMatrixBody || !summaryMatrixFoot) return;
+
+  const targetGender = matrixGenderTab; // '남', '여', or 'all'
+  const filteredList = targetGender === 'all' 
+    ? records 
+    : records.filter(r => r.gender === targetGender);
+
+  summaryMatrixBody.innerHTML = '';
+
+  const colTotals = {
+    '핀자유형 50': 0,
+    '핀접영 50': 0,
+    '자유형 50': 0,
+    '배영 50': 0,
+    '평영 50': 0,
+    '접영 50': 0
+  };
+  let grandTotal = 0;
+
+  GROUPS.forEach(groupName => {
+    const groupMembers = filteredList.filter(r => r.group === groupName);
+    let groupRowTotal = 0;
+
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td class="matrix-cell-group">${groupName}</td>`;
+
+    EVENT_OPTIONS.forEach(eventName => {
+      // Swimmers in this group who entered this event
+      const eventSwimmers = groupMembers.filter(r => r.event1 === eventName || r.event2 === eventName);
+      const count = eventSwimmers.length;
+      groupRowTotal += count;
+      colTotals[eventName] += count;
+
+      const swimmersChips = eventSwimmers.map(s => `
+        <span class="matrix-swimmer-chip ${s.gender === '남' ? 'male' : 'female'}">
+          ${escapeHtml(s.name)}
+        </span>
+      `).join('');
+
+      tr.innerHTML += `
+        <td class="matrix-cell">
+          <div class="matrix-count-badge ${count > 0 ? 'has-count' : ''}">
+            ${count > 0 ? `${count}명` : '-'}
+          </div>
+          <div class="matrix-swimmers-list">
+            ${swimmersChips}
+          </div>
+        </td>
+      `;
+    });
+
+    grandTotal += groupRowTotal;
+    tr.innerHTML += `
+      <td class="matrix-cell" style="text-align:center; font-weight:800; background:#f8fafc; color:var(--secondary);">
+        ${groupRowTotal > 0 ? `${groupRowTotal}건` : '-'}
+      </td>
+    `;
+    summaryMatrixBody.appendChild(tr);
+  });
+
+  // Render Footer Total Row
+  summaryMatrixFoot.innerHTML = `
+    <tr>
+      <th>합계</th>
+      ${EVENT_OPTIONS.map(ev => `
+        <td>${colTotals[ev] > 0 ? `${colTotals[ev]}건` : '-'}</td>
+      `).join('')}
+      <td style="color:var(--primary); font-size:14px; font-weight:900;">${grandTotal}건</td>
+    </tr>
+  `;
+}
+
+// ============================================================
+// EVENTS DETAIL TABLE SECTION (출전 선수별 상세 명단)
+// ============================================================
+function renderEventsTable() {
+  if (!eventsTableBody) return;
+
+  let list = [...records];
+
+  // Search filter
+  if (eventsSearchQuery.trim()) {
+    const q = eventsSearchQuery.trim().toLowerCase();
+    list = list.filter(item => 
+      (item.name && item.name.toLowerCase().includes(q)) ||
+      (item.group && item.group.toLowerCase().includes(q)) ||
+      (item.birthId && item.birthId.toLowerCase().includes(q))
+    );
+  }
+
+  // Gender filter
+  if (eventsGenderFilter === '남') {
+    list = list.filter(item => item.gender === '남');
+  } else if (eventsGenderFilter === '여') {
+    list = list.filter(item => item.gender === '여');
+  }
+
+  // Group filter
+  if (eventsGroupFilter !== 'all') {
+    list = list.filter(item => item.group === eventsGroupFilter);
+  }
+
+  if (eventsFilteredCount) {
+    eventsFilteredCount.textContent = `${list.length}명 표시 중 (총 ${records.length}명)`;
+  }
+
+  eventsTableBody.innerHTML = '';
+
+  if (list.length === 0) {
+    const emptyRow = document.createElement('tr');
+    emptyRow.innerHTML = `
+      <td colspan="9" style="padding: 36px; color: var(--text-muted); font-size: 14px; text-align: center;">
+        일치하는 출전 선수가 없습니다.
+      </td>
+    `;
+    eventsTableBody.appendChild(emptyRow);
+    return;
+  }
+
+  list.forEach(item => {
+    const tr = document.createElement('tr');
+    tr.dataset.id = item.id;
+
+    const count = [item.event1, item.event2].filter(Boolean).length;
+    const countClass = count === 2 ? 'count-2' : count === 1 ? 'count-1' : 'count-0';
+
+    tr.innerHTML = `
+      <td class="col-no" style="text-align:center;">${item.id}</td>
+      <td class="col-group" style="text-align:center;">
+        <span class="group-badge">${escapeHtml(item.group || '-')}</span>
+      </td>
+      <td class="col-gender" style="text-align:center;">
+        <span class="gender-badge ${item.gender === '남' ? 'male' : 'female'}">${item.gender || '남'}</span>
+      </td>
+      <td class="col-name" style="font-weight:700;">
+        ${escapeHtml(item.name || '무명')}
+        <span style="font-size:11px; color:var(--text-subtle); margin-left:2px;">(${item.age}세)</span>
+      </td>
+      <td class="col-birth" style="text-align:center;">
+        <span class="birth-code">${escapeHtml(item.birthId || '-')}</span>
+      </td>
+      <td class="col-event">
+        <select class="event-select ${item.event1 ? 'has-event' : ''}" data-id="${item.id}" data-field="event1">
+          <option value="">(미신청)</option>
+          ${EVENT_OPTIONS.map(opt => `
+            <option value="${opt}" ${item.event1 === opt ? 'selected' : ''}>${opt}</option>
+          `).join('')}
+        </select>
+      </td>
+      <td class="col-event">
+        <select class="event-select ${item.event2 ? 'has-event' : ''}" data-id="${item.id}" data-field="event2">
+          <option value="">(미신청)</option>
+          ${EVENT_OPTIONS.map(opt => `
+            <option value="${opt}" ${item.event2 === opt ? 'selected' : ''}>${opt}</option>
+          `).join('')}
+        </select>
+      </td>
+      <td class="col-count" style="text-align:center;">
+        <span class="count-badge ${countClass}">${count}종목</span>
+      </td>
+      <td class="col-goto-pb" style="text-align:center;">
+        <button class="btn-table-jump" data-jump-id="${item.id}" title="${item.name}의 개인 PB 기록표로 이동">
+          PB 보기
+        </button>
+      </td>
+    `;
+
+    eventsTableBody.appendChild(tr);
   });
 }
 
@@ -566,7 +853,6 @@ function findBestMedleyRelay(gender, minAge = 160) {
 
 // Compute Optimal Relay Combinations
 function calculateRelayCombinations() {
-  // 1. Combo 1 (핀계영): Total Age >= 240, Men 3 + Women 3, Stroke: 핀자유(finFree) only
   const finMen = records.filter(r => r.gender === '남' && parseFloat(r.finFree) > 0 && parseFloat(r.age) > 0);
   const finWomen = records.filter(r => r.gender === '여' && parseFloat(r.finFree) > 0 && parseFloat(r.age) > 0);
 
@@ -623,10 +909,7 @@ function calculateRelayCombinations() {
     }
   }
 
-  // 2. Combo 2 (남계영): Total Age >= 160, Men 4, 배/평/접/자 각 1명씩 배정
   const combo2Result = findBestMedleyRelay('남', 160);
-
-  // 3. Combo 3 (여계영): Total Age >= 160, Women 4, 배/평/접/자 각 1명씩 배정
   const combo3Result = findBestMedleyRelay('여', 160);
 
   return { combo1: combo1Result, combo2: combo2Result, combo3: combo3Result };
@@ -647,12 +930,8 @@ function formatRelayTime(seconds) {
 // Update Top Dashboard Combination Panels
 function updateStats() {
   const { combo1, combo2, combo3 } = calculateRelayCombinations();
-
-  // Render Combo 1
   renderComboCard('combo1', combo1, false);
-  // Render Combo 2
   renderComboCard('combo2', combo2, true);
-  // Render Combo 3
   renderComboCard('combo3', combo3, true);
 }
 
@@ -695,7 +974,6 @@ function renderComboCard(prefix, result, isMedley = false) {
 
 // Input filter: strict number and decimal point validation
 function sanitizeNumericInput(val) {
-  // Allow only digits and at most one decimal point
   let clean = val.replace(/[^0-9.]/g, '');
   const parts = clean.split('.');
   if (parts.length > 2) {
@@ -704,9 +982,105 @@ function sanitizeNumericInput(val) {
   return clean;
 }
 
+// Jump from Events view to Records view for a specific swimmer
+function jumpToSwimmerPB(id) {
+  switchView('records');
+  searchQuery = '';
+  if (searchInput) searchInput.value = '';
+  currentFilter = 'all';
+  filterBtns.forEach(b => b.classList.toggle('active', b.dataset.filter === 'all'));
+  renderTable();
+
+  setTimeout(() => {
+    const row = tableBody.querySelector(`tr[data-id="${id}"]`);
+    if (row) {
+      row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      row.style.transition = 'background-color 0.4s ease';
+      row.style.backgroundColor = '#fef08a';
+      setTimeout(() => {
+        row.style.backgroundColor = '';
+      }, 1500);
+    }
+  }, 100);
+}
+
 // Event Bindings
 function bindEvents() {
-  // Table input events delegation
+  // Tab Switchers
+  if (tabNavRecords) tabNavRecords.addEventListener('click', () => switchView('records'));
+  if (tabNavEvents) tabNavEvents.addEventListener('click', () => switchView('events'));
+  if (btnJumpToEvents) btnJumpToEvents.addEventListener('click', () => switchView('events'));
+  if (btnJumpToRecords) btnJumpToRecords.addEventListener('click', () => switchView('records'));
+
+  // Matrix Gender Tab Switcher
+  matrixGenderTabs.forEach(btn => {
+    btn.addEventListener('click', () => {
+      matrixGenderTabs.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      matrixGenderTab = btn.dataset.matrixGender;
+      renderSummaryMatrix();
+    });
+  });
+
+  // Events Table Dropdown Change Delegation
+  if (eventsTableBody) {
+    eventsTableBody.addEventListener('change', (e) => {
+      const target = e.target;
+      if (!target.classList.contains('event-select')) return;
+
+      const id = parseInt(target.dataset.id, 10);
+      const field = target.dataset.field; // 'event1' or 'event2'
+      const record = records.find(r => r.id === id);
+      if (!record) return;
+
+      record[field] = target.value;
+      target.classList.toggle('has-event', !!target.value);
+
+      // Re-render summary matrix & PB table
+      saveData();
+      renderSummaryMatrix();
+      renderEventsTable();
+      renderTable();
+      showToast(`'${record.name}'의 ${field === 'event1' ? '종목 1' : '종목 2'}이(가) 변경되었습니다.`);
+    });
+
+    // Jump to PB button click delegation
+    eventsTableBody.addEventListener('click', (e) => {
+      const jumpBtn = e.target.closest('[data-jump-id]');
+      if (jumpBtn) {
+        const id = parseInt(jumpBtn.dataset.jumpId, 10);
+        jumpToSwimmerPB(id);
+      }
+    });
+  }
+
+  // Events Search Input
+  if (eventsSearchInput) {
+    eventsSearchInput.addEventListener('input', (e) => {
+      eventsSearchQuery = e.target.value;
+      renderEventsTable();
+    });
+  }
+
+  // Events Gender Filter Buttons
+  eventsFilterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      eventsFilterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      eventsGenderFilter = btn.dataset.eventsFilter;
+      renderEventsTable();
+    });
+  });
+
+  // Events Group Filter Dropdown
+  if (eventsGroupSelect) {
+    eventsGroupSelect.addEventListener('change', (e) => {
+      eventsGroupFilter = e.target.value;
+      renderEventsTable();
+    });
+  }
+
+  // PB Table Input Delegation
   tableBody.addEventListener('input', (e) => {
     const target = e.target;
     if (!target.classList.contains('cell-input')) return;
@@ -718,7 +1092,6 @@ function bindEvents() {
 
     let val = target.value;
 
-    // Strict number filter for records and age
     if (STROKE_FIELDS.includes(field)) {
       const sanitized = sanitizeNumericInput(val);
       if (sanitized !== val) {
@@ -726,7 +1099,6 @@ function bindEvents() {
         val = sanitized;
       }
 
-      // Dynamic color class update
       const lastYearVal = getLastYearRecord(id, field);
       target.classList.remove('is-last-year', 'is-target');
       if (val !== '') {
@@ -766,7 +1138,6 @@ function bindEvents() {
     const val = target.value.trim();
     const lastYearVal = getLastYearRecord(id, field);
 
-    // If cleared (empty) and a last year record exists, revert back!
     if (val === '' && lastYearVal !== '') {
       target.value = lastYearVal;
       record[field] = lastYearVal;
@@ -800,7 +1171,6 @@ function bindEvents() {
 
   // Table click events (Gender toggle, Delete button)
   tableBody.addEventListener('click', (e) => {
-    // Gender Badge Toggle
     const genderBadge = e.target.closest('.gender-badge');
     if (genderBadge) {
       const id = parseInt(genderBadge.dataset.id, 10);
@@ -811,11 +1181,11 @@ function bindEvents() {
         genderBadge.className = `gender-badge ${record.gender === '남' ? 'male' : 'female'}`;
         saveData();
         updateStats();
+        renderSummaryMatrix();
       }
       return;
     }
 
-    // Delete Button
     const deleteBtn = e.target.closest('[data-delete-id]');
     if (deleteBtn) {
       const id = parseInt(deleteBtn.dataset.deleteId, 10);
@@ -824,8 +1194,7 @@ function bindEvents() {
       if (confirm(`'${name}' 회원을 명단에서 삭제하시겠습니까?`)) {
         records = records.filter(r => r.id !== id);
         saveData();
-        renderTable();
-        updateStats();
+        renderAll();
         showToast('회원이 삭제되었습니다.');
       }
     }
@@ -837,13 +1206,13 @@ function bindEvents() {
   // Paste from Excel / TSV
   tableBody.addEventListener('paste', handleTablePaste);
 
-  // Search input
+  // Search input in PB table
   searchInput.addEventListener('input', (e) => {
     searchQuery = e.target.value;
     renderTable();
   });
 
-  // Filter Buttons
+  // Filter Buttons in PB table
   filterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       filterBtns.forEach(b => b.classList.remove('active'));
@@ -859,8 +1228,12 @@ function bindEvents() {
     const newRecord = {
       id: newId,
       age: '',
+      group: '1그룹',
       gender: '남',
       name: '',
+      birthId: '',
+      event1: '',
+      event2: '',
       finFly: '',
       finFree: '',
       free: '',
@@ -870,10 +1243,8 @@ function bindEvents() {
     };
     records.push(newRecord);
     saveData();
-    renderTable();
-    updateStats();
+    renderAll();
 
-    // Focus on the new row's name or age
     setTimeout(() => {
       const newInputs = tableBody.querySelectorAll(`input[data-id="${newId}"]`);
       if (newInputs.length > 1) {
@@ -916,7 +1287,6 @@ function bindEvents() {
         sortDirection = 'asc';
       }
 
-      // Update header styles
       document.querySelectorAll('.record-table th').forEach(h => {
         h.classList.remove('sort-asc', 'sort-desc');
       });
@@ -981,8 +1351,8 @@ function handleTablePaste(e) {
 
   const clipboardData = e.clipboardData || window.clipboardData;
   const pastedText = clipboardData.getData('text');
-  if (!pastedText || !pastedText.includes('\t') && !pastedText.includes('\n')) {
-    return; // Single value standard paste
+  if (!pastedText || (!pastedText.includes('\t') && !pastedText.includes('\n'))) {
+    return;
   }
 
   e.preventDefault();
@@ -1021,31 +1391,48 @@ function handleTablePaste(e) {
   });
 
   saveData();
-  renderTable();
-  updateStats();
+  renderAll();
   showToast('엑셀 데이터가 표에 적용되었습니다.');
 }
 
-// Copy to Clipboard as TSV (Tab Separated Values)
+// Copy to Clipboard as TSV
 function copyToClipboardTsv() {
-  const headers = ['2026-01-01', '성별', '이름', '핀접영', '핀자유', '자유형', '배영', '평영', '접영'];
-  const rows = records.map(r => [
-    r.age || '',
-    r.gender || '',
-    r.name || '',
-    r.finFly || '',
-    r.finFree || '',
-    r.free || '',
-    r.back || '',
-    r.breast || '',
-    r.fly || ''
-  ]);
+  let headers, rows;
+  if (currentView === 'events') {
+    headers = ['번호', '그룹', '성별', '이름', '생년월일(식별코드)', '출전 종목 1', '출전 종목 2'];
+    rows = records.map(r => [
+      r.id,
+      r.group || '',
+      r.gender || '',
+      r.name || '',
+      r.birthId || '',
+      r.event1 || '',
+      r.event2 || ''
+    ]);
+  } else {
+    headers = ['번호', '그룹', '2026-01-01', '성별', '이름', '핀접영', '핀자유', '자유형', '배영', '평영', '접영', '출전종목1', '출전종목2'];
+    rows = records.map(r => [
+      r.id,
+      r.group || '',
+      r.age || '',
+      r.gender || '',
+      r.name || '',
+      r.finFly || '',
+      r.finFree || '',
+      r.free || '',
+      r.back || '',
+      r.breast || '',
+      r.fly || '',
+      r.event1 || '',
+      r.event2 || ''
+    ]);
+  }
 
   const tsv = [headers.join('\t'), ...rows.map(row => row.join('\t'))].join('\n');
 
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(tsv).then(() => {
-      showToast('📋 전체 데이터가 복사되었습니다. 엑셀에 붙여넣기(Ctrl+V)하세요!');
+      showToast('📋 전체 데이터가 클립보드에 복사되었습니다. 엑셀에 붙여넣기(Ctrl+V)하세요!');
     }).catch(() => {
       fallbackCopy(tsv);
     });
@@ -1066,17 +1453,22 @@ function fallbackCopy(text) {
 
 // Export to CSV with UTF-8 BOM
 function exportToCsv() {
-  const headers = ['2026-01-01', '성별', '이름', '핀접영', '핀자유', '자유형', '배영', '평영', '접영'];
+  const headers = ['번호', '그룹', '성별', '이름', '생년월일(식별코드)', '출전 종목 1', '출전 종목 2', '나이', '핀접영', '핀자유', '자유형', '배영', '평영', '접영'];
   const rows = records.map(r => [
-    `"${(r.age || '').replace(/"/g, '""')}"`,
-    `"${(r.gender || '').replace(/"/g, '""')}"`,
+    `"${r.id}"`,
+    `"${r.group || ''}"`,
+    `"${r.gender || ''}"`,
     `"${(r.name || '').replace(/"/g, '""')}"`,
-    `"${(r.finFly || '').replace(/"/g, '""')}"`,
-    `"${(r.finFree || '').replace(/"/g, '""')}"`,
-    `"${(r.free || '').replace(/"/g, '""')}"`,
-    `"${(r.back || '').replace(/"/g, '""')}"`,
-    `"${(r.breast || '').replace(/"/g, '""')}"`,
-    `"${(r.fly || '').replace(/"/g, '""')}"`
+    `"${r.birthId || ''}"`,
+    `"${r.event1 || ''}"`,
+    `"${r.event2 || ''}"`,
+    `"${r.age || ''}"`,
+    `"${r.finFly || ''}"`,
+    `"${r.finFree || ''}"`,
+    `"${r.free || ''}"`,
+    `"${r.back || ''}"`,
+    `"${r.breast || ''}"`,
+    `"${r.fly || ''}"`
   ]);
 
   const csvContent = '\uFEFF' + [headers.join(','), ...rows.map(row => row.join(','))].join('\r\n');
@@ -1084,7 +1476,7 @@ function exportToCsv() {
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.setAttribute('href', url);
-  link.setAttribute('download', `수영기록표_2026-01-01.csv`);
+  link.setAttribute('download', `수영기록및출전현황_2026-01-01.csv`);
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
