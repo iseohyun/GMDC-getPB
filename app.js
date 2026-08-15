@@ -4,7 +4,7 @@
  */
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, doc, setDoc, onSnapshot, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getFirestore, doc, setDoc, onSnapshot, getDoc, collection, addDoc, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 // Firebase Configuration
 const firebaseConfig = {
@@ -20,6 +20,7 @@ const firebaseConfig = {
 // Initialize Firebase App & Firestore
 let db = null;
 let DOC_REF = null;
+const HISTORY_COL_NAME = "gmdc_swim_history";
 
 try {
   const app = initializeApp(firebaseConfig);
@@ -167,6 +168,19 @@ const eventsGroupSelect = document.getElementById('eventsGroupSelect');
 const eventsTableBody = document.getElementById('eventsTableBody');
 const eventsFilteredCount = document.getElementById('eventsFilteredCount');
 
+// History DOM & State
+let historyList = [];
+let historyFilter = 'all';
+
+const btnOpenHistory = document.getElementById('btnOpenHistory');
+const historyModal = document.getElementById('historyModal');
+const btnHistoryCloseX = document.getElementById('btnHistoryCloseX');
+const btnHistoryClose = document.getElementById('btnHistoryClose');
+const btnRefreshHistory = document.getElementById('btnRefreshHistory');
+const historyCountBadge = document.getElementById('historyCountBadge');
+const historyListContainer = document.getElementById('historyListContainer');
+const historyFilterBtns = document.querySelectorAll('.history-filter-btn');
+
 // Init application
 function init() {
   initStickyPreference();
@@ -178,6 +192,7 @@ function init() {
   handleUrlRouting();
   renderAll();
   initFirebaseSync();
+  initHistoryListener();
 }
 
 function initRecordsViewMode() {
@@ -204,6 +219,147 @@ function applyEventsViewMode(mode) {
   if (btnModeSimple) btnModeSimple.classList.toggle('active', mode === 'simple');
   if (btnModeDetailed) btnModeDetailed.classList.toggle('active', mode === 'detailed');
   if (eventsDetailTable) eventsDetailTable.classList.toggle('is-simple', mode === 'simple');
+}
+
+// Log history change to Firestore & local state
+async function logChangeHistory(type, swimmerName, field, fieldName, oldVal, newVal, customMsg = '') {
+  if (oldVal === newVal && type !== 'MEMBER' && type !== 'DELETE') return;
+
+  const typeLabels = {
+    RECORD: '기록 수정',
+    EVENT: '종목 변경',
+    INFO: '정보 수정',
+    MEMBER: '회원 추가',
+    DELETE: '회원 삭제'
+  };
+
+  let msg = customMsg;
+  if (!msg) {
+    if (type === 'RECORD') {
+      msg = `${swimmerName}: ${fieldName} 기록 (${oldVal || '빈값'} ➔ ${newVal || '삭제'})`;
+    } else if (type === 'EVENT') {
+      msg = `${swimmerName}: ${fieldName} (${oldVal || '미신청'} ➔ ${newVal || '미신청'})`;
+    } else if (type === 'INFO') {
+      msg = `${swimmerName}: ${fieldName} (${oldVal} ➔ ${newVal})`;
+    }
+  }
+
+  const now = new Date();
+  const timeStr = now.toLocaleString('ko-KR', {
+    month: 'numeric',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
+  });
+
+  const logData = {
+    type,
+    typeLabel: typeLabels[type] || '수정',
+    swimmerName: swimmerName || '무명',
+    field: field || '',
+    fieldName: fieldName || '',
+    prevVal: oldVal !== undefined ? String(oldVal) : '',
+    newVal: newVal !== undefined ? String(newVal) : '',
+    message: msg,
+    timestamp: now.toISOString(),
+    timeFormatted: timeStr,
+    device: navigator.userAgent.includes('Mobile') ? '모바일' : 'PC'
+  };
+
+  // Local update
+  historyList.unshift(logData);
+  if (historyList.length > 50) historyList.pop();
+  updateHistoryBadge();
+  renderHistoryList();
+
+  // Save to Firestore
+  if (db) {
+    try {
+      const colRef = collection(db, HISTORY_COL_NAME);
+      await addDoc(colRef, logData);
+    } catch (err) {
+      console.error('Firestore 히스토리 저장 오류:', err);
+    }
+  }
+}
+
+// Real-time Firestore History Listener
+function initHistoryListener() {
+  if (!db) return;
+  try {
+    const colRef = collection(db, HISTORY_COL_NAME);
+    const q = query(colRef, orderBy("timestamp", "desc"), limit(50));
+    onSnapshot(q, (snapshot) => {
+      const list = [];
+      snapshot.forEach(docSnap => {
+        list.push({ id: docSnap.id, ...docSnap.data() });
+      });
+      if (list.length > 0) {
+        historyList = list;
+        updateHistoryBadge();
+        renderHistoryList();
+      }
+    }, (err) => {
+      console.warn('History onSnapshot warning:', err);
+    });
+  } catch (e) {
+    console.error('initHistoryListener error:', e);
+  }
+}
+
+function updateHistoryBadge() {
+  if (historyCountBadge) {
+    historyCountBadge.textContent = historyList.length;
+    historyCountBadge.style.display = historyList.length > 0 ? 'inline-block' : 'none';
+  }
+}
+
+function renderHistoryList() {
+  if (!historyListContainer) return;
+
+  let filtered = [...historyList];
+  if (historyFilter !== 'all') {
+    if (historyFilter === 'MEMBER') {
+      filtered = filtered.filter(h => h.type === 'MEMBER' || h.type === 'DELETE');
+    } else {
+      filtered = filtered.filter(h => h.type === historyFilter);
+    }
+  }
+
+  if (filtered.length === 0) {
+    historyListContainer.innerHTML = `
+      <div class="history-empty">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--text-subtle);"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        <span>기록된 변경 히스토리가 없습니다.</span>
+      </div>
+    `;
+    return;
+  }
+
+  historyListContainer.innerHTML = filtered.map(item => {
+    return `
+      <div class="history-item type-${item.type}">
+        <div class="history-item-top">
+          <div class="history-item-meta">
+            <span class="history-type-chip chip-${item.type}">${escapeHtml(item.typeLabel || '수정')}</span>
+            <span class="history-swimmer-name">${escapeHtml(item.swimmerName)}</span>
+            <span style="font-size:11px; color:#64748b;">(${escapeHtml(item.device || 'PC')})</span>
+          </div>
+          <span class="history-time-stamp">${escapeHtml(item.timeFormatted || new Date(item.timestamp).toLocaleTimeString())}</span>
+        </div>
+        <div class="history-change-detail">
+          ${item.fieldName ? `<strong>${escapeHtml(item.fieldName)}:</strong>` : ''}
+          ${item.prevVal || item.newVal ? `
+            <span class="val-prev">${escapeHtml(item.prevVal || '(빈값)')}</span>
+            <span class="val-arrow">➔</span>
+            <span class="val-new">${escapeHtml(item.newVal || '(삭제)')}</span>
+          ` : `<span>${escapeHtml(item.message || '')}</span>`}
+        </div>
+      </div>
+    `;
+  }).join('');
 }
 
 function renderAll() {
@@ -1054,6 +1210,35 @@ function bindEvents() {
   if (btnToggleRecords) btnToggleRecords.addEventListener('click', () => switchView('records'));
   if (btnToggleEvents) btnToggleEvents.addEventListener('click', () => switchView('events'));
 
+  // History Modal Open / Close / Filter
+  if (btnOpenHistory) {
+    btnOpenHistory.addEventListener('click', () => {
+      if (historyModal) historyModal.classList.add('show');
+      renderHistoryList();
+    });
+  }
+  if (btnHistoryCloseX) btnHistoryCloseX.addEventListener('click', () => historyModal && historyModal.classList.remove('show'));
+  if (btnHistoryClose) btnHistoryClose.addEventListener('click', () => historyModal && historyModal.classList.remove('show'));
+  if (historyModal) {
+    historyModal.addEventListener('click', (e) => {
+      if (e.target === historyModal) historyModal.classList.remove('show');
+    });
+  }
+  if (btnRefreshHistory) {
+    btnRefreshHistory.addEventListener('click', () => {
+      renderHistoryList();
+      showToast('🔄 히스토리 목록이 갱신되었습니다.');
+    });
+  }
+  historyFilterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      historyFilterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      historyFilter = btn.dataset.historyFilter;
+      renderHistoryList();
+    });
+  });
+
   // Records View Mode (간단히 vs 자세히)
   if (btnRecordsModeSimple) {
     btnRecordsModeSimple.addEventListener('click', () => {
@@ -1088,6 +1273,13 @@ function bindEvents() {
 
   // Events Table Dropdown Change Delegation
   if (eventsTableBody) {
+    eventsTableBody.addEventListener('focusin', (e) => {
+      const target = e.target;
+      if (target.classList.contains('event-select')) {
+        target.dataset.prevVal = target.value;
+      }
+    });
+
     eventsTableBody.addEventListener('change', (e) => {
       const target = e.target;
       if (!target.classList.contains('event-select')) return;
@@ -1097,8 +1289,15 @@ function bindEvents() {
       const record = records.find(r => r.id === id);
       if (!record) return;
 
-      record[field] = target.value;
-      target.classList.toggle('has-event', !!target.value);
+      const prevVal = target.dataset.prevVal || '';
+      const newVal = target.value;
+
+      record[field] = newVal;
+      target.classList.toggle('has-event', !!newVal);
+      target.dataset.prevVal = newVal;
+
+      // Log to server history
+      logChangeHistory('EVENT', record.name, field, field === 'event1' ? '출전 종목 1' : '출전 종목 2', prevVal, newVal);
 
       // Re-render summary matrices & PB table
       saveData();
@@ -1144,7 +1343,14 @@ function bindEvents() {
     });
   }
 
-  // PB Table Input Delegation
+  // PB Table Input Delegation - Remember initial value on focusin
+  tableBody.addEventListener('focusin', (e) => {
+    const target = e.target;
+    if (target.classList.contains('cell-input')) {
+      target.dataset.prevVal = target.value;
+    }
+  });
+
   tableBody.addEventListener('input', (e) => {
     const target = e.target;
     if (!target.classList.contains('cell-input')) return;
@@ -1189,10 +1395,10 @@ function bindEvents() {
     updateStats();
   });
 
-  // Focusout / Change handler: Revert to last year's record if deleted
+  // Focusout / Change handler: Log record change & revert to last year's record if deleted
   tableBody.addEventListener('focusout', (e) => {
     const target = e.target;
-    if (!target.classList.contains('record-input')) return;
+    if (!target.classList.contains('cell-input')) return;
 
     const id = parseInt(target.dataset.id, 10);
     const field = target.dataset.field;
@@ -1200,9 +1406,10 @@ function bindEvents() {
     if (!record) return;
 
     const val = target.value.trim();
+    const prevVal = (target.dataset.prevVal || '').trim();
     const lastYearVal = getLastYearRecord(id, field);
 
-    if (val === '' && lastYearVal !== '') {
+    if (val === '' && lastYearVal !== '' && STROKE_FIELDS.includes(field)) {
       target.value = lastYearVal;
       record[field] = lastYearVal;
       target.classList.remove('is-target');
@@ -1210,8 +1417,19 @@ function bindEvents() {
       target.title = '작년기록 (파란색)';
       saveData();
       updateStats();
+      logChangeHistory('RECORD', record.name, field, STROKE_NAMES[field], prevVal, lastYearVal, `${record.name}: ${STROKE_NAMES[field]} 기록 작년 데이터(${lastYearVal}s)로 원복`);
       showToast(`'${record.name || '회원'}'의 ${STROKE_NAMES[field]} 기록이 작년기록(${lastYearVal}s)으로 원복되었습니다.`);
+    } else if (val !== prevVal) {
+      if (STROKE_FIELDS.includes(field)) {
+        logChangeHistory('RECORD', record.name, field, STROKE_NAMES[field], prevVal, val);
+      } else if (field === 'name') {
+        logChangeHistory('INFO', val || record.name, 'name', '이름', prevVal, val);
+      } else if (field === 'age') {
+        logChangeHistory('INFO', record.name, 'age', '나이', prevVal, val);
+      }
     }
+
+    target.dataset.prevVal = target.value;
   });
 
   // Real-time beforeinput filter to block non-numeric characters before insertion
@@ -1240,9 +1458,11 @@ function bindEvents() {
       const id = parseInt(genderBadge.dataset.id, 10);
       const record = records.find(r => r.id === id);
       if (record) {
+        const oldGender = record.gender;
         record.gender = record.gender === '남' ? '여' : '남';
         genderBadge.textContent = record.gender;
         genderBadge.className = `gender-badge ${record.gender === '남' ? 'male' : 'female'}`;
+        logChangeHistory('INFO', record.name, 'gender', '성별', oldGender, record.gender);
         saveData();
         updateStats();
         renderSummaryMatrices();
@@ -1256,6 +1476,7 @@ function bindEvents() {
       const record = records.find(r => r.id === id);
       const name = record ? (record.name || '해당 회원') : '해당 회원';
       if (confirm(`'${name}' 회원을 명단에서 삭제하시겠습니까?`)) {
+        logChangeHistory('DELETE', name, 'member', '회원', `번호 ${record ? record.id : id} (${record ? record.group : ''})`, '삭제됨');
         records = records.filter(r => r.id !== id);
         saveData();
         renderAll();
@@ -1306,6 +1527,7 @@ function bindEvents() {
       fly: ''
     };
     records.push(newRecord);
+    logChangeHistory('MEMBER', `새 회원 (번호 ${newId})`, 'member', '회원', '', `번호 ${newId} 등록`);
     saveData();
     renderAll();
 

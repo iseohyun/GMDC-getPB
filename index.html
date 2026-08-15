@@ -35,6 +35,11 @@
       </div>
 
       <div class="header-actions">
+        <button id="btnOpenHistory" class="btn btn-secondary" title="실시간 서버 변경 히스토리 확인">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          <span>변경 이력</span>
+          <span class="history-badge" id="historyCountBadge">0</span>
+        </button>
         <button id="btnToggleSticky" class="btn btn-sticky active" title="스크롤 시 상단 조합 패널 1, 2, 3 고정 토글">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="17" x2="12" y2="22"></line><path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V6h1a1 1 0 0 0 0-2H8a1 1 0 0 0 0 2h1v4.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24Z"></path></svg>
           <span id="stickyBtnLabel">조합패널 고정 ON</span>
@@ -393,6 +398,43 @@
           <span>오늘하루 보이지 않기</span>
         </label>
         <button id="btnModalConfirm" class="btn btn-primary">확인</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Server Change History Modal Popup -->
+  <div id="historyModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="historyModalTitle">
+    <div class="modal-card history-modal-card">
+      <div class="modal-header">
+        <div class="modal-badge history-badge-header">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          서버 변경 히스토리 (실시간)
+        </div>
+        <button id="btnHistoryCloseX" class="modal-close-btn" title="닫기" aria-label="닫기">&times;</button>
+      </div>
+      <div class="modal-body history-modal-body">
+        <div class="history-filter-bar">
+          <div class="history-filter-group">
+            <button class="history-filter-btn active" data-history-filter="all">전체</button>
+            <button class="history-filter-btn" data-history-filter="RECORD">기록 수정</button>
+            <button class="history-filter-btn" data-history-filter="EVENT">종목 변경</button>
+            <button class="history-filter-btn" data-history-filter="MEMBER">회원 관리</button>
+          </div>
+          <button id="btnRefreshHistory" class="btn btn-sm btn-secondary" title="히스토리 새로고침">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+            새로고침
+          </button>
+        </div>
+        <div class="history-list-container" id="historyListContainer">
+          <div class="history-loading">
+            <span class="history-loading-spinner"></span>
+            <span>히스토리 불러오는 중...</span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer history-modal-footer">
+        <span class="history-status-note" id="historyStatusNote">최근 50개 변경 사항이 클라우드에 자동 기록됩니다.</span>
+        <button id="btnHistoryClose" class="btn btn-primary">닫기</button>
       </div>
     </div>
   </div>
