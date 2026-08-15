@@ -110,7 +110,6 @@ const tableBody = document.getElementById('tableBody');
 const searchInput = document.getElementById('searchInput');
 const filterBtns = document.querySelectorAll('.filter-btn');
 const btnAddRow = document.getElementById('btnAddRow');
-const btnResetData = document.getElementById('btnResetData');
 const btnExportCsv = document.getElementById('btnExportCsv');
 const btnCopyTsv = document.getElementById('btnCopyTsv');
 const toastEl = document.getElementById('toast');
@@ -883,22 +882,6 @@ function bindEvents() {
     }, 50);
 
     showToast('새 회원이 추가되었습니다.');
-  });
-
-  // Reset Data Button (초기 데이터 복원)
-  btnResetData.addEventListener('click', () => {
-    if (confirm('모든 데이터를 초기 기본값(37명)으로 되돌리시겠습니까?\n클라우드 및 로컬의 모든 수정사항이 초기화됩니다.')) {
-      records = JSON.parse(JSON.stringify(DEFAULT_RECORDS));
-      saveData();
-      searchQuery = '';
-      searchInput.value = '';
-      currentFilter = 'all';
-      filterBtns.forEach(b => b.classList.toggle('active', b.dataset.filter === 'all'));
-      sortColumn = null;
-      renderTable();
-      updateStats();
-      showToast('초기 데이터로 복원되었습니다.');
-    }
   });
 
   // Toggle Sticky Panel Button
