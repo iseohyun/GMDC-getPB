@@ -36,6 +36,14 @@ const MODAL_STORAGE_KEY = 'gmdc_hide_notice_modal_date';
 const EVENTS_MODE_KEY = 'gmdc_events_view_mode';
 const RECORDS_MODE_KEY = 'gmdc_records_view_mode';
 
+// Deadline Configuration: 8월 17일(화) 18:00:00 KST
+const DEADLINE_ISO = '2026-08-17T18:00:00+09:00';
+const DEADLINE = new Date(DEADLINE_ISO);
+
+function isDeadlineExpired() {
+  return new Date() >= DEADLINE;
+}
+
 // 6 Available Competition Events (출전 가능 종목)
 const EVENT_OPTIONS = [
   '핀자유형 50',
@@ -172,11 +180,57 @@ function init() {
   initNoticeModal();
   initRecordsViewMode();
   initEventsViewMode();
+  initDeadlineCountdown();
   loadLocalData();
   bindEvents();
   handleUrlRouting();
   renderAll();
   initFirebaseSync();
+}
+
+function initDeadlineCountdown() {
+  updateDeadlineCountdown();
+  setInterval(updateDeadlineCountdown, 1000);
+}
+
+function updateDeadlineCountdown() {
+  const badge = document.getElementById('tableDateBadge');
+  if (!badge) return;
+
+  const now = new Date();
+  const diff = DEADLINE.getTime() - now.getTime();
+
+  if (diff <= 0) {
+    badge.className = 'header-date is-expired';
+    badge.innerHTML = `🔒 입력 마감됨`;
+    badge.title = '입력 마감 시한(8/17 18:00)이 종료되어 읽기 전용 상태입니다.';
+    
+    if (badge.dataset.expiredState !== 'expired') {
+      badge.dataset.expiredState = 'expired';
+      renderAll();
+    }
+    return;
+  }
+
+  const totalSeconds = Math.floor(diff / 1000);
+  const days = Math.floor(totalSeconds / 86400);
+  const hours = Math.floor((totalSeconds % 86400) / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+
+  let timeStr = '';
+  if (days > 0) {
+    timeStr = `마감까지 ${days}일 ${hours}시간 ${minutes}분 ${seconds}초`;
+  } else if (hours > 0) {
+    timeStr = `마감까지 ${hours}시간 ${minutes}분 ${seconds}초`;
+  } else {
+    timeStr = `마감까지 ${minutes}분 ${seconds}초`;
+  }
+
+  const isUrgent = diff < 3600000; // 1시간 이내
+  badge.className = `header-date ${isUrgent ? 'is-urgent' : 'is-active'}`;
+  badge.innerHTML = `⏳ ${timeStr}`;
+  badge.title = `입력 마감 시한: 8월 17일 18:00:00 (이후 입력 및 수정 불가)`;
 }
 
 function initRecordsViewMode() {
@@ -366,6 +420,11 @@ function initFirebaseSync() {
 
 // 3. Save Data (localStorage immediately + Firestore debounced)
 function saveData() {
+  if (isDeadlineExpired()) {
+    showToast('🔒 입력 및 수정 시한이 마감되었습니다.');
+    return;
+  }
+
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
   } catch (e) {
@@ -585,6 +644,16 @@ function renderTable() {
   const processed = getProcessedRecords();
   tableBody.innerHTML = '';
 
+  const expired = isDeadlineExpired();
+  const disabledAttr = expired ? 'disabled' : '';
+
+  if (btnAddRow) {
+    btnAddRow.disabled = expired;
+    btnAddRow.style.opacity = expired ? '0.5' : '1';
+    btnAddRow.style.cursor = expired ? 'not-allowed' : 'pointer';
+    btnAddRow.title = expired ? '입력 마감 시한이 종료되었습니다.' : '새 회원을 추가합니다.';
+  }
+
   if (processed.length === 0) {
     const emptyRow = document.createElement('tr');
     emptyRow.innerHTML = `
@@ -612,15 +681,15 @@ function renderTable() {
         <span class="group-badge">${escapeHtml(item.group || '-')}</span>
       </td>
       <td class="col-age col-pb-detail">
-        <input type="text" class="cell-input age-input" data-id="${item.id}" data-field="age" value="${escapeHtml(item.age || '')}" placeholder="나이" inputmode="numeric" />
+        <input type="text" class="cell-input age-input" data-id="${item.id}" data-field="age" value="${escapeHtml(item.age || '')}" placeholder="나이" inputmode="numeric" ${disabledAttr} />
       </td>
       <td class="col-gender col-pb-detail">
-        <span class="gender-badge ${item.gender === '남' ? 'male' : 'female'}" data-id="${item.id}" data-field="gender" title="클릭하여 성별 전환">
+        <span class="gender-badge ${item.gender === '남' ? 'male' : 'female'} ${expired ? 'is-locked' : ''}" data-id="${item.id}" data-field="gender" title="${expired ? '입력 마감됨' : '클릭하여 성별 전환'}">
           ${item.gender || '남'}
         </span>
       </td>
       <td class="col-name">
-        <input type="text" class="cell-input name-input" data-id="${item.id}" data-field="name" value="${escapeHtml(item.name || '')}" placeholder="이름" />
+        <input type="text" class="cell-input name-input" data-id="${item.id}" data-field="name" value="${escapeHtml(item.name || '')}" placeholder="이름" ${disabledAttr} />
       </td>
       ${STROKE_FIELDS.map(field => {
         const val = item[field] || '';
@@ -651,6 +720,7 @@ function renderTable() {
                 inputmode="decimal"
                 autocomplete="off"
                 title="${titleText}"
+                ${disabledAttr}
               />
             </div>
           </td>
@@ -660,9 +730,11 @@ function renderTable() {
         ${eventsTagHtml}
       </td>
       <td class="col-actions col-pb-detail">
+        ${expired ? '' : `
         <button class="btn-icon-danger" data-delete-id="${item.id}" title="회원 삭제">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
         </button>
+        `}
       </td>
     `;
 
@@ -801,6 +873,9 @@ function renderEventsTable() {
     return;
   }
 
+  const expired = isDeadlineExpired();
+  const disabledAttr = expired ? 'disabled' : '';
+
   list.forEach(item => {
     const tr = document.createElement('tr');
     tr.dataset.id = item.id;
@@ -824,7 +899,7 @@ function renderEventsTable() {
         <span class="birth-code">${escapeHtml(item.birthId || '-')}</span>
       </td>
       <td class="col-event">
-        <select class="event-select ${item.event1 ? 'has-event' : ''}" data-id="${item.id}" data-field="event1">
+        <select class="event-select ${item.event1 ? 'has-event' : ''}" data-id="${item.id}" data-field="event1" ${disabledAttr}>
           <option value="">(미신청)</option>
           ${EVENT_OPTIONS.map(opt => `
             <option value="${opt}" ${item.event1 === opt ? 'selected' : ''}>${opt}</option>
@@ -832,7 +907,7 @@ function renderEventsTable() {
         </select>
       </td>
       <td class="col-event">
-        <select class="event-select ${item.event2 ? 'has-event' : ''}" data-id="${item.id}" data-field="event2">
+        <select class="event-select ${item.event2 ? 'has-event' : ''}" data-id="${item.id}" data-field="event2" ${disabledAttr}>
           <option value="">(미신청)</option>
           ${EVENT_OPTIONS.map(opt => `
             <option value="${opt}" ${item.event2 === opt ? 'selected' : ''}>${opt}</option>
@@ -1154,6 +1229,12 @@ function bindEvents() {
       const target = e.target;
       if (!target.classList.contains('event-select')) return;
 
+      if (isDeadlineExpired()) {
+        showToast('🔒 입력 및 수정 시한이 마감되었습니다.');
+        renderEventsTable();
+        return;
+      }
+
       const id = parseInt(target.dataset.id, 10);
       const field = target.dataset.field; // 'event1' or 'event2'
       const record = records.find(r => r.id === id);
@@ -1225,6 +1306,13 @@ function bindEvents() {
     const target = e.target;
     if (!target.classList.contains('cell-input')) return;
 
+    if (isDeadlineExpired()) {
+      e.preventDefault();
+      showToast('🔒 입력 및 수정 시한이 마감되었습니다.');
+      renderTable();
+      return;
+    }
+
     const id = parseInt(target.dataset.id, 10);
     const field = target.dataset.field;
     const record = records.find(r => r.id === id);
@@ -1269,6 +1357,7 @@ function bindEvents() {
   tableBody.addEventListener('focusout', (e) => {
     const target = e.target;
     if (!target.classList.contains('cell-input')) return;
+    if (isDeadlineExpired()) return;
 
     const id = parseInt(target.dataset.id, 10);
     const field = target.dataset.field;
@@ -1306,6 +1395,13 @@ function bindEvents() {
   tableBody.addEventListener('beforeinput', (e) => {
     const target = e.target;
     if (!target.classList.contains('cell-input')) return;
+
+    if (isDeadlineExpired()) {
+      e.preventDefault();
+      showToast('🔒 입력 및 수정 시한이 마감되었습니다.');
+      return;
+    }
+
     if (!e.data || e.inputType.startsWith('delete') || e.inputType.startsWith('history')) return;
 
     if (target.classList.contains('record-input')) {
@@ -1325,6 +1421,10 @@ function bindEvents() {
   tableBody.addEventListener('click', (e) => {
     const genderBadge = e.target.closest('.gender-badge');
     if (genderBadge) {
+      if (isDeadlineExpired()) {
+        showToast('🔒 입력 및 수정 시한이 마감되었습니다.');
+        return;
+      }
       const id = parseInt(genderBadge.dataset.id, 10);
       const record = records.find(r => r.id === id);
       if (record) {
@@ -1342,6 +1442,10 @@ function bindEvents() {
 
     const deleteBtn = e.target.closest('[data-delete-id]');
     if (deleteBtn) {
+      if (isDeadlineExpired()) {
+        showToast('🔒 입력 및 수정 시한이 마감되었습니다.');
+        return;
+      }
       const id = parseInt(deleteBtn.dataset.deleteId, 10);
       const record = records.find(r => r.id === id);
       const name = record ? (record.name || '해당 회원') : '해당 회원';
@@ -1379,6 +1483,11 @@ function bindEvents() {
 
   // Add Row Button
   btnAddRow.addEventListener('click', () => {
+    if (isDeadlineExpired()) {
+      showToast('🔒 신규 회원 등록 시한이 마감되었습니다.');
+      return;
+    }
+
     const newId = records.length > 0 ? Math.max(...records.map(r => r.id)) + 1 : 1;
     const newRecord = {
       id: newId,
@@ -1508,6 +1617,12 @@ function handleKeyNavigation(e) {
 function handleTablePaste(e) {
   const target = e.target;
   if (!target.classList.contains('cell-input')) return;
+
+  if (isDeadlineExpired()) {
+    e.preventDefault();
+    showToast('🔒 입력 및 수정 시한이 마감되었습니다.');
+    return;
+  }
 
   const clipboardData = e.clipboardData || window.clipboardData;
   const pastedText = clipboardData.getData('text');
