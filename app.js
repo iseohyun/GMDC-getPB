@@ -146,6 +146,7 @@ const searchInput = document.getElementById('searchInput');
 const filterBtns = document.querySelectorAll('.filter-btn');
 const btnAddRow = document.getElementById('btnAddRow');
 const btnExportCsv = document.getElementById('btnExportCsv');
+const btnCopyTsv = document.getElementById('btnCopyTsv');
 const toastEl = document.getElementById('toast');
 const saveStatusText = document.getElementById('saveStatusText');
 const comboGrid = document.getElementById('comboGrid');
@@ -1425,6 +1426,11 @@ function bindEvents() {
     btnExportCsv.addEventListener('click', exportToCsv);
   }
 
+  // Copy TSV Button for Excel (Copy Icon)
+  if (btnCopyTsv) {
+    btnCopyTsv.addEventListener('click', copyToClipboardTsv);
+  }
+
   // Column Header Sorting
   document.querySelectorAll('.record-table th[data-sort]').forEach(th => {
     th.addEventListener('click', () => {
@@ -1549,11 +1555,10 @@ function handleTablePaste(e) {
   showToast('엑셀 데이터가 표에 적용되었습니다.');
 }
 
-// Copy to Clipboard as TSV
+// Copy to Clipboard as TSV (Records only, Exclude Table Headers)
 function copyToClipboardTsv() {
-  let headers, rows;
+  let rows;
   if (currentView === 'events') {
-    headers = ['번호', '그룹', '성별', '이름', '생년월일(식별코드)', '출전 종목 1', '출전 종목 2'];
     rows = records.map(r => [
       r.id,
       r.group || '',
@@ -1564,7 +1569,6 @@ function copyToClipboardTsv() {
       r.event2 || ''
     ]);
   } else {
-    headers = ['번호', '그룹', '2026-01-01', '성별', '이름', '핀접영', '핀자유', '자유형', '배영', '평영', '접영', '출전종목1', '출전종목2'];
     rows = records.map(r => [
       r.id,
       r.group || '',
@@ -1582,27 +1586,28 @@ function copyToClipboardTsv() {
     ]);
   }
 
-  const tsv = [headers.join('\t'), ...rows.map(row => row.join('\t'))].join('\n');
+  // Exclude table headers, only copy record data rows
+  const tsv = rows.map(row => row.join('\t')).join('\n');
 
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(tsv).then(() => {
-      showToast('📋 전체 데이터가 클립보드에 복사되었습니다. 엑셀에 붙여넣기(Ctrl+V)하세요!');
+      showToast(`📋 레코드 데이터(${rows.length}명, 헤더 제외)가 복사되었습니다. 엑셀에 붙여넣기(Ctrl+V)하세요!`);
     }).catch(() => {
-      fallbackCopy(tsv);
+      fallbackCopy(tsv, rows.length);
     });
   } else {
-    fallbackCopy(tsv);
+    fallbackCopy(tsv, rows.length);
   }
 }
 
-function fallbackCopy(text) {
+function fallbackCopy(text, count) {
   const textarea = document.createElement('textarea');
   textarea.value = text;
   document.body.appendChild(textarea);
   textarea.select();
   document.execCommand('copy');
   document.body.removeChild(textarea);
-  showToast('📋 전체 데이터가 복사되었습니다. 엑셀에 붙여넣기(Ctrl+V)하세요!');
+  showToast(`📋 레코드 데이터(${count || ''}명, 헤더 제외)가 복사되었습니다. 엑셀에 붙여넣기(Ctrl+V)하세요!`);
 }
 
 // Export to CSV with UTF-8 BOM
