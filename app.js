@@ -136,7 +136,7 @@ let eventsGenderFilter = 'all';
 let eventsGroupFilter = 'all';
 let eventsViewMode = 'simple'; // 'simple' (기본) | 'detailed'
 
-let isStickyPinned = true;
+let isStickyPinned = false; // 기본값: 고정해제
 let saveTimeout = null;
 
 // Header Toggle Buttons & View Containers
@@ -570,7 +570,7 @@ function initNoticeModal() {
 // Initialize Sticky Panel Preference
 function initStickyPreference() {
   const saved = localStorage.getItem(STICKY_STORAGE_KEY);
-  isStickyPinned = saved !== '0';
+  isStickyPinned = saved === '1'; // 기본값: 고정 해제 (false)
   applyStickyState(isStickyPinned);
 }
 
