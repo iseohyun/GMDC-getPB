@@ -33,6 +33,7 @@ const STORAGE_KEY = 'gmdc_swim_records_v1';
 const STICKY_STORAGE_KEY = 'gmdc_sticky_pinned';
 const MODAL_STORAGE_KEY = 'gmdc_hide_notice_modal_date';
 const EVENTS_MODE_KEY = 'gmdc_events_view_mode';
+const RECORDS_MODE_KEY = 'gmdc_records_view_mode';
 
 // 6 Available Competition Events (출전 가능 종목)
 const EVENT_OPTIONS = [
@@ -118,6 +119,7 @@ let searchQuery = '';
 let currentFilter = 'all'; // 'all', '남', '여', 'recorded'
 let sortColumn = null;
 let sortDirection = 'asc';
+let recordsViewMode = 'simple'; // 'simple' (기본) | 'detailed'
 
 // Events View State
 let eventsSearchQuery = '';
@@ -136,6 +138,9 @@ const viewEvents = document.getElementById('viewEvents');
 
 // Records View DOM
 const tableBody = document.getElementById('tableBody');
+const recordTable = document.getElementById('recordTable');
+const btnRecordsModeSimple = document.getElementById('btnRecordsModeSimple');
+const btnRecordsModeDetailed = document.getElementById('btnRecordsModeDetailed');
 const searchInput = document.getElementById('searchInput');
 const filterBtns = document.querySelectorAll('.filter-btn');
 const btnAddRow = document.getElementById('btnAddRow');
@@ -166,12 +171,26 @@ const eventsFilteredCount = document.getElementById('eventsFilteredCount');
 function init() {
   initStickyPreference();
   initNoticeModal();
+  initRecordsViewMode();
   initEventsViewMode();
   loadLocalData();
   bindEvents();
   handleUrlRouting();
   renderAll();
   initFirebaseSync();
+}
+
+function initRecordsViewMode() {
+  const saved = localStorage.getItem(RECORDS_MODE_KEY);
+  recordsViewMode = (saved === 'detailed') ? 'detailed' : 'simple'; // 기본: simple
+  applyRecordsViewMode(recordsViewMode);
+}
+
+function applyRecordsViewMode(mode) {
+  recordsViewMode = mode;
+  if (btnRecordsModeSimple) btnRecordsModeSimple.classList.toggle('active', mode === 'simple');
+  if (btnRecordsModeDetailed) btnRecordsModeDetailed.classList.toggle('active', mode === 'detailed');
+  if (recordTable) recordTable.classList.toggle('is-simple', mode === 'simple');
 }
 
 function initEventsViewMode() {
@@ -533,14 +552,14 @@ function renderTable() {
       : `<span class="pb-event-chip empty">미신청</span>`;
 
     tr.innerHTML = `
-      <td class="col-no">${item.id}</td>
-      <td class="col-group">
+      <td class="col-no col-pb-detail">${item.id}</td>
+      <td class="col-group col-pb-detail">
         <span class="group-badge">${escapeHtml(item.group || '-')}</span>
       </td>
-      <td class="col-age">
+      <td class="col-age col-pb-detail">
         <input type="text" class="cell-input age-input" data-id="${item.id}" data-field="age" value="${escapeHtml(item.age || '')}" placeholder="나이" inputmode="numeric" />
       </td>
-      <td class="col-gender">
+      <td class="col-gender col-pb-detail">
         <span class="gender-badge ${item.gender === '남' ? 'male' : 'female'}" data-id="${item.id}" data-field="gender" title="클릭하여 성별 전환">
           ${item.gender || '남'}
         </span>
@@ -582,10 +601,10 @@ function renderTable() {
           </td>
         `;
       }).join('')}
-      <td class="col-events-summary">
+      <td class="col-events-summary col-pb-detail">
         ${eventsTagHtml}
       </td>
-      <td class="col-actions">
+      <td class="col-actions col-pb-detail">
         <button class="btn-icon-danger" data-delete-id="${item.id}" title="회원 삭제">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
         </button>
@@ -1034,6 +1053,22 @@ function bindEvents() {
   // Header View Toggle Buttons
   if (btnToggleRecords) btnToggleRecords.addEventListener('click', () => switchView('records'));
   if (btnToggleEvents) btnToggleEvents.addEventListener('click', () => switchView('events'));
+
+  // Records View Mode (간단히 vs 자세히)
+  if (btnRecordsModeSimple) {
+    btnRecordsModeSimple.addEventListener('click', () => {
+      applyRecordsViewMode('simple');
+      localStorage.setItem(RECORDS_MODE_KEY, 'simple');
+      showToast('📋 개인 PB 간단히 보기 모드로 전환되었습니다.');
+    });
+  }
+  if (btnRecordsModeDetailed) {
+    btnRecordsModeDetailed.addEventListener('click', () => {
+      applyRecordsViewMode('detailed');
+      localStorage.setItem(RECORDS_MODE_KEY, 'detailed');
+      showToast('📋 개인 PB 자세히 보기 모드로 전환되었습니다.');
+    });
+  }
 
   // Events View Mode (간단히 vs 자세히)
   if (btnModeSimple) {

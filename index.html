@@ -151,6 +151,16 @@
             <button class="filter-btn" data-filter="여">여성</button>
             <button class="filter-btn" data-filter="recorded">기록 보유자</button>
           </div>
+          <div class="records-mode-toggle">
+            <button class="mode-btn active" id="btnRecordsModeSimple" data-records-mode="simple" title="이름과 기록만 간단히 표시">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+              <span>간단히 (기본)</span>
+            </button>
+            <button class="mode-btn" id="btnRecordsModeDetailed" data-records-mode="detailed" title="번호, 그룹, 나이, 성별, 출전종목, 관리 등 모든 열 표시">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+              <span>자세히</span>
+            </button>
+          </div>
         </div>
         <div class="toolbar-right">
           <button id="btnAddRow" class="btn btn-primary">
@@ -176,13 +186,13 @@
       <!-- Table Container -->
       <main class="table-card">
         <div class="table-responsive" id="tableContainer">
-          <table class="record-table" id="recordTable">
+          <table class="record-table pb-table is-simple" id="recordTable">
             <thead>
               <tr>
-                <th class="col-no" data-sort="no">번호</th>
-                <th class="col-group" data-sort="group">그룹</th>
-                <th class="col-age" data-sort="age">2026-01-01</th>
-                <th class="col-gender" data-sort="gender">성별</th>
+                <th class="col-no col-pb-detail" data-sort="no">번호</th>
+                <th class="col-group col-pb-detail" data-sort="group">그룹</th>
+                <th class="col-age col-pb-detail" data-sort="age">2026-01-01</th>
+                <th class="col-gender col-pb-detail" data-sort="gender">성별</th>
                 <th class="col-name" data-sort="name">이름</th>
                 <th class="col-record" data-sort="finFly">핀접영</th>
                 <th class="col-record" data-sort="finFree">핀자유</th>
@@ -190,8 +200,8 @@
                 <th class="col-record" data-sort="back">배영</th>
                 <th class="col-record" data-sort="breast">평영</th>
                 <th class="col-record" data-sort="fly">접영</th>
-                <th class="col-events-summary">출전 종목</th>
-                <th class="col-actions">관리</th>
+                <th class="col-events-summary col-pb-detail">출전 종목</th>
+                <th class="col-actions col-pb-detail">관리</th>
               </tr>
             </thead>
             <tbody id="tableBody">

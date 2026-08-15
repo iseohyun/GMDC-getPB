@@ -1367,7 +1367,30 @@ body {
   box-shadow: var(--shadow-sm);
 }
 
-/* Column Hiding in Simple Mode */
+/* Records Mode Toggle Container */
+.records-mode-toggle {
+  display: inline-flex;
+  background: var(--bg-page);
+  padding: 3px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-dark);
+  gap: 4px;
+}
+
+/* PB Table Column Hiding in Simple Mode */
+.pb-table.is-simple .col-pb-detail {
+  display: none !important;
+}
+
+.pb-table.is-simple .col-name {
+  width: 140px;
+}
+
+.pb-table.is-simple .col-record {
+  width: 14%;
+}
+
+/* Events Table Column Hiding in Simple Mode */
 .events-table.is-simple .col-detail {
   display: none !important;
 }
