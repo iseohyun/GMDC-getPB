@@ -1085,6 +1085,12 @@ body {
   display: flex;
   flex-direction: column;
   overflow: visible;
+  position: relative;
+  z-index: 10;
+}
+
+.matrix-card .table-responsive {
+  overflow: visible;
 }
 
 .matrix-card.male-card {
@@ -1191,6 +1197,10 @@ body {
   cursor: pointer;
 }
 
+.matrix-cell.has-count:hover {
+  z-index: 1000;
+}
+
 .male-card .matrix-cell.has-count {
   color: #0284c7;
   background-color: #f0f9ff;
@@ -1223,8 +1233,8 @@ body {
   color: #ffffff;
   padding: 8px 12px;
   border-radius: var(--radius-sm);
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 4px 6px -4px rgba(0, 0, 0, 0.2);
-  z-index: 200;
+  box-shadow: 0 14px 35px -4px rgba(0, 0, 0, 0.45), 0 6px 12px -2px rgba(0, 0, 0, 0.3);
+  z-index: 99999;
   white-space: nowrap;
   pointer-events: none;
   text-align: left;
@@ -1304,12 +1314,70 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.events-detail-title-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .events-detail-header h3 {
   font-size: 17px;
   font-weight: 800;
   color: var(--secondary);
+}
+
+/* Mode Toggle (간단히 vs 자세히) */
+.events-mode-toggle {
+  display: inline-flex;
+  background: var(--bg-page);
+  padding: 3px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-dark);
+  gap: 4px;
+}
+
+.mode-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  background: transparent;
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.mode-btn:hover {
+  color: var(--text-main);
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.mode-btn.active {
+  background: var(--secondary);
+  color: #ffffff;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Column Hiding in Simple Mode */
+.events-table.is-simple .col-detail {
+  display: none !important;
+}
+
+.events-table.is-simple .col-name {
+  width: 140px;
+}
+
+.events-table.is-simple .col-event {
+  width: 42%;
 }
 
 .group-filter-dropdown select,

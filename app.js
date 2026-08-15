@@ -32,6 +32,7 @@ try {
 const STORAGE_KEY = 'gmdc_swim_records_v1';
 const STICKY_STORAGE_KEY = 'gmdc_sticky_pinned';
 const MODAL_STORAGE_KEY = 'gmdc_hide_notice_modal_date';
+const EVENTS_MODE_KEY = 'gmdc_events_view_mode';
 
 // 6 Available Competition Events (출전 가능 종목)
 const EVENT_OPTIONS = [
@@ -122,6 +123,7 @@ let sortDirection = 'asc';
 let eventsSearchQuery = '';
 let eventsGenderFilter = 'all';
 let eventsGroupFilter = 'all';
+let eventsViewMode = 'simple'; // 'simple' (기본) | 'detailed'
 
 let isStickyPinned = true;
 let saveTimeout = null;
@@ -145,12 +147,15 @@ const btnToggleSticky = document.getElementById('btnToggleSticky');
 const comboGrid = document.getElementById('comboGrid');
 const stickyBtnLabel = document.getElementById('stickyBtnLabel');
 
-// Events View DOM (Side-by-Side Matrices)
+// Events View DOM (Side-by-Side Matrices & List)
 const maleMatrixBody = document.getElementById('maleMatrixBody');
 const maleMatrixFoot = document.getElementById('maleMatrixFoot');
 const femaleMatrixBody = document.getElementById('femaleMatrixBody');
 const femaleMatrixFoot = document.getElementById('femaleMatrixFoot');
 
+const btnModeSimple = document.getElementById('btnModeSimple');
+const btnModeDetailed = document.getElementById('btnModeDetailed');
+const eventsDetailTable = document.getElementById('eventsDetailTable');
 const eventsSearchInput = document.getElementById('eventsSearchInput');
 const eventsFilterBtns = document.querySelectorAll('.events-filter-btn');
 const eventsGroupSelect = document.getElementById('eventsGroupSelect');
@@ -161,11 +166,25 @@ const eventsFilteredCount = document.getElementById('eventsFilteredCount');
 function init() {
   initStickyPreference();
   initNoticeModal();
+  initEventsViewMode();
   loadLocalData();
   bindEvents();
   handleUrlRouting();
   renderAll();
   initFirebaseSync();
+}
+
+function initEventsViewMode() {
+  const saved = localStorage.getItem(EVENTS_MODE_KEY);
+  eventsViewMode = (saved === 'detailed') ? 'detailed' : 'simple'; // 기본: simple
+  applyEventsViewMode(eventsViewMode);
+}
+
+function applyEventsViewMode(mode) {
+  eventsViewMode = mode;
+  if (btnModeSimple) btnModeSimple.classList.toggle('active', mode === 'simple');
+  if (btnModeDetailed) btnModeDetailed.classList.toggle('active', mode === 'detailed');
+  if (eventsDetailTable) eventsDetailTable.classList.toggle('is-simple', mode === 'simple');
 }
 
 function renderAll() {
@@ -716,18 +735,18 @@ function renderEventsTable() {
     const countClass = count === 2 ? 'count-2' : count === 1 ? 'count-1' : 'count-0';
 
     tr.innerHTML = `
-      <td class="col-no" style="text-align:center;">${item.id}</td>
-      <td class="col-group" style="text-align:center;">
+      <td class="col-no col-detail" style="text-align:center;">${item.id}</td>
+      <td class="col-group col-detail" style="text-align:center;">
         <span class="group-badge">${escapeHtml(item.group || '-')}</span>
       </td>
-      <td class="col-gender" style="text-align:center;">
+      <td class="col-gender col-detail" style="text-align:center;">
         <span class="gender-badge ${item.gender === '남' ? 'male' : 'female'}">${item.gender || '남'}</span>
       </td>
       <td class="col-name" style="font-weight:700;">
         ${escapeHtml(item.name || '무명')}
         <span style="font-size:11px; color:var(--text-subtle); margin-left:2px;">(${item.age}세)</span>
       </td>
-      <td class="col-birth" style="text-align:center;">
+      <td class="col-birth col-detail" style="text-align:center;">
         <span class="birth-code">${escapeHtml(item.birthId || '-')}</span>
       </td>
       <td class="col-event">
@@ -746,10 +765,10 @@ function renderEventsTable() {
           `).join('')}
         </select>
       </td>
-      <td class="col-count" style="text-align:center;">
+      <td class="col-count col-detail" style="text-align:center;">
         <span class="count-badge ${countClass}">${count}종목</span>
       </td>
-      <td class="col-goto-pb" style="text-align:center;">
+      <td class="col-goto-pb col-detail" style="text-align:center;">
         <button class="btn-table-jump" data-jump-id="${item.id}" title="${item.name}의 개인 PB 기록표로 이동">
           PB 보기
         </button>
@@ -1015,6 +1034,22 @@ function bindEvents() {
   // Header View Toggle Buttons
   if (btnToggleRecords) btnToggleRecords.addEventListener('click', () => switchView('records'));
   if (btnToggleEvents) btnToggleEvents.addEventListener('click', () => switchView('events'));
+
+  // Events View Mode (간단히 vs 자세히)
+  if (btnModeSimple) {
+    btnModeSimple.addEventListener('click', () => {
+      applyEventsViewMode('simple');
+      localStorage.setItem(EVENTS_MODE_KEY, 'simple');
+      showToast('📋 간단히 보기 모드로 전환되었습니다.');
+    });
+  }
+  if (btnModeDetailed) {
+    btnModeDetailed.addEventListener('click', () => {
+      applyEventsViewMode('detailed');
+      localStorage.setItem(EVENTS_MODE_KEY, 'detailed');
+      showToast('📋 자세히 보기 모드로 전환되었습니다.');
+    });
+  }
 
   // Events Table Dropdown Change Delegation
   if (eventsTableBody) {

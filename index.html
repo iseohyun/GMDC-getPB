@@ -283,7 +283,19 @@
       <!-- Detailed Event Entries Table -->
       <section class="events-detail-section">
         <div class="events-detail-header">
-          <h3>📋 출전 선수별 상세 명단 (총 37명)</h3>
+          <div class="events-detail-title-group">
+            <h3>📋 출전 선수별 명단 (총 37명)</h3>
+          </div>
+          <div class="events-mode-toggle">
+            <button class="mode-btn active" id="btnModeSimple" data-events-mode="simple" title="이름과 출전 종목만 간단히 표시">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+              <span>간단히 (기본)</span>
+            </button>
+            <button class="mode-btn" id="btnModeDetailed" data-events-mode="detailed" title="그룹, 성별, 생년월일, 개인PB 등 모든 정보 표시">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+              <span>자세히</span>
+            </button>
+          </div>
         </div>
 
         <section class="toolbar">
@@ -316,18 +328,18 @@
 
         <main class="table-card">
           <div class="table-responsive">
-            <table class="record-table events-table" id="eventsDetailTable">
+            <table class="record-table events-table is-simple" id="eventsDetailTable">
               <thead>
                 <tr>
-                  <th class="col-no" style="width: 50px;">번호</th>
-                  <th class="col-group" style="width: 75px;">그룹</th>
-                  <th class="col-gender" style="width: 60px;">성별</th>
-                  <th class="col-name" style="width: 100px;">이름</th>
-                  <th class="col-birth" style="width: 130px;">생년월일(식별코드)</th>
-                  <th class="col-event" style="width: 150px;">출전 종목 1</th>
-                  <th class="col-event" style="width: 150px;">출전 종목 2</th>
-                  <th class="col-count" style="width: 90px;">출전 수</th>
-                  <th class="col-goto-pb" style="width: 110px;">개인 PB</th>
+                  <th class="col-no col-detail" style="width: 50px;">번호</th>
+                  <th class="col-group col-detail" style="width: 75px;">그룹</th>
+                  <th class="col-gender col-detail" style="width: 60px;">성별</th>
+                  <th class="col-name" style="width: 120px;">이름</th>
+                  <th class="col-birth col-detail" style="width: 130px;">생년월일(식별코드)</th>
+                  <th class="col-event" style="width: 180px;">출전 종목 1</th>
+                  <th class="col-event" style="width: 180px;">출전 종목 2</th>
+                  <th class="col-count col-detail" style="width: 90px;">출전 수</th>
+                  <th class="col-goto-pb col-detail" style="width: 100px;">개인 PB</th>
                 </tr>
               </thead>
               <tbody id="eventsTableBody">
