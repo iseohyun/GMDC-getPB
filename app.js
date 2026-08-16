@@ -188,6 +188,7 @@ function init() {
   initStickyPreference();
   initNoticeModal();
   initAuditModal();
+  initRulesModal();
   initScenarioMode();
   initRecordsViewMode();
   initEventsViewMode();
@@ -462,6 +463,30 @@ function openAuditModal() {
 function closeAuditModal() {
   const modal = document.getElementById('auditModal');
   if (modal) modal.classList.remove('show');
+}
+
+function initRulesModal() {
+  const btnOpen = document.getElementById('btnOpenRulesModal');
+  const modal = document.getElementById('rulesModal');
+  const btnCloseX = document.getElementById('btnRulesModalCloseX');
+  const btnConfirm = document.getElementById('btnRulesModalConfirm');
+
+  if (!modal) return;
+
+  function openModal() {
+    modal.classList.add('show');
+  }
+
+  function closeModal() {
+    modal.classList.remove('show');
+  }
+
+  if (btnOpen) btnOpen.addEventListener('click', openModal);
+  if (btnCloseX) btnCloseX.addEventListener('click', closeModal);
+  if (btnConfirm) btnConfirm.addEventListener('click', closeModal);
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeModal();
+  });
 }
 
 async function compareHistoryWithCurrentRecords() {
@@ -1341,13 +1366,14 @@ function findBestMedleyRelay(gender, minAge = 160) {
   if (missing.length > 0) {
     return {
       status: 'MISSING_STROKES',
-      message: `기록 부족 (미등록 종목: ${missing.join(', ')})`
+      message: `조합불가: 기록 부족 (미등록 종목: ${missing.join(', ')})`
     };
   }
 
   let bestTime = Infinity;
   let bestAge = 0;
   let bestAssignment = null;
+  let maxAgeFound = 0;
 
   for (const sBack of backList) {
     const ageBack = parseFloat(sBack.age);
@@ -1369,6 +1395,10 @@ function findBestMedleyRelay(gender, minAge = 160) {
           const timeFree = parseFloat(sFree.free);
 
           const totalAge = ageBack + ageBreast + ageFly + ageFree;
+          if (totalAge > maxAgeFound) {
+            maxAgeFound = totalAge;
+          }
+
           if (totalAge >= minAge) {
             const totalTime = timeBack + timeBreast + timeFly + timeFree;
             if (totalTime < bestTime) {
@@ -1395,23 +1425,88 @@ function findBestMedleyRelay(gender, minAge = 160) {
       members: bestAssignment
     };
   } else {
+    const ageSuffix = maxAgeFound > 0 ? ` (현재 ${maxAgeFound}세)` : '';
     return {
       status: 'AGE_NOT_MET',
-      message: `도합나이 ${minAge}세 이상 조합 없음 (4명 고유 배정)`
+      message: `조합불가: 도합나이 ${minAge}세 이상 조합 없음${ageSuffix}`
     };
   }
 }
 
-// Compute Optimal Relay Combinations
+// Find best freestyle relay (자유형 50m x 4명, 도합나이 >= minAge)
+function findBestFreestyleRelay(gender, minAge = 160) {
+  const pool = records.filter(r => r.gender === gender && parseFloat(r.free) > 0 && parseFloat(r.age) > 0);
+
+  if (pool.length < 4) {
+    const names = pool.map(p => p.name).join(', ');
+    const namesSuffix = names ? `: ${names}` : '';
+    return {
+      status: 'NOT_ENOUGH',
+      message: `조합불가: 자유형 기록 부족 (${gender} ${pool.length}/4명)${namesSuffix}`
+    };
+  }
+
+  const combos = getCombinations(pool, 4);
+  let bestTime = Infinity;
+  let bestAge = 0;
+  let bestMembers = null;
+  let maxAgeFound = 0;
+
+  for (const group of combos) {
+    const totalAge = group.reduce((sum, r) => sum + parseFloat(r.age), 0);
+    if (totalAge > maxAgeFound) {
+      maxAgeFound = totalAge;
+    }
+
+    if (totalAge >= minAge) {
+      const totalTime = group.reduce((sum, r) => sum + parseFloat(r.free), 0);
+      if (totalTime < bestTime) {
+        bestTime = totalTime;
+        bestAge = totalAge;
+        bestMembers = group.map(r => ({
+          id: r.id,
+          strokeField: 'free',
+          strokeName: '자유형',
+          name: r.name,
+          age: r.age,
+          time: parseFloat(r.free),
+          gender: r.gender
+        }));
+      }
+    }
+  }
+
+  if (bestMembers) {
+    bestMembers.sort((a, b) => a.time - b.time);
+    return {
+      status: 'SUCCESS',
+      totalTime: bestTime,
+      totalAge: bestAge,
+      members: bestMembers
+    };
+  } else {
+    const ageSuffix = maxAgeFound > 0 ? ` (현재 ${maxAgeFound}세)` : '';
+    return {
+      status: 'AGE_NOT_MET',
+      message: `조합불가: 도합나이 ${minAge}세 이상 조합 없음${ageSuffix}`
+    };
+  }
+}
+
+// Compute Optimal Relay Combinations (5 Combinations)
 function calculateRelayCombinations() {
   const finMen = records.filter(r => r.gender === '남' && parseFloat(r.finFree) > 0 && parseFloat(r.age) > 0);
   const finWomen = records.filter(r => r.gender === '여' && parseFloat(r.finFree) > 0 && parseFloat(r.age) > 0);
 
   let combo1Result = null;
   if (finMen.length < 3 || finWomen.length < 3) {
+    const mNames = finMen.map(r => r.name).join(', ');
+    const wNames = finWomen.map(r => r.name).join(', ');
+    const mSuffix = mNames ? ` [${mNames}]` : '';
+    const wSuffix = wNames ? ` [${wNames}]` : '';
     combo1Result = {
       status: 'NOT_ENOUGH',
-      message: `핀자유 기록 부족 (남 ${finMen.length}/3명, 여 ${finWomen.length}/3명)`
+      message: `조합불가: 핀자유 기록 부족 (남 ${finMen.length}/3명${mSuffix}, 여 ${finWomen.length}/3명${wSuffix})`
     };
   } else {
     const menCombos = getCombinations(finMen, 3);
@@ -1419,6 +1514,7 @@ function calculateRelayCombinations() {
     let bestTime = Infinity;
     let bestAge = 0;
     let bestMembers = null;
+    let maxAgeFound = 0;
 
     for (const mGroup of menCombos) {
       const mAge = mGroup.reduce((sum, r) => sum + parseFloat(r.age), 0);
@@ -1427,6 +1523,9 @@ function calculateRelayCombinations() {
       for (const wGroup of womenCombos) {
         const wAge = wGroup.reduce((sum, r) => sum + parseFloat(r.age), 0);
         const totalAge = mAge + wAge;
+        if (totalAge > maxAgeFound) {
+          maxAgeFound = totalAge;
+        }
 
         if (totalAge >= 240) {
           const wTime = wGroup.reduce((sum, r) => sum + parseFloat(r.finFree), 0);
@@ -1453,17 +1552,29 @@ function calculateRelayCombinations() {
         members: bestMembers
       };
     } else {
+      const ageSuffix = maxAgeFound > 0 ? ` (현재 ${maxAgeFound}세)` : '';
       combo1Result = {
         status: 'AGE_NOT_MET',
-        message: '도합나이 240세 이상 조합 없음'
+        message: `조합불가: 도합나이 240세 이상 조합 없음${ageSuffix}`
       };
     }
   }
 
-  const combo2Result = findBestMedleyRelay('남', 160);
-  const combo3Result = findBestMedleyRelay('여', 160);
+  // Combinations 2 & 3: Freestyle Relay (계영 200m)
+  const combo2Result = findBestFreestyleRelay('남', 160);
+  const combo3Result = findBestFreestyleRelay('여', 160);
 
-  return { combo1: combo1Result, combo2: combo2Result, combo3: combo3Result };
+  // Combinations 4 & 5: Medley Relay (혼계영 200m)
+  const combo4Result = findBestMedleyRelay('남', 160);
+  const combo5Result = findBestMedleyRelay('여', 160);
+
+  return {
+    combo1: combo1Result,
+    combo2: combo2Result,
+    combo3: combo3Result,
+    combo4: combo4Result,
+    combo5: combo5Result
+  };
 }
 
 // Format seconds into minutes/seconds display
@@ -1480,10 +1591,12 @@ function formatRelayTime(seconds) {
 
 // Update Top Dashboard Combination Panels
 function updateStats() {
-  const { combo1, combo2, combo3 } = calculateRelayCombinations();
+  const { combo1, combo2, combo3, combo4, combo5 } = calculateRelayCombinations();
   renderComboCard('combo1', combo1, false);
-  renderComboCard('combo2', combo2, true);
-  renderComboCard('combo3', combo3, true);
+  renderComboCard('combo2', combo2, false);
+  renderComboCard('combo3', combo3, false);
+  renderComboCard('combo4', combo4, true);
+  renderComboCard('combo5', combo5, true);
 }
 
 function renderComboCard(prefix, result, isMedley = false) {
@@ -1769,7 +1882,9 @@ function bindEvents() {
       return;
     }
 
-    if (val === '' && lastYearVal !== '' && STROKE_FIELDS.includes(field)) {
+    const isLastYearDQ = lastYearVal === '99.99' || parseFloat(lastYearVal) >= 99;
+
+    if (val === '' && lastYearVal !== '' && !isLastYearDQ && STROKE_FIELDS.includes(field)) {
       target.value = lastYearVal;
       record[field] = lastYearVal;
       target.classList.remove('is-target');
