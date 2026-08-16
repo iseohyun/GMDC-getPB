@@ -30,7 +30,10 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.08.16.3';
+const APP_VERSION = 'v2026.08.16.4';
+let isScenarioMode = false;
+let serverRecordsCache = null;
+
 const STORAGE_KEY = 'gmdc_swim_records_v1';
 const STICKY_STORAGE_KEY = 'gmdc_sticky_pinned';
 const MODAL_STORAGE_KEY = 'gmdc_hide_notice_modal_date';
@@ -149,6 +152,7 @@ const viewEvents = document.getElementById('viewEvents');
 // Records View DOM
 const tableBody = document.getElementById('tableBody');
 const recordTable = document.getElementById('recordTable');
+const btnScenarioMode = document.getElementById('btnScenarioMode');
 const btnRecordsModeSimple = document.getElementById('btnRecordsModeSimple');
 const btnRecordsModeDetailed = document.getElementById('btnRecordsModeDetailed');
 const searchInput = document.getElementById('searchInput');
@@ -157,6 +161,7 @@ const btnAddRow = document.getElementById('btnAddRow');
 const btnExportCsv = document.getElementById('btnExportCsv');
 const btnCopyTsv = document.getElementById('btnCopyTsv');
 const toastEl = document.getElementById('toast');
+const saveStatus = document.getElementById('saveStatus');
 const saveStatusText = document.getElementById('saveStatusText');
 const comboGrid = document.getElementById('comboGrid');
 
@@ -181,6 +186,7 @@ function init() {
   console.log(`%c[GMDC Swim] App Version: ${APP_VERSION}`, 'color: #0284c7; font-weight: bold; font-size: 12px;');
   initStickyPreference();
   initNoticeModal();
+  initScenarioMode();
   initRecordsViewMode();
   initEventsViewMode();
   initDeadlineCountdown();
@@ -236,6 +242,61 @@ function updateDeadlineCountdown() {
   badge.title = `클릭하여 마감 일정 안내 보기 (마감 시한: 8월 17일 18:00)`;
 }
 
+function initScenarioMode() {
+  if (btnScenarioMode) {
+    btnScenarioMode.addEventListener('click', toggleScenarioMode);
+  }
+}
+
+function toggleScenarioMode() {
+  if (!isScenarioMode) {
+    // Turning ON
+    alert("서버에 업로드 하지 않고, 입력결과를 테스트합니다.");
+    isScenarioMode = true;
+    if (!serverRecordsCache) {
+      serverRecordsCache = JSON.parse(JSON.stringify(records));
+    }
+    updateScenarioModeUI(true);
+    showToast('🧪 시나리오 테스트 모드가 활성화되었습니다. (서버 미저장)');
+  } else {
+    // Turning OFF
+    if (confirm("서버값으로 되돌립니다.")) {
+      isScenarioMode = false;
+      if (serverRecordsCache && Array.isArray(serverRecordsCache)) {
+        records = JSON.parse(JSON.stringify(serverRecordsCache));
+      } else {
+        records = JSON.parse(JSON.stringify(DEFAULT_RECORDS));
+      }
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
+      updateScenarioModeUI(false);
+      renderAll();
+      showToast('✅ 서버 데이터로 원복되었습니다.');
+    }
+  }
+}
+
+function updateScenarioModeUI(isOn) {
+  if (btnScenarioMode) {
+    btnScenarioMode.classList.toggle('active', isOn);
+    btnScenarioMode.innerHTML = `
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 2v7.31"></path><path d="M14 9.3V1.99"></path><path d="M8.5 2h7"></path><path d="M14 9.3a6.5 6.5 0 1 1-4 0"></path><path d="M5.52 16h12.96"></path></svg>
+      <span>${isOn ? '🧪 시나리오 ON' : '시나리오 OFF'}</span>
+    `;
+    btnScenarioMode.title = isOn 
+      ? '시나리오 모드 실행 중 (클릭 시 서버값으로 되돌리기)' 
+      : '시나리오 테스트 모드 (서버 저장 없이 가상 테스트)';
+  }
+
+  if (saveStatus && saveStatusText) {
+    saveStatus.classList.toggle('is-scenario', isOn);
+    if (isOn) {
+      saveStatusText.innerHTML = `<span>🧪 시나리오 모드 (서버 저장 안 됨)</span>`;
+    } else {
+      saveStatusText.innerHTML = `<span class="status-dot"></span><span>자동 저장 활성화</span>`;
+    }
+  }
+}
+
 function initRecordsViewMode() {
   const saved = localStorage.getItem(RECORDS_MODE_KEY);
   recordsViewMode = (saved === 'detailed') ? 'detailed' : 'simple'; // 기본: simple
@@ -264,6 +325,7 @@ function applyEventsViewMode(mode) {
 
 // Log history change to Firestore & local state
 async function logChangeHistory(type, swimmerName, field, fieldName, oldVal, newVal, customMsg = '') {
+  if (isScenarioMode) return;
   if (oldVal === newVal && type !== 'MEMBER' && type !== 'DELETE') return;
 
   const typeLabels = {
@@ -386,35 +448,42 @@ function initFirebaseSync() {
       const data = docSnap.data();
       if (data && Array.isArray(data.records)) {
         const merged = mergeWithDefaultData(data.records);
-        const isDataChanged = JSON.stringify(records) !== JSON.stringify(merged);
-        if (isDataChanged) {
-          records = merged;
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
-          
-          const activeEl = document.activeElement;
-          const isUserTyping = activeEl && activeEl.classList && (activeEl.classList.contains('cell-input') || activeEl.classList.contains('event-select'));
-          
-          if (!isUserTyping) {
-            renderAll();
-          } else {
-            updateStats();
-            renderSummaryMatrices();
+        serverRecordsCache = JSON.parse(JSON.stringify(merged));
+
+        if (!isScenarioMode) {
+          const isDataChanged = JSON.stringify(records) !== JSON.stringify(merged);
+          if (isDataChanged) {
+            records = merged;
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
+            
+            const activeEl = document.activeElement;
+            const isUserTyping = activeEl && activeEl.classList && (activeEl.classList.contains('cell-input') || activeEl.classList.contains('event-select'));
+            
+            if (!isUserTyping) {
+              renderAll();
+            } else {
+              updateStats();
+              renderSummaryMatrices();
+            }
           }
         }
       }
-      if (saveStatusText) {
+      if (saveStatusText && !isScenarioMode) {
         saveStatusText.innerHTML = `<span class="status-dot"></span><span>Firebase 클라우드 동기화 (${new Date().toLocaleTimeString('ko-KR')})</span>`;
       }
     } else {
       console.log('Firebase에 초기 데이터 생성 중...');
-      syncToFirestore(DEFAULT_RECORDS);
-      if (saveStatusText) {
+      serverRecordsCache = JSON.parse(JSON.stringify(DEFAULT_RECORDS));
+      if (!isScenarioMode) {
+        syncToFirestore(DEFAULT_RECORDS);
+      }
+      if (saveStatusText && !isScenarioMode) {
         saveStatusText.innerHTML = `<span class="status-dot"></span><span>Firebase 초기화 완료 (${new Date().toLocaleTimeString('ko-KR')})</span>`;
       }
     }
   }, (error) => {
     console.error('Firebase onSnapshot 에러:', error);
-    if (saveStatusText) {
+    if (saveStatusText && !isScenarioMode) {
       saveStatusText.innerHTML = `<span style="color:#ef4444;">⚠️ Firebase 접근 권한 확인 필요</span>`;
     }
     showToast('⚠️ Firebase 보안 규칙(Rules)을 테스트 모드로 설정해 주세요.');
@@ -423,6 +492,13 @@ function initFirebaseSync() {
 
 // 3. Save Data (localStorage immediately + Firestore debounced)
 function saveData() {
+  if (isScenarioMode) {
+    if (saveStatusText) {
+      saveStatusText.innerHTML = `<span>🧪 시나리오 모드 (서버 저장 안 됨)</span>`;
+    }
+    return;
+  }
+
   if (isDeadlineExpired()) {
     showToast('🔒 입력 및 수정 시한이 마감되었습니다.');
     return;

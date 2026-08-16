@@ -1478,6 +1478,41 @@ body {
   box-shadow: var(--shadow-sm);
 }
 
+.mode-btn.btn-scenario {
+  color: var(--text-muted);
+  border-right: 1px solid var(--border-light);
+  padding-right: 10px;
+  margin-right: 2px;
+  border-radius: var(--radius-xs);
+}
+
+.mode-btn.btn-scenario:hover {
+  color: #d97706;
+  background: #fef3c7;
+}
+
+.mode-btn.btn-scenario.active {
+  background: #fef3c7 !important;
+  color: #b45309 !important;
+  border: 1px solid #f59e0b !important;
+  font-weight: 800;
+  box-shadow: 0 0 0 1px #f59e0b;
+}
+
+.save-status.is-scenario {
+  background: #fffbeb !important;
+  border: 1px solid #fde68a !important;
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  color: #b45309 !important;
+  font-weight: 700;
+}
+
+.save-status.is-scenario .status-dot {
+  background-color: #f59e0b !important;
+  animation: pulse-urgent 1.5s infinite;
+}
+
 /* Records Mode Toggle Container */
 .records-mode-toggle {
   display: inline-flex;
