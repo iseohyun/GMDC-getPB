@@ -30,8 +30,9 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.08.16.6';
+const APP_VERSION = 'v2026.08.16.7';
 let isScenarioMode = false;
+let isInitialSyncCompleted = false;
 let serverRecordsCache = null;
 
 const STORAGE_KEY = 'gmdc_swim_records_v1';
@@ -745,6 +746,7 @@ function initFirebaseSync() {
 
   onSnapshot(DOC_REF, (docSnap) => {
     if (docSnap.exists()) {
+      isInitialSyncCompleted = true;
       const data = docSnap.data();
       if (data && Array.isArray(data.records)) {
         const merged = mergeWithDefaultData(data.records);
@@ -772,13 +774,9 @@ function initFirebaseSync() {
         saveStatusText.innerHTML = `<span class="status-dot"></span><span>Firebase 클라우드 동기화 (${new Date().toLocaleTimeString('ko-KR')})</span>`;
       }
     } else {
-      console.log('Firebase에 초기 데이터 생성 중...');
-      serverRecordsCache = JSON.parse(JSON.stringify(DEFAULT_RECORDS));
-      if (!isScenarioMode) {
-        syncToFirestore(DEFAULT_RECORDS);
-      }
+      console.warn('⚠️ Firebase 서버 문서를 찾을 수 없습니다. 자동 초기화(덮어쓰기)를 수행하지 않고 읽기 대기합니다.');
       if (saveStatusText && !isScenarioMode) {
-        saveStatusText.innerHTML = `<span class="status-dot"></span><span>Firebase 초기화 완료 (${new Date().toLocaleTimeString('ko-KR')})</span>`;
+        saveStatusText.innerHTML = `<span style="color:#ef4444;">⚠️ 서버 문서 없음 (연결 대기)</span>`;
       }
     }
   }, (error) => {
@@ -786,7 +784,7 @@ function initFirebaseSync() {
     if (saveStatusText && !isScenarioMode) {
       saveStatusText.innerHTML = `<span style="color:#ef4444;">⚠️ Firebase 접근 권한 확인 필요</span>`;
     }
-    showToast('⚠️ Firebase 보안 규칙(Rules)을 테스트 모드로 설정해 주세요.');
+    showToast('⚠️ Firebase 보안 규칙(Rules)을 확인해 주세요.');
   });
 }
 
@@ -796,6 +794,12 @@ function saveData() {
     if (saveStatusText) {
       saveStatusText.innerHTML = `<span>🧪 시나리오 모드 (서버 저장 안 됨)</span>`;
     }
+    return;
+  }
+
+  // Prevent saving before initial server data has been loaded
+  if (!isInitialSyncCompleted && db && DOC_REF) {
+    console.warn('⚠️ 서버 최초 데이터 동기화 완료 전 저장을 안전하게 차단합니다.');
     return;
   }
 
