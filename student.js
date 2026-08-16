@@ -15,13 +15,13 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.08.16.1_student';
+const APP_VERSION = 'v2026.08.16.2_student';
 let isScenarioMode = false;
 let isInitialSyncCompleted = false;
 let serverRecordsCache = null;
 
 const STORAGE_KEY = 'gmdc_student_records_v1';
-const STICKY_STORAGE_KEY = 'gmdc_student_sticky_pinned';
+const STICKY_STORAGE_KEY = 'gmdc_student_pinned_card_id';
 const MODAL_STORAGE_KEY = 'gmdc_student_hide_notice_modal_date';
 const EVENTS_MODE_KEY = 'gmdc_student_events_view_mode';
 const RECORDS_MODE_KEY = 'gmdc_student_records_view_mode';
@@ -38,7 +38,168 @@ const STROKE_NAMES = {
   fly: '접영'
 };
 
-const GROUPS = ['2그룹', '3그룹', '4그룹', '5그룹', '6그룹', '7그룹'];
+const GROUPS = ['1그룹', '2그룹', '3그룹', '4그룹', '5그룹', '6그룹', '7그룹'];
+
+// 2025년 학생부 출전자 분포 데이터 (작년 비교용)
+const PREV_YEAR_STUDENT_DISTRIBUTION = {
+  '남': {
+    '1그룹': { '자유형': 8, '배영': 2, '평영': 4, '접영': 3, total: 17 },
+    '2그룹': { '자유형': 16, '배영': 7, '평영': 11, '접영': 6, total: 40 },
+    '3그룹': { '자유형': 22, '배영': 10, '평영': 12, '접영': 12, total: 56 },
+    '4그룹': { '자유형': 27, '배영': 10, '평영': 12, '접영': 15, total: 64 },
+    '5그룹': { '자유형': 22, '배영': 9, '평영': 11, '접영': 11, total: 53 },
+    '6그룹': { '자유형': 9, '배영': 3, '평영': 5, '접영': 3, total: 20 },
+    '7그룹': { '자유형': 8, '배영': 2, '평영': 5, '접영': 5, total: 20 },
+  },
+  '여': {
+    '1그룹': { '자유형': 5, '배영': 3, '평영': 2, '접영': 4, total: 14 },
+    '2그룹': { '자유형': 9, '배영': 5, '평영': 7, '접영': 4, total: 25 },
+    '3그룹': { '자유형': 28, '배영': 13, '평영': 17, '접영': 6, total: 64 },
+    '4그룹': { '자유형': 17, '배영': 14, '평영': 13, '접영': 13, total: 57 },
+    '5그룹': { '자유형': 18, '배영': 9, '평영': 8, '접영': 11, total: 46 },
+    '6그룹': { '자유형': 7, '배영': 5, '평영': 6, '접영': 2, total: 20 },
+    '7그룹': { '자유형': 3, '배영': 3, '평영': 1, '접영': 5, total: 12 },
+  }
+};
+
+let isMatrixCompareMode = localStorage.getItem('gmdc_student_matrix_compare_mode') === 'true';
+
+// 2025년 학생부 각 그룹별/성별/영법별 1, 2, 3위 입상 기록
+const PREV_YEAR_STUDENT_PODIUM = {
+  '남': {
+    '1그룹': {
+      '자유형': ['47.16', '53.70', '56.01'],
+      '배영': ['84.31', '90.49'],
+      '평영': ['69.75', '74.00', '82.11'],
+      '접영': ['55.44', '66.69', '79.07']
+    },
+    '2그룹': {
+      '자유형': ['45.44', '47.81', '49.09'],
+      '배영': ['58.99', '62.56', '70.40'],
+      '평영': ['52.90', '56.66', '57.95'],
+      '접영': ['48.00', '50.02', '50.80']
+    },
+    '3그룹': {
+      '자유형': ['38.27', '39.22', '40.57'],
+      '배영': ['50.67', '53.06', '53.29'],
+      '평영': ['46.73', '47.18', '52.99'],
+      '접영': ['34.48', '43.66', '44.90']
+    },
+    '4그룹': {
+      '자유형': ['37.00', '38.22', '39.41'],
+      '배영': ['44.40', '45.20', '48.00'],
+      '평영': ['47.35', '47.43', '53.16'],
+      '접영': ['39.79', '40.07', '44.89']
+    },
+    '5그룹': {
+      '자유형': ['35.84', '36.25', '36.97'],
+      '배영': ['41.79', '42.01', '42.35'],
+      '평영': ['46.66', '47.42', '47.60'],
+      '접영': ['39.96', '40.16', '41.19']
+    },
+    '6그룹': {
+      '자유형': ['31.56', '32.73', '33.39'],
+      '배영': ['38.75', '49.15', '66.72'],
+      '평영': ['41.91', '46.68', '48.31'],
+      '접영': ['36.25', '40.56', '58.90']
+    },
+    '7그룹': {
+      '자유형': ['26.29', '27.23', '29.11'],
+      '배영': ['51.02', '54.64'],
+      '평영': ['37.81', '40.34', '47.25'],
+      '접영': ['29.08', '30.21', '31.94']
+    }
+  },
+  '여': {
+    '1그룹': {
+      '자유형': ['65.16', '69.22', '82.22'],
+      '배영': ['64.44', '64.75'],
+      '평영': ['67.76', '77.51'],
+      '접영': ['67.38', '67.77', '83.20']
+    },
+    '2그룹': {
+      '자유형': ['42.14', '43.80', '48.06'],
+      '배영': ['47.73', '53.22', '54.15'],
+      '평영': ['61.82', '62.67', '63.69'],
+      '접영': ['62.08', '72.73', '95.82']
+    },
+    '3그룹': {
+      '자유형': ['40.00', '41.23', '42.00'],
+      '배영': ['41.06', '46.93', '47.95'],
+      '평영': ['49.90', '54.24', '55.75'],
+      '접영': ['55.23', '56.07', '57.25']
+    },
+    '4그룹': {
+      '자유형': ['35.69', '36.69', '39.51'],
+      '배영': ['43.55', '45.20', '47.71'],
+      '평영': ['43.00', '46.20', '52.28'],
+      '접영': ['39.53', '40.75', '44.67']
+    },
+    '5그룹': {
+      '자유형': ['34.52', '35.34', '36.15'],
+      '배영': ['39.30', '43.69', '44.78'],
+      '평영': ['44.06', '47.59', '49.27'],
+      '접영': ['41.21', '42.80', '43.17']
+    },
+    '6그룹': {
+      '자유형': ['33.88', '36.45', '36.56'],
+      '배영': ['43.25', '49.23', '51.24'],
+      '평영': ['38.23', '42.99', '47.38'],
+      '접영': ['46.75', '54.88']
+    },
+    '7그룹': {
+      '자유형': ['36.60', '38.03', '47.00'],
+      '배영': ['38.24', '45.58', '58.63'],
+      '평영': ['52.16'],
+      '접영': ['35.10', '42.67', '44.06']
+    }
+  }
+};
+
+function formatPodiumTooltip(gender, group, stroke) {
+  let strokeKey = stroke;
+  if (stroke === 'free' || stroke === '자유형 50') strokeKey = '자유형';
+  else if (stroke === 'back' || stroke === '배영 50') strokeKey = '배영';
+  else if (stroke === 'breast' || stroke === '평영 50') strokeKey = '평영';
+  else if (stroke === 'fly' || stroke === '접영 50') strokeKey = '접영';
+
+  const groupData = PREV_YEAR_STUDENT_PODIUM[gender]?.[group];
+  if (!groupData) return '';
+  const podiumList = groupData[strokeKey];
+  if (!podiumList || podiumList.length === 0) return '';
+
+  const medals = ['🥇1위', '🥈2위', '🥉3위'];
+  const podiumStr = podiumList.map((time, idx) => `${medals[idx]} ${time}s`).join(' | ');
+
+  return `[작년 ${group} ${gender === '남' ? '남학생' : '여학생'} ${strokeKey} 입상기록] ${podiumStr}`;
+}
+
+function getPodiumShort(gender, group, stroke) {
+  let strokeKey = stroke;
+  if (stroke === 'free' || stroke === '자유형 50') strokeKey = '자유형';
+  else if (stroke === 'back' || stroke === '배영 50') strokeKey = '배영';
+  else if (stroke === 'breast' || stroke === '평영 50') strokeKey = '평영';
+  else if (stroke === 'fly' || stroke === '접영 50') strokeKey = '접영';
+
+  const groupData = PREV_YEAR_STUDENT_PODIUM[gender]?.[group];
+  if (!groupData) return '';
+  const podiumList = groupData[strokeKey];
+  if (!podiumList || podiumList.length === 0) return '';
+
+  return podiumList.map((time, idx) => `${idx + 1}위 ${time}`).join(' | ');
+}
+
+function getPodiumData(gender, group, stroke) {
+  let strokeKey = stroke;
+  if (stroke === 'free' || stroke === '자유형 50') strokeKey = '자유형';
+  else if (stroke === 'back' || stroke === '배영 50') strokeKey = '배영';
+  else if (stroke === 'breast' || stroke === '평영 50') strokeKey = '평영';
+  else if (stroke === 'fly' || stroke === '접영 50') strokeKey = '접영';
+
+  const groupData = PREV_YEAR_STUDENT_PODIUM[gender]?.[group];
+  if (!groupData) return null;
+  return groupData[strokeKey] || null;
+}
 
 // Initial 19 Student Swimmer Records
 const DEFAULT_STUDENT_RECORDS = [
@@ -88,6 +249,7 @@ let eventsSearchQuery = '';
 let currentView = 'records';
 let eventsViewMode = 'simple';
 let recordsViewMode = 'simple';
+let pinnedComboCardId = null; // 고정된 조합 카드 ID (최대 1개)
 let saveTimeout = null;
 
 // DOM Elements
@@ -144,6 +306,7 @@ function init() {
   initAuditModal();
   initRulesModal();
   initScenarioMode();
+  initMatrixCompareMode();
   initRecordsViewMode();
   initEventsViewMode();
   initDeadlineCountdown();
@@ -604,27 +767,52 @@ function applyEventsViewMode(mode) {
 }
 
 function initStickyPreference() {
-  const isPinned = localStorage.getItem(STICKY_STORAGE_KEY) === 'true';
-  applyStickyState(isPinned);
+  const savedCardId = localStorage.getItem(STICKY_STORAGE_KEY);
+  if (savedCardId && document.getElementById(savedCardId)) {
+    applySinglePinnedCard(savedCardId);
+  } else {
+    applySinglePinnedCard(null);
+  }
 }
 
-function toggleStickyState() {
-  const currentState = comboGrid ? comboGrid.classList.contains('is-pinned') : false;
-  const newState = !currentState;
-  applyStickyState(newState);
-  try {
-    localStorage.setItem(STICKY_STORAGE_KEY, String(newState));
-  } catch (e) {}
-  showToast(newState ? '📌 계영 조합 패널이 상단에 고정되었습니다.' : '🔓 계영 조합 패널 고정이 해제되었습니다.');
-}
+function applySinglePinnedCard(cardId) {
+  pinnedComboCardId = cardId;
+  const cards = document.querySelectorAll('.combo-card');
+  const hasPin = Boolean(cardId);
 
-function applyStickyState(isPinned) {
-  if (!comboGrid) return;
-  comboGrid.classList.toggle('is-pinned', isPinned);
-  const pinBtns = document.querySelectorAll('.btn-panel-pin');
-  pinBtns.forEach(btn => {
-    btn.classList.toggle('active', isPinned);
-    btn.title = isPinned ? '조합 패널 고정 해제 (클릭 시 기본 위치로)' : '상단 조합 패널 고정 (클릭 시 상단 고정)';
+  if (comboGrid) {
+    comboGrid.classList.toggle('is-pinned', hasPin);
+    comboGrid.classList.toggle('is-sticky', hasPin);
+    comboGrid.classList.toggle('has-single-pinned', hasPin);
+  }
+
+  cards.forEach(card => {
+    const pinBtn = card.querySelector('.btn-panel-pin');
+    const isThisCard = card.id === cardId;
+
+    if (!hasPin) {
+      card.classList.remove('is-hidden-by-pin', 'is-pinned-card');
+      if (pinBtn) {
+        pinBtn.classList.remove('active');
+        pinBtn.title = '이 조합 패널만 상단에 고정 (클릭 시 나머지 조합 숨김)';
+      }
+    } else {
+      if (isThisCard) {
+        card.classList.remove('is-hidden-by-pin');
+        card.classList.add('is-pinned-card');
+        if (pinBtn) {
+          pinBtn.classList.add('active');
+          pinBtn.title = '조합 패널 고정 해제 (클릭 시 전체 조합 다시 표시)';
+        }
+      } else {
+        card.classList.add('is-hidden-by-pin');
+        card.classList.remove('is-pinned-card');
+        if (pinBtn) {
+          pinBtn.classList.remove('active');
+          pinBtn.title = '이 조합 패널만 상단에 고정 (클릭 시 나머지 조합 숨김)';
+        }
+      }
+    }
   });
 }
 
@@ -1020,6 +1208,8 @@ function renderTable() {
           const numVal = parseFloat(val);
           const lastYearVal = getLastYearRecord(item.id, field);
           const isBest = !isNaN(numVal) && numVal > 0 && numVal === bests[field][item.gender];
+          const podiumList = getPodiumData(item.gender, item.group, field);
+          const podiumInfo = formatPodiumTooltip(item.gender, item.group, field);
 
           let colorClass = '';
           let titleText = '';
@@ -1037,9 +1227,11 @@ function renderTable() {
             }
           }
 
+          const fullTitle = [titleText, podiumInfo].filter(Boolean).join('\n');
+
           return `
             <td class="col-record ${isBest ? 'is-best' : ''}">
-              <div class="input-wrapper">
+              <div class="input-wrapper pb-input-wrapper">
                 <input 
                   type="text" 
                   inputmode="decimal" 
@@ -1049,10 +1241,27 @@ function renderTable() {
                   data-field="${field}" 
                   data-prev-val="${escapeHtml(val)}"
                   placeholder="-"
-                  title="${titleText}"
+                  title="${escapeHtml(fullTitle)}"
                   autocomplete="off"
                 />
                 ${isBest ? `<span class="best-badge" title="${isMale ? '남성' : '여성'} ${STROKE_NAMES[field]} 1위 (최고기록)">BEST</span>` : ''}
+                ${podiumList && podiumList.length > 0 ? `
+                  <div class="podium-popover" role="tooltip">
+                    <div class="popover-header">
+                      <span class="popover-group-tag">${item.group} ${item.gender === '남' ? '남' : '여'}</span>
+                      <span class="popover-title">${STROKE_NAMES[field]} 입상기록</span>
+                    </div>
+                    <div class="popover-ranks">
+                      ${podiumList.map((time, idx) => `
+                        <span class="popover-rank rank-${idx + 1}">
+                          <span class="medal-icon">${['🥇', '🥈', '🥉'][idx]}</span>
+                          <span class="rank-label">${idx + 1}위</span>
+                          <strong class="rank-time">${time}s</strong>
+                        </span>
+                      `).join('')}
+                    </div>
+                  </div>
+                ` : ''}
               </div>
             </td>
           `;
@@ -1465,6 +1674,27 @@ function renderComboCard(prefix, result, isMedley = false, gender = '남') {
   }).join('');
 }
 
+function initMatrixCompareMode() {
+  const chkMale = document.getElementById('chkCompareMaleMatrix');
+  const chkFemale = document.getElementById('chkCompareFemaleMatrix');
+
+  function updateCheckboxes() {
+    if (chkMale) chkMale.checked = isMatrixCompareMode;
+    if (chkFemale) chkFemale.checked = isMatrixCompareMode;
+  }
+
+  function handleToggle(e) {
+    isMatrixCompareMode = e.target.checked;
+    localStorage.setItem('gmdc_student_matrix_compare_mode', isMatrixCompareMode);
+    updateCheckboxes();
+    renderSummaryMatrices();
+  }
+
+  if (chkMale) chkMale.addEventListener('change', handleToggle);
+  if (chkFemale) chkFemale.addEventListener('change', handleToggle);
+  updateCheckboxes();
+}
+
 function renderSummaryMatrices() {
   const eventTypes = [
     { label: '자유형', match: (e) => e === '자유형 50' || e === '자유형' },
@@ -1505,7 +1735,7 @@ function renderSummaryMatrices() {
     return { matrix, swimmersByCell };
   }
 
-  function renderMatrixHTML(tbody, tfoot, data) {
+  function renderMatrixHTML(gender, tbody, tfoot, data) {
     const { matrix, swimmersByCell } = data;
     const colTotals = {};
     eventTypes.forEach(ev => colTotals[ev.label] = 0);
@@ -1515,38 +1745,94 @@ function renderSummaryMatrices() {
       let rowTotal = 0;
       const cells = eventTypes.map(ev => {
         const count = matrix[g][ev.label];
+        const prevCount = PREV_YEAR_STUDENT_DISTRIBUTION[gender]?.[g]?.[ev.label] ?? 0;
         const swimmers = swimmersByCell[g][ev.label];
         rowTotal += count;
         colTotals[ev.label] += count;
 
-        const countDisplay = count > 0 ? `<strong class="cell-count count-active">${count}</strong>` : `<span class="cell-count count-zero">-</span>`;
-        const tooltip = count > 0 ? `title="${g} ${ev.label} (${count}명): ${swimmers.join(', ')}"` : '';
-
-        return `<td class="matrix-cell ${count > 0 ? 'has-swimmers' : ''}" ${tooltip}>${countDisplay}</td>`;
+        if (isMatrixCompareMode) {
+          const tooltip = count > 0 
+            ? `title="${g} ${ev.label} (올해 ${count}명 / 작년 ${prevCount}명): ${swimmers.join(', ')}"` 
+            : `title="${g} ${ev.label} (올해 0명 / 작년 ${prevCount}명)"`;
+          return `
+            <td class="matrix-cell is-compared ${count > 0 ? 'has-swimmers' : 'is-empty'}" ${tooltip}>
+              <span class="matrix-num-compare">
+                <span class="${count > 0 ? 'num-curr' : 'num-curr-zero'}">${count}</span>
+                <span class="num-slash">/</span>
+                <span class="num-prev">(${prevCount})</span>
+              </span>
+            </td>
+          `;
+        } else {
+          const countDisplay = count > 0 ? `<strong class="cell-count count-active">${count}</strong>` : `<span class="cell-count count-zero">-</span>`;
+          const tooltip = count > 0 ? `title="${g} ${ev.label} (${count}명): ${swimmers.join(', ')}"` : '';
+          return `<td class="matrix-cell ${count > 0 ? 'has-swimmers' : ''}" ${tooltip}>${countDisplay}</td>`;
+        }
       }).join('');
 
       grandTotal += rowTotal;
-      const rowTotalDisplay = rowTotal > 0 ? `<strong class="row-total-active">${rowTotal}</strong>` : `<span>0</span>`;
+      const prevGroupTotal = PREV_YEAR_STUDENT_DISTRIBUTION[gender]?.[g]?.total ?? 0;
 
-      return `
-        <tr>
-          <td class="matrix-row-group">${g}</td>
-          ${cells}
-          <td class="matrix-row-total">${rowTotalDisplay}</td>
-        </tr>
-      `;
+      if (isMatrixCompareMode) {
+        return `
+          <tr>
+            <td class="matrix-row-group">${g}</td>
+            ${cells}
+            <td class="matrix-row-total is-compared" style="font-weight:800; background:#f8fafc; color:var(--secondary);">
+              <span class="matrix-num-compare">
+                <span class="${rowTotal > 0 ? 'num-curr' : 'num-curr-zero'}">${rowTotal}</span>
+                <span class="num-slash">/</span>
+                <span class="num-prev">(${prevGroupTotal})</span>
+              </span>
+            </td>
+          </tr>
+        `;
+      } else {
+        const rowTotalDisplay = rowTotal > 0 ? `<strong class="row-total-active">${rowTotal}</strong>` : `<span>-</span>`;
+        return `
+          <tr>
+            <td class="matrix-row-group">${g}</td>
+            ${cells}
+            <td class="matrix-row-total">${rowTotalDisplay}</td>
+          </tr>
+        `;
+      }
     }).join('');
+
+    const prevGrandTotal = GROUPS.reduce((sum, g) => sum + (PREV_YEAR_STUDENT_DISTRIBUTION[gender]?.[g]?.total ?? 0), 0);
 
     const footCells = eventTypes.map(ev => {
       const total = colTotals[ev.label];
-      return `<th class="matrix-foot-cell">${total > 0 ? `<strong>${total}</strong>` : '0'}</th>`;
+      const prevColTotal = GROUPS.reduce((sum, g) => sum + (PREV_YEAR_STUDENT_DISTRIBUTION[gender]?.[g]?.[ev.label] ?? 0), 0);
+
+      if (isMatrixCompareMode) {
+        return `
+          <th class="matrix-foot-cell is-compared">
+            <span class="matrix-num-compare">
+              <span class="${total > 0 ? 'num-curr' : 'num-curr-zero'}">${total}</span>
+              <span class="num-slash">/</span>
+              <span class="num-prev">(${prevColTotal})</span>
+            </span>
+          </th>
+        `;
+      } else {
+        return `<th class="matrix-foot-cell">${total > 0 ? `<strong>${total}</strong>` : '-'}</th>`;
+      }
     }).join('');
 
     tfoot.innerHTML = `
       <tr>
         <th class="matrix-foot-label">합계</th>
         ${footCells}
-        <th class="matrix-foot-grand-total">${grandTotal}</th>
+        <th class="matrix-foot-grand-total ${isMatrixCompareMode ? 'is-compared' : ''}">
+          ${isMatrixCompareMode ? `
+            <span class="matrix-num-compare">
+              <span class="num-curr">${grandTotal}</span>
+              <span class="num-slash">/</span>
+              <span class="num-prev">(${prevGrandTotal})</span>
+            </span>
+          ` : grandTotal}
+        </th>
       </tr>
     `;
   }
@@ -1554,8 +1840,8 @@ function renderSummaryMatrices() {
   const maleData = buildMatrix('남');
   const femaleData = buildMatrix('여');
 
-  if (maleMatrixBody && maleMatrixFoot) renderMatrixHTML(maleMatrixBody, maleMatrixFoot, maleData);
-  if (femaleMatrixBody && femaleMatrixFoot) renderMatrixHTML(femaleMatrixBody, femaleMatrixFoot, femaleData);
+  if (maleMatrixBody && maleMatrixFoot) renderMatrixHTML('남', maleMatrixBody, maleMatrixFoot, maleData);
+  if (femaleMatrixBody && femaleMatrixFoot) renderMatrixHTML('여', femaleMatrixBody, femaleMatrixFoot, femaleData);
 }
 
 const EVENT_OPTIONS = [
@@ -1623,21 +1909,39 @@ function renderEventsTable() {
           <span class="birth-code">${escapeHtml(item.birthId || '-')}</span>
         </td>
         <td class="col-event">
-          <select class="event-select ${item.event1 ? 'has-event' : ''}" data-id="${item.id}" data-event-idx="1">
-            ${EVENT_OPTIONS.map(opt => `
-              <option value="${escapeHtml(opt)}" ${item.event1 === opt ? 'selected' : ''}>
-                ${opt ? opt : '(선택 안 함)'}
-              </option>
-            `).join('')}
+          <select 
+            class="event-select ${item.event1 ? 'has-event' : ''}" 
+            data-id="${item.id}" 
+            data-event-idx="1"
+            title="${escapeHtml(item.event1 ? formatPodiumTooltip(item.gender, item.group, item.event1) : '출전 종목 선택 (선택 시 작년 입상기록 확인)')}"
+          >
+            ${EVENT_OPTIONS.map(opt => {
+              const optPodium = opt ? getPodiumShort(item.gender, item.group, opt) : '';
+              const optLabel = opt ? (optPodium ? `${opt} [${optPodium}]` : opt) : '(선택 안 함)';
+              return `
+                <option value="${escapeHtml(opt)}" ${item.event1 === opt ? 'selected' : ''}>
+                  ${escapeHtml(optLabel)}
+                </option>
+              `;
+            }).join('')}
           </select>
         </td>
         <td class="col-event">
-          <select class="event-select ${item.event2 ? 'has-event' : ''}" data-id="${item.id}" data-event-idx="2">
-            ${EVENT_OPTIONS.map(opt => `
-              <option value="${escapeHtml(opt)}" ${item.event2 === opt ? 'selected' : ''}>
-                ${opt ? opt : '(선택 안 함)'}
-              </option>
-            `).join('')}
+          <select 
+            class="event-select ${item.event2 ? 'has-event' : ''}" 
+            data-id="${item.id}" 
+            data-event-idx="2"
+            title="${escapeHtml(item.event2 ? formatPodiumTooltip(item.gender, item.group, item.event2) : '출전 종목 선택 (선택 시 작년 입상기록 확인)')}"
+          >
+            ${EVENT_OPTIONS.map(opt => {
+              const optPodium = opt ? getPodiumShort(item.gender, item.group, opt) : '';
+              const optLabel = opt ? (optPodium ? `${opt} [${optPodium}]` : opt) : '(선택 안 함)';
+              return `
+                <option value="${escapeHtml(opt)}" ${item.event2 === opt ? 'selected' : ''}>
+                  ${escapeHtml(optLabel)}
+                </option>
+              `;
+            }).join('')}
           </select>
         </td>
         <td class="col-detail" style="font-size:12px; color:var(--text-muted); font-variant-numeric:tabular-nums;">
@@ -1681,9 +1985,27 @@ function bindEvents() {
     btnModeDetailed.addEventListener('click', () => applyEventsViewMode('detailed'));
   }
 
-  const pinBtns = document.querySelectorAll('.btn-panel-pin');
-  pinBtns.forEach(btn => {
-    btn.addEventListener('click', toggleStickyState);
+  // Panel Pin Buttons (Only 1 pinned at a time, hiding remaining cards)
+  document.querySelectorAll('.combo-card .btn-panel-pin').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const card = btn.closest('.combo-card');
+      if (!card) return;
+
+      const cardId = card.id;
+      if (pinnedComboCardId === cardId) {
+        pinnedComboCardId = null;
+        localStorage.removeItem(STICKY_STORAGE_KEY);
+        applySinglePinnedCard(null);
+        showToast('🔓 조합 패널 고정이 해제되어 모든 조합이 표시됩니다.');
+      } else {
+        pinnedComboCardId = cardId;
+        localStorage.setItem(STICKY_STORAGE_KEY, cardId);
+        applySinglePinnedCard(cardId);
+        const title = card.querySelector('.combo-title')?.textContent?.trim() || '선택한 조합';
+        showToast(`📌 '${title}' 패널이 상단에 고정되었습니다. (나머지 조합 숨김)`);
+      }
+    });
   });
 
   const tableHeaders = document.querySelectorAll('.record-table thead th[data-sort]');

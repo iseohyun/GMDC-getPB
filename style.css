@@ -417,16 +417,21 @@ body {
   transition: all 0.2s ease;
 }
 
-.combo-grid.is-sticky {
+.combo-grid.is-sticky,
+.combo-grid.is-pinned {
   position: sticky;
   top: 8px;
   z-index: 40;
-  background: rgba(248, 250, 252, 0.94);
+  background: rgba(248, 250, 252, 0.96);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   padding: 6px;
   border-radius: var(--radius-lg);
-  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.1), 0 4px 6px -4px rgba(15, 23, 42, 0.05);
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.12), 0 4px 6px -4px rgba(15, 23, 42, 0.06);
+}
+
+.combo-grid.has-single-pinned {
+  grid-template-columns: 1fr;
 }
 
 .combo-card {
@@ -438,8 +443,30 @@ body {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
   position: relative;
+}
+
+.combo-card.is-hidden-by-pin {
+  display: none !important;
+}
+
+.combo-card.is-pinned-card {
+  display: flex !important;
+  border-color: #0284c7;
+  box-shadow: 0 4px 14px -2px rgba(2, 132, 199, 0.2);
+}
+
+body.theme-student .combo-card.is-pinned-card {
+  border-color: #f97316;
+  box-shadow: 0 4px 14px -2px rgba(249, 115, 22, 0.2);
+}
+
+body.theme-student .btn-panel-pin.active {
+  background: #ffedd5;
+  color: #ea580c;
+  border-color: #fed7aa;
+  box-shadow: 0 2px 6px rgba(234, 88, 12, 0.25);
 }
 
 .combo-card:hover {
@@ -1058,12 +1085,127 @@ body {
   font-weight: 800;
 }
 
-.record-cell-wrapper {
+.record-cell-wrapper,
+.input-wrapper {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
+}
+
+.input-wrapper.pb-input-wrapper {
+  position: relative;
+  display: block;
+}
+
+.input-wrapper.pb-input-wrapper:focus-within {
+  z-index: 45;
+}
+
+/* Floating Podium Tooltip (Positioned Directly Below Input) */
+.podium-popover {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background: #0f172a;
+  color: #f8fafc;
+  padding: 6px 10px;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px -4px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+  font-size: 11px;
+  white-space: nowrap;
+  z-index: 80;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s ease;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  text-align: left;
+}
+
+/* Top Pointer Arrow */
+.podium-popover::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 0 5px 5px 5px;
+  border-style: solid;
+  border-color: transparent transparent #0f172a transparent;
+}
+
+/* Reveal tooltip on input focus or hover */
+.pb-input-wrapper:hover .podium-popover,
+.pb-input-wrapper:focus-within .podium-popover,
+.pb-input-wrapper input:focus ~ .podium-popover {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+.popover-header {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 4px;
+  padding-bottom: 3px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.popover-group-tag {
+  background: #ea580c;
+  color: #ffffff;
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.popover-title {
+  color: #cbd5e1;
+  font-size: 10.5px;
+  font-weight: 600;
+}
+
+.popover-ranks {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.popover-rank {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 11px;
+}
+
+.popover-rank.rank-1 .rank-time {
+  color: #fbbf24;
+  font-weight: 800;
+}
+
+.popover-rank.rank-2 .rank-time {
+  color: #e2e8f0;
+  font-weight: 700;
+}
+
+.popover-rank.rank-3 .rank-time {
+  color: #fdba74;
+  font-weight: 700;
+}
+
+.popover-rank .medal-icon {
+  font-size: 11px;
+}
+
+.popover-rank .rank-label {
+  font-size: 9.5px;
+  color: #94a3b8;
 }
 
 /* Footer */
@@ -1325,10 +1467,76 @@ body {
   color: var(--secondary);
 }
 
+.matrix-compare-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 6px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  background: #f8fafc;
+  border: 1px solid var(--border-light);
+  padding: 2px 7px;
+  border-radius: 4px;
+  user-select: none;
+  transition: all 0.15s ease;
+}
+
+.matrix-compare-toggle:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: #ffffff;
+}
+
+.matrix-compare-toggle input[type="checkbox"] {
+  accent-color: var(--primary);
+  cursor: pointer;
+  margin: 0;
+  width: 13px;
+  height: 13px;
+}
+
 .matrix-tip {
   font-size: 11.5px;
   color: var(--text-muted);
   font-weight: 600;
+}
+
+.matrix-num-compare {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.matrix-num-compare .num-curr {
+  font-weight: 800;
+  color: inherit;
+}
+
+.matrix-num-compare .num-curr-zero {
+  font-weight: 600;
+  color: #94a3b8;
+}
+
+.matrix-num-compare .num-slash {
+  color: #94a3b8;
+  font-size: 11px;
+  margin: 0 1px;
+}
+
+.matrix-num-compare .num-prev {
+  font-size: 11px;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.matrix-cell.is-compared {
+  padding: 7px 2px !important;
 }
 
 /* Summary Matrix Table (Compact Number Grid) */

@@ -30,13 +30,13 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.08.16.7';
+const APP_VERSION = 'v2026.08.16.8';
 let isScenarioMode = false;
 let isInitialSyncCompleted = false;
 let serverRecordsCache = null;
 
 const STORAGE_KEY = 'gmdc_swim_records_v1';
-const STICKY_STORAGE_KEY = 'gmdc_sticky_pinned';
+const STICKY_STORAGE_KEY = 'gmdc_pinned_card_id';
 const MODAL_STORAGE_KEY = 'gmdc_hide_notice_modal_date';
 const EVENTS_MODE_KEY = 'gmdc_events_view_mode';
 const RECORDS_MODE_KEY = 'gmdc_records_view_mode';
@@ -60,6 +60,28 @@ const EVENT_OPTIONS = [
 ];
 
 const GROUPS = ['1그룹', '2그룹', '3그룹', '4그룹', '5그룹', '6그룹'];
+
+// 2025년 출전자 분포 데이터 (작년 비교용)
+const PREV_YEAR_DISTRIBUTION = {
+  '남': {
+    '1그룹': { '핀자유형 50': 0, '핀접영 50': 1, '자유형 50': 3, '배영 50': 1, '평영 50': 1, '접영 50': 3, total: 9 },
+    '2그룹': { '핀자유형 50': 0, '핀접영 50': 0, '자유형 50': 0, '배영 50': 0, '평영 50': 0, '접영 50': 0, total: 0 },
+    '3그룹': { '핀자유형 50': 2, '핀접영 50': 2, '자유형 50': 8, '배영 50': 1, '평영 50': 4, '접영 50': 5, total: 22 },
+    '4그룹': { '핀자유형 50': 14, '핀접영 50': 19, '자유형 50': 25, '배영 50': 9, '평영 50': 19, '접영 50': 11, total: 97 },
+    '5그룹': { '핀자유형 50': 13, '핀접영 50': 8, '자유형 50': 5, '배영 50': 1, '평영 50': 11, '접영 50': 6, total: 44 },
+    '6그룹': { '핀자유형 50': 7, '핀접영 50': 7, '자유형 50': 5, '배영 50': 3, '평영 50': 6, '접영 50': 3, total: 31 },
+  },
+  '여': {
+    '1그룹': { '핀자유형 50': 0, '핀접영 50': 0, '자유형 50': 4, '배영 50': 1, '평영 50': 2, '접영 50': 2, total: 9 },
+    '2그룹': { '핀자유형 50': 0, '핀접영 50': 0, '자유형 50': 0, '배영 50': 0, '평영 50': 0, '접영 50': 0, total: 0 },
+    '3그룹': { '핀자유형 50': 3, '핀접영 50': 4, '자유형 50': 5, '배영 50': 5, '평영 50': 3, '접영 50': 3, total: 23 },
+    '4그룹': { '핀자유형 50': 14, '핀접영 50': 11, '자유형 50': 18, '배영 50': 10, '평영 50': 15, '접영 50': 4, total: 72 },
+    '5그룹': { '핀자유형 50': 5, '핀접영 50': 4, '자유형 50': 8, '배영 50': 8, '평영 50': 2, '접영 50': 2, total: 29 },
+    '6그룹': { '핀자유형 50': 2, '핀접영 50': 4, '자유형 50': 4, '배영 50': 4, '평영 50': 1, '접영 50': 0, total: 15 },
+  }
+};
+
+let isMatrixCompareMode = localStorage.getItem('gmdc_matrix_compare_mode') === 'true';
 
 // Initial 37 Swimmer Records (출전 그룹, 생년월일 식별코드, 출전 종목 1/2, PB 기록)
 const DEFAULT_RECORDS = [
@@ -141,7 +163,7 @@ let eventsGenderFilter = 'all';
 let eventsGroupFilter = 'all';
 let eventsViewMode = 'simple'; // 'simple' (기본) | 'detailed'
 
-let isStickyPinned = false; // 기본값: 고정해제
+let pinnedComboCardId = null; // 고정된 조합 카드 ID (최대 1개)
 let saveTimeout = null;
 
 // Header Toggle Buttons & View Containers
@@ -190,6 +212,7 @@ function init() {
   initAuditModal();
   initRulesModal();
   initScenarioMode();
+  initMatrixCompareMode();
   initRecordsViewMode();
   initEventsViewMode();
   initDeadlineCountdown();
@@ -969,21 +992,53 @@ function initNoticeModal() {
   });
 }
 
-// Initialize Sticky Panel Preference
+// Initialize Sticky Panel Preference (최대 1개 패널 고정 & 나머지 숨김)
 function initStickyPreference() {
-  const saved = localStorage.getItem(STICKY_STORAGE_KEY);
-  isStickyPinned = saved === '1'; // 기본값: 고정 해제 (false)
-  applyStickyState(isStickyPinned);
+  const savedCardId = localStorage.getItem(STICKY_STORAGE_KEY);
+  if (savedCardId && document.getElementById(savedCardId)) {
+    applySinglePinnedCard(savedCardId);
+  } else {
+    applySinglePinnedCard(null);
+  }
 }
 
-function applyStickyState(pinned) {
+function applySinglePinnedCard(cardId) {
+  pinnedComboCardId = cardId;
+  const cards = document.querySelectorAll('.combo-card');
+  const hasPin = Boolean(cardId);
+
   if (comboGrid) {
-    comboGrid.classList.toggle('is-sticky', pinned);
+    comboGrid.classList.toggle('is-sticky', hasPin);
+    comboGrid.classList.toggle('has-single-pinned', hasPin);
   }
-  const pinBtns = document.querySelectorAll('.btn-panel-pin');
-  pinBtns.forEach(btn => {
-    btn.classList.toggle('active', pinned);
-    btn.title = pinned ? '조합 패널 고정 해제 (클릭 시 고정 해제)' : '조합 패널 고정 활성화 (클릭 시 상단 고정)';
+
+  cards.forEach(card => {
+    const pinBtn = card.querySelector('.btn-panel-pin');
+    const isThisCard = card.id === cardId;
+
+    if (!hasPin) {
+      card.classList.remove('is-hidden-by-pin', 'is-pinned-card');
+      if (pinBtn) {
+        pinBtn.classList.remove('active');
+        pinBtn.title = '이 조합 패널만 상단에 고정 (클릭 시 나머지 조합 숨김)';
+      }
+    } else {
+      if (isThisCard) {
+        card.classList.remove('is-hidden-by-pin');
+        card.classList.add('is-pinned-card');
+        if (pinBtn) {
+          pinBtn.classList.add('active');
+          pinBtn.title = '조합 패널 고정 해제 (클릭 시 전체 조합 다시 표시)';
+        }
+      } else {
+        card.classList.add('is-hidden-by-pin');
+        card.classList.remove('is-pinned-card');
+        if (pinBtn) {
+          pinBtn.classList.remove('active');
+          pinBtn.title = '이 조합 패널만 상단에 고정 (클릭 시 나머지 조합 숨김)';
+        }
+      }
+    }
   });
 }
 
@@ -1138,6 +1193,27 @@ function renderTable() {
   });
 }
 
+function initMatrixCompareMode() {
+  const chkMale = document.getElementById('chkCompareMaleMatrix');
+  const chkFemale = document.getElementById('chkCompareFemaleMatrix');
+
+  function updateCheckboxes() {
+    if (chkMale) chkMale.checked = isMatrixCompareMode;
+    if (chkFemale) chkFemale.checked = isMatrixCompareMode;
+  }
+
+  function handleToggle(e) {
+    isMatrixCompareMode = e.target.checked;
+    localStorage.setItem('gmdc_matrix_compare_mode', isMatrixCompareMode);
+    updateCheckboxes();
+    renderSummaryMatrices();
+  }
+
+  if (chkMale) chkMale.addEventListener('change', handleToggle);
+  if (chkFemale) chkFemale.addEventListener('change', handleToggle);
+  updateCheckboxes();
+}
+
 // ============================================================
 // SIDE-BY-SIDE SUMMARY MATRICES (남성 / 여성 각각 좌우 표시, 숫자만 + hover 툴팁)
 // ============================================================
@@ -1174,50 +1250,114 @@ function renderSingleGenderMatrix(gender, bodyEl, footEl) {
     EVENT_OPTIONS.forEach(eventName => {
       const eventSwimmers = groupMembers.filter(r => r.event1 === eventName || r.event2 === eventName);
       const count = eventSwimmers.length;
+      const prevCount = PREV_YEAR_DISTRIBUTION[gender]?.[groupName]?.[eventName] ?? 0;
       groupRowTotal += count;
       colTotals[eventName] += count;
 
-      if (count > 0) {
-        const namesList = eventSwimmers.map(s => s.name).join(', ');
+      if (isMatrixCompareMode) {
+        const titleText = count > 0
+          ? `${groupName} · ${eventName} (올해 ${count}명 / 작년 ${prevCount}명): ${eventSwimmers.map(s => s.name).join(', ')}`
+          : `${groupName} · ${eventName} (올해 0명 / 작년 ${prevCount}명)`;
+
         tr.innerHTML += `
-          <td class="matrix-cell has-count" title="${groupName} · ${eventName} (${count}명): ${namesList}">
-            <span class="matrix-num">${count}</span>
-            <div class="matrix-hover-tooltip">
-              <div class="tooltip-header">${groupName} · ${eventName} (${count}명)</div>
-              <div class="tooltip-list">
-                ${eventSwimmers.map(s => `
-                  <span class="tooltip-chip ${gender === '남' ? 'male' : 'female'}">${escapeHtml(s.name)}</span>
-                `).join('')}
+          <td class="matrix-cell is-compared ${count > 0 ? 'has-count' : 'is-empty'}" title="${titleText}">
+            <span class="matrix-num-compare">
+              <span class="${count > 0 ? 'num-curr' : 'num-curr-zero'}">${count}</span>
+              <span class="num-slash">/</span>
+              <span class="num-prev">(${prevCount})</span>
+            </span>
+            ${count > 0 ? `
+              <div class="matrix-hover-tooltip">
+                <div class="tooltip-header">${groupName} · ${eventName} (올해 ${count}명 / 작년 ${prevCount}명)</div>
+                <div class="tooltip-list">
+                  ${eventSwimmers.map(s => `
+                    <span class="tooltip-chip ${gender === '남' ? 'male' : 'female'}">${escapeHtml(s.name)}</span>
+                  `).join('')}
+                </div>
               </div>
-            </div>
+            ` : ''}
           </td>
         `;
       } else {
-        tr.innerHTML += `
-          <td class="matrix-cell is-empty">
-            <span class="matrix-num-empty">-</span>
-          </td>
-        `;
+        if (count > 0) {
+          const namesList = eventSwimmers.map(s => s.name).join(', ');
+          tr.innerHTML += `
+            <td class="matrix-cell has-count" title="${groupName} · ${eventName} (${count}명): ${namesList}">
+              <span class="matrix-num">${count}</span>
+              <div class="matrix-hover-tooltip">
+                <div class="tooltip-header">${groupName} · ${eventName} (${count}명)</div>
+                <div class="tooltip-list">
+                  ${eventSwimmers.map(s => `
+                    <span class="tooltip-chip ${gender === '남' ? 'male' : 'female'}">${escapeHtml(s.name)}</span>
+                  `).join('')}
+                </div>
+              </div>
+            </td>
+          `;
+        } else {
+          tr.innerHTML += `
+            <td class="matrix-cell is-empty">
+              <span class="matrix-num-empty">-</span>
+            </td>
+          `;
+        }
       }
     });
 
     grandTotal += groupRowTotal;
-    tr.innerHTML += `
-      <td class="matrix-cell" style="font-weight:800; background:#f8fafc; color:var(--secondary);">
-        ${groupRowTotal > 0 ? groupRowTotal : '-'}
-      </td>
-    `;
+    const prevGroupTotal = PREV_YEAR_DISTRIBUTION[gender]?.[groupName]?.total ?? 0;
+
+    if (isMatrixCompareMode) {
+      tr.innerHTML += `
+        <td class="matrix-cell is-compared" style="font-weight:800; background:#f8fafc; color:var(--secondary);">
+          <span class="matrix-num-compare">
+            <span class="${groupRowTotal > 0 ? 'num-curr' : 'num-curr-zero'}">${groupRowTotal}</span>
+            <span class="num-slash">/</span>
+            <span class="num-prev">(${prevGroupTotal})</span>
+          </span>
+        </td>
+      `;
+    } else {
+      tr.innerHTML += `
+        <td class="matrix-cell" style="font-weight:800; background:#f8fafc; color:var(--secondary);">
+          ${groupRowTotal > 0 ? groupRowTotal : '-'}
+        </td>
+      `;
+    }
     bodyEl.appendChild(tr);
   });
 
   // Footer Row
+  const prevGrandTotal = GROUPS.reduce((sum, g) => sum + (PREV_YEAR_DISTRIBUTION[gender]?.[g]?.total ?? 0), 0);
+
   footEl.innerHTML = `
     <tr>
       <th>계</th>
-      ${EVENT_OPTIONS.map(ev => `
-        <td>${colTotals[ev] > 0 ? colTotals[ev] : '-'}</td>
-      `).join('')}
-      <td style="color:${gender === '남' ? '#0284c7' : '#e11d48'}; font-weight:900;">${grandTotal}</td>
+      ${EVENT_OPTIONS.map(ev => {
+        const prevColTotal = GROUPS.reduce((sum, g) => sum + (PREV_YEAR_DISTRIBUTION[gender]?.[g]?.[ev] ?? 0), 0);
+        if (isMatrixCompareMode) {
+          return `
+            <td>
+              <span class="matrix-num-compare">
+                <span class="${colTotals[ev] > 0 ? 'num-curr' : 'num-curr-zero'}">${colTotals[ev]}</span>
+                <span class="num-slash">/</span>
+                <span class="num-prev">(${prevColTotal})</span>
+              </span>
+            </td>
+          `;
+        } else {
+          return `<td>${colTotals[ev] > 0 ? colTotals[ev] : '-'}</td>`;
+        }
+      }).join('')}
+      <td style="color:${gender === '남' ? '#0284c7' : '#e11d48'}; font-weight:900;">
+        ${isMatrixCompareMode ? `
+          <span class="matrix-num-compare">
+            <span class="num-curr">${grandTotal}</span>
+            <span class="num-slash">/</span>
+            <span class="num-prev">(${prevGrandTotal})</span>
+          </span>
+        ` : grandTotal}
+      </td>
     </tr>
   `;
 }
@@ -2038,13 +2178,26 @@ function bindEvents() {
     });
   }
 
-  // Panel Pin Buttons (Synchronized across all panels)
-  document.querySelectorAll('.btn-panel-pin').forEach(btn => {
-    btn.addEventListener('click', () => {
-      isStickyPinned = !isStickyPinned;
-      applyStickyState(isStickyPinned);
-      localStorage.setItem(STICKY_STORAGE_KEY, isStickyPinned ? '1' : '0');
-      showToast(isStickyPinned ? '📌 상단 조합 패널이 고정되었습니다.' : '🔓 상단 조합 패널 고정이 해제되었습니다.');
+  // Panel Pin Buttons (Only 1 pinned at a time, hiding remaining cards)
+  document.querySelectorAll('.combo-card .btn-panel-pin').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const card = btn.closest('.combo-card');
+      if (!card) return;
+
+      const cardId = card.id;
+      if (pinnedComboCardId === cardId) {
+        pinnedComboCardId = null;
+        localStorage.removeItem(STICKY_STORAGE_KEY);
+        applySinglePinnedCard(null);
+        showToast('🔓 조합 패널 고정이 해제되어 모든 조합이 표시됩니다.');
+      } else {
+        pinnedComboCardId = cardId;
+        localStorage.setItem(STICKY_STORAGE_KEY, cardId);
+        applySinglePinnedCard(cardId);
+        const title = card.querySelector('.combo-title')?.textContent?.trim() || '선택한 조합';
+        showToast(`📌 '${title}' 패널이 상단에 고정되었습니다. (나머지 조합 숨김)`);
+      }
     });
   });
 
