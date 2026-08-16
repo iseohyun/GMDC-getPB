@@ -780,10 +780,9 @@ function initFirebaseSync() {
         saveStatusText.innerHTML = `<span class="status-dot"></span><span>Firebase 클라우드 동기화 (${new Date().toLocaleTimeString('ko-KR')})</span>`;
       }
     } else {
-      console.warn('⚠️ Firebase 학생부 문서를 찾을 수 없습니다. 자동 초기화(덮어쓰기)를 수행하지 않고 읽기 대기합니다.');
-      if (saveStatusText && !isScenarioMode) {
-        saveStatusText.innerHTML = `<span style="color:#ef4444;">⚠️ 서버 문서 없음 (연결 대기)</span>`;
-      }
+      console.log('🌱 Firestore 학생부 문서가 없어 기본 데이터(19명, 단체전 PB 빈 데이터)로 DB에 일괄 입력(초기화)합니다.');
+      isInitialSyncCompleted = true;
+      syncToFirestore(DEFAULT_STUDENT_RECORDS);
     }
   }, (error) => {
     console.error('Firebase onSnapshot 에러:', error);
@@ -1329,16 +1328,92 @@ function formatRelayTime(seconds) {
   return `${mins}분 ${formattedSecs}초 (${seconds.toFixed(2)}s)`;
 }
 
+// Generate Recommended Student Relay Lineup based on Grade Rules
+// 1·2학년(2학년 우선) + 3·4학년(4학년 우선) + 5·6학년(6학년 우선) + 와일드카드(6학년 우선)
+function getStudentRecommendedLineup(gender) {
+  const pool = records.filter(r => r.gender === gender && ['1그룹','2그룹','3그룹','4그룹','5그룹','6그룹'].includes(r.group));
+  
+  const g12 = pool.filter(r => r.group === '1그룹' || r.group === '2그룹');
+  const g34 = pool.filter(r => r.group === '3그룹' || r.group === '4그룹');
+  const g56 = pool.filter(r => r.group === '5그룹' || r.group === '6그룹');
+
+  const missing = [];
+  if (g12.length === 0) missing.push('1·2학년');
+  if (g34.length === 0) missing.push('3·4학년');
+  if (g56.length === 0) missing.push('5·6학년');
+
+  if (missing.length > 0) {
+    return `[${missing.join(', ')} 미등록]으로 팀 구성 불가`;
+  }
+
+  if (pool.length < 4) {
+    const names = pool.map(r => r.name).join(', ');
+    return `[선수 등록 부족 (${pool.length}/4명: ${names})]으로 팀 구성 불가`;
+  }
+
+  // Slot 1: 1, 2학년 (2학년 우선)
+  const g2 = pool.filter(r => r.group === '2그룹');
+  const g1 = pool.filter(r => r.group === '1그룹');
+  const s1Pool = g2.length > 0 ? g2 : g1;
+
+  // Slot 2: 3, 4학년 (4학년 우선)
+  const g4 = pool.filter(r => r.group === '4그룹');
+  const g3 = pool.filter(r => r.group === '3그룹');
+  const s2Pool = g4.length > 0 ? g4 : g3;
+
+  // Slot 3 & 4: 5, 6학년 & 와일드카드 (6학년 우선)
+  const g6 = pool.filter(r => r.group === '6그룹');
+  const g5 = pool.filter(r => r.group === '5그룹');
+
+  const slot1Str = s1Pool.length === 1 ? s1Pool[0].name : `[${s1Pool.map(c => c.name).join(' or ')}]`;
+  const slot2Str = s2Pool.length === 1 ? s2Pool[0].name : `[${s2Pool.map(c => c.name).join(' or ')}]`;
+  let slot3Str = '';
+  let slot4Str = '';
+
+  if (g6.length >= 2) {
+    if (g6.length === 2) {
+      slot3Str = g6[0].name;
+      slot4Str = g6[1].name;
+    } else {
+      slot3Str = `[${g6.map(c => c.name).join(' or ')}]`;
+      slot4Str = `[${g6.map(c => c.name).join(' or ')}]`;
+    }
+  } else if (g6.length === 1) {
+    slot3Str = g6[0].name;
+    const remaining = g5.length > 0 ? g5 : pool.filter(r => r.id !== g6[0].id && !s1Pool.some(p => p.id === r.id) && !s2Pool.some(p => p.id === r.id));
+    if (remaining.length === 1) {
+      slot4Str = remaining[0].name;
+    } else if (remaining.length > 1) {
+      slot4Str = `[${remaining.map(c => c.name).join(' or ')}]`;
+    } else {
+      slot4Str = `[와일드카드]`;
+    }
+  } else {
+    if (g5.length === 2) {
+      slot3Str = g5[0].name;
+      slot4Str = g5[1].name;
+    } else if (g5.length > 2) {
+      slot3Str = `[${g5.map(c => c.name).join(' or ')}]`;
+      slot4Str = `[${g5.map(c => c.name).join(' or ')}]`;
+    } else {
+      slot3Str = g5.length === 1 ? g5[0].name : `[5·6학년]`;
+      slot4Str = `[와일드카드]`;
+    }
+  }
+
+  return `${slot1Str} + ${slot2Str} + ${slot3Str} + ${slot4Str}`;
+}
+
 // Update Top Dashboard Combination Panels
 function updateStats() {
   const { combo1, combo2, combo3, combo4 } = calculateRelayCombinations();
-  renderComboCard('combo1', combo1, false);
-  renderComboCard('combo2', combo2, false);
-  renderComboCard('combo3', combo3, true);
-  renderComboCard('combo4', combo4, true);
+  renderComboCard('combo1', combo1, false, '남');
+  renderComboCard('combo2', combo2, false, '여');
+  renderComboCard('combo3', combo3, true, '남');
+  renderComboCard('combo4', combo4, true, '여');
 }
 
-function renderComboCard(prefix, result, isMedley = false) {
+function renderComboCard(prefix, result, isMedley = false, gender = '남') {
   const timeEl = document.getElementById(`${prefix}Time`);
   const ageEl = document.getElementById(`${prefix}Age`);
   const membersEl = document.getElementById(`${prefix}Members`);
@@ -1349,7 +1424,19 @@ function renderComboCard(prefix, result, isMedley = false) {
     timeEl.textContent = '-';
     timeEl.classList.remove('time-highlight');
     ageEl.textContent = '-';
-    membersEl.innerHTML = `<span class="combo-empty-msg">${result ? result.message : '기록 부족'}</span>`;
+
+    const recommendLine = getStudentRecommendedLineup(gender);
+    const failMsg = result ? result.message : '기록 부족';
+
+    membersEl.innerHTML = `
+      <div class="combo-recommendation-box">
+        <div class="combo-fail-reason">${escapeHtml(failMsg)}</div>
+        <div class="combo-recommend-line">
+          <span class="recommend-badge">추천 라인업</span>
+          <span class="recommend-members">${escapeHtml(recommendLine)}</span>
+        </div>
+      </div>
+    `;
     return;
   }
 
@@ -1560,7 +1647,7 @@ function renderEventsTable() {
           <span class="event-count-badge ${eventCount > 0 ? 'has-events' : ''}">${eventCount}개</span>
         </td>
         <td class="col-goto-pb col-detail">
-          <button class="btn-goto-pb" data-name="${escapeHtml(item.name)}" title="${escapeHtml(item.name)}의 개인 PB 기록표로 이동">
+          <button class="btn-goto-pb" data-name="${escapeHtml(item.name)}" title="${escapeHtml(item.name)}의 단체전 기록표로 이동">
             기록보기 ➔
           </button>
         </td>

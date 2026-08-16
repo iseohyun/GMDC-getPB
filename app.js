@@ -1320,7 +1320,7 @@ function renderEventsTable() {
         <span class="count-badge ${countClass}">${count}종목</span>
       </td>
       <td class="col-goto-pb col-detail" style="text-align:center;">
-        <button class="btn-table-jump" data-jump-id="${item.id}" title="${item.name}의 개인 PB 기록표로 이동">
+        <button class="btn-table-jump" data-jump-id="${item.id}" title="${item.name}의 단체전 기록표로 이동">
           PB 보기
         </button>
       </td>
@@ -1679,14 +1679,14 @@ function bindEvents() {
     btnRecordsModeSimple.addEventListener('click', () => {
       applyRecordsViewMode('simple');
       localStorage.setItem(RECORDS_MODE_KEY, 'simple');
-      showToast('📋 개인 PB 간단히 보기 모드로 전환되었습니다.');
+      showToast('📋 단체전 간단히 보기 모드로 전환되었습니다.');
     });
   }
   if (btnRecordsModeDetailed) {
     btnRecordsModeDetailed.addEventListener('click', () => {
       applyRecordsViewMode('detailed');
       localStorage.setItem(RECORDS_MODE_KEY, 'detailed');
-      showToast('📋 개인 PB 자세히 보기 모드로 전환되었습니다.');
+      showToast('📋 단체전 자세히 보기 모드로 전환되었습니다.');
     });
   }
 

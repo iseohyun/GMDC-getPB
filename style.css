@@ -223,8 +223,8 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 30px;
+  height: 28px;
   border-radius: var(--radius-sm);
   border: 1px solid var(--border-dark);
   background: var(--bg-card);
@@ -2098,4 +2098,65 @@ body.theme-student .rules-section-title {
 
 body.theme-student .toast {
   background: #ea580c;
+}
+
+/* Combo Recommendation Box */
+.combo-recommendation-box {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  width: 100%;
+  padding: 4px 0;
+}
+
+.combo-fail-reason {
+  font-size: 12px;
+  color: #dc2626;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.combo-recommend-line {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  font-size: 12px;
+  color: var(--text-main);
+  background: var(--bg-page);
+  border: 1px solid var(--border-light);
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  line-height: 1.45;
+  word-break: break-word;
+}
+
+.recommend-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 800;
+  color: #0369a1;
+  background: #e0f2fe;
+  padding: 1.5px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.recommend-members {
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+body.theme-student .combo-recommend-line {
+  background: #fff7ed;
+  border-color: #fed7aa;
+}
+
+body.theme-student .recommend-badge {
+  color: #c2410c;
+  background: #ffedd5;
+}
+
+body.theme-student .recommend-members {
+  color: #9a3412;
 }

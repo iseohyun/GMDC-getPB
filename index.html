@@ -18,32 +18,22 @@
     <header class="app-header">
       <div class="header-left">
         <div class="header-badge">GMDC 2026 거제시장배</div>
+        <span class="header-date" id="tableDateBadge">기준일: 2026-01-01</span>
         <nav class="division-nav" aria-label="부서 선택">
           <a href="index.html" class="division-tab active" title="성인부 기록표로 이동">🏊 성인부 (37명)</a>
           <a href="student.html" class="division-tab" title="학생부 기록표로 이동">🏊 학생부 (19명)</a>
         </nav>
-        <span class="header-date" id="tableDateBadge">기준일: 2026-01-01</span>
-      </div>
-
-      <!-- Segmented View Toggle & Save Button in Header -->
-      <div class="header-center">
         <div class="header-view-toggle">
-          <button class="view-toggle-btn active" id="btnToggleRecords" data-view="records" title="개인 PB 기록표 보기">
+          <button class="view-toggle-btn active" id="btnToggleRecords" data-view="records" title="단체전 (기록 및 조합) 보기">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
-            <span>개인 PB</span>
+            <span>단체전</span>
           </button>
-          <button class="view-toggle-btn" id="btnToggleEvents" data-view="events" title="대회 출전 경기 보기 (37명)">
+          <button class="view-toggle-btn" id="btnToggleEvents" data-view="events" title="개인전 (37명)">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="M9 12h6"></path><path d="M9 16h6"></path></svg>
-            <span>출전 경기</span>
+            <span>개인전</span>
             <span class="toggle-count-badge">37명</span>
           </button>
         </div>
-        <button id="btnExportCsv" class="btn-icon-header" title="CSV 파일로 저장 (다운로드)">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
-        </button>
-        <button id="btnCopyTsv" class="btn-icon-header" title="엑셀 붙여넣기용 복사 (헤더 제외, 데이터만 복사)">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-        </button>
         <button id="btnOpenRulesModal" class="btn-rules-header" title="2026년 제19회 거제시장배 대회 요강 보기">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
           <span>모집요강</span>
@@ -255,7 +245,13 @@
           <span class="legend-item"><span class="legend-dot dot-red"></span><strong>희망기록 (붉은색):</strong> 새로 입력/수정한 데이터</span>
           <span class="legend-tip">※ 기록 삭제 시 작년기록이 존재하면 자동으로 작년기록으로 원복됩니다.</span>
         </div>
-        <div class="notice-actions" style="display: flex; align-items: center; gap: 10px;">
+        <div class="notice-actions" style="display: flex; align-items: center; gap: 8px;">
+          <button id="btnExportCsv" class="btn-icon-header" title="CSV 파일로 저장 (다운로드)">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+          </button>
+          <button id="btnCopyTsv" class="btn-icon-header" title="클립보드로 복사">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          </button>
           <button id="btnAuditHistory" class="btn-audit" title="히스토리 기반 데이터 정합성 검증">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
             <span>히스토리 검증</span>
@@ -432,7 +428,7 @@
                   <th class="col-event" style="width: 180px;">출전 종목 1</th>
                   <th class="col-event" style="width: 180px;">출전 종목 2</th>
                   <th class="col-count col-detail" style="width: 90px;">출전 수</th>
-                  <th class="col-goto-pb col-detail" style="width: 100px;">개인 PB</th>
+                  <th class="col-goto-pb col-detail" style="width: 100px;">단체전</th>
                 </tr>
               </thead>
               <tbody id="eventsTableBody">
