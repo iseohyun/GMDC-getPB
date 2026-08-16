@@ -30,6 +30,7 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
+const APP_VERSION = 'v2026.08.16.1';
 const STORAGE_KEY = 'gmdc_swim_records_v1';
 const STICKY_STORAGE_KEY = 'gmdc_sticky_pinned';
 const MODAL_STORAGE_KEY = 'gmdc_hide_notice_modal_date';
@@ -176,6 +177,8 @@ const eventsFilteredCount = document.getElementById('eventsFilteredCount');
 
 // Init application
 function init() {
+  window.__GMDC_VERSION__ = APP_VERSION;
+  console.log(`%c[GMDC Swim] App Version: ${APP_VERSION}`, 'color: #0284c7; font-weight: bold; font-size: 12px;');
   initStickyPreference();
   initNoticeModal();
   initRecordsViewMode();
