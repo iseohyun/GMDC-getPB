@@ -41,7 +41,7 @@ const MODAL_STORAGE_KEY = 'gmdc_hide_notice_modal_date';
 const EVENTS_MODE_KEY = 'gmdc_events_view_mode';
 const RECORDS_MODE_KEY = 'gmdc_records_view_mode';
 
-// Deadline Configuration: 8월 17일(화) 18:00:00 KST
+// Deadline Configuration: 8월 17일(월) 18:00:00 KST
 const DEADLINE_ISO = '2026-08-17T18:00:00+09:00';
 const DEADLINE = new Date(DEADLINE_ISO);
 
@@ -225,24 +225,18 @@ function updateDeadlineCountdown() {
   }
 
   const totalSeconds = Math.floor(diff / 1000);
-  const days = Math.floor(totalSeconds / 86400);
-  const hours = Math.floor((totalSeconds % 86400) / 3600);
+  const totalHours = Math.floor(totalSeconds / 3600);
   const minutes = Math.floor((totalSeconds % 3600) / 60);
   const seconds = totalSeconds % 60;
 
-  let timeStr = '';
-  if (days > 0) {
-    timeStr = `마감까지 ${days}일 ${hours}시간 ${minutes}분 ${seconds}초`;
-  } else if (hours > 0) {
-    timeStr = `마감까지 ${hours}시간 ${minutes}분 ${seconds}초`;
-  } else {
-    timeStr = `마감까지 ${minutes}분 ${seconds}초`;
-  }
+  const hh = String(totalHours).padStart(2, '0');
+  const mm = String(minutes).padStart(2, '0');
+  const ss = String(seconds).padStart(2, '0');
 
   const isUrgent = diff < 3600000; // 1시간 이내
   badge.className = `header-date ${isUrgent ? 'is-urgent' : 'is-active'}`;
-  badge.innerHTML = `⏳ ${timeStr}`;
-  badge.title = `클릭하여 마감 일정 안내 보기 (마감 시한: 8월 17일 18:00)`;
+  badge.innerHTML = `⏳ 마감까지 <strong>${hh}:${mm}:${ss}</strong>`;
+  badge.title = `클릭하여 마감 일정 안내 보기 (마감 시한: 8월 17일(월) 18:00)`;
 }
 
 function initScenarioMode() {

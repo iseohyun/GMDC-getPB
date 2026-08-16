@@ -26,7 +26,7 @@ const MODAL_STORAGE_KEY = 'gmdc_student_hide_notice_modal_date';
 const EVENTS_MODE_KEY = 'gmdc_student_events_view_mode';
 const RECORDS_MODE_KEY = 'gmdc_student_records_view_mode';
 
-// Deadline Configuration: 8월 17일(화) 18:00:00 KST
+// Deadline Configuration: 8월 17일(월) 18:00:00 KST
 const DEADLINE_ISO = '2026-08-17T18:00:00+09:00';
 const DEADLINE = new Date(DEADLINE_ISO);
 
@@ -170,14 +170,17 @@ function initDeadlineCountdown() {
       badge.innerHTML = `<span style="color:#ef4444; font-weight:800;">🔒 마감 완료</span>`;
       badge.title = '입력 및 수정 시한이 마감되었습니다.';
     } else {
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-      const secs = Math.floor((diff % (1000 * 60)) / 1000);
+      const totalSeconds = Math.floor(diff / 1000);
+      const totalHours = Math.floor(totalSeconds / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
 
-      const timeText = days > 0 ? `${days}일 ${hours}시간 ${mins}분 남음` : `${hours}시간 ${mins}분 ${secs}초 남음`;
-      badge.innerHTML = `⏱️ 마감까지 <strong>${timeText}</strong>`;
-      badge.title = `마감일시: 2026년 8월 17일(화) 18:00 (클릭 시 마감안내)`;
+      const hh = String(totalHours).padStart(2, '0');
+      const mm = String(minutes).padStart(2, '0');
+      const ss = String(seconds).padStart(2, '0');
+
+      badge.innerHTML = `⏱️ 마감까지 <strong>${hh}:${mm}:${ss}</strong>`;
+      badge.title = `마감일시: 2026년 8월 17일(월) 18:00 (클릭 시 마감안내)`;
     }
   }
 
