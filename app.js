@@ -30,7 +30,7 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.08.16.2';
+const APP_VERSION = 'v2026.08.16.3';
 const STORAGE_KEY = 'gmdc_swim_records_v1';
 const STICKY_STORAGE_KEY = 'gmdc_sticky_pinned';
 const MODAL_STORAGE_KEY = 'gmdc_hide_notice_modal_date';
@@ -685,7 +685,7 @@ function renderTable() {
         <span class="group-badge">${escapeHtml(item.group || '-')}</span>
       </td>
       <td class="col-age col-pb-detail">
-        <input type="text" class="cell-input age-input" data-id="${item.id}" data-field="age" value="${escapeHtml(item.age || '')}" placeholder="나이" inputmode="numeric" ${disabledAttr} />
+        <input type="text" class="cell-input age-input" data-id="${item.id}" data-field="age" value="${escapeHtml(item.age || '')}" placeholder="만나이" inputmode="numeric" ${disabledAttr} />
       </td>
       <td class="col-gender col-pb-detail">
         <span class="gender-badge ${item.gender === '남' ? 'male' : 'female'} ${expired ? 'is-locked' : ''}" data-id="${item.id}" data-field="gender" title="${expired ? '입력 마감됨' : '클릭하여 성별 전환'}">
@@ -693,7 +693,7 @@ function renderTable() {
         </span>
       </td>
       <td class="col-name">
-        <input type="text" class="cell-input name-input" data-id="${item.id}" data-field="name" value="${escapeHtml(item.name || '')}" placeholder="이름" ${disabledAttr} />
+        <input type="text" class="cell-input name-input" data-id="${item.id}" data-field="name" value="${escapeHtml(item.name || '')}" placeholder="이름" title="클릭하여 이름 수정 (수정 시 확인 절차가 진행됩니다)" ${disabledAttr} />
       </td>
       ${STROKE_FIELDS.map(field => {
         const val = item[field] || '';
@@ -1345,9 +1345,11 @@ function bindEvents() {
       }
     }
 
-    record[field] = val;
-    saveData();
-    updateStats();
+    if (field !== 'name') {
+      record[field] = val;
+      saveData();
+      updateStats();
+    }
   });
 
   // Focusout / Change handler: Log record change & revert to last year's record if deleted
@@ -1365,6 +1367,28 @@ function bindEvents() {
     const prevVal = (target.dataset.prevVal || '').trim();
     const lastYearVal = getLastYearRecord(id, field);
 
+    // Name field change with explicit user confirmation
+    if (field === 'name') {
+      if (val !== prevVal) {
+        const oldName = prevVal || '무명';
+        const newName = val || '(빈값)';
+        if (!confirm(`'${oldName}' 회원의 이름을 '${newName}'(으)로 변경하시겠습니까?`)) {
+          target.value = prevVal;
+          record.name = prevVal;
+          target.dataset.prevVal = prevVal;
+          renderAll();
+          return;
+        }
+        record.name = val;
+        saveData();
+        renderAll();
+        logChangeHistory('INFO', val || record.name, 'name', '이름', prevVal, val);
+        showToast(`'${oldName}' 회원의 이름이 '${newName}'(으)로 변경되었습니다.`);
+      }
+      target.dataset.prevVal = target.value;
+      return;
+    }
+
     if (val === '' && lastYearVal !== '' && STROKE_FIELDS.includes(field)) {
       target.value = lastYearVal;
       record[field] = lastYearVal;
@@ -1378,8 +1402,6 @@ function bindEvents() {
     } else if (val !== prevVal) {
       if (STROKE_FIELDS.includes(field)) {
         logChangeHistory('RECORD', record.name, field, STROKE_NAMES[field], prevVal, val);
-      } else if (field === 'name') {
-        logChangeHistory('INFO', val || record.name, 'name', '이름', prevVal, val);
       } else if (field === 'age') {
         logChangeHistory('INFO', record.name, 'age', '나이', prevVal, val);
       }
