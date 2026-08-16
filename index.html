@@ -10,7 +10,7 @@
   <meta name="description" content="수영 종목별 개인 PB 기록 관리 및 대회 출전 종목/그룹별 현황 요약 시스템">
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
-  <link rel="stylesheet" href="style.css?v=20260816_4">
+  <link rel="stylesheet" href="style.css?v=20260816_5">
 </head>
 <body>
   <div class="app-container">
@@ -184,9 +184,15 @@
           <span class="legend-item"><span class="legend-dot dot-red"></span><strong>희망기록 (붉은색):</strong> 새로 입력/수정한 데이터</span>
           <span class="legend-tip">※ 기록 삭제 시 작년기록이 존재하면 자동으로 작년기록으로 원복됩니다.</span>
         </div>
-        <div class="save-status" id="saveStatus">
-          <span class="status-dot"></span>
-          <span id="saveStatusText">자동 저장 활성화</span>
+        <div class="notice-actions" style="display: flex; align-items: center; gap: 10px;">
+          <button id="btnAuditHistory" class="btn-audit" title="히스토리 기반 데이터 정합성 검증">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            <span>히스토리 검증</span>
+          </button>
+          <div class="save-status" id="saveStatus">
+            <span class="status-dot"></span>
+            <span id="saveStatusText">자동 저장 활성화</span>
+          </div>
         </div>
       </div>
 
@@ -403,6 +409,28 @@
     </div>
   </div>
 
-  <script type="module" src="app.js?v=20260816_4"></script>
+  <!-- History Audit Modal Popup -->
+  <div id="auditModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="auditModalTitle">
+    <div class="modal-card" style="max-width: 620px; max-height: 85vh;">
+      <div class="modal-header">
+        <div class="modal-badge" style="background:#e0f2fe; color:#0284c7;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+          히스토리 데이터 정합성 검증
+        </div>
+        <button id="btnAuditModalCloseX" class="modal-close-btn" title="닫기" aria-label="닫기">&times;</button>
+      </div>
+      <div class="modal-body" id="auditModalBody" style="overflow-y: auto; max-height: 60vh; padding: 20px 24px;">
+        <div style="text-align: center; padding: 30px; color: var(--text-muted);">
+          <span>⏳ Firebase 히스토리 로그 조회 및 재현 분석 중...</span>
+        </div>
+      </div>
+      <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-size: 12px; color: var(--text-muted);" id="auditModalTimestamp"></span>
+        <button id="btnAuditModalConfirm" class="btn btn-primary">확인</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="app.js?v=20260816_5"></script>
 </body>
 </html>

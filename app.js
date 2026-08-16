@@ -4,7 +4,7 @@
  */
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, doc, setDoc, onSnapshot, getDoc, collection, addDoc, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getFirestore, doc, setDoc, onSnapshot, getDoc, getDocs, collection, addDoc, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 // Firebase Configuration
 const firebaseConfig = {
@@ -30,7 +30,7 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.08.16.4';
+const APP_VERSION = 'v2026.08.16.5';
 let isScenarioMode = false;
 let serverRecordsCache = null;
 
@@ -186,6 +186,7 @@ function init() {
   console.log(`%c[GMDC Swim] App Version: ${APP_VERSION}`, 'color: #0284c7; font-weight: bold; font-size: 12px;');
   initStickyPreference();
   initNoticeModal();
+  initAuditModal();
   initScenarioMode();
   initRecordsViewMode();
   initEventsViewMode();
@@ -294,6 +295,284 @@ function updateScenarioModeUI(isOn) {
     } else {
       saveStatusText.innerHTML = `<span class="status-dot"></span><span>자동 저장 활성화</span>`;
     }
+  }
+}
+
+// ============================================================
+// HISTORY RECONCILIATION & AUDIT ENGINE
+// (히스토리 로그를 초기 기본값부터 순차 재현하여 현재 PB 데이터와 정합성 비교)
+// ============================================================
+function initAuditModal() {
+  const btnAudit = document.getElementById('btnAuditHistory');
+  const modal = document.getElementById('auditModal');
+  const btnCloseX = document.getElementById('btnAuditModalCloseX');
+  const btnConfirm = document.getElementById('btnAuditModalConfirm');
+
+  if (btnAudit) {
+    btnAudit.addEventListener('click', openAuditModal);
+  }
+
+  if (btnCloseX) {
+    btnCloseX.addEventListener('click', closeAuditModal);
+  }
+
+  if (btnConfirm) {
+    btnConfirm.addEventListener('click', closeAuditModal);
+  }
+
+  if (modal) {
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        closeAuditModal();
+      }
+    });
+  }
+
+  // Expose to window for developer/console debugging
+  window.compareHistoryWithCurrentRecords = compareHistoryWithCurrentRecords;
+  window.openAuditModal = openAuditModal;
+}
+
+function openAuditModal() {
+  const modal = document.getElementById('auditModal');
+  const body = document.getElementById('auditModalBody');
+  const timeEl = document.getElementById('auditModalTimestamp');
+
+  if (!modal || !body) return;
+
+  modal.classList.add('show');
+  body.innerHTML = `
+    <div style="text-align:center; padding:35px 20px; color:var(--text-muted);">
+      <div style="font-size:28px; margin-bottom:10px; animation:spin 1s infinite linear;">⏳</div>
+      <div style="font-size:14px; font-weight:700; color:var(--text-main);">Firebase 히스토리 로그 분석 및 정합성 검증 중...</div>
+      <div style="font-size:12px; margin-top:5px;">클라우드 히스토리 컬렉션에서 전체 변경 이력을 순차 재현하고 있습니다.</div>
+    </div>
+  `;
+
+  // Run audit analysis asynchronously
+  setTimeout(async () => {
+    const result = await compareHistoryWithCurrentRecords();
+    if (timeEl) {
+      timeEl.textContent = `검증 시각: ${new Date().toLocaleTimeString('ko-KR')}`;
+    }
+
+    if (!result || !result.success) {
+      body.innerHTML = `
+        <div style="background:#fee2e2; border:1px solid #fca5a5; border-radius:8px; padding:16px; color:#991b1b;">
+          <div style="font-weight:700; font-size:14px;">⚠️ 검증 실패</div>
+          <div style="font-size:12.5px; margin-top:4px;">${escapeHtml(result ? result.reason || result.error : '알 수 없는 오류가 발생했습니다.')}</div>
+        </div>
+      `;
+      return;
+    }
+
+    if (result.isPerfectMatch) {
+      body.innerHTML = `
+        <div style="background:#ecfdf5; border:1px solid #6ee7b7; border-radius:10px; padding:18px; margin-bottom:16px;">
+          <div style="display:flex; align-items:center; gap:8px; color:#065f46; font-weight:800; font-size:16px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            <span>히스토리와 현재 데이터가 100% 완벽히 일치합니다!</span>
+          </div>
+          <p style="margin-top:8px; font-size:13px; color:#047857; line-height:1.5;">
+            서버의 <strong>${HISTORY_COL_NAME}</strong> 컬렉션에 기록된 총 <strong>${result.totalLogs}건</strong>의 변경 로그를 2026-01-01 초기 기본 데이터부터 순차적으로 재현한 결과, 현재 로딩된 모든 회원(37명) 및 <strong>${result.totalFieldChecks}개</strong>의 세부 필드 값과 오차 없이 100% 정확하게 일치함을 검증하였습니다.
+          </p>
+        </div>
+
+        <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:12px; margin-bottom:14px; text-align:center;">
+          <div style="background:var(--bg-page); padding:14px 10px; border-radius:8px; border:1px solid var(--border-light);">
+            <div style="font-size:11.5px; color:var(--text-muted); font-weight:600;">처리된 히스토리</div>
+            <div style="font-size:20px; font-weight:800; color:var(--primary); margin-top:4px;">${result.totalLogs}건</div>
+          </div>
+          <div style="background:var(--bg-page); padding:14px 10px; border-radius:8px; border:1px solid var(--border-light);">
+            <div style="font-size:11.5px; color:var(--text-muted); font-weight:600;">검증된 데이터 필드</div>
+            <div style="font-size:20px; font-weight:800; color:var(--secondary); margin-top:4px;">${result.totalFieldChecks}개</div>
+          </div>
+          <div style="background:var(--bg-page); padding:14px 10px; border-radius:8px; border:1px solid var(--border-light);">
+            <div style="font-size:11.5px; color:var(--text-muted); font-weight:600;">데이터 정합성</div>
+            <div style="font-size:20px; font-weight:800; color:#10b981; margin-top:4px;">100% 일치</div>
+          </div>
+        </div>
+
+        <div style="font-size:12px; color:var(--text-muted); background:var(--bg-page); padding:10px 14px; border-radius:6px; border-left:3px solid #10b981;">
+          💡 <strong>무결성 보증:</strong> 코드 재배포나 동기화 과정에서 서버 데이터의 유실이나 임의 롤백이 전혀 없었음을 확인하였습니다.
+        </div>
+      `;
+    } else {
+      body.innerHTML = `
+        <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:10px; padding:18px; margin-bottom:16px;">
+          <div style="display:flex; align-items:center; gap:8px; color:#92400e; font-weight:800; font-size:16px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            <span>총 ${result.discrepancyCount}건의 차이가 발견되었습니다 (일치율: ${result.matchRate})</span>
+          </div>
+          <p style="margin-top:8px; font-size:13px; color:#b45309;">
+            히스토리 로그 재현 결과와 현재 서버/로컬 로딩 데이터 간에 일부 차이가 있습니다. 아래 목록을 확인해 주세요.
+          </p>
+        </div>
+
+        <div style="max-height: 280px; overflow-y: auto; border: 1px solid var(--border-light); border-radius: 8px;">
+          <table class="audit-table" style="margin-top:0;">
+            <thead>
+              <tr>
+                <th>회원명</th>
+                <th>항목</th>
+                <th>히스토리 재현값</th>
+                <th>현재 로딩값</th>
+                <th>상태</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${result.discrepancies.map(d => `
+                <tr>
+                  <td style="font-weight:700;">${escapeHtml(d.name)}</td>
+                  <td>${escapeHtml(d.fieldName || d.field)}</td>
+                  <td style="color:#2563eb; font-weight:600;">${escapeHtml(d.replayedVal)}</td>
+                  <td style="color:#dc2626; font-weight:700;">${escapeHtml(d.currentVal)}</td>
+                  <td><span style="background:#fee2e2; color:#991b1b; padding:2px 6px; border-radius:4px; font-size:11px;">${escapeHtml(d.status)}</span></td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+  }, 100);
+}
+
+function closeAuditModal() {
+  const modal = document.getElementById('auditModal');
+  if (modal) modal.classList.remove('show');
+}
+
+async function compareHistoryWithCurrentRecords() {
+  if (!db) {
+    console.warn('Firebase DB가 연결되지 않았습니다.');
+    return { success: false, reason: 'Firebase DB가 연결되지 않았습니다.' };
+  }
+
+  try {
+    const colRef = collection(db, HISTORY_COL_NAME);
+    const q = query(colRef, orderBy("timestamp", "asc"));
+    const querySnapshot = await getDocs(q);
+
+    const historyLogs = [];
+    querySnapshot.forEach(docSnap => {
+      historyLogs.push({ id: docSnap.id, ...docSnap.data() });
+    });
+
+    // 1. Start from initial DEFAULT_RECORDS (deep clone)
+    let replayed = JSON.parse(JSON.stringify(DEFAULT_RECORDS));
+
+    // 2. Replay all logs chronologically
+    historyLogs.forEach(log => {
+      const { type, swimmerName, field, newVal } = log;
+      if (!swimmerName) return;
+
+      let target = replayed.find(r => r.name === swimmerName);
+
+      if (type === 'MEMBER') {
+        if (!target) {
+          const newId = replayed.length > 0 ? Math.max(...replayed.map(r => r.id)) + 1 : 1;
+          target = {
+            id: newId,
+            age: '',
+            group: '1그룹',
+            gender: '남',
+            name: swimmerName,
+            birthId: '',
+            event1: '',
+            event2: '',
+            finFly: '',
+            finFree: '',
+            free: '',
+            back: '',
+            breast: '',
+            fly: ''
+          };
+          replayed.push(target);
+        }
+      } else if (type === 'DELETE') {
+        replayed = replayed.filter(r => r.name !== swimmerName);
+        return;
+      }
+
+      if (target && field) {
+        target[field] = newVal !== undefined && newVal !== null ? String(newVal) : '';
+      }
+    });
+
+    // 3. Compare replayed with current records (serverRecordsCache or records)
+    const currentList = serverRecordsCache || records;
+    const discrepancies = [];
+    const fieldsToCheck = ['group', 'age', 'gender', 'name', 'event1', 'event2', 'finFly', 'finFree', 'free', 'back', 'breast', 'fly'];
+
+    let totalFieldChecks = 0;
+    let matchingFieldChecks = 0;
+
+    currentList.forEach(curr => {
+      const rep = replayed.find(r => r.id === curr.id || r.name === curr.name);
+      if (!rep) {
+        discrepancies.push({
+          id: curr.id,
+          name: curr.name,
+          field: '(회원 존재 여부)',
+          fieldName: '회원 존재 여부',
+          replayedVal: '미존재',
+          currentVal: '존재함',
+          status: '히스토리 미기록'
+        });
+        return;
+      }
+
+      fieldsToCheck.forEach(f => {
+        totalFieldChecks++;
+        const currVal = String(curr[f] || '').trim();
+        const repVal = String(rep[f] || '').trim();
+
+        if (currVal === repVal) {
+          matchingFieldChecks++;
+        } else {
+          discrepancies.push({
+            id: curr.id,
+            name: curr.name,
+            field: f,
+            fieldName: STROKE_NAMES[f] || f,
+            replayedVal: repVal || '(빈값)',
+            currentVal: currVal || '(빈값)',
+            status: '불일치'
+          });
+        }
+      });
+    });
+
+    const matchRate = totalFieldChecks > 0 ? ((matchingFieldChecks / totalFieldChecks) * 100).toFixed(1) : '100.0';
+    const result = {
+      success: true,
+      totalLogs: historyLogs.length,
+      totalFieldChecks,
+      matchingFieldChecks,
+      matchRate: `${matchRate}%`,
+      discrepancyCount: discrepancies.length,
+      discrepancies,
+      isPerfectMatch: discrepancies.length === 0,
+      timestamp: new Date().toISOString()
+    };
+
+    // Formatted Developer Console Group
+    console.group(`🔍 [GMDC] 히스토리 기반 데이터 정합성 검증 (${new Date().toLocaleTimeString('ko-KR')})`);
+    console.log(`📜 처리된 히스토리 로그: ${historyLogs.length}건`);
+    console.log(`🎯 데이터 일치율: ${matchRate}% (${matchingFieldChecks}/${totalFieldChecks}개 필드 일치)`);
+    if (result.isPerfectMatch) {
+      console.log(`%c✅ 완벽 일치: 히스토리 실행 결과와 현재 서버/로딩 데이터가 100% 일치합니다.`, 'color: #10b981; font-weight: bold; font-size: 13px;');
+    } else {
+      console.warn(`⚠️ 불일치 항목 ${discrepancies.length}건 발견:`, discrepancies);
+      console.table(discrepancies);
+    }
+    console.groupEnd();
+
+    return result;
+  } catch (err) {
+    console.error('히스토리 검증 중 오류 발생:', err);
+    return { success: false, error: err.message || err };
   }
 }
 

@@ -786,6 +786,48 @@ body {
   color: var(--text-muted);
 }
 
+.btn-audit {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  background: #ffffff;
+  border: 1px solid var(--border-dark);
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-main);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-audit:hover {
+  background: #f0f9ff;
+  border-color: #38bdf8;
+  color: #0284c7;
+}
+
+.audit-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  margin-top: 12px;
+}
+
+.audit-table th {
+  background: var(--bg-page);
+  color: var(--text-muted);
+  font-weight: 700;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border-dark);
+  text-align: left;
+}
+
+.audit-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border-light);
+}
+
 .status-dot {
   width: 8px;
   height: 8px;
