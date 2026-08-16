@@ -30,7 +30,7 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.08.16.5';
+const APP_VERSION = 'v2026.08.16.6';
 let isScenarioMode = false;
 let serverRecordsCache = null;
 
@@ -404,12 +404,12 @@ function openAuditModal() {
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
             <span>총 ${result.discrepancyCount}건의 차이가 발견되었습니다 (일치율: ${result.matchRate})</span>
           </div>
-          <p style="margin-top:8px; font-size:13px; color:#b45309;">
-            히스토리 로그 재현 결과와 현재 서버/로컬 로딩 데이터 간에 일부 차이가 있습니다. 아래 목록을 확인해 주세요.
+          <p style="margin-top:8px; font-size:13px; color:#b45309; line-height:1.5;">
+            히스토리 로그 재현 결과와 현재 서버/로컬 로딩 데이터 간에 일부 차이가 있습니다. 아래 목록을 확인하고, 필요 시 아래 <strong>[히스토리 데이터로 일괄 복구]</strong> 버튼을 눌러 원상 복구할 수 있습니다.
           </p>
         </div>
 
-        <div style="max-height: 280px; overflow-y: auto; border: 1px solid var(--border-light); border-radius: 8px;">
+        <div style="max-height: 250px; overflow-y: auto; border: 1px solid var(--border-light); border-radius: 8px; margin-bottom: 14px;">
           <table class="audit-table" style="margin-top:0;">
             <thead>
               <tr>
@@ -425,7 +425,7 @@ function openAuditModal() {
                 <tr>
                   <td style="font-weight:700;">${escapeHtml(d.name)}</td>
                   <td>${escapeHtml(d.fieldName || d.field)}</td>
-                  <td style="color:#2563eb; font-weight:600;">${escapeHtml(d.replayedVal)}</td>
+                  <td style="color:#2563eb; font-weight:700;">${escapeHtml(d.replayedVal)}</td>
                   <td style="color:#dc2626; font-weight:700;">${escapeHtml(d.currentVal)}</td>
                   <td><span style="background:#fee2e2; color:#991b1b; padding:2px 6px; border-radius:4px; font-size:11px;">${escapeHtml(d.status)}</span></td>
                 </tr>
@@ -433,7 +433,27 @@ function openAuditModal() {
             </tbody>
           </table>
         </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 8px;">
+          <button id="btnRestoreFromHistory" class="btn btn-primary" style="background:#059669; border-color:#059669; font-weight:700; display:flex; align-items:center; gap:6px; font-size:13px; padding:8px 16px;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path><path d="M21 3v5h-5"></path><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path><path d="M8 16H3v5"></path></svg>
+            <span>히스토리 데이터로 일괄 복구하기 (${result.discrepancyCount}건 복원)</span>
+          </button>
+        </div>
       `;
+
+      const btnRestore = body.querySelector('#btnRestoreFromHistory');
+      if (btnRestore) {
+        btnRestore.addEventListener('click', () => {
+          if (confirm(`히스토리에 기록된 ${result.discrepancyCount}건의 변경 내역을 현재 서버 데이터에 완벽하게 복구하시겠습니까?`)) {
+            records = JSON.parse(JSON.stringify(result.replayedRecords));
+            saveData();
+            renderAll();
+            showToast(`🎉 ${result.discrepancyCount}건의 기록이 히스토리 데이터로 완벽히 복구되었습니다!`);
+            closeAuditModal();
+          }
+        });
+      }
     }
   }, 100);
 }
@@ -553,6 +573,7 @@ async function compareHistoryWithCurrentRecords() {
       matchRate: `${matchRate}%`,
       discrepancyCount: discrepancies.length,
       discrepancies,
+      replayedRecords: replayed,
       isPerfectMatch: discrepancies.length === 0,
       timestamp: new Date().toISOString()
     };
