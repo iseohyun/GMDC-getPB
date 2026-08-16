@@ -30,7 +30,7 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.08.16.1';
+const APP_VERSION = 'v2026.08.16.2';
 const STORAGE_KEY = 'gmdc_swim_records_v1';
 const STICKY_STORAGE_KEY = 'gmdc_sticky_pinned';
 const MODAL_STORAGE_KEY = 'gmdc_hide_notice_modal_date';
@@ -658,17 +658,10 @@ function renderTable() {
   const expired = isDeadlineExpired();
   const disabledAttr = expired ? 'disabled' : '';
 
-  if (btnAddRow) {
-    btnAddRow.disabled = expired;
-    btnAddRow.style.opacity = expired ? '0.5' : '1';
-    btnAddRow.style.cursor = expired ? 'not-allowed' : 'pointer';
-    btnAddRow.title = expired ? '입력 마감 시한이 종료되었습니다.' : '새 회원을 추가합니다.';
-  }
-
   if (processed.length === 0) {
     const emptyRow = document.createElement('tr');
     emptyRow.innerHTML = `
-      <td colspan="13" style="padding: 40px; color: var(--text-muted); font-size: 14px; text-align: center;">
+      <td colspan="12" style="padding: 40px; color: var(--text-muted); font-size: 14px; text-align: center;">
         일치하는 데이터가 없습니다.
       </td>
     `;
@@ -739,13 +732,6 @@ function renderTable() {
       }).join('')}
       <td class="col-events-summary col-pb-detail">
         ${eventsTagHtml}
-      </td>
-      <td class="col-actions col-pb-detail">
-        ${expired ? '' : `
-        <button class="btn-icon-danger" data-delete-id="${item.id}" title="회원 삭제">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-        </button>
-        `}
       </td>
     `;
 
@@ -1439,14 +1425,22 @@ function bindEvents() {
       const id = parseInt(genderBadge.dataset.id, 10);
       const record = records.find(r => r.id === id);
       if (record) {
-        const oldGender = record.gender;
-        record.gender = record.gender === '남' ? '여' : '남';
+        const oldGender = record.gender || '남';
+        const targetGender = oldGender === '남' ? '여' : '남';
+        const memberName = record.name ? `'${record.name}'` : '해당';
+
+        if (!confirm(`${memberName} 회원의 성별을 '${targetGender}'(으)로 변경하시겠습니까?`)) {
+          return;
+        }
+
+        record.gender = targetGender;
         genderBadge.textContent = record.gender;
         genderBadge.className = `gender-badge ${record.gender === '남' ? 'male' : 'female'}`;
         logChangeHistory('INFO', record.name, 'gender', '성별', oldGender, record.gender);
         saveData();
         updateStats();
         renderSummaryMatrices();
+        showToast(`${memberName} 회원의 성별이 '${targetGender}'(으)로 변경되었습니다.`);
       }
       return;
     }
@@ -1492,44 +1486,46 @@ function bindEvents() {
     });
   });
 
-  // Add Row Button
-  btnAddRow.addEventListener('click', () => {
-    if (isDeadlineExpired()) {
-      showToast('🔒 신규 회원 등록 시한이 마감되었습니다.');
-      return;
-    }
-
-    const newId = records.length > 0 ? Math.max(...records.map(r => r.id)) + 1 : 1;
-    const newRecord = {
-      id: newId,
-      age: '',
-      group: '1그룹',
-      gender: '남',
-      name: '',
-      birthId: '',
-      event1: '',
-      event2: '',
-      finFly: '',
-      finFree: '',
-      free: '',
-      back: '',
-      breast: '',
-      fly: ''
-    };
-    records.push(newRecord);
-    logChangeHistory('MEMBER', `새 회원 (번호 ${newId})`, 'member', '회원', '', `번호 ${newId} 등록`);
-    saveData();
-    renderAll();
-
-    setTimeout(() => {
-      const newInputs = tableBody.querySelectorAll(`input[data-id="${newId}"]`);
-      if (newInputs.length > 1) {
-        newInputs[1].focus();
+  // Add Row Button (If element exists)
+  if (btnAddRow) {
+    btnAddRow.addEventListener('click', () => {
+      if (isDeadlineExpired()) {
+        showToast('🔒 신규 회원 등록 시한이 마감되었습니다.');
+        return;
       }
-    }, 50);
 
-    showToast('새 회원이 추가되었습니다.');
-  });
+      const newId = records.length > 0 ? Math.max(...records.map(r => r.id)) + 1 : 1;
+      const newRecord = {
+        id: newId,
+        age: '',
+        group: '1그룹',
+        gender: '남',
+        name: '',
+        birthId: '',
+        event1: '',
+        event2: '',
+        finFly: '',
+        finFree: '',
+        free: '',
+        back: '',
+        breast: '',
+        fly: ''
+      };
+      records.push(newRecord);
+      logChangeHistory('MEMBER', `새 회원 (번호 ${newId})`, 'member', '회원', '', `번호 ${newId} 등록`);
+      saveData();
+      renderAll();
+
+      setTimeout(() => {
+        const newInputs = tableBody.querySelectorAll(`input[data-id="${newId}"]`);
+        if (newInputs.length > 1) {
+          newInputs[1].focus();
+        }
+      }, 50);
+
+      showToast('새 회원이 추가되었습니다.');
+    });
+  }
 
   // Panel Pin Buttons (Synchronized across all panels)
   document.querySelectorAll('.btn-panel-pin').forEach(btn => {

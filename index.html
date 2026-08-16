@@ -10,7 +10,7 @@
   <meta name="description" content="수영 종목별 개인 PB 기록 관리 및 대회 출전 종목/그룹별 현황 요약 시스템">
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
-  <link rel="stylesheet" href="style.css?v=20260816_1">
+  <link rel="stylesheet" href="style.css?v=20260816_2">
 </head>
 <body>
   <div class="app-container">
@@ -165,17 +165,11 @@
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
               <span>간단히 (기본)</span>
             </button>
-            <button class="mode-btn" id="btnRecordsModeDetailed" data-records-mode="detailed" title="번호, 그룹, 나이, 성별, 출전종목, 관리 등 모든 열 표시">
+            <button class="mode-btn" id="btnRecordsModeDetailed" data-records-mode="detailed" title="번호, 그룹, 2026-01-01, 성별, 출전종목 등 모든 열 표시">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
               <span>자세히</span>
             </button>
           </div>
-        </div>
-        <div class="toolbar-right">
-          <button id="btnAddRow" class="btn btn-primary">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-            회원 추가
-          </button>
         </div>
       </section>
 
@@ -210,7 +204,6 @@
                 <th class="col-record" data-sort="breast">평영</th>
                 <th class="col-record" data-sort="fly">접영</th>
                 <th class="col-events-summary col-pb-detail">출전 종목</th>
-                <th class="col-actions col-pb-detail">관리</th>
               </tr>
             </thead>
             <tbody id="tableBody">
@@ -406,6 +399,6 @@
     </div>
   </div>
 
-  <script type="module" src="app.js?v=20260816_1"></script>
+  <script type="module" src="app.js?v=20260816_2"></script>
 </body>
 </html>
