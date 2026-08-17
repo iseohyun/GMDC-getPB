@@ -30,7 +30,7 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.08.17.9';
+const APP_VERSION = 'v2026.08.17.10';
 let isScenarioMode = false;
 let isInitialSyncCompleted = false;
 let serverRecordsCache = null;
@@ -1483,7 +1483,7 @@ function renderEventsTable() {
   if (list.length === 0) {
     const emptyRow = document.createElement('tr');
     emptyRow.innerHTML = `
-      <td colspan="11" style="padding: 36px; color: var(--text-muted); font-size: 14px; text-align: center;">
+      <td colspan="12" style="padding: 36px; color: var(--text-muted); font-size: 14px; text-align: center;">
         일치하는 출전 선수가 없습니다.
       </td>
     `;
@@ -1515,7 +1515,9 @@ function renderEventsTable() {
       </td>
       <td class="col-name" style="font-weight:700;">
         ${escapeHtml(item.name || '무명')}
-        <span style="font-size:11px; color:var(--text-subtle); margin-left:2px;">(${item.age}세)</span>
+      </td>
+      <td class="col-age col-simple" style="text-align:center; font-weight:600; color:var(--text-main);">
+        ${item.age ? `${item.age}세` : '-'}
       </td>
       <td class="col-birth col-detail" style="text-align:center;">
         <span class="birth-code">${escapeHtml(item.birthId || '-')}</span>

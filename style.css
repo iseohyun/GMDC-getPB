@@ -1959,9 +1959,17 @@ body.theme-student .btn-panel-pin.active {
   border: 1px solid #fde68a;
 }
 
-/* Events Table Column Hiding in Simple Mode */
+/* Events Table Column Visibility in Simple vs Detailed Mode */
+.events-table .col-simple {
+  display: none;
+}
+
 .events-table.is-simple .col-detail {
   display: none !important;
+}
+
+.events-table.is-simple .col-simple {
+  display: table-cell !important;
 }
 
 .events-table .col-team {
@@ -1976,11 +1984,16 @@ body.theme-student .btn-panel-pin.active {
 }
 
 .events-table.is-simple .col-name {
-  width: 125px;
+  width: 120px;
+}
+
+.events-table.is-simple .col-age {
+  width: 65px;
+  text-align: center;
 }
 
 .events-table.is-simple .col-event {
-  width: calc((100% - 200px) / 2);
+  width: calc((100% - 260px) / 2);
 }
 
 .group-filter-dropdown select,
