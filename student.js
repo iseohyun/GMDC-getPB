@@ -1062,6 +1062,7 @@ function handleUrlRouting() {
 }
 
 function switchView(viewName) {
+  const currentScroll = window.scrollY;
   currentView = viewName;
   if (viewName === 'records') {
     viewRecords.classList.add('active');
@@ -1079,6 +1080,10 @@ function switchView(viewName) {
     if (window.location.hash !== '#events') {
       history.replaceState(null, null, '#events');
     }
+  }
+
+  if (currentScroll > 0) {
+    window.scrollTo({ top: currentScroll, behavior: 'instant' });
   }
 }
 

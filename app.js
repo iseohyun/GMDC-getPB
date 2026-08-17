@@ -932,14 +932,17 @@ function showToast(message, duration = 2800) {
 
 // View Navigation & URL hash routing
 function switchView(viewName) {
+  const currentScroll = window.scrollY;
   currentView = viewName;
-  window.location.hash = viewName;
 
   if (viewName === 'events') {
     if (btnToggleRecords) btnToggleRecords.classList.remove('active');
     if (btnToggleEvents) btnToggleEvents.classList.add('active');
     if (viewRecords) viewRecords.classList.remove('active');
     if (viewEvents) viewEvents.classList.add('active');
+    if (window.location.hash !== '#events') {
+      history.replaceState(null, null, '#events');
+    }
     renderSummaryMatrices();
     renderEventsTable();
   } else {
@@ -947,10 +950,16 @@ function switchView(viewName) {
     if (btnToggleEvents) btnToggleEvents.classList.remove('active');
     if (viewRecords) viewRecords.classList.add('active');
     if (viewEvents) viewEvents.classList.remove('active');
+    if (window.location.hash !== '' && window.location.hash !== '#records') {
+      history.replaceState(null, null, '#records');
+    }
     renderTable();
     updateStats();
   }
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  if (currentScroll > 0) {
+    window.scrollTo({ top: currentScroll, behavior: 'instant' });
+  }
 }
 
 function handleUrlRouting() {
