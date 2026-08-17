@@ -187,10 +187,15 @@
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
             <input type="text" id="searchInput" placeholder="이름 또는 나이 검색..." autocomplete="off">
           </div>
-          <div class="filter-group">
-            <button class="filter-btn active" data-filter="all">전체</button>
-            <button class="filter-btn" data-filter="남">남성</button>
-            <button class="filter-btn" data-filter="여">여성</button>
+          <div class="header-view-toggle">
+            <button class="view-toggle-btn active" data-view="records" title="단체전 보기 (단축키: T)">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+              <span>단체전</span>
+            </button>
+            <button class="view-toggle-btn" data-view="events" title="개인전 보기 (단축키: I)">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="M9 12h6"></path><path d="M9 16h6"></path></svg>
+              <span>개인전</span>
+            </button>
           </div>
         </div>
 
@@ -372,16 +377,15 @@
               <button class="events-filter-btn" data-events-filter="남">남성</button>
               <button class="events-filter-btn" data-events-filter="여">여성</button>
             </div>
-            <div class="group-filter-dropdown">
-              <select id="eventsGroupSelect" class="filter-select">
-                <option value="all">모든 그룹</option>
-                <option value="2그룹">2그룹</option>
-                <option value="3그룹">3그룹</option>
-                <option value="4그룹">4그룹</option>
-                <option value="5그룹">5그룹</option>
-                <option value="6그룹">6그룹</option>
-                <option value="7그룹">7그룹</option>
-              </select>
+            <div class="header-view-toggle">
+              <button class="view-toggle-btn" data-view="records" title="단체전 보기 (단축키: T)">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                <span>단체전</span>
+              </button>
+              <button class="view-toggle-btn active" data-view="events" title="개인전 보기 (단축키: I)">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="M9 12h6"></path><path d="M9 16h6"></path></svg>
+                <span>개인전</span>
+              </button>
             </div>
           </div>
           <div class="toolbar-right">

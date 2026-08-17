@@ -935,9 +935,12 @@ function switchView(viewName) {
   const currentScroll = window.scrollY;
   currentView = viewName;
 
+  // Synchronize all view-toggle-btn buttons (header + toolbars)
+  document.querySelectorAll('.view-toggle-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.view === viewName);
+  });
+
   if (viewName === 'events') {
-    if (btnToggleRecords) btnToggleRecords.classList.remove('active');
-    if (btnToggleEvents) btnToggleEvents.classList.add('active');
     if (viewRecords) viewRecords.classList.remove('active');
     if (viewEvents) viewEvents.classList.add('active');
     if (window.location.hash !== '#events') {
@@ -946,8 +949,6 @@ function switchView(viewName) {
     renderSummaryMatrices();
     renderEventsTable();
   } else {
-    if (btnToggleRecords) btnToggleRecords.classList.add('active');
-    if (btnToggleEvents) btnToggleEvents.classList.remove('active');
     if (viewRecords) viewRecords.classList.add('active');
     if (viewEvents) viewEvents.classList.remove('active');
     if (window.location.hash !== '' && window.location.hash !== '#records') {
@@ -1873,9 +1874,14 @@ function jumpToSwimmerPB(id) {
 
 // Event Bindings
 function bindEvents() {
-  // Header View Toggle Buttons
-  if (btnToggleRecords) btnToggleRecords.addEventListener('click', () => switchView('records'));
-  if (btnToggleEvents) btnToggleEvents.addEventListener('click', () => switchView('events'));
+  // View Toggle Buttons (Synchronize both header and toolbar buttons)
+  document.querySelectorAll('.view-toggle-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const targetView = btn.dataset.view;
+      if (targetView) switchView(targetView);
+    });
+  });
 
   // Adult Team Sub Tabs (A팀 vs B팀)
 

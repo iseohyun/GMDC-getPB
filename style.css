@@ -243,6 +243,9 @@ body {
 
 .header-view-toggle {
   display: inline-flex;
+  align-items: center;
+  height: 28px;
+  box-sizing: border-box;
   background: #f1f5f9;
   padding: 2px;
   border-radius: var(--radius-sm);

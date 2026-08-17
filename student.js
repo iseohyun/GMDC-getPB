@@ -1064,19 +1064,20 @@ function handleUrlRouting() {
 function switchView(viewName) {
   const currentScroll = window.scrollY;
   currentView = viewName;
+
+  document.querySelectorAll('.view-toggle-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.view === viewName);
+  });
+
   if (viewName === 'records') {
     viewRecords.classList.add('active');
     viewEvents.classList.remove('active');
-    btnToggleRecords.classList.add('active');
-    btnToggleEvents.classList.remove('active');
     if (window.location.hash !== '' && window.location.hash !== '#records') {
       history.replaceState(null, null, ' ');
     }
   } else {
     viewRecords.classList.remove('active');
     viewEvents.classList.add('active');
-    btnToggleRecords.classList.remove('active');
-    btnToggleEvents.classList.add('active');
     if (window.location.hash !== '#events') {
       history.replaceState(null, null, '#events');
     }
@@ -1969,12 +1970,13 @@ function renderEventsTable() {
 }
 
 function bindEvents() {
-  if (btnToggleRecords) {
-    btnToggleRecords.addEventListener('click', () => switchView('records'));
-  }
-  if (btnToggleEvents) {
-    btnToggleEvents.addEventListener('click', () => switchView('events'));
-  }
+  document.querySelectorAll('.view-toggle-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const targetView = btn.dataset.view;
+      if (targetView) switchView(targetView);
+    });
+  });
 
   if (btnRecordsModeSimple) {
     btnRecordsModeSimple.addEventListener('click', () => applyRecordsViewMode('simple'));
