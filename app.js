@@ -30,7 +30,7 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.08.17.10';
+const APP_VERSION = 'v2026.08.17.11';
 let isScenarioMode = false;
 let isInitialSyncCompleted = false;
 let serverRecordsCache = null;
@@ -1186,6 +1186,16 @@ function renderTable() {
       : `<span class="pb-event-chip empty">미신청</span>`;
 
     tr.innerHTML = `
+      <td class="col-team" style="text-align:center;">
+        <button 
+          type="button" 
+          class="btn-team-toggle team-${item.team || 'A'}" 
+          data-team-id="${item.id}" 
+          title="클릭하여 소속팀 변경 (현재: ${item.team || 'A'}팀)"
+        >
+          ${item.team || 'A'}팀
+        </button>
+      </td>
       <td class="col-no col-pb-detail">${item.id}</td>
       <td class="col-group col-pb-detail">
         <span class="group-badge">${escapeHtml(item.group || '-')}</span>
@@ -1197,16 +1207,6 @@ function renderTable() {
         <span class="gender-badge ${item.gender === '남' ? 'male' : 'female'}" data-id="${item.id}" data-field="gender" title="클릭하여 성별 전환">
           ${item.gender || '남'}
         </span>
-      </td>
-      <td class="col-team" style="text-align:center;">
-        <button 
-          type="button" 
-          class="btn-team-toggle team-${item.team || 'A'}" 
-          data-team-id="${item.id}" 
-          title="클릭하여 소속팀 변경 (현재: ${item.team || 'A'}팀)"
-        >
-          ${item.team || 'A'}팀
-        </button>
       </td>
       <td class="col-name">
         <input type="text" class="cell-input name-input" data-id="${item.id}" data-field="name" value="${escapeHtml(item.name || '')}" placeholder="이름" title="클릭하여 이름 수정 (수정 시 확인 절차가 진행됩니다)" />
@@ -1496,13 +1496,6 @@ function renderEventsTable() {
     tr.dataset.id = item.id;
 
     tr.innerHTML = `
-      <td class="col-no col-detail" style="text-align:center;">${idx + 1}</td>
-      <td class="col-group col-detail" style="text-align:center;">
-        <span class="group-badge">${escapeHtml(item.group || '-')}</span>
-      </td>
-      <td class="col-gender col-detail" style="text-align:center;">
-        <span class="gender-badge ${item.gender === '남' ? 'male' : 'female'}">${item.gender || '남'}</span>
-      </td>
       <td class="col-team" style="text-align:center;">
         <button 
           type="button"
@@ -1512,6 +1505,13 @@ function renderEventsTable() {
         >
           ${item.team || 'A'}팀
         </button>
+      </td>
+      <td class="col-no col-detail" style="text-align:center;">${idx + 1}</td>
+      <td class="col-group col-detail" style="text-align:center;">
+        <span class="group-badge">${escapeHtml(item.group || '-')}</span>
+      </td>
+      <td class="col-gender col-detail" style="text-align:center;">
+        <span class="gender-badge ${item.gender === '남' ? 'male' : 'female'}">${item.gender || '남'}</span>
       </td>
       <td class="col-name" style="font-weight:700;">
         ${escapeHtml(item.name || '무명')}
@@ -1560,13 +1560,13 @@ function copyEventsToClipboard() {
     return;
   }
 
-  // Omit <th> headers, copy sequence (1-based), group, gender, team, name, birthId, event1, event2, phone, depositor, address
+  // Omit <th> headers, copy team, sequence (1-based), group, gender, name, birthId, event1, event2, phone, depositor, address
   const rows = list.map((item, idx) => {
     return [
+      `${item.team || 'A'}팀`,
       idx + 1,
       item.group || '',
       item.gender || '',
-      `${item.team || 'A'}팀`,
       item.name || '',
       item.birthId || '',
       item.event1 || '',
