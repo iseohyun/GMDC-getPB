@@ -18,7 +18,7 @@
   <meta name="description" content="수영 종목별 개인 PB 기록 관리 및 대회 출전 종목/그룹별 현황 요약 시스템">
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
-  <link rel="stylesheet" href="style.css?v=20260817_2">
+  <link rel="stylesheet" href="style.css?v=20260817_3">
 </head>
 <body>
   <div class="app-container">
@@ -502,32 +502,37 @@
           <div class="events-detail-title-group">
             <h3>📋 출전 선수별 명단 (총 39명)</h3>
           </div>
-          <div class="events-mode-toggle">
-            <button class="mode-btn active" id="btnModeSimple" data-events-mode="simple" title="이름과 출전 종목만 간단히 표시">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
-              <span>간단히 (기본)</span>
-            </button>
-            <button class="mode-btn" id="btnModeDetailed" data-events-mode="detailed" title="그룹, 성별, 생년월일, 개인PB 등 모든 정보 표시">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
-              <span>자세히</span>
-            </button>
-          </div>
         </div>
 
         <section class="toolbar">
           <div class="toolbar-left">
             <div class="search-box">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-              <input type="text" id="eventsSearchInput" placeholder="이름, 그룹, 생년월일 검색..." autocomplete="off">
+              <input type="text" id="eventsSearchInput" placeholder="이름 또는 나이 검색..." autocomplete="off">
             </div>
+
             <div class="filter-group">
-              <button class="events-filter-btn active" data-events-filter="all">전체</button>
-              <button class="events-filter-btn" data-events-filter="남">남성</button>
-              <button class="events-filter-btn" data-events-filter="여">여성</button>
+              <label for="eventsGenderSelect" class="filter-label">성별</label>
+              <select id="eventsGenderSelect" class="filter-select">
+                <option value="all" selected>전체</option>
+                <option value="남">남자</option>
+                <option value="여">여자</option>
+              </select>
             </div>
-            <div class="group-filter-dropdown">
+
+            <div class="filter-group">
+              <label for="eventsTeamSelect" class="filter-label">팀</label>
+              <select id="eventsTeamSelect" class="filter-select">
+                <option value="all" selected>전체</option>
+                <option value="A">A팀</option>
+                <option value="B">B팀</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label for="eventsGroupSelect" class="filter-label">그룹</label>
               <select id="eventsGroupSelect" class="filter-select">
-                <option value="all">모든 그룹</option>
+                <option value="all" selected>모든 그룹</option>
                 <option value="1그룹">1그룹</option>
                 <option value="2그룹">2그룹</option>
                 <option value="3그룹">3그룹</option>
@@ -536,9 +541,17 @@
                 <option value="6그룹">6그룹</option>
               </select>
             </div>
+
+            <div class="filter-group">
+              <label for="eventsModeSelect" class="filter-label">보기</label>
+              <select id="eventsModeSelect" class="filter-select">
+                <option value="simple" selected>간단히</option>
+                <option value="detailed">자세히</option>
+              </select>
+            </div>
           </div>
           <div class="toolbar-right">
-            <span class="events-count-info" id="eventsFilteredCount">37명 표시 중</span>
+            <span class="events-count-info" id="eventsFilteredCount">39명 표시 중</span>
           </div>
         </section>
 
@@ -925,6 +938,6 @@
     </div>
   </div>
 
-  <script type="module" src="app.js?v=20260817_2"></script>
+  <script type="module" src="app.js?v=20260817_3"></script>
 </body>
 </html>

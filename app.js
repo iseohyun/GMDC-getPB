@@ -30,7 +30,7 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.08.17.2';
+const APP_VERSION = 'v2026.08.17.3';
 let isScenarioMode = false;
 let isInitialSyncCompleted = false;
 let serverRecordsCache = null;
@@ -166,6 +166,7 @@ let recordsViewMode = 'detailed'; // 'detailed' (기본) | 'simple'
 // Events View State
 let eventsSearchQuery = '';
 let eventsGenderFilter = 'all';
+let eventsTeamFilter = 'all';
 let eventsGroupFilter = 'all';
 let eventsViewMode = 'simple'; // 'simple' (기본) | 'detailed'
 
@@ -200,12 +201,12 @@ const maleMatrixFoot = document.getElementById('maleMatrixFoot');
 const femaleMatrixBody = document.getElementById('femaleMatrixBody');
 const femaleMatrixFoot = document.getElementById('femaleMatrixFoot');
 
-const btnModeSimple = document.getElementById('btnModeSimple');
-const btnModeDetailed = document.getElementById('btnModeDetailed');
+const eventsGenderSelect = document.getElementById('eventsGenderSelect');
+const eventsTeamSelect = document.getElementById('eventsTeamSelect');
+const eventsGroupSelect = document.getElementById('eventsGroupSelect');
+const eventsModeSelect = document.getElementById('eventsModeSelect');
 const eventsDetailTable = document.getElementById('eventsDetailTable');
 const eventsSearchInput = document.getElementById('eventsSearchInput');
-const eventsFilterBtns = document.querySelectorAll('.events-filter-btn');
-const eventsGroupSelect = document.getElementById('eventsGroupSelect');
 const eventsTableBody = document.getElementById('eventsTableBody');
 const eventsFilteredCount = document.getElementById('eventsFilteredCount');
 
@@ -664,8 +665,8 @@ function initEventsViewMode() {
 
 function applyEventsViewMode(mode) {
   eventsViewMode = mode;
-  if (btnModeSimple) btnModeSimple.classList.toggle('active', mode === 'simple');
-  if (btnModeDetailed) btnModeDetailed.classList.toggle('active', mode === 'detailed');
+  const select = document.getElementById('eventsModeSelect');
+  if (select) select.value = mode;
   if (eventsDetailTable) eventsDetailTable.classList.toggle('is-simple', mode === 'simple');
 }
 
@@ -1422,6 +1423,7 @@ function renderEventsTable() {
     list = list.filter(item => 
       (item.name && item.name.toLowerCase().includes(q)) ||
       (item.group && item.group.toLowerCase().includes(q)) ||
+      (item.age && String(item.age).includes(q)) ||
       (item.birthId && item.birthId.toLowerCase().includes(q))
     );
   }
@@ -1431,6 +1433,13 @@ function renderEventsTable() {
     list = list.filter(item => item.gender === '남');
   } else if (eventsGenderFilter === '여') {
     list = list.filter(item => item.gender === '여');
+  }
+
+  // Team filter
+  if (eventsTeamFilter === 'A') {
+    list = list.filter(item => (item.team || 'A') === 'A');
+  } else if (eventsTeamFilter === 'B') {
+    list = list.filter(item => (item.team || 'A') === 'B');
   }
 
   // Group filter
@@ -1889,21 +1898,7 @@ function bindEvents() {
     });
   }
 
-  // Events View Mode (간단히 vs 자세히)
-  if (btnModeSimple) {
-    btnModeSimple.addEventListener('click', () => {
-      applyEventsViewMode('simple');
-      localStorage.setItem(EVENTS_MODE_KEY, 'simple');
-      showToast('📋 간단히 보기 모드로 전환되었습니다.');
-    });
-  }
-  if (btnModeDetailed) {
-    btnModeDetailed.addEventListener('click', () => {
-      applyEventsViewMode('detailed');
-      localStorage.setItem(EVENTS_MODE_KEY, 'detailed');
-      showToast('📋 자세히 보기 모드로 전환되었습니다.');
-    });
-  }
+
 
   // Events Table Dropdown Change & Click Delegation
   if (eventsTableBody) {
@@ -1985,7 +1980,7 @@ function bindEvents() {
     });
   }
 
-  // Events Search Input
+  // Events Toolbar Filters
   if (eventsSearchInput) {
     eventsSearchInput.addEventListener('input', (e) => {
       eventsSearchQuery = e.target.value;
@@ -1993,21 +1988,32 @@ function bindEvents() {
     });
   }
 
-  // Events Gender Filter Buttons
-  eventsFilterBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      eventsFilterBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      eventsGenderFilter = btn.dataset.eventsFilter;
+  if (eventsGenderSelect) {
+    eventsGenderSelect.addEventListener('change', (e) => {
+      eventsGenderFilter = e.target.value;
       renderEventsTable();
     });
-  });
+  }
 
-  // Events Group Filter Dropdown
+  if (eventsTeamSelect) {
+    eventsTeamSelect.addEventListener('change', (e) => {
+      eventsTeamFilter = e.target.value;
+      renderEventsTable();
+    });
+  }
+
   if (eventsGroupSelect) {
     eventsGroupSelect.addEventListener('change', (e) => {
       eventsGroupFilter = e.target.value;
       renderEventsTable();
+    });
+  }
+
+  if (eventsModeSelect) {
+    eventsModeSelect.addEventListener('change', (e) => {
+      applyEventsViewMode(e.target.value);
+      localStorage.setItem(EVENTS_MODE_KEY, e.target.value);
+      showToast(e.target.value === 'detailed' ? '📋 개인전 자세히 보기 모드로 전환되었습니다.' : '📋 개인전 간단히 보기 모드로 전환되었습니다.');
     });
   }
 
