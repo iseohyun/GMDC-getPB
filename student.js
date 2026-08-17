@@ -15,7 +15,7 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.08.17.19_student';
+const APP_VERSION = 'v2026.08.17.20_student';
 let isScenarioMode = false;
 let isInitialSyncCompleted = false;
 let serverRecordsCache = null;
@@ -1106,6 +1106,26 @@ function calculateIndividualBest() {
   return strokeBests;
 }
 
+// Default sorting comparator: 1. Group asc, 2. Gender asc ('남' -> '여'), 3. Name asc ('가나다순')
+function defaultRecordComparator(a, b) {
+  // 1. Group ascending
+  const groupA = a.group || '';
+  const groupB = b.group || '';
+  const groupCmp = groupA.localeCompare(groupB, 'ko', { numeric: true });
+  if (groupCmp !== 0) return groupCmp;
+
+  // 2. Gender ascending ('남' before '여')
+  const genderA = a.gender || '';
+  const genderB = b.gender || '';
+  const genderCmp = genderA.localeCompare(genderB, 'ko');
+  if (genderCmp !== 0) return genderCmp;
+
+  // 3. Name ascending ('가나다순')
+  const nameA = a.name || '';
+  const nameB = b.name || '';
+  return nameA.localeCompare(nameB, 'ko');
+}
+
 function renderTable() {
   let list = [...records];
 
@@ -1129,26 +1149,6 @@ function renderTable() {
       return name.includes(q) || age.includes(q) || group.includes(q);
     });
   }
-
-// Default sorting comparator: 1. Group asc, 2. Gender asc ('남' -> '여'), 3. Name asc ('가나다순')
-function defaultRecordComparator(a, b) {
-  // 1. Group ascending
-  const groupA = a.group || '';
-  const groupB = b.group || '';
-  const groupCmp = groupA.localeCompare(groupB, 'ko', { numeric: true });
-  if (groupCmp !== 0) return groupCmp;
-
-  // 2. Gender ascending ('남' before '여')
-  const genderA = a.gender || '';
-  const genderB = b.gender || '';
-  const genderCmp = genderA.localeCompare(genderB, 'ko');
-  if (genderCmp !== 0) return genderCmp;
-
-  // 3. Name ascending ('가나다순')
-  const nameA = a.name || '';
-  const nameB = b.name || '';
-  return nameA.localeCompare(nameB, 'ko');
-}
 
   if (sortCol) {
     list.sort((a, b) => {
