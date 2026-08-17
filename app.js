@@ -30,7 +30,7 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.08.17.17';
+const APP_VERSION = 'v2026.08.17.18';
 let isScenarioMode = false;
 let isInitialSyncCompleted = false;
 let serverRecordsCache = null;
@@ -1606,10 +1606,9 @@ function copyEventsToClipboard() {
     return;
   }
 
-  // Omit <th> headers, copy team, sequence (1-based), group, gender, name, birthId, event1, event2, phone, depositor, address
+  // Omit <th> headers and team; copy sequence (1-based), group, gender, name, birthId, event1, event2, phone, depositor, address
   const rows = list.map((item, idx) => {
     return [
-      `${item.team || 'A'}팀`,
       idx + 1,
       item.group || '',
       item.gender || '',
