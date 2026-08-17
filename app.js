@@ -30,7 +30,7 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.08.17.20';
+const APP_VERSION = 'v2026.08.18.01';
 let isScenarioMode = false;
 let isInitialSyncCompleted = false;
 let serverRecordsCache = null;
@@ -1602,11 +1602,49 @@ function fallbackCopyText(text, count) {
   textarea.select();
   try {
     document.execCommand('copy');
-    showToast(`📋 ${count}명의 성인부 명단이 클립보드에 복사되었습니다.`);
+    showToast(`📋 ${count}명의 명단이 클립보드에 복사되었습니다.`);
   } catch (err) {
     showToast('⚠️ 클립보드 복사에 실패했습니다.');
   }
   document.body.removeChild(textarea);
+}
+
+// Copy Selected Team Combination Members to Clipboard
+// Format: 그룹, 성별, 성명, 생년월일, 나이, 종목, 전화번호
+function copyComboTeamToClipboard(comboKey, team) {
+  const combos = calculateRelayCombinations(team);
+  const result = combos[comboKey];
+
+  if (!result || result.status !== 'SUCCESS' || !result.members || result.members.length === 0) {
+    showToast('⚠️ 선발된 팀 멤버 명단이 없습니다.');
+    return;
+  }
+
+  const rows = result.members.map(m => {
+    const swimmer = records.find(r => r.id === m.id) || {};
+    return [
+      swimmer.group || m.group || '',
+      swimmer.gender || m.gender || '',
+      swimmer.name || m.name || '',
+      swimmer.birthId || '',
+      swimmer.age || m.age || '',
+      m.strokeName || '',
+      swimmer.phone || ''
+    ].join('\t');
+  });
+
+  const tsvText = rows.join('\n');
+  const teamLabel = `${team}팀`;
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(tsvText).then(() => {
+      showToast(`📋 ${teamLabel} 선발 명단(${result.members.length}명)이 복사되었습니다.`);
+    }).catch(() => {
+      fallbackCopyText(tsvText, result.members.length);
+    });
+  } else {
+    fallbackCopyText(tsvText, result.members.length);
+  }
 }
 
 // Combination generator helper (k-combinations)
@@ -2372,6 +2410,16 @@ function bindEvents() {
         const title = card.querySelector('.combo-title')?.textContent?.trim() || '선택한 조합';
         showToast(`📌 '${title}' 패널이 상단에 고정되었습니다. (나머지 조합 숨김)`);
       }
+    });
+  });
+
+  // Combo Team Roster Copy Buttons
+  document.querySelectorAll('.btn-copy-combo-team').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const comboKey = btn.dataset.combo;
+      const team = btn.dataset.team || 'A';
+      copyComboTeamToClipboard(comboKey, team);
     });
   });
 

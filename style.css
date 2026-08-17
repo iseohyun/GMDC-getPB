@@ -599,6 +599,43 @@ body.theme-student .btn-panel-pin.active {
   color: var(--text-muted);
 }
 
+.btn-copy-combo-team {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 5px;
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 11px;
+  transition: all var(--transition-fast);
+  margin-left: auto;
+  line-height: 1;
+}
+
+.btn-copy-combo-team:hover {
+  background: var(--primary-light);
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-1px);
+}
+
+.btn-copy-combo-team:active {
+  transform: scale(0.92);
+}
+
+.members-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
 .combo-team-meta .meta-label {
   font-weight: 600;
   font-size: 11px;
