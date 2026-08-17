@@ -30,7 +30,7 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.08.17.7';
+const APP_VERSION = 'v2026.08.17.8';
 let isScenarioMode = false;
 let isInitialSyncCompleted = false;
 let serverRecordsCache = null;
@@ -85,43 +85,43 @@ let isMatrixCompareMode = localStorage.getItem('gmdc_matrix_compare_mode') === '
 
 // Initial 39 Swimmer Records (A팀: 30명, B팀: 9명)
 const DEFAULT_RECORDS = [
-  { id: 1, age: '15', group: '1그룹', gender: '남', name: '박슬우', birthId: '20100223-3', team: 'A', event1: '자유형 50', event2: '접영 50', finFly: '', finFree: '', free: '25.13', back: '31', breast: '34', fly: '28.28' },
-  { id: 2, age: '15', group: '1그룹', gender: '남', name: '이지훈', birthId: '20100908-3', team: 'A', event1: '자유형 50', event2: '접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 3, age: '16', group: '1그룹', gender: '남', name: '이채율', birthId: '20090814-3', team: 'A', event1: '핀자유형 50', event2: '배영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 4, age: '17', group: '1그룹', gender: '남', name: '조성찬', birthId: '20080718-3', team: 'A', event1: '자유형 50', event2: '접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 5, age: '17', group: '1그룹', gender: '여', name: '이지호', birthId: '20080506-4', team: 'A', event1: '핀자유형 50', event2: '자유형 50', finFly: '', finFree: '31.07', free: '36.78', back: '', breast: '', fly: '' },
-  { id: 6, age: '24', group: '2그룹', gender: '여', name: '추성비', birthId: '20010521-4', team: 'A', event1: '자유형 50', event2: '접영 50', finFly: '', finFree: '', free: '40.48', back: '', breast: '', fly: '47.99' },
-  { id: 7, age: '24', group: '2그룹', gender: '여', name: '이영경', birthId: '20011204-4', team: 'A', event1: '자유형 50', event2: '접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 8, age: '33', group: '3그룹', gender: '남', name: '안재홍', birthId: '19920211-1', team: 'B', event1: '자유형 50', event2: '', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 9, age: '38', group: '3그룹', gender: '여', name: '노언영', birthId: '19870712-2', team: 'A', event1: '자유형 50', event2: '평영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 10, age: '37', group: '3그룹', gender: '여', name: '최이슬', birthId: '19881213-2', team: 'A', event1: '자유형 50', event2: '접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 11, age: '43', group: '4그룹', gender: '남', name: '고석보', birthId: '19821227-1', team: 'A', event1: '핀접영 50', event2: '자유형 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 12, age: '44', group: '4그룹', gender: '남', name: '김기용', birthId: '19810929-1', team: 'A', event1: '핀자유형 50', event2: '핀접영 50', finFly: '', finFree: '', free: '35.69', back: '', breast: '41.65', fly: '' },
-  { id: 13, age: '42', group: '4그룹', gender: '남', name: '김준영', birthId: '19830201-1', team: 'A', event1: '자유형 50', event2: '평영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 14, age: '44', group: '4그룹', gender: '남', name: '손철수', birthId: '19810217-1', team: 'A', event1: '핀자유형 50', event2: '자유형 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 15, age: '44', group: '4그룹', gender: '남', name: '안상준', birthId: '19811115-1', team: 'A', event1: '자유형 50', event2: '', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 16, age: '41', group: '4그룹', gender: '남', name: '양승진', birthId: '19840221-1', team: 'B', event1: '자유형 50', event2: '', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 17, age: '44', group: '4그룹', gender: '남', name: '이도형', birthId: '19810823-1', team: 'A', event1: '자유형 50', event2: '평영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 18, age: '42', group: '4그룹', gender: '남', name: '정서현', birthId: '19830903-1', team: 'B', event1: '평영 50', event2: '배영 50', finFly: '', finFree: '27.92', free: '33.59', back: '', breast: '', fly: '' },
-  { id: 19, age: '47', group: '4그룹', gender: '여', name: '김상희', birthId: '19780602-2', team: 'B', event1: '핀자유형 50', event2: '', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 20, age: '43', group: '4그룹', gender: '여', name: '박다유', birthId: '19820825-2', team: 'A', event1: '자유형 50', event2: '배영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 21, age: '48', group: '4그룹', gender: '여', name: '손혜정', birthId: '19770415-2', team: 'A', event1: '핀자유형 50', event2: '핀접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 22, age: '40', group: '4그룹', gender: '여', name: '심민경', birthId: '19850520-2', team: 'A', event1: '자유형 50', event2: '배영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 23, age: '42', group: '4그룹', gender: '여', name: '여수연', birthId: '19830209-2', team: 'B', event1: '핀자유형 50', event2: '핀접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 24, age: '44', group: '4그룹', gender: '여', name: '이미영', birthId: '19811014-2', team: 'A', event1: '핀자유형 50', event2: '핀접영 50', finFly: '', finFree: '30.42', free: '', back: '', breast: '', fly: '57.17' },
-  { id: 25, age: '41', group: '4그룹', gender: '여', name: '이은희', birthId: '19840528-2', team: 'A', event1: '배영 50', event2: '평영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 26, age: '50', group: '5그룹', gender: '남', name: '박재홍', birthId: '19750715-1', team: 'A', event1: '핀자유형 50', event2: '핀접영 50', finFly: '30.29', finFree: '28.08', free: '', back: '', breast: '', fly: '' },
-  { id: 27, age: '57', group: '5그룹', gender: '남', name: '박진홍', birthId: '19681220-1', team: 'A', event1: '핀자유형 50', event2: '핀접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 28, age: '50', group: '5그룹', gender: '남', name: '서충근', birthId: '19750724-1', team: 'A', event1: '핀자유형 50', event2: '', finFly: '', finFree: '27.43', free: '', back: '', breast: '', fly: '99.99' },
-  { id: 29, age: '50', group: '5그룹', gender: '남', name: '성지경', birthId: '19750223-1', team: 'A', event1: '핀자유형 50', event2: '핀접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 30, age: '51', group: '5그룹', gender: '남', name: '이경열', birthId: '19740501-1', team: 'A', event1: '핀자유형 50', event2: '평영 50', finFly: '', finFree: '', free: '', back: '', breast: '43.51', fly: '' },
-  { id: 31, age: '53', group: '5그룹', gender: '여', name: '김애란', birthId: '19720727-2', team: 'B', event1: '자유형 50', event2: '배영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 32, age: '58', group: '5그룹', gender: '여', name: '박선화', birthId: '19671212-2', team: 'A', event1: '핀자유형 50', event2: '평영 50', finFly: '', finFree: '33.64', free: '46.66', back: '', breast: '', fly: '' },
-  { id: 33, age: '56', group: '5그룹', gender: '여', name: '전경미', birthId: '19690201-2', team: 'A', event1: '핀자유형 50', event2: '핀접영 50', finFly: '', finFree: '32.42', free: '', back: '55.88', breast: '', fly: '' },
-  { id: 34, age: '62', group: '6그룹', gender: '남', name: '박봉권', birthId: '19630807-1', team: 'A', event1: '평영 50', event2: '배영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 35, age: '63', group: '6그룹', gender: '남', name: '성환용', birthId: '19620713-1', team: 'B', event1: '핀자유형 50', event2: '', finFly: '', finFree: '99.99', free: '', back: '', breast: '', fly: '' },
-  { id: 36, age: '59', group: '6그룹', gender: '여', name: '송원자', birthId: '19660325-2', team: 'A', event1: '자유형 50', event2: '평영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 37, age: '62', group: '6그룹', gender: '여', name: '최지희', birthId: '19630705-2', team: 'A', event1: '자유형 50', event2: '핀자유형 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 1, age: '15', group: '1그룹', gender: '남', name: '박슬우', birthId: '20100223-3', phone: '010-2558-7116', club: 'GMDC', address: '거제시 문동 1길, 42, 문동푸르지오 104동 2104호', team: 'A', event1: '자유형 50', event2: '접영 50', finFly: '', finFree: '', free: '25.13', back: '31', breast: '34', fly: '28.28' },
+  { id: 2, age: '15', group: '1그룹', gender: '남', name: '이지훈', birthId: '20100908-3', phone: '010-4176-0239', club: 'GMDC', address: '거제시 옥포동 308 거제엘크루랜드마크 아파트 104동 2302호', team: 'A', event1: '자유형 50', event2: '접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 3, age: '16', group: '1그룹', gender: '남', name: '이채율', birthId: '20090814-3', phone: '010-7637-9313', club: 'GMDC', address: '거제시 연초면 거제북로57 연초일성유수안 104동 2302호', team: 'A', event1: '핀자유형 50', event2: '배영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 4, age: '17', group: '1그룹', gender: '남', name: '조성찬', birthId: '20080718-3', phone: '010-6681-9874', club: 'GMDC', address: '거제시 소동8길 11 스타힐스오션시티 105동 703호', team: 'A', event1: '자유형 50', event2: '접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 5, age: '17', group: '1그룹', gender: '여', name: '이지호', birthId: '20080506-4', phone: '010-6451-0229', club: 'GMDC', address: '거제시 옥포동 308 거제엘크루랜드마크 아파트 104동 2302호', team: 'A', event1: '핀자유형 50', event2: '자유형 50', finFly: '', finFree: '31.07', free: '36.78', back: '', breast: '', fly: '' },
+  { id: 6, age: '24', group: '2그룹', gender: '여', name: '추성비', birthId: '20010521-4', phone: '010-2818-2055', club: 'GMDC', address: '거제시 능포로 4길5 동헌하이츠 802호', team: 'A', event1: '자유형 50', event2: '접영 50', finFly: '', finFree: '', free: '40.48', back: '', breast: '', fly: '47.99' },
+  { id: 7, age: '24', group: '2그룹', gender: '여', name: '이영경', birthId: '20011204-4', phone: '010-6327-7828', club: 'GMDC', address: '거제시 장평1로 86, 삼성S빌리지 B동 1005호', team: 'A', event1: '자유형 50', event2: '접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 8, age: '33', group: '3그룹', gender: '남', name: '안재홍', birthId: '19920211-1', phone: '010-7199-7719', club: 'GMDC', address: '거제시 아주로 100-10 111동 501호', team: 'B', event1: '자유형 50', event2: '', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 9, age: '38', group: '3그룹', gender: '여', name: '노언영', birthId: '19870712-2', phone: '010-3833-3074', club: 'GMDC', address: '거제시 제산로86, 더샵 101동 406호', team: 'A', event1: '자유형 50', event2: '평영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 10, age: '37', group: '3그룹', gender: '여', name: '최이슬', birthId: '19881213-2', phone: '010-2398-6484', club: 'GMDC', address: '거제시 아주로73 석호해와루아파트 106동 403호', team: 'A', event1: '자유형 50', event2: '접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 11, age: '43', group: '4그룹', gender: '남', name: '고석보', birthId: '19821227-1', phone: '010-4040-6987', club: 'GMDC', address: '거제시 능포로 218 나동 503호', team: 'A', event1: '핀접영 50', event2: '자유형 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 12, age: '44', group: '4그룹', gender: '남', name: '김기용', birthId: '19810929-1', phone: '010-4018-3188', club: 'GMDC', address: '거제시 아주로 63 미진이지비아 103동 704호', team: 'A', event1: '핀자유형 50', event2: '핀접영 50', finFly: '', finFree: '', free: '35.69', back: '', breast: '41.65', fly: '' },
+  { id: 13, age: '42', group: '4그룹', gender: '남', name: '김준영', birthId: '19830201-1', phone: '010-4572-7285', club: 'GMDC', address: '거제시 고현항2로 51, 202동 1804호', team: 'A', event1: '자유형 50', event2: '평영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 14, age: '44', group: '4그룹', gender: '남', name: '손철수', birthId: '19810217-1', phone: '010-7142-8269', club: 'GMDC', address: '거제시 고현항2로51 207동 3002호', team: 'A', event1: '핀자유형 50', event2: '자유형 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 15, age: '44', group: '4그룹', gender: '남', name: '안상준', birthId: '19811115-1', phone: '010-4005-7171', club: 'GMDC', address: '거제시 아주2로 138, 102동 1801호', team: 'A', event1: '자유형 50', event2: '', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 16, age: '41', group: '4그룹', gender: '남', name: '양승진', birthId: '19840221-1', phone: '010-4252-4589', club: 'GMDC', address: '거제시 장평2로19 103동 402호', team: 'B', event1: '자유형 50', event2: '', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 17, age: '44', group: '4그룹', gender: '남', name: '이도형', birthId: '19810823-1', phone: '010-5155-2728', club: 'GMDC', address: '거제시 장평1로 86, 삼성S빌리지 B동 202호', team: 'A', event1: '자유형 50', event2: '평영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 18, age: '42', group: '4그룹', gender: '남', name: '정서현', birthId: '19830903-1', phone: '010-4266-4766', club: 'GMDC', address: '거제시 상동5길 117-16, 206동 402호', team: 'B', event1: '평영 50', event2: '배영 50', finFly: '', finFree: '27.92', free: '33.59', back: '', breast: '', fly: '' },
+  { id: 19, age: '47', group: '4그룹', gender: '여', name: '김상희', birthId: '19780602-2', phone: '010-6880-5472', club: 'GMDC', address: '거제시 제산로 2-5 삼성쉐르빌APT 105동 904호', team: 'B', event1: '핀자유형 50', event2: '', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 20, age: '43', group: '4그룹', gender: '여', name: '박다유', birthId: '19820825-2', phone: '010-8234-5210', club: 'GMDC', address: '거제시 장평1로 86, 삼성S빌리지 B동 202호', team: 'A', event1: '자유형 50', event2: '배영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 21, age: '48', group: '4그룹', gender: '여', name: '손혜정', birthId: '19770415-2', phone: '010-8603-9827', club: 'GMDC', address: '거제시 일운면 소동8길 11, 서희 108동 303호', team: 'A', event1: '핀자유형 50', event2: '핀접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 22, age: '40', group: '4그룹', gender: '여', name: '심민경', birthId: '19850520-2', phone: '010-9611-8332', club: 'GMDC', address: '거제시 거제 중앙로3길 15, 102동 1003호', team: 'A', event1: '자유형 50', event2: '배영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 23, age: '42', group: '4그룹', gender: '여', name: '여수연', birthId: '19830209-2', phone: '010-3723-8453', club: 'GMDC', address: '거제시 용소1길 17-17, 푸르지오 108동 203호', team: 'B', event1: '핀자유형 50', event2: '핀접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 24, age: '44', group: '4그룹', gender: '여', name: '이미영', birthId: '19811014-2', phone: '010-6866-2268', club: 'GMDC', address: '거제시 아주로 63 미진이지비아 103동 704호', team: 'A', event1: '핀자유형 50', event2: '핀접영 50', finFly: '', finFree: '30.42', free: '', back: '', breast: '', fly: '57.17' },
+  { id: 25, age: '41', group: '4그룹', gender: '여', name: '이은희', birthId: '19840528-2', phone: '010-7456-1512', club: 'GMDC', address: '거제시 상동1길 15-9, 302동 104호', team: 'A', event1: '배영 50', event2: '평영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 26, age: '50', group: '5그룹', gender: '남', name: '박재홍', birthId: '19750715-1', phone: '010-8707-5940', club: 'GMDC', address: '거재시 아주로 100-11 204동 602호', team: 'A', event1: '핀자유형 50', event2: '핀접영 50', finFly: '30.29', finFree: '28.08', free: '', back: '', breast: '', fly: '' },
+  { id: 27, age: '57', group: '5그룹', gender: '남', name: '박진홍', birthId: '19681220-1', phone: '010-2517-9826', club: 'GMDC', address: '거제시 일운면 소동8길 11, 서희 108동 303호', team: 'A', event1: '핀자유형 50', event2: '핀접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 28, age: '50', group: '5그룹', gender: '남', name: '서충근', birthId: '19750724-1', phone: '010-5566-3542', club: 'GMDC', address: '거제시 성산로42 옥포이편한세상', team: 'A', event1: '핀자유형 50', event2: '', finFly: '', finFree: '27.43', free: '', back: '', breast: '', fly: '99.99' },
+  { id: 29, age: '50', group: '5그룹', gender: '남', name: '성지경', birthId: '19750223-1', phone: '010-2587-7399', club: 'GMDC', address: '거제시 상동5길 117-50, 303동 204호', team: 'A', event1: '핀자유형 50', event2: '핀접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 30, age: '51', group: '5그룹', gender: '남', name: '이경열', birthId: '19740501-1', phone: '010-5065-8643', club: 'GMDC', address: '거제시 아주로 73, 석호해와루아파트 103동 603호', team: 'A', event1: '핀자유형 50', event2: '평영 50', finFly: '', finFree: '', free: '', back: '', breast: '43.51', fly: '' },
+  { id: 31, age: '53', group: '5그룹', gender: '여', name: '김애란', birthId: '19720727-2', phone: '010-5146-9873', club: 'GMDC', address: '거제시 소동8길 11 스타힐스오션시티 105동 703호', team: 'B', event1: '자유형 50', event2: '배영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 32, age: '58', group: '5그룹', gender: '여', name: '박선화', birthId: '19671212-2', phone: '010-2599-6441', club: 'GMDC', address: '거제시 옥수로6길160 조각공원빌 501호', team: 'A', event1: '핀자유형 50', event2: '평영 50', finFly: '', finFree: '33.64', free: '46.66', back: '', breast: '', fly: '' },
+  { id: 33, age: '56', group: '5그룹', gender: '여', name: '전경미', birthId: '19690201-2', phone: '010-6332-4009', club: 'GMDC', address: '거제시 아주2로 2길 10 코오랑하늘채 102동 302호', team: 'A', event1: '핀자유형 50', event2: '핀접영 50', finFly: '', finFree: '32.42', free: '', back: '55.88', breast: '', fly: '' },
+  { id: 34, age: '62', group: '6그룹', gender: '남', name: '박봉권', birthId: '19630807-1', phone: '010-9669-5629', club: 'GMDC', address: '', team: 'A', event1: '평영 50', event2: '배영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 35, age: '63', group: '6그룹', gender: '남', name: '성환용', birthId: '19620713-1', phone: '010-9689-2830', club: 'GMDC', address: '거제시 능포로2길 38, 옥명대우아파트 105동 1203호', team: 'B', event1: '핀자유형 50', event2: '', finFly: '', finFree: '99.99', free: '', back: '', breast: '', fly: '' },
+  { id: 36, age: '59', group: '6그룹', gender: '여', name: '송원자', birthId: '19660325-2', phone: '010-2854-3715', club: 'GMDC', address: '거제시 능포로2길62 롯데캐슬 302동 801호', team: 'A', event1: '자유형 50', event2: '평영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 37, age: '62', group: '6그룹', gender: '여', name: '최지희', birthId: '19630705-2', phone: '010-3560-6375', club: 'GMDC', address: '거제시 상동7길30, 대동다숲 124동 1406호', team: 'A', event1: '자유형 50', event2: '핀자유형 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
   { id: 38, age: '61', group: '6그룹', gender: '남', name: '권순용', birthId: '19650101-1', phone: '010-5890-7052', club: 'GMDC', address: '경상남도 거제시 동부면 거제남서로 3136', team: 'B', event1: '', event2: '', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
   { id: 39, age: '27', group: '2그룹', gender: '남', name: '이석민', birthId: '19990101-1', phone: '010-9989-7218', club: 'GMDC', address: '경상남도 거제시 동부면 산양리 671-1', team: 'B', event1: '', event2: '', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' }
 ];
@@ -754,7 +754,7 @@ function loadLocalData() {
   }
 }
 
-// Merge helper to guarantee group, birthId, team, event1, event2 are preserved
+// Merge helper to guarantee group, birthId, team, event1, event2, phone, address are preserved
 function mergeWithDefaultData(remoteList) {
   if (!Array.isArray(remoteList)) return JSON.parse(JSON.stringify(DEFAULT_RECORDS));
 
@@ -768,9 +768,9 @@ function mergeWithDefaultData(remoteList) {
       name: item.name || def.name || '',
       birthId: item.birthId || def.birthId || '',
       team: item.team !== undefined ? item.team : (def.team || 'A'),
-      phone: item.phone !== undefined ? item.phone : (def.phone || ''),
-      address: item.address !== undefined ? item.address : (def.address || ''),
-      club: item.club !== undefined ? item.club : (def.club || 'GMDC'),
+      phone: (item.phone && String(item.phone).trim() !== '') ? item.phone : (def.phone || ''),
+      address: (item.address && String(item.address).trim() !== '') ? item.address : (def.address || ''),
+      club: (item.club && String(item.club).trim() !== '') ? item.club : (def.club || 'GMDC'),
       event1: item.event1 !== undefined ? item.event1 : (def.event1 || ''),
       event2: item.event2 !== undefined ? item.event2 : (def.event2 || ''),
       finFly: item.finFly !== undefined ? item.finFly : (def.finFly || ''),
@@ -815,6 +815,8 @@ function initFirebaseSync() {
 
         if (!isScenarioMode) {
           const isDataChanged = JSON.stringify(records) !== JSON.stringify(merged);
+          const isRemoteMissingDetails = data.records.some(r => (!r.phone || !r.address) && DEFAULT_RECORDS.some(d => d.id === r.id && (d.phone || d.address)));
+
           if (isDataChanged) {
             records = merged;
             localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
@@ -828,6 +830,10 @@ function initFirebaseSync() {
               updateStats();
               renderSummaryMatrices();
             }
+          }
+
+          if (isRemoteMissingDetails) {
+            syncToFirestore(merged);
           }
         }
       }
