@@ -30,7 +30,7 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.08.17.18';
+const APP_VERSION = 'v2026.08.17.19';
 let isScenarioMode = false;
 let isInitialSyncCompleted = false;
 let serverRecordsCache = null;
@@ -705,33 +705,7 @@ async function logChangeHistory(type, swimmerName, field, fieldName, oldVal, new
   }
 }
 
-function updateTeamNavAndCounts() {
-  const countA = records.filter(r => (r.team || 'A') === 'A').length;
-  const countB = records.filter(r => (r.team || 'A') === 'B').length;
-
-  const adultDivisionTab = document.getElementById('adultDivisionTab');
-  if (adultDivisionTab) {
-    adultDivisionTab.textContent = `🏊 성인부 (A:${countA}, B:${countB})`;
-  }
-
-  const studentDivisionTab = document.getElementById('studentDivisionTab');
-  if (studentDivisionTab) {
-    let studentCount = 19;
-    try {
-      const savedStudent = localStorage.getItem('gmdc_swim_student_records_v1');
-      if (savedStudent) {
-        const parsedStudent = JSON.parse(savedStudent);
-        if (Array.isArray(parsedStudent) && parsedStudent.length > 0) {
-          studentCount = parsedStudent.length;
-        }
-      }
-    } catch (e) {}
-    studentDivisionTab.textContent = `🏊 학생부 (${studentCount}명)`;
-  }
-}
-
 function renderAll() {
-  updateTeamNavAndCounts();
   renderTable();
   updateStats();
   renderSummaryMatrices();
@@ -854,22 +828,6 @@ function initFirebaseSync() {
     }
     showToast('⚠️ Firebase 보안 규칙(Rules)을 확인해 주세요.');
   });
-
-  // Cross-division sync: listen to student records to keep student tab count accurate
-  try {
-    const STUDENT_DOC_REF = doc(db, "swim_records", "gmdc-swim-student-records");
-    onSnapshot(STUDENT_DOC_REF, (docSnap) => {
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        if (data && Array.isArray(data.records)) {
-          localStorage.setItem('gmdc_swim_student_records_v1', JSON.stringify(data.records));
-          updateTeamNavAndCounts();
-        }
-      }
-    });
-  } catch (e) {
-    console.warn('Student records sync in adult view skipped:', e);
-  }
 }
 
 // 3. Save Data (localStorage immediately + Firestore debounced)
