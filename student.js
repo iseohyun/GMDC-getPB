@@ -15,7 +15,7 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.08.17.14_student';
+const APP_VERSION = 'v2026.08.17.15_student';
 let isScenarioMode = false;
 let isInitialSyncCompleted = false;
 let serverRecordsCache = null;
@@ -239,7 +239,7 @@ function getLastYearRecord(id, field) {
 }
 
 let records = [];
-let sortCol = 'no';
+let sortCol = null;
 let sortAsc = true;
 let currentFilter = 'all';
 let currentEventsFilter = 'all';
@@ -1167,28 +1167,52 @@ function renderTable() {
     });
   }
 
-  list.sort((a, b) => {
-    let aVal = a[sortCol];
-    let bVal = b[sortCol];
+// Default sorting comparator: 1. Group asc, 2. Gender asc ('남' -> '여'), 3. Name asc ('가나다순')
+function defaultRecordComparator(a, b) {
+  // 1. Group ascending
+  const groupA = a.group || '';
+  const groupB = b.group || '';
+  const groupCmp = groupA.localeCompare(groupB, 'ko', { numeric: true });
+  if (groupCmp !== 0) return groupCmp;
 
-    if (sortCol === 'no') {
-      aVal = a.id;
-      bVal = b.id;
-    } else if (sortCol === 'age') {
-      aVal = parseFloat(aVal) || 0;
-      bVal = parseFloat(bVal) || 0;
-    } else if (STROKE_FIELDS.includes(sortCol)) {
-      aVal = parseFloat(aVal) || (sortAsc ? 9999 : -1);
-      bVal = parseFloat(bVal) || (sortAsc ? 9999 : -1);
-    } else {
-      aVal = String(aVal || '');
-      bVal = String(bVal || '');
-    }
+  // 2. Gender ascending ('남' before '여')
+  const genderA = a.gender || '';
+  const genderB = b.gender || '';
+  const genderCmp = genderA.localeCompare(genderB, 'ko');
+  if (genderCmp !== 0) return genderCmp;
 
-    if (aVal < bVal) return sortAsc ? -1 : 1;
-    if (aVal > bVal) return sortAsc ? 1 : -1;
-    return a.id - b.id;
-  });
+  // 3. Name ascending ('가나다순')
+  const nameA = a.name || '';
+  const nameB = b.name || '';
+  return nameA.localeCompare(nameB, 'ko');
+}
+
+  if (sortCol) {
+    list.sort((a, b) => {
+      let aVal = a[sortCol];
+      let bVal = b[sortCol];
+
+      if (sortCol === 'no') {
+        aVal = a.id;
+        bVal = b.id;
+      } else if (sortCol === 'age') {
+        aVal = parseFloat(aVal) || 0;
+        bVal = parseFloat(bVal) || 0;
+      } else if (STROKE_FIELDS.includes(sortCol)) {
+        aVal = parseFloat(aVal) || (sortAsc ? 9999 : -1);
+        bVal = parseFloat(bVal) || (sortAsc ? 9999 : -1);
+      } else {
+        aVal = String(aVal || '');
+        bVal = String(bVal || '');
+      }
+
+      if (aVal < bVal) return sortAsc ? -1 : 1;
+      if (aVal > bVal) return sortAsc ? 1 : -1;
+      return a.id - b.id;
+    });
+  } else {
+    list.sort(defaultRecordComparator);
+  }
 
   const bests = calculateIndividualBest();
 
@@ -1900,12 +1924,8 @@ function getFilteredEventsList() {
     });
   }
 
-  list.sort((a, b) => {
-    if (a.group !== b.group) {
-      return a.group.localeCompare(b.group);
-    }
-    return a.id - b.id;
-  });
+  // Default sorting: 1. Group asc, 2. Gender asc, 3. Name asc
+  list.sort(defaultRecordComparator);
 
   return list;
 }

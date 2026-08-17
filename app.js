@@ -30,7 +30,7 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.08.17.14';
+const APP_VERSION = 'v2026.08.17.15';
 let isScenarioMode = false;
 let isInitialSyncCompleted = false;
 let serverRecordsCache = null;
@@ -1084,6 +1084,26 @@ function applySinglePinnedCard(cardId) {
   });
 }
 
+// Default sorting comparator: 1. Group asc, 2. Gender asc ('남' -> '여'), 3. Name asc ('가나다순')
+function defaultRecordComparator(a, b) {
+  // 1. Group ascending (1그룹, 2그룹, ...)
+  const groupA = a.group || '';
+  const groupB = b.group || '';
+  const groupCmp = groupA.localeCompare(groupB, 'ko', { numeric: true });
+  if (groupCmp !== 0) return groupCmp;
+
+  // 2. Gender ascending ('남' before '여')
+  const genderA = a.gender || '';
+  const genderB = b.gender || '';
+  const genderCmp = genderA.localeCompare(genderB, 'ko');
+  if (genderCmp !== 0) return genderCmp;
+
+  // 3. Name ascending ('가나다순')
+  const nameA = a.name || '';
+  const nameB = b.name || '';
+  return nameA.localeCompare(nameB, 'ko');
+}
+
 // Filter and Sort Data for Records View
 function getProcessedRecords() {
   let list = [...records];
@@ -1149,6 +1169,8 @@ function getProcessedRecords() {
         ? String(valA).localeCompare(String(valB), 'ko')
         : String(valB).localeCompare(String(valA), 'ko');
     });
+  } else {
+    list.sort(defaultRecordComparator);
   }
 
   return list;
@@ -1455,6 +1477,9 @@ function getFilteredEventsList() {
   if (eventsGroupFilter !== 'all') {
     list = list.filter(item => item.group === eventsGroupFilter);
   }
+
+  // Default sorting: 1. Group asc, 2. Gender asc, 3. Name asc
+  list.sort(defaultRecordComparator);
 
   return list;
 }
