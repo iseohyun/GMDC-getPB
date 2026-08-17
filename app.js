@@ -30,7 +30,7 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.08.17.13';
+const APP_VERSION = 'v2026.08.17.14';
 let isScenarioMode = false;
 let isInitialSyncCompleted = false;
 let serverRecordsCache = null;
@@ -816,7 +816,6 @@ function initFirebaseSync() {
 
         if (!isScenarioMode) {
           const isDataChanged = JSON.stringify(records) !== JSON.stringify(merged);
-          const isRemoteMissingDetails = data.records.some(r => (!r.phone || !r.address) && DEFAULT_RECORDS.some(d => d.id === r.id && (d.phone || d.address)));
 
           if (isDataChanged) {
             records = merged;
@@ -831,10 +830,6 @@ function initFirebaseSync() {
               updateStats();
               renderSummaryMatrices();
             }
-          }
-
-          if (isRemoteMissingDetails) {
-            syncToFirestore(merged);
           }
         }
       }
