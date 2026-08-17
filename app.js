@@ -30,7 +30,7 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.08.17.12';
+const APP_VERSION = 'v2026.08.17.13';
 let isScenarioMode = false;
 let isInitialSyncCompleted = false;
 let serverRecordsCache = null;
@@ -2563,7 +2563,7 @@ function fallbackCopy(text, count) {
 
 // Export to CSV with UTF-8 BOM
 function exportToCsv() {
-  const headers = ['번호', '그룹', '성별', '이름', '생년월일(식별코드)', '출전 종목 1', '출전 종목 2', '나이', '핀접영', '핀자유', '자유형', '배영', '평영', '접영'];
+  const headers = ['번호', '그룹', '성별', '이름', '생년월일', '출전 종목 1', '출전 종목 2', '나이', '핀접영', '핀자유', '자유형', '배영', '평영', '접영'];
   const rows = records.map(r => [
     `"${r.id}"`,
     `"${r.group || ''}"`,
