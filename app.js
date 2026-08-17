@@ -30,7 +30,7 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.08.17.8';
+const APP_VERSION = 'v2026.08.17.9';
 let isScenarioMode = false;
 let isInitialSyncCompleted = false;
 let serverRecordsCache = null;
@@ -771,6 +771,7 @@ function mergeWithDefaultData(remoteList) {
       phone: (item.phone && String(item.phone).trim() !== '') ? item.phone : (def.phone || ''),
       address: (item.address && String(item.address).trim() !== '') ? item.address : (def.address || ''),
       club: (item.club && String(item.club).trim() !== '') ? item.club : (def.club || 'GMDC'),
+      depositor: (item.depositor && String(item.depositor).trim() !== '') ? item.depositor : 'GMDC',
       event1: item.event1 !== undefined ? item.event1 : (def.event1 || ''),
       event2: item.event2 !== undefined ? item.event2 : (def.event2 || ''),
       finFly: item.finFly !== undefined ? item.finFly : (def.finFly || ''),
@@ -1538,8 +1539,8 @@ function renderEventsTable() {
       <td class="col-detail" style="text-align:center; font-size:12px; color:var(--text-muted); font-variant-numeric:tabular-nums;">
         ${escapeHtml(item.phone || '-')}
       </td>
-      <td class="col-detail" style="text-align:center; font-size:12px;">
-        ${escapeHtml(item.depositor || item.name || '-')}
+      <td class="col-detail" style="text-align:center; font-size:12px; font-weight:600; color:var(--text-main);">
+        ${escapeHtml(item.depositor || 'GMDC')}
       </td>
       <td class="col-detail" style="text-align:left; font-size:12px; color:var(--text-muted); max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${escapeHtml(item.address || '')}">
         ${escapeHtml(item.address || '-')}
@@ -1569,7 +1570,7 @@ function copyEventsToClipboard() {
       item.event1 || '',
       item.event2 || '',
       item.phone || '',
-      item.depositor || item.name || '',
+      item.depositor || 'GMDC',
       item.address || ''
     ].join('\t');
   });
