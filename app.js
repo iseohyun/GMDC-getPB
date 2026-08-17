@@ -30,7 +30,7 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.08.17.6';
+const APP_VERSION = 'v2026.08.17.7';
 let isScenarioMode = false;
 let isInitialSyncCompleted = false;
 let serverRecordsCache = null;
@@ -1429,7 +1429,9 @@ function getFilteredEventsList() {
       (item.name && item.name.toLowerCase().includes(q)) ||
       (item.group && item.group.toLowerCase().includes(q)) ||
       (item.age && String(item.age).includes(q)) ||
-      (item.birthId && item.birthId.toLowerCase().includes(q))
+      (item.birthId && item.birthId.toLowerCase().includes(q)) ||
+      (item.phone && item.phone.toLowerCase().includes(q)) ||
+      (item.address && item.address.toLowerCase().includes(q))
     );
   }
 
@@ -1452,6 +1454,19 @@ function getFilteredEventsList() {
     list = list.filter(item => item.group === eventsGroupFilter);
   }
 
+  return list;
+}
+
+function renderEventsTable() {
+  if (!eventsTableBody) return;
+
+  const list = getFilteredEventsList();
+
+  const eventsDetailTitle = document.getElementById('eventsDetailTitle');
+  if (eventsDetailTitle) {
+    eventsDetailTitle.textContent = `📋 출전 선수별 명단 (${list.length}명 표시 중 / 총 ${records.length}명)`;
+  }
+
   if (eventsFilteredCount) {
     eventsFilteredCount.textContent = `${list.length}명 표시 중 (총 ${records.length}명)`;
   }
@@ -1461,7 +1476,7 @@ function getFilteredEventsList() {
   if (list.length === 0) {
     const emptyRow = document.createElement('tr');
     emptyRow.innerHTML = `
-      <td colspan="9" style="padding: 36px; color: var(--text-muted); font-size: 14px; text-align: center;">
+      <td colspan="11" style="padding: 36px; color: var(--text-muted); font-size: 14px; text-align: center;">
         일치하는 출전 선수가 없습니다.
       </td>
     `;
@@ -1469,18 +1484,12 @@ function getFilteredEventsList() {
     return;
   }
 
-  const expired = isDeadlineExpired();
-  const disabledAttr = expired ? 'disabled' : '';
-
-  list.forEach(item => {
+  list.forEach((item, idx) => {
     const tr = document.createElement('tr');
     tr.dataset.id = item.id;
 
-    const count = [item.event1, item.event2].filter(Boolean).length;
-    const countClass = count === 2 ? 'count-2' : count === 1 ? 'count-1' : 'count-0';
-
     tr.innerHTML = `
-      <td class="col-no col-detail" style="text-align:center;">${item.id}</td>
+      <td class="col-no col-detail" style="text-align:center;">${idx + 1}</td>
       <td class="col-group col-detail" style="text-align:center;">
         <span class="group-badge">${escapeHtml(item.group || '-')}</span>
       </td>
@@ -1490,10 +1499,9 @@ function getFilteredEventsList() {
       <td class="col-team" style="text-align:center;">
         <button 
           type="button"
-          class="btn-team-toggle team-${item.team || 'A'} ${expired ? 'is-locked' : ''}" 
+          class="btn-team-toggle team-${item.team || 'A'}" 
           data-team-id="${item.id}" 
-          title="${expired ? '입력 마감됨' : `클릭하여 소속팀 변경 (현재: ${item.team || 'A'}팀)`}"
-          ${disabledAttr}
+          title="클릭하여 소속팀 변경 (현재: ${item.team || 'A'}팀)"
         >
           ${item.team || 'A'}팀
         </button>
@@ -1506,7 +1514,7 @@ function getFilteredEventsList() {
         <span class="birth-code">${escapeHtml(item.birthId || '-')}</span>
       </td>
       <td class="col-event">
-        <select class="event-select ${item.event1 ? 'has-event' : ''}" data-id="${item.id}" data-field="event1" ${disabledAttr}>
+        <select class="event-select ${item.event1 ? 'has-event' : ''}" data-id="${item.id}" data-field="event1">
           <option value="">(미신청)</option>
           ${EVENT_OPTIONS.map(opt => `
             <option value="${opt}" ${item.event1 === opt ? 'selected' : ''}>${opt}</option>
@@ -1514,20 +1522,79 @@ function getFilteredEventsList() {
         </select>
       </td>
       <td class="col-event">
-        <select class="event-select ${item.event2 ? 'has-event' : ''}" data-id="${item.id}" data-field="event2" ${disabledAttr}>
+        <select class="event-select ${item.event2 ? 'has-event' : ''}" data-id="${item.id}" data-field="event2">
           <option value="">(미신청)</option>
           ${EVENT_OPTIONS.map(opt => `
             <option value="${opt}" ${item.event2 === opt ? 'selected' : ''}>${opt}</option>
           `).join('')}
         </select>
       </td>
-      <td class="col-count col-detail" style="text-align:center;">
-        <span class="count-badge ${countClass}">${count}종목</span>
+      <td class="col-detail" style="text-align:center; font-size:12px; color:var(--text-muted); font-variant-numeric:tabular-nums;">
+        ${escapeHtml(item.phone || '-')}
+      </td>
+      <td class="col-detail" style="text-align:center; font-size:12px;">
+        ${escapeHtml(item.depositor || item.name || '-')}
+      </td>
+      <td class="col-detail" style="text-align:left; font-size:12px; color:var(--text-muted); max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${escapeHtml(item.address || '')}">
+        ${escapeHtml(item.address || '-')}
       </td>
     `;
 
     eventsTableBody.appendChild(tr);
   });
+}
+
+function copyEventsToClipboard() {
+  const list = getFilteredEventsList();
+  if (!list || list.length === 0) {
+    showToast('⚠️ 복사할 출전 선수 명단이 없습니다.');
+    return;
+  }
+
+  // Omit <th> headers, copy sequence (1-based), group, gender, team, name, birthId, event1, event2, phone, depositor, address
+  const rows = list.map((item, idx) => {
+    return [
+      idx + 1,
+      item.group || '',
+      item.gender || '',
+      `${item.team || 'A'}팀`,
+      item.name || '',
+      item.birthId || '',
+      item.event1 || '',
+      item.event2 || '',
+      item.phone || '',
+      item.depositor || item.name || '',
+      item.address || ''
+    ].join('\t');
+  });
+
+  const tsvText = rows.join('\n');
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(tsvText).then(() => {
+      showToast(`📋 ${list.length}명의 성인부 명단이 클립보드에 복사되었습니다. (엑셀에 바로 붙여넣기 가능)`);
+    }).catch(() => {
+      fallbackCopyText(tsvText, list.length);
+    });
+  } else {
+    fallbackCopyText(tsvText, list.length);
+  }
+}
+
+function fallbackCopyText(text, count) {
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  textarea.style.position = 'fixed';
+  textarea.style.left = '-9999px';
+  document.body.appendChild(textarea);
+  textarea.select();
+  try {
+    document.execCommand('copy');
+    showToast(`📋 ${count}명의 성인부 명단이 클립보드에 복사되었습니다.`);
+  } catch (err) {
+    showToast('⚠️ 클립보드 복사에 실패했습니다.');
+  }
+  document.body.removeChild(textarea);
 }
 
 // Combination generator helper (k-combinations)
