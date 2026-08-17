@@ -15,7 +15,7 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.08.17.3_student';
+const APP_VERSION = 'v2026.08.17.4_student';
 let isScenarioMode = false;
 let isInitialSyncCompleted = false;
 let serverRecordsCache = null;
@@ -318,37 +318,15 @@ function init() {
 }
 
 function isDeadlineExpired() {
-  return new Date() >= DEADLINE;
+  return false;
 }
 
 function initDeadlineCountdown() {
   const badge = document.getElementById('tableDateBadge');
   if (!badge) return;
 
-  function update() {
-    const now = new Date();
-    const diff = DEADLINE - now;
-
-    if (diff <= 0) {
-      badge.innerHTML = `<span style="color:#ef4444; font-weight:800;">🔒 마감 완료</span>`;
-      badge.title = '입력 및 수정 시한이 마감되었습니다.';
-    } else {
-      const totalSeconds = Math.floor(diff / 1000);
-      const totalHours = Math.floor(totalSeconds / 3600);
-      const minutes = Math.floor((totalSeconds % 3600) / 60);
-      const seconds = totalSeconds % 60;
-
-      const hh = String(totalHours).padStart(2, '0');
-      const mm = String(minutes).padStart(2, '0');
-      const ss = String(seconds).padStart(2, '0');
-
-      badge.innerHTML = `⏱️ 마감까지 <strong>${hh}:${mm}:${ss}</strong>`;
-      badge.title = `마감일시: 2026년 8월 17일(월) 18:00 (클릭 시 마감안내)`;
-    }
-  }
-
-  update();
-  setInterval(update, 1000);
+  badge.innerHTML = `기준일: 2026-01-01`;
+  badge.title = '기준일: 2026-01-01';
 }
 
 function initNoticeModal() {
@@ -994,11 +972,6 @@ function saveData() {
 
   if (!isInitialSyncCompleted && db && DOC_REF) {
     console.warn('⚠️ 서버 최초 데이터 동기화 완료 전 저장을 안전하게 차단합니다.');
-    return;
-  }
-
-  if (isDeadlineExpired()) {
-    showToast('🔒 입력 및 수정 시한이 마감되었습니다.');
     return;
   }
 
@@ -2073,11 +2046,6 @@ function bindEvents() {
     const target = e.target;
     if (!target.classList.contains('cell-input')) return;
 
-    if (isDeadlineExpired()) {
-      showToast('🔒 입력 및 수정 시한이 마감되었습니다.');
-      return;
-    }
-
     const id = parseInt(target.dataset.id, 10);
     const field = target.dataset.field;
     let val = target.value.trim();
@@ -2178,12 +2146,6 @@ function bindEvents() {
     const target = e.target;
     if (!target.classList.contains('cell-input')) return;
 
-    if (isDeadlineExpired()) {
-      e.preventDefault();
-      showToast('🔒 입력 및 수정 시한이 마감되었습니다.');
-      return;
-    }
-
     const field = target.dataset.field;
     if (field === 'name') return;
 
@@ -2198,11 +2160,6 @@ function bindEvents() {
   tableBody.addEventListener('click', (e) => {
     const toggle = e.target.closest('.gender-toggle');
     if (!toggle) return;
-
-    if (isDeadlineExpired()) {
-      showToast('🔒 입력 및 수정 시한이 마감되었습니다.');
-      return;
-    }
 
     const id = parseInt(toggle.dataset.id, 10);
     const record = records.find(r => r.id === id);
@@ -2226,11 +2183,6 @@ function bindEvents() {
   tableBody.addEventListener('click', (e) => {
     const cell = e.target.closest('.editable-age-cell');
     if (!cell) return;
-
-    if (isDeadlineExpired()) {
-      showToast('🔒 입력 및 수정 시한이 마감되었습니다.');
-      return;
-    }
 
     const id = parseInt(cell.dataset.id, 10);
     const record = records.find(r => r.id === id);
@@ -2278,12 +2230,6 @@ function bindEvents() {
     eventsTableBody.addEventListener('change', (e) => {
       const select = e.target.closest('.event-select');
       if (!select) return;
-
-      if (isDeadlineExpired()) {
-        showToast('🔒 입력 및 수정 시한이 마감되었습니다.');
-        renderEventsTable();
-        return;
-      }
 
       const id = parseInt(select.dataset.id, 10);
       const eventIdx = select.dataset.eventIdx;
@@ -2361,11 +2307,6 @@ function handleTablePaste(e) {
   if (!pastedText || !pastedText.includes('\t') && !pastedText.includes('\n')) return;
 
   e.preventDefault();
-
-  if (isDeadlineExpired()) {
-    showToast('🔒 입력 및 수정 시한이 마감되었습니다.');
-    return;
-  }
 
   const rows = pastedText.trim().split(/\r?\n/).map(row => row.split('\t'));
   const startId = parseInt(activeEl.dataset.id, 10);

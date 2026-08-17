@@ -30,7 +30,7 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.08.17.3';
+const APP_VERSION = 'v2026.08.17.4';
 let isScenarioMode = false;
 let isInitialSyncCompleted = false;
 let serverRecordsCache = null;
@@ -44,12 +44,9 @@ const ADULT_TEAM_KEY = 'gmdc_adult_team';
 
 let currentAdultTeam = localStorage.getItem(ADULT_TEAM_KEY) || 'A';
 
-// Deadline Configuration: 8월 17일(월) 18:00:00 KST
-const DEADLINE_ISO = '2026-08-17T18:00:00+09:00';
-const DEADLINE = new Date(DEADLINE_ISO);
-
+// Deadline Configuration
 function isDeadlineExpired() {
-  return new Date() >= DEADLINE;
+  return false;
 }
 
 // 6 Available Competition Events (출전 가능 종목)
@@ -239,34 +236,9 @@ function updateDeadlineCountdown() {
   const badge = document.getElementById('tableDateBadge');
   if (!badge) return;
 
-  const now = new Date();
-  const diff = DEADLINE.getTime() - now.getTime();
-
-  if (diff <= 0) {
-    badge.className = 'header-date is-expired';
-    badge.innerHTML = `🔒 입력 마감됨`;
-    badge.title = '입력 마감 시한(8/17 18:00)이 종료되어 읽기 전용 상태입니다.';
-    
-    if (badge.dataset.expiredState !== 'expired') {
-      badge.dataset.expiredState = 'expired';
-      renderAll();
-    }
-    return;
-  }
-
-  const totalSeconds = Math.floor(diff / 1000);
-  const totalHours = Math.floor(totalSeconds / 3600);
-  const minutes = Math.floor((totalSeconds % 3600) / 60);
-  const seconds = totalSeconds % 60;
-
-  const hh = String(totalHours).padStart(2, '0');
-  const mm = String(minutes).padStart(2, '0');
-  const ss = String(seconds).padStart(2, '0');
-
-  const isUrgent = diff < 3600000; // 1시간 이내
-  badge.className = `header-date ${isUrgent ? 'is-urgent' : 'is-active'}`;
-  badge.innerHTML = `⏳ 마감까지 <strong>${hh}:${mm}:${ss}</strong>`;
-  badge.title = `클릭하여 마감 일정 안내 보기 (마감 시한: 8월 17일(월) 18:00)`;
+  badge.className = 'header-date';
+  badge.innerHTML = `기준일: 2026-01-01`;
+  badge.title = '기준일: 2026-01-01';
 }
 
 function initScenarioMode() {
@@ -873,11 +845,6 @@ function saveData() {
     return;
   }
 
-  if (isDeadlineExpired()) {
-    showToast('🔒 입력 및 수정 시한이 마감되었습니다.');
-    return;
-  }
-
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
   } catch (e) {
@@ -1155,9 +1122,6 @@ function renderTable() {
   const processed = getProcessedRecords();
   tableBody.innerHTML = '';
 
-  const expired = isDeadlineExpired();
-  const disabledAttr = expired ? 'disabled' : '';
-
   if (processed.length === 0) {
     const emptyRow = document.createElement('tr');
     emptyRow.innerHTML = `
@@ -1185,26 +1149,25 @@ function renderTable() {
         <span class="group-badge">${escapeHtml(item.group || '-')}</span>
       </td>
       <td class="col-age col-pb-detail">
-        <input type="text" class="cell-input age-input" data-id="${item.id}" data-field="age" value="${escapeHtml(item.age || '')}" placeholder="만나이" inputmode="numeric" ${disabledAttr} />
+        <input type="text" class="cell-input age-input" data-id="${item.id}" data-field="age" value="${escapeHtml(item.age || '')}" placeholder="만나이" inputmode="numeric" />
       </td>
       <td class="col-gender col-pb-detail">
-        <span class="gender-badge ${item.gender === '남' ? 'male' : 'female'} ${expired ? 'is-locked' : ''}" data-id="${item.id}" data-field="gender" title="${expired ? '입력 마감됨' : '클릭하여 성별 전환'}">
+        <span class="gender-badge ${item.gender === '남' ? 'male' : 'female'}" data-id="${item.id}" data-field="gender" title="클릭하여 성별 전환">
           ${item.gender || '남'}
         </span>
       </td>
       <td class="col-team" style="text-align:center;">
         <button 
           type="button" 
-          class="btn-team-toggle team-${item.team || 'A'} ${expired ? 'is-locked' : ''}" 
+          class="btn-team-toggle team-${item.team || 'A'}" 
           data-team-id="${item.id}" 
-          title="${expired ? '입력 마감됨' : `클릭하여 소속팀 변경 (현재: ${item.team || 'A'}팀)`}"
-          ${disabledAttr}
+          title="클릭하여 소속팀 변경 (현재: ${item.team || 'A'}팀)"
         >
           ${item.team || 'A'}팀
         </button>
       </td>
       <td class="col-name">
-        <input type="text" class="cell-input name-input" data-id="${item.id}" data-field="name" value="${escapeHtml(item.name || '')}" placeholder="이름" title="클릭하여 이름 수정 (수정 시 확인 절차가 진행됩니다)" ${disabledAttr} />
+        <input type="text" class="cell-input name-input" data-id="${item.id}" data-field="name" value="${escapeHtml(item.name || '')}" placeholder="이름" title="클릭하여 이름 수정 (수정 시 확인 절차가 진행됩니다)" />
       </td>
       ${STROKE_FIELDS.map(field => {
         const val = item[field] || '';
@@ -1235,7 +1198,6 @@ function renderTable() {
                 inputmode="decimal"
                 autocomplete="off"
                 title="${titleText}"
-                ${disabledAttr}
               />
             </div>
           </td>
@@ -1928,12 +1890,6 @@ function bindEvents() {
       const target = e.target;
       if (!target.classList.contains('event-select')) return;
 
-      if (isDeadlineExpired()) {
-        showToast('🔒 입력 및 수정 시한이 마감되었습니다.');
-        renderEventsTable();
-        return;
-      }
-
       const id = parseInt(target.dataset.id, 10);
       const field = target.dataset.field; // 'event1' or 'event2'
       const record = records.find(r => r.id === id);
@@ -1961,10 +1917,6 @@ function bindEvents() {
     eventsTableBody.addEventListener('click', (e) => {
       const teamBtn = e.target.closest('[data-team-id]');
       if (teamBtn) {
-        if (isDeadlineExpired()) {
-          showToast('🔒 입력 및 수정 시한이 마감되었습니다.');
-          return;
-        }
         const id = parseInt(teamBtn.dataset.teamId, 10);
         const record = records.find(r => r.id === id);
         if (!record) return;
@@ -2044,13 +1996,6 @@ function bindEvents() {
     const target = e.target;
     if (!target.classList.contains('cell-input')) return;
 
-    if (isDeadlineExpired()) {
-      e.preventDefault();
-      showToast('🔒 입력 및 수정 시한이 마감되었습니다.');
-      renderTable();
-      return;
-    }
-
     const id = parseInt(target.dataset.id, 10);
     const field = target.dataset.field;
     const record = records.find(r => r.id === id);
@@ -2097,7 +2042,6 @@ function bindEvents() {
   tableBody.addEventListener('focusout', (e) => {
     const target = e.target;
     if (!target.classList.contains('cell-input')) return;
-    if (isDeadlineExpired()) return;
 
     const id = parseInt(target.dataset.id, 10);
     const field = target.dataset.field;
@@ -2158,12 +2102,6 @@ function bindEvents() {
     const target = e.target;
     if (!target.classList.contains('cell-input')) return;
 
-    if (isDeadlineExpired()) {
-      e.preventDefault();
-      showToast('🔒 입력 및 수정 시한이 마감되었습니다.');
-      return;
-    }
-
     if (!e.data || e.inputType.startsWith('delete') || e.inputType.startsWith('history')) return;
 
     if (target.classList.contains('record-input')) {
@@ -2183,10 +2121,6 @@ function bindEvents() {
   tableBody.addEventListener('click', (e) => {
     const teamBtn = e.target.closest('[data-team-id]');
     if (teamBtn) {
-      if (isDeadlineExpired()) {
-        showToast('🔒 입력 및 수정 시한이 마감되었습니다.');
-        return;
-      }
       const id = parseInt(teamBtn.dataset.teamId, 10);
       const record = records.find(r => r.id === id);
       if (!record) return;
@@ -2211,10 +2145,6 @@ function bindEvents() {
 
     const genderBadge = e.target.closest('.gender-badge');
     if (genderBadge) {
-      if (isDeadlineExpired()) {
-        showToast('🔒 입력 및 수정 시한이 마감되었습니다.');
-        return;
-      }
       const id = parseInt(genderBadge.dataset.id, 10);
       const record = records.find(r => r.id === id);
       if (record) {
@@ -2240,10 +2170,6 @@ function bindEvents() {
 
     const deleteBtn = e.target.closest('[data-delete-id]');
     if (deleteBtn) {
-      if (isDeadlineExpired()) {
-        showToast('🔒 입력 및 수정 시한이 마감되었습니다.');
-        return;
-      }
       const id = parseInt(deleteBtn.dataset.deleteId, 10);
       const record = records.find(r => r.id === id);
       const name = record ? (record.name || '해당 회원') : '해당 회원';
@@ -2274,11 +2200,6 @@ function bindEvents() {
   // Add Row Button (If element exists)
   if (btnAddRow) {
     btnAddRow.addEventListener('click', () => {
-      if (isDeadlineExpired()) {
-        showToast('🔒 신규 회원 등록 시한이 마감되었습니다.');
-        return;
-      }
-
       const newId = records.length > 0 ? Math.max(...records.map(r => r.id)) + 1 : 1;
       const newRecord = {
         id: newId,
@@ -2423,12 +2344,6 @@ function handleKeyNavigation(e) {
 function handleTablePaste(e) {
   const target = e.target;
   if (!target.classList.contains('cell-input')) return;
-
-  if (isDeadlineExpired()) {
-    e.preventDefault();
-    showToast('🔒 입력 및 수정 시한이 마감되었습니다.');
-    return;
-  }
 
   const clipboardData = e.clipboardData || window.clipboardData;
   const pastedText = clipboardData.getData('text');
