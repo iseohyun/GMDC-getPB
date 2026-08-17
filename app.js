@@ -30,7 +30,7 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.08.17.16';
+const APP_VERSION = 'v2026.08.17.17';
 let isScenarioMode = false;
 let isInitialSyncCompleted = false;
 let serverRecordsCache = null;
@@ -1313,7 +1313,7 @@ function renderSingleGenderMatrix(gender, bodyEl, footEl) {
   bodyEl.innerHTML = '';
   const filteredList = records.filter(r => r.gender === gender);
 
-  const colTotals = {
+  const colTotalsA = {
     '핀자유형 50': 0,
     '핀접영 50': 0,
     '자유형 50': 0,
@@ -1321,40 +1321,55 @@ function renderSingleGenderMatrix(gender, bodyEl, footEl) {
     '평영 50': 0,
     '접영 50': 0
   };
-  let grandTotal = 0;
+  const colTotalsB = {
+    '핀자유형 50': 0,
+    '핀접영 50': 0,
+    '자유형 50': 0,
+    '배영 50': 0,
+    '평영 50': 0,
+    '접영 50': 0
+  };
+  let grandTotalA = 0;
+  let grandTotalB = 0;
 
   GROUPS.forEach(groupName => {
     const groupMembers = filteredList.filter(r => r.group === groupName);
-    let groupRowTotal = 0;
+    let groupRowTotalA = 0;
+    let groupRowTotalB = 0;
 
     const tr = document.createElement('tr');
     tr.innerHTML = `<td class="matrix-cell-group">${groupName}</td>`;
 
     EVENT_OPTIONS.forEach(eventName => {
       const eventSwimmers = groupMembers.filter(r => r.event1 === eventName || r.event2 === eventName);
-      const count = eventSwimmers.length;
+      const countA = eventSwimmers.filter(r => (r.team || 'A') === 'A').length;
+      const countB = eventSwimmers.filter(r => (r.team || 'A') === 'B').length;
+      const totalCount = countA + countB;
       const prevCount = PREV_YEAR_DISTRIBUTION[gender]?.[groupName]?.[eventName] ?? 0;
-      groupRowTotal += count;
-      colTotals[eventName] += count;
+
+      groupRowTotalA += countA;
+      groupRowTotalB += countB;
+      colTotalsA[eventName] += countA;
+      colTotalsB[eventName] += countB;
 
       if (isMatrixCompareMode) {
-        const titleText = count > 0
-          ? `${groupName} · ${eventName} (올해 ${count}명 / 작년 ${prevCount}명): ${eventSwimmers.map(s => s.name).join(', ')}`
+        const titleText = totalCount > 0
+          ? `${groupName} · ${eventName} (올해 ${countA}+${countB}명 / 작년 ${prevCount}명): ${eventSwimmers.map(s => `[${s.team || 'A'}팀] ${s.name}`).join(', ')}`
           : `${groupName} · ${eventName} (올해 0명 / 작년 ${prevCount}명)`;
 
         tr.innerHTML += `
-          <td class="matrix-cell is-compared ${count > 0 ? 'has-count' : 'is-empty'}" title="${titleText}">
+          <td class="matrix-cell is-compared ${totalCount > 0 ? 'has-count' : 'is-empty'}" title="${titleText}">
             <span class="matrix-num-compare">
-              <span class="${count > 0 ? 'num-curr' : 'num-curr-zero'}">${count}</span>
+              <span class="${totalCount > 0 ? 'num-curr' : 'num-curr-zero'}">${totalCount > 0 ? `${countA}+${countB}` : '0'}</span>
               <span class="num-slash">/</span>
               <span class="num-prev">(${prevCount})</span>
             </span>
-            ${count > 0 ? `
+            ${totalCount > 0 ? `
               <div class="matrix-hover-tooltip">
-                <div class="tooltip-header">${groupName} · ${eventName} (올해 ${count}명 / 작년 ${prevCount}명)</div>
+                <div class="tooltip-header">${groupName} · ${eventName} (총 ${totalCount}명: A팀 ${countA} + B팀 ${countB})</div>
                 <div class="tooltip-list">
                   ${eventSwimmers.map(s => `
-                    <span class="tooltip-chip ${gender === '남' ? 'male' : 'female'}">${escapeHtml(s.name)}</span>
+                    <span class="tooltip-chip ${gender === '남' ? 'male' : 'female'}">[${s.team || 'A'}팀] ${escapeHtml(s.name)}</span>
                   `).join('')}
                 </div>
               </div>
@@ -1362,16 +1377,16 @@ function renderSingleGenderMatrix(gender, bodyEl, footEl) {
           </td>
         `;
       } else {
-        if (count > 0) {
-          const namesList = eventSwimmers.map(s => s.name).join(', ');
+        if (totalCount > 0) {
+          const namesList = eventSwimmers.map(s => `[${s.team || 'A'}팀] ${s.name}`).join(', ');
           tr.innerHTML += `
-            <td class="matrix-cell has-count" title="${groupName} · ${eventName} (${count}명): ${namesList}">
-              <span class="matrix-num">${count}</span>
+            <td class="matrix-cell has-count" title="${groupName} · ${eventName} (${countA}+${countB}명): ${namesList}">
+              <span class="matrix-num">${countA}+${countB}</span>
               <div class="matrix-hover-tooltip">
-                <div class="tooltip-header">${groupName} · ${eventName} (${count}명)</div>
+                <div class="tooltip-header">${groupName} · ${eventName} (총 ${totalCount}명: A팀 ${countA} + B팀 ${countB})</div>
                 <div class="tooltip-list">
                   ${eventSwimmers.map(s => `
-                    <span class="tooltip-chip ${gender === '남' ? 'male' : 'female'}">${escapeHtml(s.name)}</span>
+                    <span class="tooltip-chip ${gender === '남' ? 'male' : 'female'}">[${s.team || 'A'}팀] ${escapeHtml(s.name)}</span>
                   `).join('')}
                 </div>
               </div>
@@ -1387,14 +1402,16 @@ function renderSingleGenderMatrix(gender, bodyEl, footEl) {
       }
     });
 
-    grandTotal += groupRowTotal;
+    grandTotalA += groupRowTotalA;
+    grandTotalB += groupRowTotalB;
+    const groupRowGrandTotal = groupRowTotalA + groupRowTotalB;
     const prevGroupTotal = PREV_YEAR_DISTRIBUTION[gender]?.[groupName]?.total ?? 0;
 
     if (isMatrixCompareMode) {
       tr.innerHTML += `
         <td class="matrix-cell is-compared" style="font-weight:800; background:#f8fafc; color:var(--secondary);">
           <span class="matrix-num-compare">
-            <span class="${groupRowTotal > 0 ? 'num-curr' : 'num-curr-zero'}">${groupRowTotal}</span>
+            <span class="${groupRowGrandTotal > 0 ? 'num-curr' : 'num-curr-zero'}">${groupRowGrandTotal > 0 ? `${groupRowTotalA}+${groupRowTotalB}` : '0'}</span>
             <span class="num-slash">/</span>
             <span class="num-prev">(${prevGroupTotal})</span>
           </span>
@@ -1403,7 +1420,7 @@ function renderSingleGenderMatrix(gender, bodyEl, footEl) {
     } else {
       tr.innerHTML += `
         <td class="matrix-cell" style="font-weight:800; background:#f8fafc; color:var(--secondary);">
-          ${groupRowTotal > 0 ? groupRowTotal : '-'}
+          ${groupRowGrandTotal > 0 ? `${groupRowTotalA}+${groupRowTotalB}` : '-'}
         </td>
       `;
     }
@@ -1411,35 +1428,39 @@ function renderSingleGenderMatrix(gender, bodyEl, footEl) {
   });
 
   // Footer Row
+  const grandTotal = grandTotalA + grandTotalB;
   const prevGrandTotal = GROUPS.reduce((sum, g) => sum + (PREV_YEAR_DISTRIBUTION[gender]?.[g]?.total ?? 0), 0);
 
   footEl.innerHTML = `
     <tr>
       <th>계</th>
       ${EVENT_OPTIONS.map(ev => {
+        const colTotalA = colTotalsA[ev];
+        const colTotalB = colTotalsB[ev];
+        const colTotal = colTotalA + colTotalB;
         const prevColTotal = GROUPS.reduce((sum, g) => sum + (PREV_YEAR_DISTRIBUTION[gender]?.[g]?.[ev] ?? 0), 0);
         if (isMatrixCompareMode) {
           return `
             <td>
               <span class="matrix-num-compare">
-                <span class="${colTotals[ev] > 0 ? 'num-curr' : 'num-curr-zero'}">${colTotals[ev]}</span>
+                <span class="${colTotal > 0 ? 'num-curr' : 'num-curr-zero'}">${colTotal > 0 ? `${colTotalA}+${colTotalB}` : '0'}</span>
                 <span class="num-slash">/</span>
                 <span class="num-prev">(${prevColTotal})</span>
               </span>
             </td>
           `;
         } else {
-          return `<td>${colTotals[ev] > 0 ? colTotals[ev] : '-'}</td>`;
+          return `<td>${colTotal > 0 ? `${colTotalA}+${colTotalB}` : '-'}</td>`;
         }
       }).join('')}
       <td style="color:${gender === '남' ? '#0284c7' : '#e11d48'}; font-weight:900;">
         ${isMatrixCompareMode ? `
           <span class="matrix-num-compare">
-            <span class="num-curr">${grandTotal}</span>
+            <span class="num-curr">${grandTotalA}+${grandTotalB}</span>
             <span class="num-slash">/</span>
             <span class="num-prev">(${prevGrandTotal})</span>
           </span>
-        ` : grandTotal}
+        ` : `${grandTotalA}+${grandTotalB}`}
       </td>
     </tr>
   `;
