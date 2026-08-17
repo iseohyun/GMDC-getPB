@@ -30,7 +30,7 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.08.17.5';
+const APP_VERSION = 'v2026.08.17.6';
 let isScenarioMode = false;
 let isInitialSyncCompleted = false;
 let serverRecordsCache = null;
@@ -640,6 +640,10 @@ function applyEventsViewMode(mode) {
   const select = document.getElementById('eventsModeSelect');
   if (select) select.value = mode;
   if (eventsDetailTable) eventsDetailTable.classList.toggle('is-simple', mode === 'simple');
+  const btnCopyEvents = document.getElementById('btnCopyEventsTsv');
+  if (btnCopyEvents) {
+    btnCopyEvents.style.display = (mode === 'detailed') ? 'inline-flex' : 'none';
+  }
 }
 
 // Log history change to Firestore & local state
@@ -1415,9 +1419,7 @@ function renderSingleGenderMatrix(gender, bodyEl, footEl) {
 // ============================================================
 // EVENTS DETAIL TABLE SECTION (출전 선수별 상세 명단)
 // ============================================================
-function renderEventsTable() {
-  if (!eventsTableBody) return;
-
+function getFilteredEventsList() {
   let list = [...records];
 
   // Search filter
@@ -2013,6 +2015,12 @@ function bindEvents() {
       localStorage.setItem(EVENTS_MODE_KEY, e.target.value);
       showToast(e.target.value === 'detailed' ? '📋 개인전 자세히 보기 모드로 전환되었습니다.' : '📋 개인전 간단히 보기 모드로 전환되었습니다.');
     });
+  }
+
+  // Copy events list to clipboard button
+  const btnCopyEvents = document.getElementById('btnCopyEventsTsv');
+  if (btnCopyEvents) {
+    btnCopyEvents.addEventListener('click', copyEventsToClipboard);
   }
 
   // PB Table Input Delegation - Remember initial value on focusin

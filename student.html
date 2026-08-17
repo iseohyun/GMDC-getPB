@@ -15,7 +15,7 @@
   <meta name="description" content="수영 종목별 개인 PB 기록 관리 및 대회 출전 종목/그룹별 현황 요약 시스템 - 학생부">
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
-  <link rel="stylesheet" href="style.css?v=20260817_5">
+  <link rel="stylesheet" href="style.css?v=20260817_6">
 </head>
 <body class="theme-student">
   <div class="app-container">
@@ -352,17 +352,26 @@
       <section class="events-detail-section">
         <div class="events-detail-header">
           <div class="events-detail-title-group">
-            <h3>📋 출전 선수별 명단 (총 19명)</h3>
+            <h3 id="eventsDetailTitle">📋 출전 선수별 명단 (19명 표시 중 / 총 19명)</h3>
           </div>
-          <div class="events-mode-toggle">
-            <button class="mode-btn active" id="btnModeSimple" data-events-mode="simple" title="이름과 출전 종목만 간단히 표시">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
-              <span>간단히 (기본)</span>
+          <div class="events-detail-actions">
+            <button type="button" id="btnCopyEventsTsv" class="btn-copy-events" title="현재 표시된 명단 복사 (엑셀/스프레드시트 붙여넣기용)" style="display: none;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <span>명단 복사</span>
             </button>
-            <button class="mode-btn" id="btnModeDetailed" data-events-mode="detailed" title="그룹, 성별, 생년월일, 연락처, 주소, 개인PB 등 모든 정보 표시">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
-              <span>자세히</span>
-            </button>
+            <div class="events-mode-toggle">
+              <button class="mode-btn active" id="btnModeSimple" data-events-mode="simple" title="이름과 출전 종목만 간단히 표시">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+                <span>간단히 (기본)</span>
+              </button>
+              <button class="mode-btn" id="btnModeDetailed" data-events-mode="detailed" title="그룹, 성별, 생년월일, 연락처, 주소, 개인PB 등 모든 정보 표시">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                <span>자세히</span>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -778,7 +787,7 @@
     </div>
   </div>
 
-  <script src="shortcut.js?v=20260817_5"></script>
-  <script type="module" src="student.js?v=20260817_5"></script>
+  <script src="shortcut.js?v=20260817_6"></script>
+  <script type="module" src="student.js?v=20260817_6"></script>
 </body>
 </html>

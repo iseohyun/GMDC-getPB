@@ -15,7 +15,7 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.08.17.5_student';
+const APP_VERSION = 'v2026.08.17.6_student';
 let isScenarioMode = false;
 let isInitialSyncCompleted = false;
 let serverRecordsCache = null;
@@ -739,6 +739,10 @@ function applyEventsViewMode(mode) {
   if (btnModeSimple) btnModeSimple.classList.toggle('active', mode === 'simple');
   if (btnModeDetailed) btnModeDetailed.classList.toggle('active', mode === 'detailed');
   if (eventsDetailTable) eventsDetailTable.classList.toggle('is-simple', mode === 'simple');
+  const btnCopyEvents = document.getElementById('btnCopyEventsTsv');
+  if (btnCopyEvents) {
+    btnCopyEvents.style.display = (mode === 'detailed') ? 'inline-flex' : 'none';
+  }
   try {
     localStorage.setItem(EVENTS_MODE_KEY, mode);
   } catch (e) {}
@@ -1873,9 +1877,7 @@ const EVENT_OPTIONS = [
   '접영 50'
 ];
 
-function renderEventsTable() {
-  if (!eventsTableBody) return;
-
+function getFilteredEventsList() {
   let list = [...records];
 
   if (currentEventsFilter === '남' || currentEventsFilter === '여') {
@@ -1893,7 +1895,8 @@ function renderEventsTable() {
       const birth = (r.birthId || '').toLowerCase();
       const group = (r.group || '').toLowerCase();
       const phone = (r.phone || '').toLowerCase();
-      return name.includes(q) || birth.includes(q) || group.includes(q) || phone.includes(q);
+      const address = (r.address || '').toLowerCase();
+      return name.includes(q) || birth.includes(q) || group.includes(q) || phone.includes(q) || address.includes(q);
     });
   }
 
@@ -1904,29 +1907,53 @@ function renderEventsTable() {
     return a.id - b.id;
   });
 
+  return list;
+}
+
+function renderEventsTable() {
+  if (!eventsTableBody) return;
+
+  const list = getFilteredEventsList();
+
+  const eventsDetailTitle = document.getElementById('eventsDetailTitle');
+  if (eventsDetailTitle) {
+    eventsDetailTitle.textContent = `📋 출전 선수별 명단 (${list.length}명 표시 중 / 총 ${records.length}명)`;
+  }
+
   if (eventsFilteredCount) {
     eventsFilteredCount.textContent = `총 ${list.length}명 표시 중`;
   }
 
-  eventsTableBody.innerHTML = list.map((item) => {
+  if (list.length === 0) {
+    eventsTableBody.innerHTML = `
+      <tr>
+        <td colspan="11" style="padding: 36px; color: var(--text-muted); font-size: 14px; text-align: center;">
+          일치하는 출전 선수가 없습니다.
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  eventsTableBody.innerHTML = list.map((item, idx) => {
     const genderClass = item.gender === '남' ? 'badge-male' : 'badge-female';
     const eventCount = (item.event1 ? 1 : 0) + (item.event2 ? 1 : 0);
 
     return `
       <tr data-id="${item.id}">
-        <td class="col-no col-detail">${item.id}</td>
-        <td class="col-group col-detail">
+        <td class="col-no col-detail" style="text-align:center;">${idx + 1}</td>
+        <td class="col-group col-detail" style="text-align:center;">
           <span class="group-badge">${escapeHtml(item.group || '-')}</span>
         </td>
-        <td class="col-gender col-detail">
+        <td class="col-gender col-detail" style="text-align:center;">
           <span class="gender-toggle ${genderClass}" data-id="${item.id}" title="클릭하여 성별 전환 (현재: ${item.gender})">
             ${item.gender}
           </span>
         </td>
-        <td class="col-name">
+        <td class="col-name" style="font-weight:700;">
           <span class="swimmer-name-text">${escapeHtml(item.name)}</span>
         </td>
-        <td class="col-birth col-detail">
+        <td class="col-birth col-detail" style="text-align:center;">
           <span class="birth-code">${escapeHtml(item.birthId || '-')}</span>
         </td>
         <td class="col-event">
@@ -1965,16 +1992,16 @@ function renderEventsTable() {
             }).join('')}
           </select>
         </td>
-        <td class="col-detail" style="font-size:12px; color:var(--text-muted); font-variant-numeric:tabular-nums;">
+        <td class="col-detail" style="text-align:center; font-size:12px; color:var(--text-muted); font-variant-numeric:tabular-nums;">
           ${escapeHtml(item.phone || '-')}
         </td>
         <td class="col-detail" style="font-size:12px; color:var(--text-muted); text-align:left; max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${escapeHtml(item.address || '')}">
           ${escapeHtml(item.address || '-')}
         </td>
-        <td class="col-count col-detail">
+        <td class="col-count col-detail" style="text-align:center;">
           <span class="event-count-badge ${eventCount > 0 ? 'has-events' : ''}">${eventCount}개</span>
         </td>
-        <td class="col-goto-pb col-detail">
+        <td class="col-goto-pb col-detail" style="text-align:center;">
           <button class="btn-goto-pb" data-name="${escapeHtml(item.name)}" title="${escapeHtml(item.name)}의 단체전 기록표로 이동">
             기록보기 ➔
           </button>
@@ -1982,6 +2009,58 @@ function renderEventsTable() {
       </tr>
     `;
   }).join('');
+}
+
+function copyEventsToClipboard() {
+  const list = getFilteredEventsList();
+  if (!list || list.length === 0) {
+    showToast('⚠️ 복사할 출전 선수 명단이 없습니다.');
+    return;
+  }
+
+  // Omit <th> headers, copy sequence (1-based), group, gender, name, birthId, event1, event2, phone, address, eventCount
+  const rows = list.map((item, idx) => {
+    return [
+      idx + 1,
+      item.group || '',
+      item.gender || '',
+      item.name || '',
+      item.birthId || '',
+      item.event1 || '',
+      item.event2 || '',
+      item.phone || '',
+      item.address || '',
+      `${(item.event1 ? 1 : 0) + (item.event2 ? 1 : 0)}개`
+    ].join('\t');
+  });
+
+  const tsvText = rows.join('\n');
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(tsvText).then(() => {
+      showToast(`📋 ${list.length}명의 학생부 명단이 클립보드에 복사되었습니다. (엑셀에 바로 붙여넣기 가능)`);
+    }).catch(() => {
+      fallbackCopyText(tsvText, list.length);
+    });
+  } else {
+    fallbackCopyText(tsvText, list.length);
+  }
+}
+
+function fallbackCopyText(text, count) {
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  textarea.style.position = 'fixed';
+  textarea.style.left = '-9999px';
+  document.body.appendChild(textarea);
+  textarea.select();
+  try {
+    document.execCommand('copy');
+    showToast(`📋 ${count}명의 학생부 명단이 클립보드에 복사되었습니다.`);
+  } catch (err) {
+    showToast('⚠️ 클립보드 복사에 실패했습니다.');
+  }
+  document.body.removeChild(textarea);
 }
 
 function bindEvents() {
@@ -2081,6 +2160,11 @@ function bindEvents() {
       currentEventsGroup = e.target.value;
       renderEventsTable();
     });
+  }
+
+  const btnCopyEvents = document.getElementById('btnCopyEventsTsv');
+  if (btnCopyEvents) {
+    btnCopyEvents.addEventListener('click', copyEventsToClipboard);
   }
 
   // Real-time table input handler
