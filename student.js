@@ -15,7 +15,7 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.08.17.15_student';
+const APP_VERSION = 'v2026.08.17.16_student';
 let isScenarioMode = false;
 let isInitialSyncCompleted = false;
 let serverRecordsCache = null;
@@ -912,6 +912,11 @@ function loadLocalData() {
   }
 }
 
+function cleanAddress(addr) {
+  if (!addr) return '';
+  return String(addr).replace(/경상남도/g, '').trim();
+}
+
 function mergeWithDefaultData(remoteList) {
   if (!Array.isArray(remoteList)) return JSON.parse(JSON.stringify(DEFAULT_STUDENT_RECORDS));
 
@@ -928,7 +933,7 @@ function mergeWithDefaultData(remoteList) {
       event2: item.event2 !== undefined ? item.event2 : (def.event2 || ''),
       phone: item.phone || def.phone || '',
       club: item.club || def.club || 'GMDC',
-      address: item.address || def.address || '',
+      address: cleanAddress(item.address || def.address || ''),
       free: item.free !== undefined ? item.free : (def.free || ''),
       back: item.back !== undefined ? item.back : (def.back || ''),
       breast: item.breast !== undefined ? item.breast : (def.breast || ''),

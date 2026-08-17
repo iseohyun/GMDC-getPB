@@ -30,7 +30,7 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.08.17.15';
+const APP_VERSION = 'v2026.08.17.16';
 let isScenarioMode = false;
 let isInitialSyncCompleted = false;
 let serverRecordsCache = null;
@@ -122,8 +122,8 @@ const DEFAULT_RECORDS = [
   { id: 35, age: '63', group: '6그룹', gender: '남', name: '성환용', birthId: '19620713-1', phone: '010-9689-2830', club: 'GMDC', address: '거제시 능포로2길 38, 옥명대우아파트 105동 1203호', team: 'B', event1: '핀자유형 50', event2: '', finFly: '', finFree: '99.99', free: '', back: '', breast: '', fly: '' },
   { id: 36, age: '59', group: '6그룹', gender: '여', name: '송원자', birthId: '19660325-2', phone: '010-2854-3715', club: 'GMDC', address: '거제시 능포로2길62 롯데캐슬 302동 801호', team: 'A', event1: '자유형 50', event2: '평영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
   { id: 37, age: '62', group: '6그룹', gender: '여', name: '최지희', birthId: '19630705-2', phone: '010-3560-6375', club: 'GMDC', address: '거제시 상동7길30, 대동다숲 124동 1406호', team: 'A', event1: '자유형 50', event2: '핀자유형 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 38, age: '61', group: '6그룹', gender: '남', name: '권순용', birthId: '19650101-1', phone: '010-5890-7052', club: 'GMDC', address: '경상남도 거제시 동부면 거제남서로 3136', team: 'B', event1: '', event2: '', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 39, age: '27', group: '2그룹', gender: '남', name: '이석민', birthId: '19990101-1', phone: '010-9989-7218', club: 'GMDC', address: '경상남도 거제시 동부면 산양리 671-1', team: 'B', event1: '', event2: '', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' }
+  { id: 38, age: '61', group: '6그룹', gender: '남', name: '권순용', birthId: '19650101-1', phone: '010-5890-7052', club: 'GMDC', address: '거제시 동부면 거제남서로 3136', team: 'B', event1: '', event2: '', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 39, age: '27', group: '2그룹', gender: '남', name: '이석민', birthId: '19990101-1', phone: '010-9989-7218', club: 'GMDC', address: '거제시 동부면 산양리 671-1', team: 'B', event1: '', event2: '', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' }
 ];
 
 // Baseline Map of Last Year's Records (Original 37 swimmers)
@@ -754,6 +754,11 @@ function loadLocalData() {
   }
 }
 
+function cleanAddress(addr) {
+  if (!addr) return '';
+  return String(addr).replace(/경상남도/g, '').trim();
+}
+
 // Merge helper to guarantee group, birthId, team, event1, event2, phone, address are preserved
 function mergeWithDefaultData(remoteList) {
   if (!Array.isArray(remoteList)) return JSON.parse(JSON.stringify(DEFAULT_RECORDS));
@@ -769,7 +774,7 @@ function mergeWithDefaultData(remoteList) {
       birthId: item.birthId || def.birthId || '',
       team: item.team !== undefined ? item.team : (def.team || 'A'),
       phone: (item.phone && String(item.phone).trim() !== '') ? item.phone : (def.phone || ''),
-      address: (item.address && String(item.address).trim() !== '') ? item.address : (def.address || ''),
+      address: cleanAddress((item.address && String(item.address).trim() !== '') ? item.address : (def.address || '')),
       club: (item.club && String(item.club).trim() !== '') ? item.club : (def.club || 'GMDC'),
       depositor: (item.depositor && String(item.depositor).trim() !== '') ? item.depositor : 'GMDC',
       event1: item.event1 !== undefined ? item.event1 : (def.event1 || ''),
