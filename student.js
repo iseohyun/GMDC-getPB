@@ -15,7 +15,7 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.08.17.4_student';
+const APP_VERSION = 'v2026.08.17.5_student';
 let isScenarioMode = false;
 let isInitialSyncCompleted = false;
 let serverRecordsCache = null;
@@ -860,7 +860,33 @@ async function logChangeHistory(type, swimmerName, field, fieldName, prevVal, ne
   }
 }
 
+function updateTeamNavAndCounts() {
+  const studentDivisionTab = document.getElementById('studentDivisionTab');
+  if (studentDivisionTab) {
+    const studentCount = records ? records.length : 19;
+    studentDivisionTab.textContent = `🏊 학생부 (${studentCount}명)`;
+  }
+
+  const adultDivisionTab = document.getElementById('adultDivisionTab');
+  if (adultDivisionTab) {
+    let countA = 30;
+    let countB = 9;
+    try {
+      const savedAdult = localStorage.getItem('gmdc_swim_records_v1');
+      if (savedAdult) {
+        const parsedAdult = JSON.parse(savedAdult);
+        if (Array.isArray(parsedAdult) && parsedAdult.length > 0) {
+          countA = parsedAdult.filter(r => (r.team || 'A') === 'A').length;
+          countB = parsedAdult.filter(r => (r.team || 'A') === 'B').length;
+        }
+      }
+    } catch (e) {}
+    adultDivisionTab.textContent = `🏊 성인부 (A:${countA}, B:${countB})`;
+  }
+}
+
 function renderAll() {
+  updateTeamNavAndCounts();
   renderTable();
   updateStats();
   renderSummaryMatrices();
@@ -960,6 +986,22 @@ function initFirebaseSync() {
     }
     showToast('⚠️ Firebase 보안 규칙(Rules)을 확인해 주세요.');
   });
+
+  // Cross-division sync: listen to adult records to keep adult division tab count accurate in student view
+  try {
+    const ADULT_DOC_REF = doc(db, "swim_records", "gmdc-swim-records");
+    onSnapshot(ADULT_DOC_REF, (docSnap) => {
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        if (data && Array.isArray(data.records)) {
+          localStorage.setItem('gmdc_swim_records_v1', JSON.stringify(data.records));
+          updateTeamNavAndCounts();
+        }
+      }
+    });
+  } catch (e) {
+    console.warn('Adult records sync in student view skipped:', e);
+  }
 }
 
 function saveData() {
