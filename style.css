@@ -104,6 +104,7 @@ body {
 
 .division-nav {
   display: inline-flex;
+  align-items: center;
   background: #f1f5f9;
   border: 1px solid var(--border-light);
   border-radius: var(--radius-sm);
@@ -560,57 +561,72 @@ body.theme-student .btn-panel-pin.active {
   font-weight: 600;
 }
 
-.combo-metrics {
-  display: grid;
-  grid-template-columns: 1.3fr 1fr;
-  gap: 10px;
-  background: var(--bg-page);
-  padding: 10px 12px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border-light);
-}
-
-.metric-item {
+.combo-teams-wrapper {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-}
-
-.metric-label {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--text-muted);
-  text-transform: uppercase;
-}
-
-.metric-value {
-  font-size: 17px;
-  font-weight: 800;
-  color: var(--secondary);
-  line-height: 1.2;
-}
-
-.metric-value.time-highlight {
-  color: var(--primary);
-}
-
-.combo-members-section {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+  gap: 8px;
   flex: 1;
 }
 
-.members-title {
-  font-size: 12px;
-  font-weight: 700;
+.combo-team-block {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: #f8fafc;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+}
+
+.combo-team-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding-bottom: 4px;
+  border-bottom: 1px dashed var(--border-light);
+}
+
+.combo-team-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11.5px;
   color: var(--text-muted);
+}
+
+.combo-team-meta .meta-label {
+  font-weight: 600;
+  font-size: 11px;
+}
+
+.combo-team-meta .meta-time {
+  font-weight: 800;
+  color: var(--primary);
+  font-size: 12.5px;
+}
+
+.combo-team-meta .meta-time.time-highlight {
+  color: var(--primary);
+}
+
+.combo-team-meta .meta-age {
+  font-weight: 700;
+  color: var(--secondary);
+  font-size: 11.5px;
+}
+
+.combo-team-meta .meta-divider {
+  color: var(--border-dark);
+  opacity: 0.5;
+  font-size: 10px;
 }
 
 .combo-members-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 5px;
 }
 
 .member-pill {
@@ -744,13 +760,70 @@ body.theme-student .btn-panel-pin.active {
   color: var(--text-main);
 }
 
-.filter-group {
+.filter-label {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--text-muted);
+  white-space: nowrap;
+  margin-right: 4px;
+}
+
+.filter-select {
+  padding: 3px 8px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-light);
+  background: #ffffff;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-main);
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.filter-select:focus {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.scenario-checkbox-label {
   display: inline-flex;
-  background: #f1f5f9;
+  align-items: center;
+  gap: 6px;
+  background: #f8fafc;
   border: 1px solid var(--border-light);
   border-radius: var(--radius-sm);
-  padding: 2px;
-  gap: 2px;
+  padding: 3px 9px;
+  height: 28px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-muted);
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.15s ease;
+}
+
+.scenario-checkbox-label:hover {
+  background: #fffbeb;
+  color: #b45309;
+  border-color: #fde68a;
+}
+
+.scenario-checkbox-label:has(.scenario-checkbox:checked) {
+  background: #fef3c7;
+  color: #b45309;
+  border-color: #f59e0b;
+  box-shadow: 0 1px 2px rgba(245, 158, 11, 0.15);
+}
+
+.scenario-checkbox {
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+  accent-color: #d97706;
+  margin: 0;
 }
 
 .filter-btn,
@@ -1801,12 +1874,46 @@ body.theme-student .btn-panel-pin.active {
   display: none !important;
 }
 
+.pb-table .col-team {
+  width: 65px;
+  min-width: 55px;
+  text-align: center;
+}
+
+.pb-table.is-simple .col-team {
+  width: 65px;
+  display: table-cell !important;
+}
+
 .pb-table.is-simple .col-name {
-  width: 140px;
+  width: 130px;
 }
 
 .pb-table.is-simple .col-record {
-  width: 14%;
+  width: calc((100% - 195px) / 6);
+}
+
+.team-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 6px;
+  font-size: 11px;
+  font-weight: 800;
+  border-radius: 4px;
+  letter-spacing: -0.01em;
+}
+
+.team-badge.team-a {
+  background: #e0f2fe;
+  color: #0369a1;
+  border: 1px solid #bae6fd;
+}
+
+.team-badge.team-b {
+  background: #fef3c7;
+  color: #b45309;
+  border: 1px solid #fde68a;
 }
 
 /* Events Table Column Hiding in Simple Mode */
@@ -1814,12 +1921,23 @@ body.theme-student .btn-panel-pin.active {
   display: none !important;
 }
 
+.events-table .col-team {
+  width: 75px;
+  min-width: 65px;
+  text-align: center;
+}
+
+.events-table.is-simple .col-team {
+  width: 75px;
+  display: table-cell !important;
+}
+
 .events-table.is-simple .col-name {
-  width: 140px;
+  width: 125px;
 }
 
 .events-table.is-simple .col-event {
-  width: 42%;
+  width: calc((100% - 200px) / 2);
 }
 
 .group-filter-dropdown select,
@@ -1922,6 +2040,55 @@ body.theme-student .btn-panel-pin.active {
   color: var(--text-muted);
 }
 
+.col-team {
+  width: 90px;
+}
+
+.btn-team-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 9px;
+  font-size: 11.5px;
+  font-weight: 800;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+  font-family: inherit;
+}
+
+.btn-team-toggle.team-A {
+  background: #e0f2fe;
+  color: #0369a1;
+  border-color: #bae6fd;
+}
+
+.btn-team-toggle.team-A:hover {
+  background: #bae6fd;
+  color: #0284c7;
+  transform: translateY(-1px);
+}
+
+.btn-team-toggle.team-B {
+  background: #fef3c7;
+  color: #b45309;
+  border-color: #fde68a;
+}
+
+.btn-team-toggle.team-B:hover {
+  background: #fde68a;
+  color: #d97706;
+  transform: translateY(-1px);
+}
+
+.btn-team-toggle.is-locked {
+  cursor: not-allowed;
+  opacity: 0.8;
+  transform: none !important;
+}
+
 .btn-table-jump {
   padding: 5px 10px;
   font-size: 12px;
@@ -1999,17 +2166,6 @@ body.theme-student .btn-panel-pin.active {
   
   .search-box {
     width: 100%;
-  }
-  
-  .filter-group {
-    width: 100%;
-    justify-content: space-between;
-  }
-    .filter-btn {
-    flex: 1;
-    text-align: center;
-    padding: 8px 4px;
-    font-size: 12px;
   }
 }
 

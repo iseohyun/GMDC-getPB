@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-5H98EB7ZSP"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-5H98EB7ZSP');
+  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -10,7 +18,7 @@
   <meta name="description" content="수영 종목별 개인 PB 기록 관리 및 대회 출전 종목/그룹별 현황 요약 시스템">
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
-  <link rel="stylesheet" href="style.css?v=20260816_8">
+  <link rel="stylesheet" href="style.css?v=20260817_2">
 </head>
 <body>
   <div class="app-container">
@@ -20,7 +28,7 @@
         <div class="header-badge">GMDC 2026 거제시장배</div>
         <span class="header-date" id="tableDateBadge">기준일: 2026-01-01</span>
         <nav class="division-nav" aria-label="부서 선택">
-          <a href="index.html" class="division-tab active" title="성인부 기록표로 이동">🏊 성인부 (37명)</a>
+          <a href="index.html" class="division-tab active" id="adultDivisionTab" title="성인부 기록표">🏊 성인부 (A:30, B:9)</a>
           <a href="student.html" class="division-tab" title="학생부 기록표로 이동">🏊 학생부 (19명)</a>
         </nav>
         <div class="header-view-toggle">
@@ -60,20 +68,40 @@
           <div class="combo-sub-header">
             <span class="combo-condition">조건: 도합 240세↑ · 남3+여3 · 핀자유만</span>
           </div>
-          <div class="combo-metrics">
-            <div class="metric-item">
-              <span class="metric-label">도합 기록</span>
-              <span class="metric-value" id="combo1Time">-</span>
+
+          <div class="combo-teams-wrapper">
+            <!-- Team A -->
+            <div class="combo-team-block">
+              <div class="combo-team-header">
+                <span class="team-badge team-a">A팀</span>
+                <div class="combo-team-meta">
+                  <span class="meta-label">기록:</span>
+                  <span class="meta-time" id="combo1ATime">-</span>
+                  <span class="meta-divider">|</span>
+                  <span class="meta-label">나이:</span>
+                  <span class="meta-age" id="combo1AAge">-</span>
+                </div>
+              </div>
+              <div class="combo-members-list" id="combo1AMembers">
+                <span class="combo-empty-msg">기록 분석 중...</span>
+              </div>
             </div>
-            <div class="metric-item">
-              <span class="metric-label">도합 나이</span>
-              <span class="metric-value" id="combo1Age">-</span>
-            </div>
-          </div>
-          <div class="combo-members-section">
-            <div class="members-title">선발 멤버 (6명)</div>
-            <div class="combo-members-list" id="combo1Members">
-              <span class="combo-empty-msg">기록 분석 중...</span>
+
+            <!-- Team B -->
+            <div class="combo-team-block">
+              <div class="combo-team-header">
+                <span class="team-badge team-b">B팀</span>
+                <div class="combo-team-meta">
+                  <span class="meta-label">기록:</span>
+                  <span class="meta-time" id="combo1BTime">-</span>
+                  <span class="meta-divider">|</span>
+                  <span class="meta-label">나이:</span>
+                  <span class="meta-age" id="combo1BAge">-</span>
+                </div>
+              </div>
+              <div class="combo-members-list" id="combo1BMembers">
+                <span class="combo-empty-msg">기록 분석 중...</span>
+              </div>
             </div>
           </div>
         </div>
@@ -92,20 +120,40 @@
           <div class="combo-sub-header">
             <span class="combo-condition">조건: 도합 160세↑ · 남4 (자유형)</span>
           </div>
-          <div class="combo-metrics">
-            <div class="metric-item">
-              <span class="metric-label">도합 기록</span>
-              <span class="metric-value" id="combo2Time">-</span>
+
+          <div class="combo-teams-wrapper">
+            <!-- Team A -->
+            <div class="combo-team-block">
+              <div class="combo-team-header">
+                <span class="team-badge team-a">A팀</span>
+                <div class="combo-team-meta">
+                  <span class="meta-label">기록:</span>
+                  <span class="meta-time" id="combo2ATime">-</span>
+                  <span class="meta-divider">|</span>
+                  <span class="meta-label">나이:</span>
+                  <span class="meta-age" id="combo2AAge">-</span>
+                </div>
+              </div>
+              <div class="combo-members-list" id="combo2AMembers">
+                <span class="combo-empty-msg">기록 분석 중...</span>
+              </div>
             </div>
-            <div class="metric-item">
-              <span class="metric-label">도합 나이</span>
-              <span class="metric-value" id="combo2Age">-</span>
-            </div>
-          </div>
-          <div class="combo-members-section">
-            <div class="members-title">선발 멤버 (4명)</div>
-            <div class="combo-members-list" id="combo2Members">
-              <span class="combo-empty-msg">기록 분석 중...</span>
+
+            <!-- Team B -->
+            <div class="combo-team-block">
+              <div class="combo-team-header">
+                <span class="team-badge team-b">B팀</span>
+                <div class="combo-team-meta">
+                  <span class="meta-label">기록:</span>
+                  <span class="meta-time" id="combo2BTime">-</span>
+                  <span class="meta-divider">|</span>
+                  <span class="meta-label">나이:</span>
+                  <span class="meta-age" id="combo2BAge">-</span>
+                </div>
+              </div>
+              <div class="combo-members-list" id="combo2BMembers">
+                <span class="combo-empty-msg">기록 분석 중...</span>
+              </div>
             </div>
           </div>
         </div>
@@ -124,20 +172,40 @@
           <div class="combo-sub-header">
             <span class="combo-condition">조건: 도합 160세↑ · 여4 (자유형)</span>
           </div>
-          <div class="combo-metrics">
-            <div class="metric-item">
-              <span class="metric-label">도합 기록</span>
-              <span class="metric-value" id="combo3Time">-</span>
+
+          <div class="combo-teams-wrapper">
+            <!-- Team A -->
+            <div class="combo-team-block">
+              <div class="combo-team-header">
+                <span class="team-badge team-a">A팀</span>
+                <div class="combo-team-meta">
+                  <span class="meta-label">기록:</span>
+                  <span class="meta-time" id="combo3ATime">-</span>
+                  <span class="meta-divider">|</span>
+                  <span class="meta-label">나이:</span>
+                  <span class="meta-age" id="combo3AAge">-</span>
+                </div>
+              </div>
+              <div class="combo-members-list" id="combo3AMembers">
+                <span class="combo-empty-msg">기록 분석 중...</span>
+              </div>
             </div>
-            <div class="metric-item">
-              <span class="metric-label">도합 나이</span>
-              <span class="metric-value" id="combo3Age">-</span>
-            </div>
-          </div>
-          <div class="combo-members-section">
-            <div class="members-title">선발 멤버 (4명)</div>
-            <div class="combo-members-list" id="combo3Members">
-              <span class="combo-empty-msg">기록 분석 중...</span>
+
+            <!-- Team B -->
+            <div class="combo-team-block">
+              <div class="combo-team-header">
+                <span class="team-badge team-b">B팀</span>
+                <div class="combo-team-meta">
+                  <span class="meta-label">기록:</span>
+                  <span class="meta-time" id="combo3BTime">-</span>
+                  <span class="meta-divider">|</span>
+                  <span class="meta-label">나이:</span>
+                  <span class="meta-age" id="combo3BAge">-</span>
+                </div>
+              </div>
+              <div class="combo-members-list" id="combo3BMembers">
+                <span class="combo-empty-msg">기록 분석 중...</span>
+              </div>
             </div>
           </div>
         </div>
@@ -156,20 +224,40 @@
           <div class="combo-sub-header">
             <span class="combo-condition">조건: 도합 160세↑ · 남4 (배/평/접/자)</span>
           </div>
-          <div class="combo-metrics">
-            <div class="metric-item">
-              <span class="metric-label">도합 기록</span>
-              <span class="metric-value" id="combo4Time">-</span>
+
+          <div class="combo-teams-wrapper">
+            <!-- Team A -->
+            <div class="combo-team-block">
+              <div class="combo-team-header">
+                <span class="team-badge team-a">A팀</span>
+                <div class="combo-team-meta">
+                  <span class="meta-label">기록:</span>
+                  <span class="meta-time" id="combo4ATime">-</span>
+                  <span class="meta-divider">|</span>
+                  <span class="meta-label">나이:</span>
+                  <span class="meta-age" id="combo4AAge">-</span>
+                </div>
+              </div>
+              <div class="combo-members-list" id="combo4AMembers">
+                <span class="combo-empty-msg">기록 분석 중...</span>
+              </div>
             </div>
-            <div class="metric-item">
-              <span class="metric-label">도합 나이</span>
-              <span class="metric-value" id="combo4Age">-</span>
-            </div>
-          </div>
-          <div class="combo-members-section">
-            <div class="members-title">선발 멤버 (4명)</div>
-            <div class="combo-members-list" id="combo4Members">
-              <span class="combo-empty-msg">기록 분석 중...</span>
+
+            <!-- Team B -->
+            <div class="combo-team-block">
+              <div class="combo-team-header">
+                <span class="team-badge team-b">B팀</span>
+                <div class="combo-team-meta">
+                  <span class="meta-label">기록:</span>
+                  <span class="meta-time" id="combo4BTime">-</span>
+                  <span class="meta-divider">|</span>
+                  <span class="meta-label">나이:</span>
+                  <span class="meta-age" id="combo4BAge">-</span>
+                </div>
+              </div>
+              <div class="combo-members-list" id="combo4BMembers">
+                <span class="combo-empty-msg">기록 분석 중...</span>
+              </div>
             </div>
           </div>
         </div>
@@ -188,20 +276,40 @@
           <div class="combo-sub-header">
             <span class="combo-condition">조건: 도합 160세↑ · 여4 (배/평/접/자)</span>
           </div>
-          <div class="combo-metrics">
-            <div class="metric-item">
-              <span class="metric-label">도합 기록</span>
-              <span class="metric-value" id="combo5Time">-</span>
+
+          <div class="combo-teams-wrapper">
+            <!-- Team A -->
+            <div class="combo-team-block">
+              <div class="combo-team-header">
+                <span class="team-badge team-a">A팀</span>
+                <div class="combo-team-meta">
+                  <span class="meta-label">기록:</span>
+                  <span class="meta-time" id="combo5ATime">-</span>
+                  <span class="meta-divider">|</span>
+                  <span class="meta-label">나이:</span>
+                  <span class="meta-age" id="combo5AAge">-</span>
+                </div>
+              </div>
+              <div class="combo-members-list" id="combo5AMembers">
+                <span class="combo-empty-msg">기록 분석 중...</span>
+              </div>
             </div>
-            <div class="metric-item">
-              <span class="metric-label">도합 나이</span>
-              <span class="metric-value" id="combo5Age">-</span>
-            </div>
-          </div>
-          <div class="combo-members-section">
-            <div class="members-title">선발 멤버 (4명)</div>
-            <div class="combo-members-list" id="combo5Members">
-              <span class="combo-empty-msg">기록 분석 중...</span>
+
+            <!-- Team B -->
+            <div class="combo-team-block">
+              <div class="combo-team-header">
+                <span class="team-badge team-b">B팀</span>
+                <div class="combo-team-meta">
+                  <span class="meta-label">기록:</span>
+                  <span class="meta-time" id="combo5BTime">-</span>
+                  <span class="meta-divider">|</span>
+                  <span class="meta-label">나이:</span>
+                  <span class="meta-age" id="combo5BAge">-</span>
+                </div>
+              </div>
+              <div class="combo-members-list" id="combo5BMembers">
+                <span class="combo-empty-msg">기록 분석 중...</span>
+              </div>
             </div>
           </div>
         </div>
@@ -214,26 +322,37 @@
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
             <input type="text" id="searchInput" placeholder="이름 또는 나이 검색..." autocomplete="off">
           </div>
+          
           <div class="filter-group">
-            <button class="filter-btn active" data-filter="all">전체</button>
-            <button class="filter-btn" data-filter="남">남성</button>
-            <button class="filter-btn" data-filter="여">여성</button>
-            <button class="filter-btn" data-filter="recorded">기록 보유자</button>
+            <label for="filterGenderSelect" class="filter-label">성별</label>
+            <select id="filterGenderSelect" class="filter-select">
+              <option value="all" selected>전체</option>
+              <option value="남">남자</option>
+              <option value="여">여자</option>
+            </select>
           </div>
-          <div class="records-mode-toggle">
-            <button class="mode-btn btn-scenario" id="btnScenarioMode" title="시나리오 테스트 모드 (서버 저장 없이 가상 테스트)">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 2v7.31"></path><path d="M14 9.3V1.99"></path><path d="M8.5 2h7"></path><path d="M14 9.3a6.5 6.5 0 1 1-4 0"></path><path d="M5.52 16h12.96"></path></svg>
-              <span>시나리오 OFF</span>
-            </button>
-            <button class="mode-btn active" id="btnRecordsModeSimple" data-records-mode="simple" title="이름과 기록만 간단히 표시">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
-              <span>간단히 (기본)</span>
-            </button>
-            <button class="mode-btn" id="btnRecordsModeDetailed" data-records-mode="detailed" title="번호, 그룹, 만나이, 성별, 출전종목 등 모든 열 표시">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
-              <span>자세히</span>
-            </button>
+
+          <div class="filter-group">
+            <label for="filterTeamSelect" class="filter-label">팀</label>
+            <select id="filterTeamSelect" class="filter-select">
+              <option value="all" selected>전체</option>
+              <option value="A">A팀</option>
+              <option value="B">B팀</option>
+            </select>
           </div>
+
+          <div class="filter-group">
+            <label for="recordsModeSelect" class="filter-label">보기</label>
+            <select id="recordsModeSelect" class="filter-select">
+              <option value="simple">간단히</option>
+              <option value="detailed" selected>자세히</option>
+            </select>
+          </div>
+
+          <label class="scenario-checkbox-label" title="시나리오 테스트 모드 (서버 저장 없이 가상 테스트)">
+            <input type="checkbox" id="chkScenarioMode" class="scenario-checkbox" />
+            <span>시나리오 모드</span>
+          </label>
         </div>
       </section>
 
@@ -265,13 +384,14 @@
       <!-- Table Container -->
       <main class="table-card">
         <div class="table-responsive" id="tableContainer">
-          <table class="record-table pb-table is-simple" id="recordTable">
+          <table class="record-table pb-table" id="recordTable">
             <thead>
               <tr>
                 <th class="col-no col-pb-detail" data-sort="no">번호</th>
                 <th class="col-group col-pb-detail" data-sort="group">그룹</th>
                 <th class="col-age col-pb-detail" data-sort="age">만나이</th>
                 <th class="col-gender col-pb-detail" data-sort="gender">성별</th>
+                <th class="col-team" data-sort="team">팀</th>
                 <th class="col-name" data-sort="name">이름</th>
                 <th class="col-record" data-sort="finFly">핀접영</th>
                 <th class="col-record" data-sort="finFree">핀자유</th>
@@ -380,7 +500,7 @@
       <section class="events-detail-section">
         <div class="events-detail-header">
           <div class="events-detail-title-group">
-            <h3>📋 출전 선수별 명단 (총 37명)</h3>
+            <h3>📋 출전 선수별 명단 (총 39명)</h3>
           </div>
           <div class="events-mode-toggle">
             <button class="mode-btn active" id="btnModeSimple" data-events-mode="simple" title="이름과 출전 종목만 간단히 표시">
@@ -430,12 +550,12 @@
                   <th class="col-no col-detail" style="width: 50px;">번호</th>
                   <th class="col-group col-detail" style="width: 75px;">그룹</th>
                   <th class="col-gender col-detail" style="width: 60px;">성별</th>
+                  <th class="col-team" style="width: 75px;">팀</th>
                   <th class="col-name" style="width: 120px;">이름</th>
                   <th class="col-birth col-detail" style="width: 130px;">생년월일(식별코드)</th>
                   <th class="col-event" style="width: 180px;">출전 종목 1</th>
                   <th class="col-event" style="width: 180px;">출전 종목 2</th>
                   <th class="col-count col-detail" style="width: 90px;">출전 수</th>
-                  <th class="col-goto-pb col-detail" style="width: 100px;">단체전</th>
                 </tr>
               </thead>
               <tbody id="eventsTableBody">
@@ -805,6 +925,6 @@
     </div>
   </div>
 
-  <script type="module" src="app.js?v=20260816_8"></script>
+  <script type="module" src="app.js?v=20260817_2"></script>
 </body>
 </html>

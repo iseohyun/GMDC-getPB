@@ -1,13 +1,21 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-5H98EB7ZSP"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-5H98EB7ZSP');
+  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GMDC 수영 기록 & 출전 경기 관리표 (학생부)</title>
   <meta name="description" content="수영 종목별 개인 PB 기록 관리 및 대회 출전 종목/그룹별 현황 요약 시스템 - 학생부">
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
-  <link rel="stylesheet" href="style.css?v=20260816_8">
+  <link rel="stylesheet" href="style.css?v=20260817_2">
 </head>
 <body class="theme-student">
   <div class="app-container">
@@ -17,8 +25,8 @@
         <div class="header-badge">GMDC 2026 거제시장배</div>
         <span class="header-date" id="tableDateBadge">기준일: 2026-01-01</span>
         <nav class="division-nav" aria-label="부서 선택">
-          <a href="index.html" class="division-tab" title="성인부 기록표로 이동">🏊 성인부 (37명)</a>
-          <a href="student.html" class="division-tab active" title="학생부 기록표로 이동">🏊 학생부 (19명)</a>
+          <a href="index.html" class="division-tab" title="성인부 기록표로 이동">🏊 성인부 (A:30, B:9)</a>
+          <a href="student.html" class="division-tab active" title="학생부 기록표">🏊 학생부 (19명)</a>
         </nav>
         <div class="header-view-toggle">
           <button class="view-toggle-btn active" id="btnToggleRecords" data-view="records" title="단체전 (기록 및 조합) 보기">
@@ -766,6 +774,6 @@
     </div>
   </div>
 
-  <script type="module" src="student.js?v=20260816_2"></script>
+  <script type="module" src="student.js?v=20260817_2"></script>
 </body>
 </html>

@@ -30,7 +30,7 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.08.16.8';
+const APP_VERSION = 'v2026.08.17.2';
 let isScenarioMode = false;
 let isInitialSyncCompleted = false;
 let serverRecordsCache = null;
@@ -40,6 +40,9 @@ const STICKY_STORAGE_KEY = 'gmdc_pinned_card_id';
 const MODAL_STORAGE_KEY = 'gmdc_hide_notice_modal_date';
 const EVENTS_MODE_KEY = 'gmdc_events_view_mode';
 const RECORDS_MODE_KEY = 'gmdc_records_view_mode';
+const ADULT_TEAM_KEY = 'gmdc_adult_team';
+
+let currentAdultTeam = localStorage.getItem(ADULT_TEAM_KEY) || 'A';
 
 // Deadline Configuration: 8월 17일(월) 18:00:00 KST
 const DEADLINE_ISO = '2026-08-17T18:00:00+09:00';
@@ -83,45 +86,47 @@ const PREV_YEAR_DISTRIBUTION = {
 
 let isMatrixCompareMode = localStorage.getItem('gmdc_matrix_compare_mode') === 'true';
 
-// Initial 37 Swimmer Records (출전 그룹, 생년월일 식별코드, 출전 종목 1/2, PB 기록)
+// Initial 39 Swimmer Records (A팀: 30명, B팀: 9명)
 const DEFAULT_RECORDS = [
-  { id: 1, age: '15', group: '1그룹', gender: '남', name: '박슬우', birthId: '20100223-3', event1: '자유형 50', event2: '접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 2, age: '15', group: '1그룹', gender: '남', name: '이지훈', birthId: '20100908-3', event1: '자유형 50', event2: '접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 3, age: '16', group: '1그룹', gender: '남', name: '이채율', birthId: '20090814-3', event1: '핀자유형 50', event2: '배영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 4, age: '17', group: '1그룹', gender: '남', name: '조성찬', birthId: '20080718-3', event1: '자유형 50', event2: '접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 5, age: '17', group: '1그룹', gender: '여', name: '이지호', birthId: '20080506-4', event1: '핀자유형 50', event2: '자유형 50', finFly: '', finFree: '31.07', free: '36.78', back: '', breast: '', fly: '' },
-  { id: 6, age: '24', group: '2그룹', gender: '여', name: '추성비', birthId: '20010521-4', event1: '자유형 50', event2: '접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 7, age: '24', group: '2그룹', gender: '여', name: '이영경', birthId: '20011204-4', event1: '자유형 50', event2: '접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 8, age: '33', group: '3그룹', gender: '남', name: '안재홍', birthId: '19920211-1', event1: '자유형 50', event2: '', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 9, age: '38', group: '3그룹', gender: '여', name: '노언영', birthId: '19870712-2', event1: '자유형 50', event2: '평영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 10, age: '37', group: '3그룹', gender: '여', name: '최이슬', birthId: '19881213-2', event1: '자유형 50', event2: '접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 11, age: '43', group: '4그룹', gender: '남', name: '고석보', birthId: '19821227-1', event1: '핀접영 50', event2: '자유형 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 12, age: '44', group: '4그룹', gender: '남', name: '김기용', birthId: '19810929-1', event1: '핀자유형 50', event2: '핀접영 50', finFly: '', finFree: '', free: '35.69', back: '', breast: '41.65', fly: '' },
-  { id: 13, age: '42', group: '4그룹', gender: '남', name: '김준영', birthId: '19830201-1', event1: '자유형 50', event2: '평영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 14, age: '44', group: '4그룹', gender: '남', name: '손철수', birthId: '19810217-1', event1: '핀자유형 50', event2: '자유형 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 15, age: '44', group: '4그룹', gender: '남', name: '안상준', birthId: '19811115-1', event1: '자유형 50', event2: '', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 16, age: '41', group: '4그룹', gender: '남', name: '양승진', birthId: '19840221-1', event1: '자유형 50', event2: '', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 17, age: '44', group: '4그룹', gender: '남', name: '이도형', birthId: '19810823-1', event1: '자유형 50', event2: '평영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 18, age: '42', group: '4그룹', gender: '남', name: '정서현', birthId: '19830903-1', event1: '평영 50', event2: '배영 50', finFly: '', finFree: '27.92', free: '33.59', back: '', breast: '', fly: '' },
-  { id: 19, age: '47', group: '4그룹', gender: '여', name: '김상희', birthId: '19780602-2', event1: '핀자유형 50', event2: '', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 20, age: '43', group: '4그룹', gender: '여', name: '박다유', birthId: '19820825-2', event1: '자유형 50', event2: '배영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 21, age: '48', group: '4그룹', gender: '여', name: '손혜정', birthId: '19770415-2', event1: '핀자유형 50', event2: '핀접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 22, age: '40', group: '4그룹', gender: '여', name: '심민경', birthId: '19850520-2', event1: '자유형 50', event2: '배영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 23, age: '42', group: '4그룹', gender: '여', name: '여수연', birthId: '19830209-2', event1: '핀자유형 50', event2: '핀접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 24, age: '44', group: '4그룹', gender: '여', name: '이미영', birthId: '19811014-2', event1: '핀자유형 50', event2: '핀접영 50', finFly: '', finFree: '30.42', free: '', back: '', breast: '', fly: '57.17' },
-  { id: 25, age: '41', group: '4그룹', gender: '여', name: '이은희', birthId: '19840528-2', event1: '배영 50', event2: '평영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 26, age: '50', group: '5그룹', gender: '남', name: '박재홍', birthId: '19750715-1', event1: '핀자유형 50', event2: '핀접영 50', finFly: '30.29', finFree: '28.08', free: '', back: '', breast: '', fly: '' },
-  { id: 27, age: '57', group: '5그룹', gender: '남', name: '박진홍', birthId: '19681220-1', event1: '핀자유형 50', event2: '핀접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 28, age: '50', group: '5그룹', gender: '남', name: '서충근', birthId: '19750724-1', event1: '핀자유형 50', event2: '', finFly: '', finFree: '27.43', free: '', back: '', breast: '', fly: '99.99' },
-  { id: 29, age: '50', group: '5그룹', gender: '남', name: '성지경', birthId: '19750223-1', event1: '핀자유형 50', event2: '핀접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 30, age: '51', group: '5그룹', gender: '남', name: '이경열', birthId: '19740501-1', event1: '핀자유형 50', event2: '평영 50', finFly: '', finFree: '', free: '', back: '', breast: '43.51', fly: '' },
-  { id: 31, age: '53', group: '5그룹', gender: '여', name: '김애란', birthId: '19720727-2', event1: '자유형 50', event2: '배영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 32, age: '58', group: '5그룹', gender: '여', name: '박선화', birthId: '19671212-2', event1: '핀자유형 50', event2: '평영 50', finFly: '', finFree: '33.64', free: '46.66', back: '', breast: '', fly: '' },
-  { id: 33, age: '56', group: '5그룹', gender: '여', name: '전경미', birthId: '19690201-2', event1: '핀자유형 50', event2: '핀접영 50', finFly: '', finFree: '32.42', free: '', back: '55.88', breast: '', fly: '' },
-  { id: 34, age: '62', group: '6그룹', gender: '남', name: '박봉권', birthId: '19630807-1', event1: '평영 50', event2: '배영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 35, age: '63', group: '6그룹', gender: '남', name: '성환용', birthId: '19620713-1', event1: '핀자유형 50', event2: '', finFly: '', finFree: '99.99', free: '', back: '', breast: '', fly: '' },
-  { id: 36, age: '59', group: '6그룹', gender: '여', name: '송원자', birthId: '19660325-2', event1: '자유형 50', event2: '평영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 37, age: '62', group: '6그룹', gender: '여', name: '최지희', birthId: '19630705-2', event1: '자유형 50', event2: '핀자유형 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' }
+  { id: 1, age: '15', group: '1그룹', gender: '남', name: '박슬우', birthId: '20100223-3', team: 'A', event1: '자유형 50', event2: '접영 50', finFly: '', finFree: '', free: '25.13', back: '31', breast: '34', fly: '28.28' },
+  { id: 2, age: '15', group: '1그룹', gender: '남', name: '이지훈', birthId: '20100908-3', team: 'A', event1: '자유형 50', event2: '접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 3, age: '16', group: '1그룹', gender: '남', name: '이채율', birthId: '20090814-3', team: 'A', event1: '핀자유형 50', event2: '배영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 4, age: '17', group: '1그룹', gender: '남', name: '조성찬', birthId: '20080718-3', team: 'A', event1: '자유형 50', event2: '접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 5, age: '17', group: '1그룹', gender: '여', name: '이지호', birthId: '20080506-4', team: 'A', event1: '핀자유형 50', event2: '자유형 50', finFly: '', finFree: '31.07', free: '36.78', back: '', breast: '', fly: '' },
+  { id: 6, age: '24', group: '2그룹', gender: '여', name: '추성비', birthId: '20010521-4', team: 'A', event1: '자유형 50', event2: '접영 50', finFly: '', finFree: '', free: '40.48', back: '', breast: '', fly: '47.99' },
+  { id: 7, age: '24', group: '2그룹', gender: '여', name: '이영경', birthId: '20011204-4', team: 'A', event1: '자유형 50', event2: '접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 8, age: '33', group: '3그룹', gender: '남', name: '안재홍', birthId: '19920211-1', team: 'B', event1: '자유형 50', event2: '', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 9, age: '38', group: '3그룹', gender: '여', name: '노언영', birthId: '19870712-2', team: 'A', event1: '자유형 50', event2: '평영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 10, age: '37', group: '3그룹', gender: '여', name: '최이슬', birthId: '19881213-2', team: 'A', event1: '자유형 50', event2: '접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 11, age: '43', group: '4그룹', gender: '남', name: '고석보', birthId: '19821227-1', team: 'A', event1: '핀접영 50', event2: '자유형 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 12, age: '44', group: '4그룹', gender: '남', name: '김기용', birthId: '19810929-1', team: 'A', event1: '핀자유형 50', event2: '핀접영 50', finFly: '', finFree: '', free: '35.69', back: '', breast: '41.65', fly: '' },
+  { id: 13, age: '42', group: '4그룹', gender: '남', name: '김준영', birthId: '19830201-1', team: 'A', event1: '자유형 50', event2: '평영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 14, age: '44', group: '4그룹', gender: '남', name: '손철수', birthId: '19810217-1', team: 'A', event1: '핀자유형 50', event2: '자유형 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 15, age: '44', group: '4그룹', gender: '남', name: '안상준', birthId: '19811115-1', team: 'A', event1: '자유형 50', event2: '', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 16, age: '41', group: '4그룹', gender: '남', name: '양승진', birthId: '19840221-1', team: 'B', event1: '자유형 50', event2: '', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 17, age: '44', group: '4그룹', gender: '남', name: '이도형', birthId: '19810823-1', team: 'A', event1: '자유형 50', event2: '평영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 18, age: '42', group: '4그룹', gender: '남', name: '정서현', birthId: '19830903-1', team: 'B', event1: '평영 50', event2: '배영 50', finFly: '', finFree: '27.92', free: '33.59', back: '', breast: '', fly: '' },
+  { id: 19, age: '47', group: '4그룹', gender: '여', name: '김상희', birthId: '19780602-2', team: 'B', event1: '핀자유형 50', event2: '', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 20, age: '43', group: '4그룹', gender: '여', name: '박다유', birthId: '19820825-2', team: 'A', event1: '자유형 50', event2: '배영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 21, age: '48', group: '4그룹', gender: '여', name: '손혜정', birthId: '19770415-2', team: 'A', event1: '핀자유형 50', event2: '핀접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 22, age: '40', group: '4그룹', gender: '여', name: '심민경', birthId: '19850520-2', team: 'A', event1: '자유형 50', event2: '배영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 23, age: '42', group: '4그룹', gender: '여', name: '여수연', birthId: '19830209-2', team: 'B', event1: '핀자유형 50', event2: '핀접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 24, age: '44', group: '4그룹', gender: '여', name: '이미영', birthId: '19811014-2', team: 'A', event1: '핀자유형 50', event2: '핀접영 50', finFly: '', finFree: '30.42', free: '', back: '', breast: '', fly: '57.17' },
+  { id: 25, age: '41', group: '4그룹', gender: '여', name: '이은희', birthId: '19840528-2', team: 'A', event1: '배영 50', event2: '평영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 26, age: '50', group: '5그룹', gender: '남', name: '박재홍', birthId: '19750715-1', team: 'A', event1: '핀자유형 50', event2: '핀접영 50', finFly: '30.29', finFree: '28.08', free: '', back: '', breast: '', fly: '' },
+  { id: 27, age: '57', group: '5그룹', gender: '남', name: '박진홍', birthId: '19681220-1', team: 'A', event1: '핀자유형 50', event2: '핀접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 28, age: '50', group: '5그룹', gender: '남', name: '서충근', birthId: '19750724-1', team: 'A', event1: '핀자유형 50', event2: '', finFly: '', finFree: '27.43', free: '', back: '', breast: '', fly: '99.99' },
+  { id: 29, age: '50', group: '5그룹', gender: '남', name: '성지경', birthId: '19750223-1', team: 'A', event1: '핀자유형 50', event2: '핀접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 30, age: '51', group: '5그룹', gender: '남', name: '이경열', birthId: '19740501-1', team: 'A', event1: '핀자유형 50', event2: '평영 50', finFly: '', finFree: '', free: '', back: '', breast: '43.51', fly: '' },
+  { id: 31, age: '53', group: '5그룹', gender: '여', name: '김애란', birthId: '19720727-2', team: 'B', event1: '자유형 50', event2: '배영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 32, age: '58', group: '5그룹', gender: '여', name: '박선화', birthId: '19671212-2', team: 'A', event1: '핀자유형 50', event2: '평영 50', finFly: '', finFree: '33.64', free: '46.66', back: '', breast: '', fly: '' },
+  { id: 33, age: '56', group: '5그룹', gender: '여', name: '전경미', birthId: '19690201-2', team: 'A', event1: '핀자유형 50', event2: '핀접영 50', finFly: '', finFree: '32.42', free: '', back: '55.88', breast: '', fly: '' },
+  { id: 34, age: '62', group: '6그룹', gender: '남', name: '박봉권', birthId: '19630807-1', team: 'A', event1: '평영 50', event2: '배영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 35, age: '63', group: '6그룹', gender: '남', name: '성환용', birthId: '19620713-1', team: 'B', event1: '핀자유형 50', event2: '', finFly: '', finFree: '99.99', free: '', back: '', breast: '', fly: '' },
+  { id: 36, age: '59', group: '6그룹', gender: '여', name: '송원자', birthId: '19660325-2', team: 'A', event1: '자유형 50', event2: '평영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 37, age: '62', group: '6그룹', gender: '여', name: '최지희', birthId: '19630705-2', team: 'A', event1: '자유형 50', event2: '핀자유형 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 38, age: '61', group: '6그룹', gender: '남', name: '권순용', birthId: '19650101-1', phone: '010-5890-7052', club: 'GMDC', address: '경상남도 거제시 동부면 거제남서로 3136', team: 'B', event1: '', event2: '', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 39, age: '27', group: '2그룹', gender: '남', name: '이석민', birthId: '19990101-1', phone: '010-9989-7218', club: 'GMDC', address: '경상남도 거제시 동부면 산양리 671-1', team: 'B', event1: '', event2: '', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' }
 ];
 
 // Baseline Map of Last Year's Records (Original 37 swimmers)
@@ -152,10 +157,11 @@ const STROKE_NAMES = {
 let records = [];
 let currentView = 'records'; // 'records' | 'events'
 let searchQuery = '';
-let currentFilter = 'all'; // 'all', '남', '여', 'recorded'
+let currentFilter = 'all'; // 'all', '남', '여'
+let currentTeamFilter = 'all'; // 'all', 'A', 'B'
 let sortColumn = null;
 let sortDirection = 'asc';
-let recordsViewMode = 'simple'; // 'simple' (기본) | 'detailed'
+let recordsViewMode = 'detailed'; // 'detailed' (기본) | 'simple'
 
 // Events View State
 let eventsSearchQuery = '';
@@ -175,11 +181,11 @@ const viewEvents = document.getElementById('viewEvents');
 // Records View DOM
 const tableBody = document.getElementById('tableBody');
 const recordTable = document.getElementById('recordTable');
-const btnScenarioMode = document.getElementById('btnScenarioMode');
-const btnRecordsModeSimple = document.getElementById('btnRecordsModeSimple');
-const btnRecordsModeDetailed = document.getElementById('btnRecordsModeDetailed');
+const filterGenderSelect = document.getElementById('filterGenderSelect');
+const filterTeamSelect = document.getElementById('filterTeamSelect');
+const recordsModeSelect = document.getElementById('recordsModeSelect');
+const chkScenarioMode = document.getElementById('chkScenarioMode');
 const searchInput = document.getElementById('searchInput');
-const filterBtns = document.querySelectorAll('.filter-btn');
 const btnAddRow = document.getElementById('btnAddRow');
 const btnExportCsv = document.getElementById('btnExportCsv');
 const btnCopyTsv = document.getElementById('btnCopyTsv');
@@ -263,13 +269,16 @@ function updateDeadlineCountdown() {
 }
 
 function initScenarioMode() {
-  if (btnScenarioMode) {
-    btnScenarioMode.addEventListener('click', toggleScenarioMode);
+  const chk = document.getElementById('chkScenarioMode');
+  if (chk) {
+    chk.checked = isScenarioMode;
+    chk.addEventListener('change', handleScenarioToggle);
   }
 }
 
-function toggleScenarioMode() {
-  if (!isScenarioMode) {
+function handleScenarioToggle(e) {
+  const chk = e.target;
+  if (chk.checked) {
     // Turning ON
     alert("서버에 업로드 하지 않고, 입력결과를 테스트합니다.");
     isScenarioMode = true;
@@ -291,21 +300,15 @@ function toggleScenarioMode() {
       updateScenarioModeUI(false);
       renderAll();
       showToast('✅ 서버 데이터로 원복되었습니다.');
+    } else {
+      chk.checked = true; // 취소 시 체크박스 ON 상태 유지
     }
   }
 }
 
 function updateScenarioModeUI(isOn) {
-  if (btnScenarioMode) {
-    btnScenarioMode.classList.toggle('active', isOn);
-    btnScenarioMode.innerHTML = `
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 2v7.31"></path><path d="M14 9.3V1.99"></path><path d="M8.5 2h7"></path><path d="M14 9.3a6.5 6.5 0 1 1-4 0"></path><path d="M5.52 16h12.96"></path></svg>
-      <span>${isOn ? '🧪 시나리오 ON' : '시나리오 OFF'}</span>
-    `;
-    btnScenarioMode.title = isOn 
-      ? '시나리오 모드 실행 중 (클릭 시 서버값으로 되돌리기)' 
-      : '시나리오 테스트 모드 (서버 저장 없이 가상 테스트)';
-  }
+  const chk = document.getElementById('chkScenarioMode');
+  if (chk) chk.checked = isOn;
 
   if (saveStatus && saveStatusText) {
     saveStatus.classList.toggle('is-scenario', isOn);
@@ -642,14 +645,14 @@ async function compareHistoryWithCurrentRecords() {
 
 function initRecordsViewMode() {
   const saved = localStorage.getItem(RECORDS_MODE_KEY);
-  recordsViewMode = (saved === 'detailed') ? 'detailed' : 'simple'; // 기본: simple
+  recordsViewMode = saved ? saved : 'detailed'; // 기본: 자세히 (detailed)
   applyRecordsViewMode(recordsViewMode);
 }
 
 function applyRecordsViewMode(mode) {
   recordsViewMode = mode;
-  if (btnRecordsModeSimple) btnRecordsModeSimple.classList.toggle('active', mode === 'simple');
-  if (btnRecordsModeDetailed) btnRecordsModeDetailed.classList.toggle('active', mode === 'detailed');
+  const select = document.getElementById('recordsModeSelect');
+  if (select) select.value = mode;
   if (recordTable) recordTable.classList.toggle('is-simple', mode === 'simple');
 }
 
@@ -725,7 +728,18 @@ async function logChangeHistory(type, swimmerName, field, fieldName, oldVal, new
   }
 }
 
+function updateTeamNavAndCounts() {
+  const countA = records.filter(r => (r.team || 'A') === 'A').length;
+  const countB = records.filter(r => (r.team || 'A') === 'B').length;
+
+  const adultDivisionTab = document.getElementById('adultDivisionTab');
+  if (adultDivisionTab) {
+    adultDivisionTab.textContent = `🏊 성인부 (A:${countA}, B:${countB})`;
+  }
+}
+
 function renderAll() {
+  updateTeamNavAndCounts();
   renderTable();
   updateStats();
   renderSummaryMatrices();
@@ -748,11 +762,11 @@ function loadLocalData() {
   }
 }
 
-// Merge helper to guarantee group, birthId, event1, event2 are preserved
+// Merge helper to guarantee group, birthId, team, event1, event2 are preserved
 function mergeWithDefaultData(remoteList) {
   if (!Array.isArray(remoteList)) return JSON.parse(JSON.stringify(DEFAULT_RECORDS));
 
-  return remoteList.map(item => {
+  const list = remoteList.map(item => {
     const def = DEFAULT_RECORDS.find(d => d.id === item.id || d.name === item.name) || {};
     return {
       id: item.id || def.id || 0,
@@ -761,6 +775,10 @@ function mergeWithDefaultData(remoteList) {
       gender: item.gender || def.gender || '남',
       name: item.name || def.name || '',
       birthId: item.birthId || def.birthId || '',
+      team: item.team !== undefined ? item.team : (def.team || 'A'),
+      phone: item.phone !== undefined ? item.phone : (def.phone || ''),
+      address: item.address !== undefined ? item.address : (def.address || ''),
+      club: item.club !== undefined ? item.club : (def.club || 'GMDC'),
       event1: item.event1 !== undefined ? item.event1 : (def.event1 || ''),
       event2: item.event2 !== undefined ? item.event2 : (def.event2 || ''),
       finFly: item.finFly !== undefined ? item.finFly : (def.finFly || ''),
@@ -771,6 +789,15 @@ function mergeWithDefaultData(remoteList) {
       fly: item.fly !== undefined ? item.fly : (def.fly || '')
     };
   });
+
+  // Ensure any new members in DEFAULT_RECORDS (e.g. ID 38 권순용, ID 39 이석민) are appended if missing
+  DEFAULT_RECORDS.forEach(def => {
+    if (!list.some(r => r.id === def.id || r.name === def.name)) {
+      list.push(JSON.parse(JSON.stringify(def)));
+    }
+  });
+
+  return list;
 }
 
 // 2. Real-time Firebase Firestore Sync Listener
@@ -1059,10 +1086,12 @@ function getProcessedRecords() {
     list = list.filter(item => item.gender === '남');
   } else if (currentFilter === '여') {
     list = list.filter(item => item.gender === '여');
-  } else if (currentFilter === 'recorded') {
-    list = list.filter(item => 
-      STROKE_FIELDS.some(field => item[field] && item[field].trim() !== '')
-    );
+  }
+
+  if (currentTeamFilter === 'A') {
+    list = list.filter(item => (item.team || 'A') === 'A');
+  } else if (currentTeamFilter === 'B') {
+    list = list.filter(item => (item.team || 'A') === 'B');
   }
 
   if (sortColumn) {
@@ -1074,6 +1103,12 @@ function getProcessedRecords() {
         valA = a.id;
         valB = b.id;
         return sortDirection === 'asc' ? valA - valB : valB - valA;
+      }
+
+      if (sortColumn === 'team') {
+        valA = a.team || 'A';
+        valB = b.team || 'A';
+        return sortDirection === 'asc' ? valA.localeCompare(valB) : valB.localeCompare(valA);
       }
 
       if (sortColumn === 'age') {
@@ -1115,7 +1150,7 @@ function renderTable() {
   if (processed.length === 0) {
     const emptyRow = document.createElement('tr');
     emptyRow.innerHTML = `
-      <td colspan="12" style="padding: 40px; color: var(--text-muted); font-size: 14px; text-align: center;">
+      <td colspan="13" style="padding: 40px; color: var(--text-muted); font-size: 14px; text-align: center;">
         일치하는 데이터가 없습니다.
       </td>
     `;
@@ -1145,6 +1180,17 @@ function renderTable() {
         <span class="gender-badge ${item.gender === '남' ? 'male' : 'female'} ${expired ? 'is-locked' : ''}" data-id="${item.id}" data-field="gender" title="${expired ? '입력 마감됨' : '클릭하여 성별 전환'}">
           ${item.gender || '남'}
         </span>
+      </td>
+      <td class="col-team" style="text-align:center;">
+        <button 
+          type="button" 
+          class="btn-team-toggle team-${item.team || 'A'} ${expired ? 'is-locked' : ''}" 
+          data-team-id="${item.id}" 
+          title="${expired ? '입력 마감됨' : `클릭하여 소속팀 변경 (현재: ${item.team || 'A'}팀)`}"
+          ${disabledAttr}
+        >
+          ${item.team || 'A'}팀
+        </button>
       </td>
       <td class="col-name">
         <input type="text" class="cell-input name-input" data-id="${item.id}" data-field="name" value="${escapeHtml(item.name || '')}" placeholder="이름" title="클릭하여 이름 수정 (수정 시 확인 절차가 진행됩니다)" ${disabledAttr} />
@@ -1427,6 +1473,17 @@ function renderEventsTable() {
       <td class="col-gender col-detail" style="text-align:center;">
         <span class="gender-badge ${item.gender === '남' ? 'male' : 'female'}">${item.gender || '남'}</span>
       </td>
+      <td class="col-team" style="text-align:center;">
+        <button 
+          type="button"
+          class="btn-team-toggle team-${item.team || 'A'} ${expired ? 'is-locked' : ''}" 
+          data-team-id="${item.id}" 
+          title="${expired ? '입력 마감됨' : `클릭하여 소속팀 변경 (현재: ${item.team || 'A'}팀)`}"
+          ${disabledAttr}
+        >
+          ${item.team || 'A'}팀
+        </button>
+      </td>
       <td class="col-name" style="font-weight:700;">
         ${escapeHtml(item.name || '무명')}
         <span style="font-size:11px; color:var(--text-subtle); margin-left:2px;">(${item.age}세)</span>
@@ -1453,11 +1510,6 @@ function renderEventsTable() {
       <td class="col-count col-detail" style="text-align:center;">
         <span class="count-badge ${countClass}">${count}종목</span>
       </td>
-      <td class="col-goto-pb col-detail" style="text-align:center;">
-        <button class="btn-table-jump" data-jump-id="${item.id}" title="${item.name}의 단체전 기록표로 이동">
-          PB 보기
-        </button>
-      </td>
     `;
 
     eventsTableBody.appendChild(tr);
@@ -1483,8 +1535,9 @@ function getCombinations(arr, k) {
 }
 
 // Find best medley relay (배영, 평영, 접영, 자유형 각 1명씩 배정, 4명 고유, 도합나이 >= minAge)
-function findBestMedleyRelay(gender, minAge = 160) {
-  const pool = records.filter(r => r.gender === gender && parseFloat(r.age) > 0);
+function findBestMedleyRelay(gender, minAge = 160, team = 'A') {
+  const teamRecords = records.filter(r => (r.team || 'A') === team);
+  const pool = teamRecords.filter(r => r.gender === gender && parseFloat(r.age) > 0);
 
   const backList = pool.filter(r => parseFloat(r.back) > 0);
   const breastList = pool.filter(r => parseFloat(r.breast) > 0);
@@ -1500,7 +1553,7 @@ function findBestMedleyRelay(gender, minAge = 160) {
   if (missing.length > 0) {
     return {
       status: 'MISSING_STROKES',
-      message: `조합불가: 기록 부족 (미등록 종목: ${missing.join(', ')})`
+      message: `기록 부족 (미등록: ${missing.join(', ')})`
     };
   }
 
@@ -1559,24 +1612,23 @@ function findBestMedleyRelay(gender, minAge = 160) {
       members: bestAssignment
     };
   } else {
-    const ageSuffix = maxAgeFound > 0 ? ` (현재 ${maxAgeFound}세)` : '';
+    const ageSuffix = maxAgeFound > 0 ? ` (최대 ${maxAgeFound}세)` : '';
     return {
       status: 'AGE_NOT_MET',
-      message: `조합불가: 도합나이 ${minAge}세 이상 조합 없음${ageSuffix}`
+      message: `나이 부족: 도합 ${minAge}세 이상 조합 없음${ageSuffix}`
     };
   }
 }
 
 // Find best freestyle relay (자유형 50m x 4명, 도합나이 >= minAge)
-function findBestFreestyleRelay(gender, minAge = 160) {
-  const pool = records.filter(r => r.gender === gender && parseFloat(r.free) > 0 && parseFloat(r.age) > 0);
+function findBestFreestyleRelay(gender, minAge = 160, team = 'A') {
+  const teamRecords = records.filter(r => (r.team || 'A') === team);
+  const pool = teamRecords.filter(r => r.gender === gender && parseFloat(r.free) > 0 && parseFloat(r.age) > 0);
 
   if (pool.length < 4) {
-    const names = pool.map(p => p.name).join(', ');
-    const namesSuffix = names ? `: ${names}` : '';
     return {
       status: 'NOT_ENOUGH',
-      message: `조합불가: 자유형 기록 부족 (${gender} ${pool.length}/4명)${namesSuffix}`
+      message: `자유형 인원 부족 (${gender} ${pool.length}/4명)`
     };
   }
 
@@ -1619,28 +1671,25 @@ function findBestFreestyleRelay(gender, minAge = 160) {
       members: bestMembers
     };
   } else {
-    const ageSuffix = maxAgeFound > 0 ? ` (현재 ${maxAgeFound}세)` : '';
+    const ageSuffix = maxAgeFound > 0 ? ` (최대 ${maxAgeFound}세)` : '';
     return {
       status: 'AGE_NOT_MET',
-      message: `조합불가: 도합나이 ${minAge}세 이상 조합 없음${ageSuffix}`
+      message: `나이 부족: 도합 ${minAge}세 이상 조합 없음${ageSuffix}`
     };
   }
 }
 
-// Compute Optimal Relay Combinations (5 Combinations)
-function calculateRelayCombinations() {
-  const finMen = records.filter(r => r.gender === '남' && parseFloat(r.finFree) > 0 && parseFloat(r.age) > 0);
-  const finWomen = records.filter(r => r.gender === '여' && parseFloat(r.finFree) > 0 && parseFloat(r.age) > 0);
+// Compute Optimal Relay Combinations (5 Combinations) for a given team
+function calculateRelayCombinations(team = 'A') {
+  const teamRecords = records.filter(r => (r.team || 'A') === team);
+  const finMen = teamRecords.filter(r => r.gender === '남' && parseFloat(r.finFree) > 0 && parseFloat(r.age) > 0);
+  const finWomen = teamRecords.filter(r => r.gender === '여' && parseFloat(r.finFree) > 0 && parseFloat(r.age) > 0);
 
   let combo1Result = null;
   if (finMen.length < 3 || finWomen.length < 3) {
-    const mNames = finMen.map(r => r.name).join(', ');
-    const wNames = finWomen.map(r => r.name).join(', ');
-    const mSuffix = mNames ? ` [${mNames}]` : '';
-    const wSuffix = wNames ? ` [${wNames}]` : '';
     combo1Result = {
       status: 'NOT_ENOUGH',
-      message: `조합불가: 핀자유 기록 부족 (남 ${finMen.length}/3명${mSuffix}, 여 ${finWomen.length}/3명${wSuffix})`
+      message: `핀자유 인원 부족 (남 ${finMen.length}/3명, 여 ${finWomen.length}/3명)`
     };
   } else {
     const menCombos = getCombinations(finMen, 3);
@@ -1686,21 +1735,21 @@ function calculateRelayCombinations() {
         members: bestMembers
       };
     } else {
-      const ageSuffix = maxAgeFound > 0 ? ` (현재 ${maxAgeFound}세)` : '';
+      const ageSuffix = maxAgeFound > 0 ? ` (최대 ${maxAgeFound}세)` : '';
       combo1Result = {
         status: 'AGE_NOT_MET',
-        message: `조합불가: 도합나이 240세 이상 조합 없음${ageSuffix}`
+        message: `나이 부족: 도합 240세 이상 조합 없음${ageSuffix}`
       };
     }
   }
 
   // Combinations 2 & 3: Freestyle Relay (계영 200m)
-  const combo2Result = findBestFreestyleRelay('남', 160);
-  const combo3Result = findBestFreestyleRelay('여', 160);
+  const combo2Result = findBestFreestyleRelay('남', 160, team);
+  const combo3Result = findBestFreestyleRelay('여', 160, team);
 
   // Combinations 4 & 5: Medley Relay (혼계영 200m)
-  const combo4Result = findBestMedleyRelay('남', 160);
-  const combo5Result = findBestMedleyRelay('여', 160);
+  const combo4Result = findBestMedleyRelay('남', 160, team);
+  const combo5Result = findBestMedleyRelay('여', 160, team);
 
   return {
     combo1: combo1Result,
@@ -1723,20 +1772,22 @@ function formatRelayTime(seconds) {
   return `${mins}분 ${formattedSecs}초 (${seconds.toFixed(2)}s)`;
 }
 
-// Update Top Dashboard Combination Panels
+// Update Top Dashboard Combination Panels for both A and B teams
 function updateStats() {
-  const { combo1, combo2, combo3, combo4, combo5 } = calculateRelayCombinations();
-  renderComboCard('combo1', combo1, false);
-  renderComboCard('combo2', combo2, false);
-  renderComboCard('combo3', combo3, false);
-  renderComboCard('combo4', combo4, true);
-  renderComboCard('combo5', combo5, true);
+  const combosA = calculateRelayCombinations('A');
+  const combosB = calculateRelayCombinations('B');
+
+  ['combo1', 'combo2', 'combo3', 'combo4', 'combo5'].forEach((prefix, idx) => {
+    const isMedley = idx >= 3;
+    renderComboCardTeam(prefix, 'A', combosA[prefix], isMedley);
+    renderComboCardTeam(prefix, 'B', combosB[prefix], isMedley);
+  });
 }
 
-function renderComboCard(prefix, result, isMedley = false) {
-  const timeEl = document.getElementById(`${prefix}Time`);
-  const ageEl = document.getElementById(`${prefix}Age`);
-  const membersEl = document.getElementById(`${prefix}Members`);
+function renderComboCardTeam(prefix, team, result, isMedley = false) {
+  const timeEl = document.getElementById(`${prefix}${team}Time`);
+  const ageEl = document.getElementById(`${prefix}${team}Age`);
+  const membersEl = document.getElementById(`${prefix}${team}Members`);
 
   if (!timeEl || !ageEl || !membersEl) return;
 
@@ -1808,19 +1859,33 @@ function bindEvents() {
   if (btnToggleRecords) btnToggleRecords.addEventListener('click', () => switchView('records'));
   if (btnToggleEvents) btnToggleEvents.addEventListener('click', () => switchView('events'));
 
-  // Records View Mode (간단히 vs 자세히)
-  if (btnRecordsModeSimple) {
-    btnRecordsModeSimple.addEventListener('click', () => {
-      applyRecordsViewMode('simple');
-      localStorage.setItem(RECORDS_MODE_KEY, 'simple');
-      showToast('📋 단체전 간단히 보기 모드로 전환되었습니다.');
+  // Adult Team Sub Tabs (A팀 vs B팀)
+
+
+  // Toolbar Filter & Mode Selects
+  if (filterGenderSelect) {
+    filterGenderSelect.addEventListener('change', (e) => {
+      currentFilter = e.target.value;
+      renderTable();
     });
   }
-  if (btnRecordsModeDetailed) {
-    btnRecordsModeDetailed.addEventListener('click', () => {
-      applyRecordsViewMode('detailed');
-      localStorage.setItem(RECORDS_MODE_KEY, 'detailed');
-      showToast('📋 단체전 자세히 보기 모드로 전환되었습니다.');
+
+  if (filterTeamSelect) {
+    filterTeamSelect.addEventListener('change', (e) => {
+      currentTeamFilter = e.target.value;
+      if (e.target.value !== 'all') {
+        currentAdultTeam = e.target.value;
+        localStorage.setItem(ADULT_TEAM_KEY, e.target.value);
+      }
+      renderAll();
+    });
+  }
+
+  if (recordsModeSelect) {
+    recordsModeSelect.addEventListener('change', (e) => {
+      applyRecordsViewMode(e.target.value);
+      localStorage.setItem(RECORDS_MODE_KEY, e.target.value);
+      showToast(e.target.value === 'detailed' ? '📋 단체전 자세히 보기 모드로 전환되었습니다.' : '📋 단체전 간단히 보기 모드로 전환되었습니다.');
     });
   }
 
@@ -1840,7 +1905,7 @@ function bindEvents() {
     });
   }
 
-  // Events Table Dropdown Change Delegation
+  // Events Table Dropdown Change & Click Delegation
   if (eventsTableBody) {
     eventsTableBody.addEventListener('focusin', (e) => {
       const target = e.target;
@@ -1882,8 +1947,36 @@ function bindEvents() {
       showToast(`'${record.name}'의 ${field === 'event1' ? '종목 1' : '종목 2'}이(가) 변경되었습니다.`);
     });
 
-    // Jump to PB button click delegation
+    // Team toggle button & Jump to PB delegation
     eventsTableBody.addEventListener('click', (e) => {
+      const teamBtn = e.target.closest('[data-team-id]');
+      if (teamBtn) {
+        if (isDeadlineExpired()) {
+          showToast('🔒 입력 및 수정 시한이 마감되었습니다.');
+          return;
+        }
+        const id = parseInt(teamBtn.dataset.teamId, 10);
+        const record = records.find(r => r.id === id);
+        if (!record) return;
+
+        const currentTeam = record.team || 'A';
+        const targetTeam = currentTeam === 'A' ? 'B' : 'A';
+
+        const ok = confirm(`'${record.name}' 선수의 소속팀을 [${targetTeam}팀]으로 변경하시겠습니까?`);
+        if (!ok) return;
+
+        const prevTeam = currentTeam;
+        record.team = targetTeam;
+
+        // Log to server history
+        logChangeHistory('INFO', record.name, 'team', '소속팀', `${prevTeam}팀`, `${targetTeam}팀`);
+
+        saveData();
+        renderAll();
+        showToast(`'${record.name}' 선수가 [${targetTeam}팀]으로 변경되었습니다.`);
+        return;
+      }
+
       const jumpBtn = e.target.closest('[data-jump-id]');
       if (jumpBtn) {
         const id = parseInt(jumpBtn.dataset.jumpId, 10);
@@ -2065,8 +2158,36 @@ function bindEvents() {
     }
   });
 
-  // Table click events (Gender toggle, Delete button)
+  // Table click events (Team toggle, Gender toggle, Delete button)
   tableBody.addEventListener('click', (e) => {
+    const teamBtn = e.target.closest('[data-team-id]');
+    if (teamBtn) {
+      if (isDeadlineExpired()) {
+        showToast('🔒 입력 및 수정 시한이 마감되었습니다.');
+        return;
+      }
+      const id = parseInt(teamBtn.dataset.teamId, 10);
+      const record = records.find(r => r.id === id);
+      if (!record) return;
+
+      const currentTeam = record.team || 'A';
+      const targetTeam = currentTeam === 'A' ? 'B' : 'A';
+
+      const ok = confirm(`'${record.name}' 선수의 소속팀을 [${targetTeam}팀]으로 변경하시겠습니까?`);
+      if (!ok) return;
+
+      const prevTeam = currentTeam;
+      record.team = targetTeam;
+
+      // Log to server history
+      logChangeHistory('INFO', record.name, 'team', '소속팀', `${prevTeam}팀`, `${targetTeam}팀`);
+
+      saveData();
+      renderAll();
+      showToast(`'${record.name}' 선수가 [${targetTeam}팀]으로 변경되었습니다.`);
+      return;
+    }
+
     const genderBadge = e.target.closest('.gender-badge');
     if (genderBadge) {
       if (isDeadlineExpired()) {
@@ -2127,15 +2248,7 @@ function bindEvents() {
     renderTable();
   });
 
-  // Filter Buttons in PB table
-  filterBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      filterBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      currentFilter = btn.dataset.filter;
-      renderTable();
-    });
-  });
+
 
   // Add Row Button (If element exists)
   if (btnAddRow) {
@@ -2153,6 +2266,7 @@ function bindEvents() {
         gender: '남',
         name: '',
         birthId: '',
+        team: currentAdultTeam || 'A',
         event1: '',
         event2: '',
         finFly: '',
