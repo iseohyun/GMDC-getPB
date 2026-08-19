@@ -32,7 +32,7 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.08.19.05';
+const APP_VERSION = 'v2026.08.19.06';
 let isScenarioMode = false;
 let isInitialSyncCompleted = false;
 let serverRecordsCache = null;
@@ -2413,24 +2413,29 @@ function renderTable() {
     const tr = document.createElement('tr');
     tr.dataset.id = item.id;
 
-    // Events summary tags & Relay assignments
+    // Events summary tags (Individual events only)
     const eventsList = [item.event1, item.event2].filter(Boolean);
-    const relayAssignments = getSwimmerRelayAssignments(item.name);
-    
-    let tagsHtml = '';
+    let eventsTagsHtml = '';
     if (eventsList.length > 0) {
-      tagsHtml += eventsList.map(e => `<span class="pb-event-chip">${escapeHtml(e)}</span>`).join('');
-    } else if (relayAssignments.length === 0) {
-      tagsHtml += `<span class="pb-event-chip empty">미신청</span>`;
+      eventsTagsHtml = eventsList.map(e => `<span class="pb-event-chip">${escapeHtml(e)}</span>`).join('');
+    } else {
+      eventsTagsHtml = `<span class="pb-event-chip empty">미신청</span>`;
     }
+    const eventsTagHtml = `<div class="pb-events-tag-container">${eventsTagsHtml}</div>`;
+
+    // Relay assignments (Team relay entries)
+    const relayAssignments = getSwimmerRelayAssignments(item.name);
+    let relayTagsHtml = '';
     if (relayAssignments.length > 0) {
-      tagsHtml += relayAssignments.map(a => `
+      relayTagsHtml = relayAssignments.map(a => `
         <span class="relay-chip relay-${a.team.toLowerCase()}" title="${a.team}팀 ${a.label} 출전 고정 (${a.strokeName})">
           🔒 ${a.team === 'B' ? 'B-' : ''}${a.label}
         </span>
       `).join('');
+    } else {
+      relayTagsHtml = `<span class="relay-chip empty">-</span>`;
     }
-    const eventsTagHtml = `<div class="pb-events-tag-container">${tagsHtml}</div>`;
+    const relayTagHtml = `<div class="pb-events-tag-container">${relayTagsHtml}</div>`;
 
     const canEdit = canEditRecords();
     const admin = isAdmin();
@@ -2463,6 +2468,9 @@ function renderTable() {
       </td>
       <td class="col-name">
         <input type="text" class="cell-input name-input" data-id="${item.id}" data-field="name" value="${escapeHtml(item.name || '')}" placeholder="이름" ${readonlyAttr} title="${canEdit ? '클릭하여 이름 수정' : escapeHtml(item.name || '')}" />
+      </td>
+      <td class="col-relay-summary col-pb-detail" style="text-align:center;">
+        ${relayTagHtml}
       </td>
       ${STROKE_FIELDS.map(field => {
         const val = item[field] || '';
@@ -2775,12 +2783,12 @@ function renderEventsTable() {
 
     const relayAssignments = getSwimmerRelayAssignments(item.name);
     const relayTagsHtml = relayAssignments.length > 0
-      ? `<div style="display:flex;gap:3px;flex-wrap:wrap;margin-top:3px;">${relayAssignments.map(a => `
+      ? `<div style="display:flex;gap:3px;flex-wrap:wrap;justify-content:center;">${relayAssignments.map(a => `
           <span class="relay-chip relay-${a.team.toLowerCase()}" title="${a.team}팀 ${a.label} 출전 고정 (${a.strokeName})">
             🔒 ${a.team === 'B' ? 'B-' : ''}${a.label}
           </span>
         `).join('')}</div>`
-      : '';
+      : '<span class="relay-chip empty">-</span>';
 
     tr.innerHTML = `
       <td class="col-team" style="text-align:center;">
@@ -2802,6 +2810,8 @@ function renderEventsTable() {
       </td>
       <td class="col-name" style="font-weight:700;">
         ${escapeHtml(item.name || '무명')}
+      </td>
+      <td class="col-relay" style="text-align:center;">
         ${relayTagsHtml}
       </td>
       <td class="col-age col-simple" style="text-align:center; font-weight:600; color:var(--text-main);">

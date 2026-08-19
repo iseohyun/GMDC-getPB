@@ -697,6 +697,19 @@ body.theme-student .btn-panel-pin.active {
   color: #15803d;
 }
 
+.relay-chip.empty {
+  background: transparent;
+  border: none;
+  color: var(--text-subtle);
+  font-weight: 500;
+}
+
+.col-relay,
+.col-relay-summary {
+  text-align: center !important;
+  min-width: 100px;
+}
+
 .member-pill .member-time.is-empty {
   color: var(--text-muted);
   font-style: italic;

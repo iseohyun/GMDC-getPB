@@ -25,7 +25,7 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.08.19.05_student';
+const APP_VERSION = 'v2026.08.19.06_student';
 let isScenarioMode = false;
 let isInitialSyncCompleted = false;
 let serverRecordsCache = null;
@@ -306,6 +306,50 @@ function toggleMemberPin(comboKey, swimmerName, strokeField = null) {
   updateStats();
   renderTable();
   renderEventsTable();
+}
+
+function getStudentRelayAssignments(swimmerName) {
+  if (!swimmerName) return [];
+  const assignments = [];
+  const titles = {
+    combo1: '남계영',
+    combo2: '여계영',
+    combo3: '남혼계',
+    combo4: '여혼계'
+  };
+
+  // Check freestyle relays (combo1, combo2)
+  ['combo1', 'combo2'].forEach(comboKey => {
+    const list = pinnedRelaysState[comboKey] || [];
+    if (Array.isArray(list) && list.includes(swimmerName)) {
+      assignments.push({
+        comboKey,
+        label: titles[comboKey] || '계영',
+        strokeName: '자유형'
+      });
+    }
+  });
+
+  // Check medley relays (combo3, combo4)
+  const strokeNames = { back: '배영', breast: '평영', fly: '접영', free: '자유형' };
+  ['combo3', 'combo4'].forEach(comboKey => {
+    const pins = pinnedRelaysState[comboKey] || {};
+    if (pins && typeof pins === 'object') {
+      Object.entries(pins).forEach(([stField, name]) => {
+        if (name === swimmerName) {
+          const stName = strokeNames[stField] || stField;
+          assignments.push({
+            comboKey,
+            label: `${titles[comboKey] || '혼계'}(${stName.slice(0, 1)})`,
+            strokeField: stField,
+            strokeName: stName
+          });
+        }
+      });
+    }
+  });
+
+  return assignments;
 }
 
 const LAST_YEAR_MAP = {};
@@ -2124,6 +2168,19 @@ function renderTable() {
     if (item.event2) eventsList.push(item.event2);
     const eventsText = eventsList.length > 0 ? eventsList.join(', ') : '-';
 
+    const relayAssignments = getStudentRelayAssignments(item.name);
+    let relayTagsHtml = '';
+    if (relayAssignments.length > 0) {
+      relayTagsHtml = relayAssignments.map(a => `
+        <span class="relay-chip relay-a" title="${a.label} 출전 (${a.strokeName})">
+          🔒 ${a.label}
+        </span>
+      `).join('');
+    } else {
+      relayTagsHtml = `<span class="relay-chip empty">-</span>`;
+    }
+    const relayTagHtml = `<div class="pb-events-tag-container">${relayTagsHtml}</div>`;
+
     return `
       <tr data-id="${item.id}">
         <td class="col-no col-pb-detail">${item.id}</td>
@@ -2151,6 +2208,9 @@ function renderTable() {
             autocomplete="off"
             ${readonlyAttr}
           />
+        </td>
+        <td class="col-relay-summary col-pb-detail" style="text-align:center;">
+          ${relayTagHtml}
         </td>
         ${STROKE_FIELDS.map(field => {
           const val = item[field] || '';
@@ -2891,6 +2951,15 @@ function renderEventsTable() {
     const genderClass = item.gender === '남' ? 'badge-male' : 'badge-female';
     const eventCount = (item.event1 ? 1 : 0) + (item.event2 ? 1 : 0);
 
+    const relayAssignments = getStudentRelayAssignments(item.name);
+    const relayTagsHtml = relayAssignments.length > 0
+      ? `<div style="display:flex;gap:3px;flex-wrap:wrap;justify-content:center;">${relayAssignments.map(a => `
+          <span class="relay-chip relay-a" title="${a.label} 출전 (${a.strokeName})">
+            🔒 ${a.label}
+          </span>
+        `).join('')}</div>`
+      : '<span class="relay-chip empty">-</span>';
+
     return `
       <tr data-id="${item.id}">
         <td class="col-no col-detail" style="text-align:center;">${idx + 1}</td>
@@ -2904,6 +2973,9 @@ function renderEventsTable() {
         </td>
         <td class="col-name" style="font-weight:700;">
           <span class="swimmer-name-text">${escapeHtml(item.name)}</span>
+        </td>
+        <td class="col-relay" style="text-align:center;">
+          ${relayTagsHtml}
         </td>
         <td class="col-birth col-detail" style="text-align:center;">
           <span class="birth-code">${escapeHtml(item.birthId || '-')}</span>
@@ -2952,11 +3024,6 @@ function renderEventsTable() {
         </td>
         <td class="col-count col-detail" style="text-align:center;">
           <span class="event-count-badge ${eventCount > 0 ? 'has-events' : ''}">${eventCount}개</span>
-        </td>
-        <td class="col-goto-pb col-detail" style="text-align:center;">
-          <button class="btn-goto-pb" data-name="${escapeHtml(item.name)}" title="${escapeHtml(item.name)}의 단체전 기록표로 이동">
-            기록보기 ➔
-          </button>
         </td>
       </tr>
     `;
