@@ -25,7 +25,7 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.08.19.02_student';
+const APP_VERSION = 'v2026.08.19.03_student';
 let isScenarioMode = false;
 let isInitialSyncCompleted = false;
 let serverRecordsCache = null;
@@ -213,13 +213,13 @@ function getPodiumData(gender, group, stroke) {
 
 // Initial 20 Student Swimmer Records
 const DEFAULT_STUDENT_RECORDS = [
-  { id: 1, age: '7', group: '2그룹', gender: '남', name: '배건우', birthId: '20181207-3', event1: '계영 200', event2: '혼성계영 200', phone: '010-9729-3224', club: 'GMDC', depositor: 'GMDC', address: '거제시 고현항2로 51 유로스카이 206동 1804호', free: '', back: '', breast: '', fly: '' },
-  { id: 2, age: '8', group: '3그룹', gender: '남', name: '김예준', birthId: '20170519-3', event1: '혼성계영 200', event2: '평영 50', phone: '010-4779-4105', club: 'GMDC', depositor: 'GMDC', address: '거제시 상동 대동다숲 122동 201호', free: '', back: '', breast: '', fly: '' },
+  { id: 1, age: '7', group: '2그룹', gender: '남', name: '배건우', birthId: '20181207-3', event1: '자유형 50', event2: '배영 50', phone: '010-9729-3224', club: 'GMDC', depositor: 'GMDC', address: '거제시 고현항2로 51 유로스카이 206동 1804호', free: '', back: '', breast: '', fly: '' },
+  { id: 2, age: '8', group: '3그룹', gender: '남', name: '김예준', birthId: '20170519-3', event1: '자유형 50', event2: '평영 50', phone: '010-4779-4105', club: 'GMDC', depositor: 'GMDC', address: '거제시 상동 대동다숲 122동 201호', free: '', back: '', breast: '', fly: '' },
   { id: 3, age: '8', group: '3그룹', gender: '남', name: '한고준', birthId: '20171019-3', event1: '자유형 50', event2: '평영 50', phone: '010-2541-1426', club: 'GMDC', depositor: 'GMDC', address: '거제시 상동5길46 104동 602호', free: '', back: '', breast: '', fly: '' },
-  { id: 4, age: '9', group: '4그룹', gender: '남', name: '손민재', birthId: '20160616-3', event1: '계영 200', event2: '', phone: '010-7142-8269', club: 'GMDC', depositor: 'GMDC', address: '거제시 고현항2로51 207동 3002호', free: '', back: '', breast: '', fly: '' },
+  { id: 4, age: '9', group: '4그룹', gender: '남', name: '손민재', birthId: '20160610-3', event1: '자유형 50', event2: '배영 50', phone: '010-7142-8269', club: 'GMDC', depositor: 'GMDC', address: '거제시 고현항2로51 207동 3002호', free: '', back: '', breast: '', fly: '' },
   { id: 5, age: '9', group: '4그룹', gender: '여', name: '이유빈', birthId: '20160308-4', event1: '자유형 50', event2: '배영 50', phone: '010-4101-8171', club: 'GMDC', depositor: 'GMDC', address: '거제시 사등면 두동로54-40 영진 201동 1505호', free: '', back: '', breast: '', fly: '' },
-  { id: 20, age: '11', group: '5그룹', gender: '남', name: '김하준', birthId: '20150423-3', event1: '혼성계영 200', event2: '배영 50', phone: '010-4779-4105', club: 'GMDC', depositor: 'GMDC', address: '거제시 상동 대동다숲 122동 201호', free: '', back: '', breast: '', fly: '' },
-  { id: 6, age: '10', group: '5그룹', gender: '남', name: '양서진', birthId: '20151030-3', event1: '계영 200', event2: '혼성계영 200', phone: '010-4252-4589', club: 'GMDC', depositor: 'GMDC', address: '거제시 장평2로19 103동 402호', free: '', back: '', breast: '', fly: '' },
+  { id: 20, age: '11', group: '5그룹', gender: '남', name: '김하준', birthId: '20150423-3', event1: '배영 50', event2: '평영 50', phone: '010-4779-4105', club: 'GMDC', depositor: 'GMDC', address: '거제시 상동 대동다숲 122동 201호', free: '', back: '', breast: '', fly: '' },
+  { id: 6, age: '10', group: '5그룹', gender: '남', name: '양서진', birthId: '20151030-3', event1: '자유형 50', event2: '접영 50', phone: '010-4252-4589', club: 'GMDC', depositor: 'GMDC', address: '거제시 장평2로19 103동 402호', free: '', back: '', breast: '', fly: '' },
   { id: 7, age: '10', group: '5그룹', gender: '남', name: '이우리', birthId: '20150603-3', event1: '자유형 50', event2: '배영 50', phone: '010-6337-7471', club: 'GMDC', depositor: 'GMDC', address: '거제시 거제면 두동로259-90 오션파크자이 111동 504호', free: '', back: '', breast: '', fly: '' },
   { id: 8, age: '10', group: '5그룹', gender: '여', name: '김서윤', birthId: '20150115-4', event1: '자유형 50', event2: '평영 50', phone: '010-9822-2363', club: 'GMDC', depositor: 'GMDC', address: '거제시 옥포로315-2 6동 102호', free: '', back: '', breast: '', fly: '' },
   { id: 9, age: '10', group: '5그룹', gender: '여', name: '류다윤', birthId: '20151002-4', event1: '자유형 50', event2: '평영 50', phone: '010-8738-1436', club: 'GMDC', depositor: 'GMDC', address: '거제시 옥포로315-2 성은아파트 103동 302호', free: '', back: '', breast: '', fly: '' },
@@ -227,7 +227,7 @@ const DEFAULT_STUDENT_RECORDS = [
   { id: 11, age: '10', group: '5그룹', gender: '여', name: '이은서', birthId: '20150915-4', event1: '배영 50', event2: '접영 50', phone: '010-8266-4030', club: 'GMDC', depositor: 'GMDC', address: '거제시 마전5길8-2 영승한마음 101호', free: '', back: '', breast: '', fly: '' },
   { id: 12, age: '10', group: '5그룹', gender: '여', name: '지혜람', birthId: '20150108-4', event1: '자유형 50', event2: '배영 50', phone: '010-4592-9948', club: 'GMDC', depositor: 'GMDC', address: '거제시 사등면 두동로54-40 영진 201동 206호', free: '', back: '', breast: '', fly: '' },
   { id: 13, age: '10', group: '5그룹', gender: '여', name: '한예진', birthId: '20150316-4', event1: '자유형 50', event2: '평영 50', phone: '010-5048-8145', club: 'GMDC', depositor: 'GMDC', address: '거제시 성산로42 201동 503호', free: '', back: '', breast: '', fly: '' },
-  { id: 14, age: '11', group: '6그룹', gender: '남', name: '김루민', birthId: '20140724-3', event1: '계영 200', event2: '', phone: '010-6677-7875', club: 'GMDC', depositor: 'GMDC', address: '거제시 옥포대첩로4길 40 라이4층', free: '', back: '', breast: '', fly: '' },
+  { id: 14, age: '11', group: '6그룹', gender: '남', name: '김루민', birthId: '20140724-3', event1: '자유형 50', event2: '배영 50', phone: '010-6677-7875', club: 'GMDC', depositor: 'GMDC', address: '거제시 옥포대첩로4길 40 라이4층', free: '', back: '', breast: '', fly: '' },
   { id: 15, age: '11', group: '6그룹', gender: '남', name: '오태훈', birthId: '20141109-3', event1: '자유형 50', event2: '평영 50', phone: '010-4872-4910', club: 'GMDC', depositor: 'GMDC', address: '거제시 아주2로138 106동 1305호', free: '', back: '', breast: '', fly: '' },
   { id: 16, age: '14', group: '7그룹', gender: '남', name: '박현민', birthId: '20110608-3', event1: '평영 50', event2: '접영 50', phone: '010-4447-5186', club: 'GMDC', depositor: 'GMDC', address: '거제시 마전5길8-2 영승한마음 710호', free: '', back: '', breast: '', fly: '' },
   { id: 17, age: '12', group: '7그룹', gender: '남', name: '이선우', birthId: '20130829-3', event1: '자유형 50', event2: '배영 50', phone: '010-4101-8171', club: 'GMDC', depositor: 'GMDC', address: '거제시 사등면 두동로54-40 영진 201동 1505호', free: '', back: '', breast: '', fly: '' },
@@ -2822,9 +2822,6 @@ function renderSummaryMatrices() {
 
 const EVENT_OPTIONS = [
   '',
-  '계영 200',
-  '혼성계영 200',
-  '혼계영 200',
   '자유형 50',
   '배영 50',
   '평영 50',
