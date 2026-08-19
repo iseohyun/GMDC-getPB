@@ -25,7 +25,7 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.08.19.06_student';
+const APP_VERSION = 'v2026.08.19.07_student';
 let isScenarioMode = false;
 let isInitialSyncCompleted = false;
 let serverRecordsCache = null;
@@ -2687,6 +2687,12 @@ function renderComboCard(prefix, result, isMedley = false, gender = '남') {
     const timeClass = isLastYear ? 'is-last-year' : 'is-target';
     const timeDisplay = m.time > 0 ? `${m.time.toFixed(2)}s` : (m.isPinned ? '고정선발' : '-');
 
+    const relayAssignments = getStudentRelayAssignments(m.name);
+    const relayCount = relayAssignments.length;
+    const relayBadgeHtml = relayCount >= 2
+      ? `<span class="member-relay-count-badge" title="${escapeHtml(m.name)} 선수는 단체전 ${relayCount}개 종목(${relayAssignments.map(a => a.label).join(', ')})에 출전합니다">${relayCount}</span>`
+      : '';
+
     const pinBtnHtml = `
       <button 
         type="button" 
@@ -2709,6 +2715,7 @@ function renderComboCard(prefix, result, isMedley = false, gender = '남') {
         <span>${escapeHtml(m.name || '무명')}</span>
         <span style="color:var(--text-subtle);font-size:11px;">(${m.group || m.age + '세'})</span>
         <span class="member-time ${timeClass}">${timeDisplay}</span>
+        ${relayBadgeHtml}
         ${pinBtnHtml}
       </div>
     `;

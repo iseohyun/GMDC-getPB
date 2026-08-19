@@ -32,7 +32,7 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.08.19.06';
+const APP_VERSION = 'v2026.08.19.07';
 let isScenarioMode = false;
 let isInitialSyncCompleted = false;
 let serverRecordsCache = null;
@@ -3421,6 +3421,12 @@ function renderComboCardTeam(prefix, team, result, isMedley = false) {
       ? `<span class="member-time ${timeClass}">${m.time.toFixed(2)}s</span>`
       : `<span class="member-time is-empty" title="PB 기록 미입력">-</span>`;
 
+    const relayAssignments = getSwimmerRelayAssignments(m.name);
+    const relayCount = relayAssignments.length;
+    const relayBadgeHtml = relayCount >= 2
+      ? `<span class="member-relay-count-badge" title="${escapeHtml(m.name)} 선수는 단체전 ${relayCount}개 종목(${relayAssignments.map(a => `${a.team}팀 ${a.label}`).join(', ')})에 출전합니다">${relayCount}</span>`
+      : '';
+
     const pinBtnHtml = `
       <button 
         type="button" 
@@ -3444,6 +3450,7 @@ function renderComboCardTeam(prefix, team, result, isMedley = false) {
         <span>${escapeHtml(m.name || '무명')}</span>
         <span style="color:var(--text-subtle);font-size:11px;">(${m.age}세)</span>
         ${timeDisplayHtml}
+        ${relayBadgeHtml}
         ${pinBtnHtml}
       </div>
     `;

@@ -779,6 +779,25 @@ body.theme-student .btn-panel-pin.active {
   background: #fff5f5;
   box-shadow: 0 1px 3px rgba(239, 68, 68, 0.12);
 }
+.member-relay-count-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  background: #fef3c7;
+  border: 1px solid #f59e0b;
+  border-radius: 9999px;
+  color: #b45309;
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.2px;
+  cursor: help;
+  box-shadow: 0 1px 2px rgba(245, 158, 11, 0.15);
+  margin-left: 2px;
+}
 
 .btn-pin-member {
   display: inline-flex;
