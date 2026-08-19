@@ -432,142 +432,161 @@
         </div>
       </section>
 
-      <!-- Control Toolbar -->
-      <section class="toolbar">
-        <div class="toolbar-left">
-          <div class="search-box">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="11" cy="11" r="8"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-            <input type="text" id="searchInput" placeholder="이름 또는 나이 검색..." autocomplete="off">
+      <!-- Detailed PB Records Section -->
+      <section class="events-detail-section">
+        <div class="events-detail-header">
+          <div class="events-detail-title-group">
+            <h3 id="recordsDetailTitle">📋 개인 PB 기록 명단 (41명 표시 중 / 총 41명)</h3>
           </div>
-
-          <div class="filter-group">
-            <label for="filterGenderSelect" class="filter-label">성별</label>
-            <select id="filterGenderSelect" class="filter-select">
-              <option value="all" selected>전체</option>
-              <option value="남">남자</option>
-              <option value="여">여자</option>
-            </select>
-          </div>
-
-          <div class="filter-group">
-            <label for="filterTeamSelect" class="filter-label">팀</label>
-            <select id="filterTeamSelect" class="filter-select">
-              <option value="all" selected>전체</option>
-              <option value="A">A팀</option>
-              <option value="B">B팀</option>
-            </select>
-          </div>
-
-          <div class="filter-group">
-            <label for="recordsModeSelect" class="filter-label">보기</label>
-            <select id="recordsModeSelect" class="filter-select">
-              <option value="simple">간단히</option>
-              <option value="detailed" selected>자세히</option>
-            </select>
-          </div>
-
-          <label class="scenario-checkbox-label" title="시나리오 테스트 모드 (서버 저장 없이 가상 테스트)">
-            <input type="checkbox" id="chkScenarioMode" class="scenario-checkbox" />
-            <span>시나리오 모드</span>
-          </label>
-
-          <div class="header-view-toggle">
-            <button class="view-toggle-btn active" data-view="records" title="단체전 보기 (단축키: T)">
+          <div class="events-detail-actions">
+            <button id="btnExportCsv" class="btn-icon-header admin-only" title="CSV 파일로 저장 (다운로드)">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                <polyline points="14 2 14 8 20 8"></polyline>
-                <line x1="16" y1="13" x2="8" y2="13"></line>
-                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                <polyline points="7 3 7 8 15 8"></polyline>
               </svg>
-              <span>단체전</span>
             </button>
-            <button class="view-toggle-btn" data-view="events" title="개인전 보기 (단축키: I)">
+            <button id="btnCopyTsv" class="btn-icon-header admin-only" title="클립보드로 복사">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
-                <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
-                <path d="M9 12h6"></path>
-                <path d="M9 16h6"></path>
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
               </svg>
-              <span>개인전</span>
             </button>
+            <button id="btnAuditHistory" class="btn-audit admin-only" title="히스토리 기반 데이터 정합성 검증">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
+              <span>히스토리 검증</span>
+            </button>
+            <button id="btnOpenSnapshotModal" class="btn-snapshot admin-only" title="DB 스냅샷 저장 및 관리 (백업/복원)">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                <circle cx="12" cy="13" r="4"></circle>
+              </svg>
+              <span>DB 스냅샷</span>
+            </button>
+            <div class="save-status admin-only" id="saveStatus">
+              <span class="status-dot"></span>
+              <span id="saveStatusText">자동 저장 활성화</span>
+            </div>
           </div>
         </div>
+
+        <!-- Control Toolbar -->
+        <section class="toolbar">
+          <div class="toolbar-left">
+            <div class="search-box">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input type="text" id="searchInput" placeholder="이름 또는 나이 검색..." autocomplete="off">
+            </div>
+
+            <div class="filter-group">
+              <select id="filterGenderSelect" class="filter-select">
+                <option value="all" selected>성별</option>
+                <option value="남">남자</option>
+                <option value="여">여자</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <select id="filterTeamSelect" class="filter-select">
+                <option value="all" selected>팀 전체</option>
+                <option value="A">A팀</option>
+                <option value="B">B팀</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <select id="filterGroupSelect" class="filter-select">
+                <option value="all" selected>모든 그룹</option>
+                <option value="1그룹">1그룹</option>
+                <option value="2그룹">2그룹</option>
+                <option value="3그룹">3그룹</option>
+                <option value="4그룹">4그룹</option>
+                <option value="5그룹">5그룹</option>
+                <option value="6그룹">6그룹</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label for="recordsModeSelect" class="filter-label">보기</label>
+              <select id="recordsModeSelect" class="filter-select">
+                <option value="simple">간단히</option>
+                <option value="detailed" selected>자세히</option>
+              </select>
+            </div>
+
+            <label class="scenario-checkbox-label" title="시나리오 테스트 모드 (서버 저장 없이 가상 테스트)">
+              <input type="checkbox" id="chkScenarioMode" class="scenario-checkbox" />
+              <span>시나리오 모드</span>
+            </label>
+
+            <div class="header-view-toggle">
+              <button class="view-toggle-btn active" data-view="records" title="단체전 보기 (단축키: T)">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                </svg>
+                <span>단체전</span>
+              </button>
+              <button class="view-toggle-btn" data-view="events" title="개인전 보기 (단축키: I)">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                  <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+                  <path d="M9 12h6"></path>
+                  <path d="M9 16h6"></path>
+                </svg>
+                <span>개인전</span>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Guide / Legend Bar -->
+        <div class="notice-bar">
+          <div class="notice-legend">
+            <span class="legend-item"><span class="legend-dot dot-blue"></span><strong>작년기록 (파란색):</strong> 기존 등록
+              데이터</span>
+            <span class="legend-item"><span class="legend-dot dot-red"></span><strong>희망기록 (붉은색):</strong> 새로 입력/수정한
+              데이터</span>
+            <span class="legend-tip">※ 기록 삭제 시 작년기록이 존재하면 자동으로 작년기록으로 원복됩니다.</span>
+          </div>
+        </div>
+
+        <!-- Table Container -->
+        <main class="table-card">
+          <div class="table-responsive" id="tableContainer">
+            <table class="record-table pb-table" id="recordTable">
+              <thead>
+                <tr>
+                  <th class="col-team" data-sort="team">팀</th>
+                  <th class="col-no col-pb-detail" data-sort="no">번호</th>
+                  <th class="col-group col-pb-detail" data-sort="group">그룹</th>
+                  <th class="col-age col-pb-detail" data-sort="age">만나이</th>
+                  <th class="col-gender col-pb-detail" data-sort="gender">성별</th>
+                  <th class="col-name" data-sort="name">이름</th>
+                  <th class="col-record" data-sort="finFly">핀접영</th>
+                  <th class="col-record" data-sort="finFree">핀자유</th>
+                  <th class="col-record" data-sort="free">자유형</th>
+                  <th class="col-record" data-sort="back">배영</th>
+                  <th class="col-record" data-sort="breast">평영</th>
+                  <th class="col-record" data-sort="fly">접영</th>
+                  <th class="col-events-summary col-pb-detail">출전 종목</th>
+                </tr>
+              </thead>
+              <tbody id="tableBody">
+                <!-- Rendered by JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </main>
       </section>
-
-      <!-- Guide / Legend Bar -->
-      <div class="notice-bar">
-        <div class="notice-legend">
-          <span class="legend-item"><span class="legend-dot dot-blue"></span><strong>작년기록 (파란색):</strong> 기존 등록
-            데이터</span>
-          <span class="legend-item"><span class="legend-dot dot-red"></span><strong>희망기록 (붉은색):</strong> 새로 입력/수정한
-            데이터</span>
-          <span class="legend-tip">※ 기록 삭제 시 작년기록이 존재하면 자동으로 작년기록으로 원복됩니다.</span>
-        </div>
-        <div class="notice-actions" style="display: flex; align-items: center; gap: 8px;">
-          <button id="btnExportCsv" class="btn-icon-header admin-only" title="CSV 파일로 저장 (다운로드)">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
-              <polyline points="17 21 17 13 7 13 7 21"></polyline>
-              <polyline points="7 3 7 8 15 8"></polyline>
-            </svg>
-          </button>
-          <button id="btnCopyTsv" class="btn-icon-header admin-only" title="클립보드로 복사">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-            </svg>
-          </button>
-          <button id="btnAuditHistory" class="btn-audit admin-only" title="히스토리 기반 데이터 정합성 검증">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-              <polyline points="22 4 12 14.01 9 11.01"></polyline>
-            </svg>
-            <span>히스토리 검증</span>
-          </button>
-          <button id="btnOpenSnapshotModal" class="btn-snapshot admin-only" title="DB 스냅샷 저장 및 관리 (백업/복원)">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
-              <circle cx="12" cy="13" r="4"></circle>
-            </svg>
-            <span>DB 스냅샷</span>
-          </button>
-          <div class="save-status admin-only" id="saveStatus">
-            <span class="status-dot"></span>
-            <span id="saveStatusText">자동 저장 활성화</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Table Container -->
-      <main class="table-card">
-        <div class="table-responsive" id="tableContainer">
-          <table class="record-table pb-table" id="recordTable">
-            <thead>
-              <tr>
-                <th class="col-team" data-sort="team">팀</th>
-                <th class="col-no col-pb-detail" data-sort="no">번호</th>
-                <th class="col-group col-pb-detail" data-sort="group">그룹</th>
-                <th class="col-age col-pb-detail" data-sort="age">만나이</th>
-                <th class="col-gender col-pb-detail" data-sort="gender">성별</th>
-                <th class="col-name" data-sort="name">이름</th>
-                <th class="col-record" data-sort="finFly">핀접영</th>
-                <th class="col-record" data-sort="finFree">핀자유</th>
-                <th class="col-record" data-sort="free">자유형</th>
-                <th class="col-record" data-sort="back">배영</th>
-                <th class="col-record" data-sort="breast">평영</th>
-                <th class="col-record" data-sort="fly">접영</th>
-                <th class="col-events-summary col-pb-detail">출전 종목</th>
-              </tr>
-            </thead>
-            <tbody id="tableBody">
-              <!-- Rendered by JavaScript -->
-            </tbody>
-          </table>
-        </div>
-      </main>
 
       <!-- Footer Information -->
       <footer class="app-footer">

@@ -32,7 +32,7 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.08.19.03';
+const APP_VERSION = 'v2026.08.19.04';
 let isScenarioMode = false;
 let isInitialSyncCompleted = false;
 let serverRecordsCache = null;
@@ -155,6 +155,7 @@ let currentView = 'records'; // 'records' | 'events'
 let searchQuery = '';
 let currentFilter = 'all'; // 'all', '남', '여'
 let currentTeamFilter = 'all'; // 'all', 'A', 'B'
+let currentGroupFilter = 'all'; // 'all', '1그룹' ~ '6그룹'
 let sortColumn = null;
 let sortDirection = 'asc';
 let recordsViewMode = 'detailed'; // 'detailed' (기본) | 'simple'
@@ -406,6 +407,7 @@ const tableBody = document.getElementById('tableBody');
 const recordTable = document.getElementById('recordTable');
 const filterGenderSelect = document.getElementById('filterGenderSelect');
 const filterTeamSelect = document.getElementById('filterTeamSelect');
+const filterGroupSelect = document.getElementById('filterGroupSelect');
 const recordsModeSelect = document.getElementById('recordsModeSelect');
 const chkScenarioMode = document.getElementById('chkScenarioMode');
 const searchInput = document.getElementById('searchInput');
@@ -2335,6 +2337,10 @@ function getProcessedRecords() {
     list = list.filter(item => (item.team || 'A') === 'B');
   }
 
+  if (currentGroupFilter && currentGroupFilter !== 'all') {
+    list = list.filter(item => item.group === currentGroupFilter);
+  }
+
   if (sortColumn) {
     list.sort((a, b) => {
       let valA = a[sortColumn] || '';
@@ -2386,6 +2392,11 @@ function getProcessedRecords() {
 function renderTable() {
   const processed = getProcessedRecords();
   tableBody.innerHTML = '';
+
+  const recordsDetailTitle = document.getElementById('recordsDetailTitle');
+  if (recordsDetailTitle) {
+    recordsDetailTitle.textContent = `📋 개인 PB 기록 명단 (${processed.length}명 표시 중 / 총 ${records.length}명)`;
+  }
 
   if (processed.length === 0) {
     const emptyRow = document.createElement('tr');
@@ -3491,6 +3502,13 @@ function bindEvents() {
         localStorage.setItem(ADULT_TEAM_KEY, e.target.value);
       }
       renderAll();
+    });
+  }
+
+  if (filterGroupSelect) {
+    filterGroupSelect.addEventListener('change', (e) => {
+      currentGroupFilter = e.target.value;
+      renderTable();
     });
   }
 

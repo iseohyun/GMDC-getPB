@@ -174,97 +174,106 @@
         </div>
       </section>
 
-      <!-- Control Toolbar -->
-      <section class="toolbar">
-        <div class="toolbar-left">
-          <div class="search-box">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-            <input type="text" id="searchInput" placeholder="이름 또는 나이 검색..." autocomplete="off">
+      <!-- Detailed PB Records Section -->
+      <section class="events-detail-section">
+        <div class="events-detail-header">
+          <div class="events-detail-title-group">
+            <h3 id="recordsDetailTitle">📋 개인 PB 기록 명단 (20명 표시 중 / 총 20명)</h3>
           </div>
-          <div class="header-view-toggle">
-            <button class="view-toggle-btn active" data-view="records" title="단체전 보기 (단축키: T)">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
-              <span>단체전</span>
+          <div class="events-detail-actions">
+            <button id="btnExportCsv" class="btn-icon-header admin-only" title="CSV 파일로 저장 (다운로드)">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
             </button>
-            <button class="view-toggle-btn" data-view="events" title="개인전 보기 (단축키: I)">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="M9 12h6"></path><path d="M9 16h6"></path></svg>
-              <span>개인전</span>
+            <button id="btnCopyTsv" class="btn-icon-header admin-only" title="클립보드로 복사">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
             </button>
+            <button id="btnAuditHistory" class="btn-audit admin-only" title="히스토리 기반 데이터 정합성 검증">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              <span>히스토리 검증</span>
+            </button>
+            <button id="btnOpenSnapshotModal" class="btn-snapshot admin-only" title="DB 스냅샷 저장 및 관리 (백업/복원)">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                <circle cx="12" cy="13" r="4"></circle>
+              </svg>
+              <span>DB 스냅샷</span>
+            </button>
+            <div class="save-status admin-only" id="saveStatus">
+              <span class="status-dot"></span>
+              <span id="saveStatusText">자동 저장 활성화</span>
+            </div>
           </div>
         </div>
 
-        <div class="toolbar-right">
-          <!-- 엑셀 데이터 직접 붙여넣기 안내 팁 -->
-          <span class="paste-tip-badge" title="엑셀에서 셀들을 복사(Ctrl+C)한 뒤, 표의 원하는 위치를 클릭하고 Ctrl+V를 누르면 일괄 입력됩니다.">
-            📋 엑셀 붙여넣기 지원 (Ctrl+V)
-          </span>
+        <!-- Control Toolbar -->
+        <section class="toolbar">
+          <div class="toolbar-left">
+            <div class="search-box">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              <input type="text" id="searchInput" placeholder="이름 또는 나이 검색..." autocomplete="off">
+            </div>
+            <div class="header-view-toggle">
+              <button class="view-toggle-btn active" data-view="records" title="단체전 보기 (단축키: T)">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                <span>단체전</span>
+              </button>
+              <button class="view-toggle-btn" data-view="events" title="개인전 보기 (단축키: I)">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="M9 12h6"></path><path d="M9 16h6"></path></svg>
+                <span>개인전</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="toolbar-right">
+            <!-- 엑셀 데이터 직접 붙여넣기 안내 팁 -->
+            <span class="paste-tip-badge" title="엑셀에서 셀들을 복사(Ctrl+C)한 뒤, 표의 원하는 위치를 클릭하고 Ctrl+V를 누르면 일괄 입력됩니다.">
+              📋 엑셀 붙여넣기 지원 (Ctrl+V)
+            </span>
+          </div>
+        </section>
+
+        <!-- Notice & Legend Bar -->
+        <div class="notice-bar">
+          <div class="notice-legend">
+            <div class="legend-item">
+              <span class="legend-dot dot-blue"></span>
+              <span>작년기록 (자동보존)</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-dot dot-green"></span>
+              <span>신규입력 PB</span>
+            </div>
+            <div class="legend-item" style="color: #64748b; font-size: 11.5px;">
+              ※ 기록 삭제 시 공란으로 비워집니다.
+            </div>
+          </div>
         </div>
+
+        <!-- Table Container -->
+        <main class="table-card">
+          <div class="table-responsive" id="tableContainer">
+            <table class="record-table pb-table is-simple" id="recordTable">
+              <thead>
+                <tr>
+                  <th class="col-no col-pb-detail" data-sort="no">번호</th>
+                  <th class="col-group col-pb-detail" data-sort="group">그룹</th>
+                  <th class="col-age col-pb-detail" data-sort="age">만나이</th>
+                  <th class="col-gender col-pb-detail" data-sort="gender">성별</th>
+                  <th class="col-name" data-sort="name">이름</th>
+                  <th class="col-record" data-sort="free">자유형</th>
+                  <th class="col-record" data-sort="back">배영</th>
+                  <th class="col-record" data-sort="breast">평영</th>
+                  <th class="col-record" data-sort="fly">접영</th>
+                  <th class="col-events-summary col-pb-detail">출전 종목</th>
+                </tr>
+              </thead>
+              <tbody id="tableBody">
+                <!-- Rendered by JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </main>
       </section>
-
-      <!-- Notice & Legend Bar -->
-      <div class="notice-bar">
-        <div class="notice-legend">
-          <div class="legend-item">
-            <span class="legend-dot dot-blue"></span>
-            <span>작년기록 (자동보존)</span>
-          </div>
-          <div class="legend-item">
-            <span class="legend-dot dot-green"></span>
-            <span>신규입력 PB</span>
-          </div>
-          <div class="legend-item" style="color: #64748b; font-size: 11.5px;">
-            ※ 기록 삭제 시 공란으로 비워집니다.
-          </div>
-        </div>
-        <div class="notice-actions" style="display: flex; align-items: center; gap: 8px;">
-          <button id="btnExportCsv" class="btn-icon-header admin-only" title="CSV 파일로 저장 (다운로드)">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
-          </button>
-          <button id="btnCopyTsv" class="btn-icon-header admin-only" title="클립보드로 복사">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-          </button>
-          <button id="btnAuditHistory" class="btn-audit admin-only" title="히스토리 기반 데이터 정합성 검증">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-            <span>히스토리 검증</span>
-          </button>
-          <button id="btnOpenSnapshotModal" class="btn-snapshot admin-only" title="DB 스냅샷 저장 및 관리 (백업/복원)">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
-              <circle cx="12" cy="13" r="4"></circle>
-            </svg>
-            <span>DB 스냅샷</span>
-          </button>
-          <div class="save-status admin-only" id="saveStatus">
-            <span class="status-dot"></span>
-            <span id="saveStatusText">자동 저장 활성화</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Table Container -->
-      <main class="table-card">
-        <div class="table-responsive" id="tableContainer">
-          <table class="record-table pb-table is-simple" id="recordTable">
-            <thead>
-              <tr>
-                <th class="col-no col-pb-detail" data-sort="no">번호</th>
-                <th class="col-group col-pb-detail" data-sort="group">그룹</th>
-                <th class="col-age col-pb-detail" data-sort="age">만나이</th>
-                <th class="col-gender col-pb-detail" data-sort="gender">성별</th>
-                <th class="col-name" data-sort="name">이름</th>
-                <th class="col-record" data-sort="free">자유형</th>
-                <th class="col-record" data-sort="back">배영</th>
-                <th class="col-record" data-sort="breast">평영</th>
-                <th class="col-record" data-sort="fly">접영</th>
-                <th class="col-events-summary col-pb-detail">출전 종목</th>
-              </tr>
-            </thead>
-            <tbody id="tableBody">
-              <!-- Rendered by JavaScript -->
-            </tbody>
-          </table>
-        </div>
-      </main>
 
       <!-- Footer Information -->
       <footer class="app-footer">

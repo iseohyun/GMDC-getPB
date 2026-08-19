@@ -25,7 +25,7 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.08.19.03_student';
+const APP_VERSION = 'v2026.08.19.04_student';
 let isScenarioMode = false;
 let isInitialSyncCompleted = false;
 let serverRecordsCache = null;
@@ -2102,6 +2102,11 @@ function renderTable() {
     });
   } else {
     list.sort(defaultRecordComparator);
+  }
+
+  const recordsDetailTitle = document.getElementById('recordsDetailTitle');
+  if (recordsDetailTitle) {
+    recordsDetailTitle.textContent = `📋 개인 PB 기록 명단 (${list.length}명 표시 중 / 총 ${records.length}명)`;
   }
 
   const bests = calculateIndividualBest();
