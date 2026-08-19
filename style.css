@@ -868,7 +868,15 @@ body.theme-student .btn-panel-pin.active {
 
 @media (max-width: 960px) {
   .combo-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .combo-grid {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 10px;
   }
 }
 
@@ -1980,13 +1988,21 @@ body.theme-student .btn-panel-pin.active {
 /* Side-by-Side Matrices Container */
 .matrices-container {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 16px;
 }
 
 @media (max-width: 1080px) {
   .matrices-container {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .matrices-container {
     grid-template-columns: 1fr;
+    gap: 10px;
   }
 }
 
@@ -2697,32 +2713,80 @@ body.theme-student .btn-panel-pin.active {
 /* Responsive */
 @media (max-width: 768px) {
   body {
-    padding: 12px 8px;
+    padding: 10px 6px;
   }
   
   .app-header {
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding: 10px 14px;
+    gap: 10px;
+  }
+  
+  .header-left {
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
   }
   
   .header-actions {
-    width: 100%;
+    width: auto;
     justify-content: flex-start;
     flex-wrap: wrap;
+    gap: 8px;
   }
   
   .toolbar {
-    flex-direction: column;
-    align-items: stretch;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
   }
   
   .toolbar-left {
-    flex-direction: column;
-    align-items: stretch;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px 8px;
+    width: auto;
+    flex: 1 1 auto;
   }
   
   .search-box {
-    width: 100%;
+    width: auto;
+    min-width: 120px;
+    flex: 1 1 150px;
+  }
+
+  .filter-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .events-detail-header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .events-detail-actions {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .notice-bar {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
   }
 }
 
