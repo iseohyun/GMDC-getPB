@@ -416,7 +416,7 @@ body {
 /* Relay Optimal Combination Panels */
 .combo-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(235px, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 14px;
   transition: all 0.2s ease;
 }
@@ -900,14 +900,21 @@ body.theme-student .btn-panel-pin.active {
 
 @media (max-width: 960px) {
   .combo-grid {
-    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 12px;
+  }
+}
+
+@media (max-width: 640px) {
+  .combo-grid {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 10px;
   }
 }
 
 @media (max-width: 480px) {
   .combo-grid {
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    grid-template-columns: 1fr;
     gap: 10px;
   }
 }
