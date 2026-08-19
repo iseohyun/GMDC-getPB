@@ -1,12 +1,22 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.0/firebase-app.js";
-import { getFirestore, doc, setDoc, onSnapshot, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/11.3.0/firebase-firestore.js";
+import { getFirestore, doc, setDoc, onSnapshot, collection, addDoc, deleteDoc, updateDoc, getDoc, getDocs, query, orderBy, limit, where } from "https://www.gstatic.com/firebasejs/11.3.0/firebase-firestore.js";
+import { initAuth, isAdmin, canEditRecords, isDeadlineExpired, loginWithGoogle, logoutUser, getCurrentUser, formatUserDisplayName } from "./auth.js";
 
 // Firebase Configuration (Shared Project)
 const firebaseConfig = {
-  projectId: "gmdc-swim-records"
+  apiKey: "AIzaSyBA0ykFrEfU9YS33Zp_HNf3OnBX39WCEkA",
+  authDomain: "gmdc-swim-records.firebaseapp.com",
+  projectId: "gmdc-swim-records",
+  storageBucket: "gmdc-swim-records.firebasestorage.app",
+  messagingSenderId: "4329922661",
+  appId: "1:4329922661:web:e0799bb08d37fd1e12668c",
+  measurementId: "G-5H98EB7ZSP"
 };
 
 let app, db, DOC_REF;
+const HISTORY_COL_NAME = "gmdc_swim_history_student";
+const SNAPSHOT_COL_NAME = "gmdc_swim_snapshots_student";
+
 try {
   app = initializeApp(firebaseConfig);
   db = getFirestore(app);
@@ -15,7 +25,7 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.08.18.01_student';
+const APP_VERSION = 'v2026.08.19.02_student';
 let isScenarioMode = false;
 let isInitialSyncCompleted = false;
 let serverRecordsCache = null;
@@ -201,28 +211,102 @@ function getPodiumData(gender, group, stroke) {
   return groupData[strokeKey] || null;
 }
 
-// Initial 19 Student Swimmer Records
+// Initial 20 Student Swimmer Records
 const DEFAULT_STUDENT_RECORDS = [
-  { id: 1, age: '7', group: '2그룹', gender: '남', name: '배건우', birthId: '20181207-3', event1: '', event2: '', phone: '010-9729-3224', club: 'GMDC', address: '거제시 고현항2로 51 유로스카이 206동 1804호', free: '', back: '', breast: '', fly: '' },
-  { id: 2, age: '8', group: '3그룹', gender: '남', name: '김예준', birthId: '20170519-3', event1: '자유형 50', event2: '평영 50', phone: '010-4779-4105', club: 'GMDC', address: '거제시 상동 대동다숲 112동 201호', free: '', back: '', breast: '', fly: '' },
-  { id: 3, age: '8', group: '3그룹', gender: '남', name: '한고준', birthId: '20171019-3', event1: '자유형 50', event2: '평영 50', phone: '010-2541-1426', club: 'GMDC', address: '거제시 상동5길46 104동 602호', free: '', back: '', breast: '', fly: '' },
-  { id: 4, age: '9', group: '4그룹', gender: '남', name: '손민재', birthId: '20160616-3', event1: '', event2: '', phone: '010-7142-8269', club: 'GMDC', address: '거제시 고현항2로51 207동 3002호', free: '', back: '', breast: '', fly: '' },
-  { id: 5, age: '9', group: '4그룹', gender: '여', name: '이유빈', birthId: '20160308-4', event1: '자유형 50', event2: '배영 50', phone: '010-4101-8171', club: 'GMDC', address: '거제시 사등면 두동로54-40 영진 201동 1505호', free: '', back: '', breast: '', fly: '' },
-  { id: 6, age: '10', group: '5그룹', gender: '남', name: '양서진', birthId: '20151030-3', event1: '', event2: '', phone: '010-4252-4589', club: 'GMDC', address: '거제시 장평2로19 103동 402호', free: '', back: '', breast: '', fly: '' },
-  { id: 7, age: '10', group: '5그룹', gender: '남', name: '이우리', birthId: '20150603-3', event1: '자유형 50', event2: '배영 50', phone: '010-4337-7471', club: 'GMDC', address: '거제시 거제면 두동로259-90 오션파크자이 111동 504호', free: '', back: '', breast: '', fly: '' },
-  { id: 8, age: '10', group: '5그룹', gender: '여', name: '김서윤', birthId: '20150115-4', event1: '자유형 50', event2: '평영 50', phone: '010-9822-2363', club: 'GMDC', address: '거제시 옥포로315-2 6동 102호', free: '', back: '', breast: '', fly: '' },
-  { id: 9, age: '10', group: '5그룹', gender: '여', name: '류다윤', birthId: '20151002-4', event1: '자유형 50', event2: '평영 50', phone: '010-8738-1436', club: 'GMDC', address: '거제시 옥포로315-2 성은아파트 103동 302호', free: '', back: '', breast: '', fly: '' },
-  { id: 10, age: '10', group: '5그룹', gender: '여', name: '이나라', birthId: '20150603-4', event1: '자유형 50', event2: '배영 50', phone: '010-4337-7471', club: 'GMDC', address: '거제시 거제면 두동로259-90 오션파크자이 111동 504호', free: '', back: '', breast: '', fly: '' },
-  { id: 11, age: '10', group: '5그룹', gender: '여', name: '이은서', birthId: '20150915-4', event1: '배영 50', event2: '접영 50', phone: '010-8266-4030', club: 'GMDC', address: '거제시 마전5길8-2 영승한마음 101호', free: '', back: '', breast: '', fly: '' },
-  { id: 12, age: '10', group: '5그룹', gender: '여', name: '지혜람', birthId: '20150108-4', event1: '자유형 50', event2: '배영 50', phone: '010-4592-9948', club: 'GMDC', address: '거제시 사등면 두동로54-40 영진 201동 206호', free: '', back: '', breast: '', fly: '' },
-  { id: 13, age: '10', group: '5그룹', gender: '여', name: '한예진', birthId: '20150316-4', event1: '자유형 50', event2: '평영 50', phone: '010-5048-8145', club: 'GMDC', address: '거제시 성산로42 201동 503호', free: '', back: '', breast: '', fly: '' },
-  { id: 14, age: '11', group: '6그룹', gender: '남', name: '김루민', birthId: '20140724-3', event1: '자유형 50', event2: '배영 50', phone: '010-6677-7875', club: 'GMDC', address: '거제시 옥포대첩로4길 40 라이4층', free: '', back: '', breast: '', fly: '' },
-  { id: 15, age: '11', group: '6그룹', gender: '남', name: '오태훈', birthId: '20141109-3', event1: '자유형 50', event2: '평영 50', phone: '010-4872-4910', club: 'GMDC', address: '거제시 아주2로138 106동 1305호', free: '', back: '', breast: '', fly: '' },
-  { id: 16, age: '14', group: '7그룹', gender: '남', name: '박현민', birthId: '20110608-3', event1: '평영 50', event2: '접영 50', phone: '010-4447-5186', club: 'GMDC', address: '거제시 마전5길8-2 영승한마음 710호', free: '', back: '', breast: '', fly: '' },
-  { id: 17, age: '12', group: '7그룹', gender: '남', name: '이선우', birthId: '20130829-3', event1: '자유형 50', event2: '배영 50', phone: '010-4101-8171', club: 'GMDC', address: '거제시 사등면 두동로54-40 영진 201동 1505호', free: '', back: '', breast: '', fly: '' },
-  { id: 18, age: '12', group: '7그룹', gender: '여', name: '안서윤', birthId: '20130806-4', event1: '자유형 50', event2: '배영 50', phone: '010-4005-7171', club: 'GMDC', address: '거제시 아주2로138 102동 1801호', free: '', back: '', breast: '', fly: '' },
-  { id: 19, age: '13', group: '7그룹', gender: '여', name: '정채윤', birthId: '20120321-4', event1: '자유형 50', event2: '평영 50', phone: '010-8312-5384', club: 'GMDC', address: '거제시 장평1로86 B동 204호', free: '', back: '', breast: '', fly: '' }
+  { id: 1, age: '7', group: '2그룹', gender: '남', name: '배건우', birthId: '20181207-3', event1: '계영 200', event2: '혼성계영 200', phone: '010-9729-3224', club: 'GMDC', depositor: 'GMDC', address: '거제시 고현항2로 51 유로스카이 206동 1804호', free: '', back: '', breast: '', fly: '' },
+  { id: 2, age: '8', group: '3그룹', gender: '남', name: '김예준', birthId: '20170519-3', event1: '혼성계영 200', event2: '평영 50', phone: '010-4779-4105', club: 'GMDC', depositor: 'GMDC', address: '거제시 상동 대동다숲 122동 201호', free: '', back: '', breast: '', fly: '' },
+  { id: 3, age: '8', group: '3그룹', gender: '남', name: '한고준', birthId: '20171019-3', event1: '자유형 50', event2: '평영 50', phone: '010-2541-1426', club: 'GMDC', depositor: 'GMDC', address: '거제시 상동5길46 104동 602호', free: '', back: '', breast: '', fly: '' },
+  { id: 4, age: '9', group: '4그룹', gender: '남', name: '손민재', birthId: '20160616-3', event1: '계영 200', event2: '', phone: '010-7142-8269', club: 'GMDC', depositor: 'GMDC', address: '거제시 고현항2로51 207동 3002호', free: '', back: '', breast: '', fly: '' },
+  { id: 5, age: '9', group: '4그룹', gender: '여', name: '이유빈', birthId: '20160308-4', event1: '자유형 50', event2: '배영 50', phone: '010-4101-8171', club: 'GMDC', depositor: 'GMDC', address: '거제시 사등면 두동로54-40 영진 201동 1505호', free: '', back: '', breast: '', fly: '' },
+  { id: 20, age: '11', group: '5그룹', gender: '남', name: '김하준', birthId: '20150423-3', event1: '혼성계영 200', event2: '배영 50', phone: '010-4779-4105', club: 'GMDC', depositor: 'GMDC', address: '거제시 상동 대동다숲 122동 201호', free: '', back: '', breast: '', fly: '' },
+  { id: 6, age: '10', group: '5그룹', gender: '남', name: '양서진', birthId: '20151030-3', event1: '계영 200', event2: '혼성계영 200', phone: '010-4252-4589', club: 'GMDC', depositor: 'GMDC', address: '거제시 장평2로19 103동 402호', free: '', back: '', breast: '', fly: '' },
+  { id: 7, age: '10', group: '5그룹', gender: '남', name: '이우리', birthId: '20150603-3', event1: '자유형 50', event2: '배영 50', phone: '010-6337-7471', club: 'GMDC', depositor: 'GMDC', address: '거제시 거제면 두동로259-90 오션파크자이 111동 504호', free: '', back: '', breast: '', fly: '' },
+  { id: 8, age: '10', group: '5그룹', gender: '여', name: '김서윤', birthId: '20150115-4', event1: '자유형 50', event2: '평영 50', phone: '010-9822-2363', club: 'GMDC', depositor: 'GMDC', address: '거제시 옥포로315-2 6동 102호', free: '', back: '', breast: '', fly: '' },
+  { id: 9, age: '10', group: '5그룹', gender: '여', name: '류다윤', birthId: '20151002-4', event1: '자유형 50', event2: '평영 50', phone: '010-8738-1436', club: 'GMDC', depositor: 'GMDC', address: '거제시 옥포로315-2 성은아파트 103동 302호', free: '', back: '', breast: '', fly: '' },
+  { id: 10, age: '10', group: '5그룹', gender: '여', name: '이나라', birthId: '20150603-4', event1: '자유형 50', event2: '배영 50', phone: '010-6337-7471', club: 'GMDC', depositor: 'GMDC', address: '거제시 거제면 두동로259-90 오션파크자이 111동 504호', free: '', back: '', breast: '', fly: '' },
+  { id: 11, age: '10', group: '5그룹', gender: '여', name: '이은서', birthId: '20150915-4', event1: '배영 50', event2: '접영 50', phone: '010-8266-4030', club: 'GMDC', depositor: 'GMDC', address: '거제시 마전5길8-2 영승한마음 101호', free: '', back: '', breast: '', fly: '' },
+  { id: 12, age: '10', group: '5그룹', gender: '여', name: '지혜람', birthId: '20150108-4', event1: '자유형 50', event2: '배영 50', phone: '010-4592-9948', club: 'GMDC', depositor: 'GMDC', address: '거제시 사등면 두동로54-40 영진 201동 206호', free: '', back: '', breast: '', fly: '' },
+  { id: 13, age: '10', group: '5그룹', gender: '여', name: '한예진', birthId: '20150316-4', event1: '자유형 50', event2: '평영 50', phone: '010-5048-8145', club: 'GMDC', depositor: 'GMDC', address: '거제시 성산로42 201동 503호', free: '', back: '', breast: '', fly: '' },
+  { id: 14, age: '11', group: '6그룹', gender: '남', name: '김루민', birthId: '20140724-3', event1: '계영 200', event2: '', phone: '010-6677-7875', club: 'GMDC', depositor: 'GMDC', address: '거제시 옥포대첩로4길 40 라이4층', free: '', back: '', breast: '', fly: '' },
+  { id: 15, age: '11', group: '6그룹', gender: '남', name: '오태훈', birthId: '20141109-3', event1: '자유형 50', event2: '평영 50', phone: '010-4872-4910', club: 'GMDC', depositor: 'GMDC', address: '거제시 아주2로138 106동 1305호', free: '', back: '', breast: '', fly: '' },
+  { id: 16, age: '14', group: '7그룹', gender: '남', name: '박현민', birthId: '20110608-3', event1: '평영 50', event2: '접영 50', phone: '010-4447-5186', club: 'GMDC', depositor: 'GMDC', address: '거제시 마전5길8-2 영승한마음 710호', free: '', back: '', breast: '', fly: '' },
+  { id: 17, age: '12', group: '7그룹', gender: '남', name: '이선우', birthId: '20130829-3', event1: '자유형 50', event2: '배영 50', phone: '010-4101-8171', club: 'GMDC', depositor: 'GMDC', address: '거제시 사등면 두동로54-40 영진 201동 1505호', free: '', back: '', breast: '', fly: '' },
+  { id: 18, age: '12', group: '7그룹', gender: '여', name: '안서윤', birthId: '20130806-4', event1: '자유형 50', event2: '배영 50', phone: '010-4005-7171', club: 'GMDC', depositor: 'GMDC', address: '거제시 아주2로138 102동 1801호', free: '', back: '', breast: '', fly: '' },
+  { id: 19, age: '13', group: '7그룹', gender: '여', name: '정채윤', birthId: '20120321-4', event1: '자유형 50', event2: '평영 50', phone: '010-8312-5384', club: 'GMDC', depositor: 'GMDC', address: '거제시 장평1로86 B동 204호', free: '', back: '', breast: '', fly: '' }
 ];
+
+// Default Student Pinned Relay Members (학생부 단체전 고정 멤버)
+const DEFAULT_PINNED_RELAYS = {
+  combo1: ['배건우', '손민재', '양서진', '김루민'],
+  combo2: [],
+  combo3: { back: '김하준', breast: '김예준', fly: '양서진', free: '배건우' },
+  combo4: { back: null, breast: null, fly: null, free: null }
+};
+
+const RELAY_TITLES = {
+  combo1: '남학생 계영 (200m)',
+  combo2: '여학생 계영 (200m)',
+  combo3: '남학생 혼계영 (200m)',
+  combo4: '여학생 혼계영 (200m)'
+};
+
+const PINNED_RELAYS_STORAGE_KEY = 'gmdc_student_pinned_relays_v1';
+let pinnedRelaysState = JSON.parse(JSON.stringify(DEFAULT_PINNED_RELAYS));
+
+function savePinnedRelays() {
+  localStorage.setItem(PINNED_RELAYS_STORAGE_KEY, JSON.stringify(pinnedRelaysState));
+  if (db && DOC_REF && !isScenarioMode) {
+    setDoc(DOC_REF, {
+      pinnedRelays: pinnedRelaysState,
+      updatedAt: new Date().toISOString()
+    }, { merge: true }).catch(err => console.warn('Firestore pinnedRelays 저장 실패:', err));
+  }
+}
+
+function toggleMemberPin(comboKey, swimmerName, strokeField = null) {
+  const relayTitle = RELAY_TITLES[comboKey] || comboKey;
+
+  if (comboKey === 'combo3' || comboKey === 'combo4') {
+    if (!pinnedRelaysState[comboKey]) {
+      pinnedRelaysState[comboKey] = { back: null, breast: null, fly: null, free: null };
+    }
+    const current = pinnedRelaysState[comboKey][strokeField];
+    const isCurrentlyPinned = current === swimmerName;
+    const stName = STROKE_NAMES[strokeField] || strokeField;
+
+    if (isCurrentlyPinned) {
+      pinnedRelaysState[comboKey][strokeField] = null;
+      showToast(`⚡ [${relayTitle}] ${swimmerName} (${stName}) 선수 고정이 해제되었습니다.`);
+      logChangeHistory('PIN', swimmerName, `relay_pin_${comboKey}_${strokeField}`, `단체전 선발 [${relayTitle} - ${stName}]`, `${stName} 고정`, '미고정 (자동추천)', `[${relayTitle}] ${swimmerName} (${stName}) 고정 해제`, { comboKey, strokeField });
+    } else {
+      pinnedRelaysState[comboKey][strokeField] = swimmerName;
+      showToast(`📌 [${relayTitle}] ${swimmerName} (${stName}) 선수가 필수로 고정되었습니다.`);
+      logChangeHistory('PIN', swimmerName, `relay_pin_${comboKey}_${strokeField}`, `단체전 선발 [${relayTitle} - ${stName}]`, '미고정 (자동추천)', `${stName} 고정`, `[${relayTitle}] ${swimmerName} (${stName}) 선발 고정`, { comboKey, strokeField });
+    }
+  } else {
+    if (!Array.isArray(pinnedRelaysState[comboKey])) {
+      pinnedRelaysState[comboKey] = [];
+    }
+    const list = pinnedRelaysState[comboKey];
+    const idx = list.indexOf(swimmerName);
+
+    if (idx >= 0) {
+      list.splice(idx, 1);
+      showToast(`⚡ [${relayTitle}] ${swimmerName} 선수 고정이 해제되었습니다.`);
+      logChangeHistory('PIN', swimmerName, `relay_pin_${comboKey}`, `단체전 선발 [${relayTitle}]`, '선발 고정됨', '미고정 (자동추천)', `[${relayTitle}] ${swimmerName} 고정 해제`, { comboKey });
+    } else {
+      list.push(swimmerName);
+      const remaining = Math.max(0, 4 - list.length);
+      showToast(`📌 [${relayTitle}] ${swimmerName} 선수가 필수로 고정되었습니다. (나머지 ${remaining}명 자동 최적화)`);
+      logChangeHistory('PIN', swimmerName, `relay_pin_${comboKey}`, `단체전 선발 [${relayTitle}]`, '미고정 (자동추천)', '선발 고정됨', `[${relayTitle}] ${swimmerName} 선발 고정`, { comboKey });
+    }
+  }
+
+  savePinnedRelays();
+  updateStats();
+  renderTable();
+  renderEventsTable();
+}
 
 const LAST_YEAR_MAP = {};
 DEFAULT_STUDENT_RECORDS.forEach(d => {
@@ -274,17 +358,9 @@ const btnRecordsModeSimple = document.getElementById('btnRecordsModeSimple');
 const btnRecordsModeDetailed = document.getElementById('btnRecordsModeDetailed');
 const btnScenarioMode = document.getElementById('btnScenarioMode');
 
-const combo1Time = document.getElementById('combo1Time');
-const combo1Age = document.getElementById('combo1Age');
 const combo1Members = document.getElementById('combo1Members');
-const combo2Time = document.getElementById('combo2Time');
-const combo2Age = document.getElementById('combo2Age');
 const combo2Members = document.getElementById('combo2Members');
-const combo3Time = document.getElementById('combo3Time');
-const combo3Age = document.getElementById('combo3Age');
 const combo3Members = document.getElementById('combo3Members');
-const combo4Time = document.getElementById('combo4Time');
-const combo4Age = document.getElementById('combo4Age');
 const combo4Members = document.getElementById('combo4Members');
 
 const maleMatrixBody = document.getElementById('maleMatrixBody');
@@ -301,9 +377,17 @@ const eventsFilteredCount = document.getElementById('eventsFilteredCount');
 function init() {
   window.__GMDC_VERSION__ = APP_VERSION;
   console.log(`%c[GMDC Swim Students] App Version: ${APP_VERSION}`, 'color: #0284c7; font-weight: bold; font-size: 12px;');
+  initAuth({
+    showToast: showToast,
+    onAuthChange: () => {
+      renderTable();
+      renderEventsTable();
+    }
+  });
   initStickyPreference();
   initNoticeModal();
   initAuditModal();
+  initSnapshotModal();
   initRulesModal();
   initScenarioMode();
   initMatrixCompareMode();
@@ -315,10 +399,6 @@ function init() {
   handleUrlRouting();
   renderAll();
   initFirebaseSync();
-}
-
-function isDeadlineExpired() {
-  return false;
 }
 
 function initDeadlineCountdown() {
@@ -424,13 +504,14 @@ function updateScenarioModeUI() {
   }
 }
 
-const HISTORY_COL_NAME = "gmdc_swim_history_student";
+let lastAuditDiscrepancies = [];
 
 function initAuditModal() {
   const btnAudit = document.getElementById('btnAuditHistory');
   const modal = document.getElementById('auditModal');
   const btnCloseX = document.getElementById('btnAuditModalCloseX');
   const btnConfirm = document.getElementById('btnAuditModalConfirm');
+  const body = document.getElementById('auditModalBody');
 
   if (btnAudit) {
     btnAudit.addEventListener('click', openAuditModal);
@@ -442,6 +523,280 @@ function initAuditModal() {
       if (e.target === modal) closeAuditModal();
     });
   }
+
+  if (body) {
+    body.addEventListener('click', async (e) => {
+      // 1. Delete specific history log
+      const delBtn = e.target.closest('.btn-delete-log');
+      if (delBtn) {
+        const logId = delBtn.dataset.logId;
+        const logSummary = delBtn.dataset.logSummary || '';
+        await deleteHistoryLog(logId, logSummary);
+        return;
+      }
+
+      // 1-1. Unapply specific history log
+      const unapplyBtn = e.target.closest('.btn-unapply-log');
+      if (unapplyBtn) {
+        const logId = unapplyBtn.dataset.logId;
+        const logSummary = unapplyBtn.dataset.logSummary || '';
+        await unapplyHistoryLog(logId, logSummary);
+        return;
+      }
+
+      // 1-2. Reactivate specific unapplied log
+      const reactBtn = e.target.closest('.btn-reactivate-log');
+      if (reactBtn) {
+        const logId = reactBtn.dataset.logId;
+        const logSummary = reactBtn.dataset.logSummary || '';
+        await reactivateHistoryLog(logId, logSummary);
+        return;
+      }
+
+      // 1-3. Unapply all recent logs button
+      const unapplyAllBtn = e.target.closest('#btnUnapplyAllRecentLogs');
+      if (unapplyAllBtn) {
+        await unapplyAllRecentLogs(window._lastRecentLogs || []);
+        return;
+      }
+
+      // 1-4. History Tab Switching
+      const tabBtn = e.target.closest('.audit-tab-btn');
+      if (tabBtn) {
+        const tabName = tabBtn.dataset.tab;
+        body.querySelectorAll('.audit-tab-btn').forEach(b => b.classList.toggle('active', b === tabBtn));
+        const paneActive = body.querySelector('#auditTabPaneActive');
+        const paneUnapplied = body.querySelector('#auditTabPaneUnapplied');
+        if (paneActive && paneUnapplied) {
+          paneActive.style.display = tabName === 'active' ? 'block' : 'none';
+          paneUnapplied.style.display = tabName === 'unapplied' ? 'block' : 'none';
+        }
+        return;
+      }
+
+      // 2. Bulk select all current
+      const btnAllCurrent = e.target.closest('#btnSelectAllCurrent');
+      if (btnAllCurrent) {
+        body.querySelectorAll('.discrepancy-choice-group').forEach(group => {
+          const radioCurrent = group.querySelector('input[value="current"]');
+          if (radioCurrent) radioCurrent.checked = true;
+          group.querySelectorAll('.choice-label').forEach(lbl => {
+            lbl.classList.toggle('is-selected-current', lbl.dataset.choice === 'current');
+            lbl.classList.toggle('is-selected-history', lbl.dataset.choice === 'history' && !radioCurrent.checked);
+          });
+        });
+        return;
+      }
+
+      // 3. Bulk select all history
+      const btnAllHistory = e.target.closest('#btnSelectAllHistory');
+      if (btnAllHistory) {
+        body.querySelectorAll('.discrepancy-choice-group').forEach(group => {
+          const radioHistory = group.querySelector('input[value="history"]');
+          if (radioHistory) radioHistory.checked = true;
+          group.querySelectorAll('.choice-label').forEach(lbl => {
+            lbl.classList.toggle('is-selected-history', lbl.dataset.choice === 'history');
+            lbl.classList.toggle('is-selected-current', lbl.dataset.choice === 'current' && !radioHistory.checked);
+          });
+        });
+        return;
+      }
+
+      // 4. Apply selected decisions
+      const btnApply = e.target.closest('#btnApplyDiscrepancyDecisions');
+      if (btnApply) {
+        const decisions = lastAuditDiscrepancies.map((d, idx) => {
+          const radio = body.querySelector(`input[name="disc_choice_${idx}"]:checked`);
+          const action = radio ? radio.value : 'current';
+          return { discrepancy: d, action };
+        });
+        await applyDiscrepancyDecisions(decisions);
+        return;
+      }
+    });
+
+    body.addEventListener('change', (e) => {
+      const radio = e.target.closest('input[type="radio"]');
+      if (radio && radio.name && radio.name.startsWith('disc_choice_')) {
+        const group = radio.closest('.discrepancy-choice-group');
+        if (group) {
+          group.querySelectorAll('.choice-label').forEach(lbl => {
+            const isCurr = radio.value === 'current' && lbl.dataset.choice === 'current';
+            const isHist = radio.value === 'history' && lbl.dataset.choice === 'history';
+            lbl.classList.toggle('is-selected-current', isCurr);
+            lbl.classList.toggle('is-selected-history', isHist);
+          });
+        }
+      }
+    });
+  }
+}
+
+async function deleteHistoryLog(logId, logSummary) {
+  if (!logId) return;
+  const ok = confirm(`해당 학생부 히스토리 로그 [${logSummary}] 를 완전히 영구 삭제하시겠습니까?\n\n※ 삭제된 히스토리는 서버 DB에서도 완전히 제거됩니다.`);
+  if (!ok) return;
+
+  try {
+    await deleteDoc(doc(db, HISTORY_COL_NAME, logId));
+    showToast(`🗑️ 히스토리 로그가 영구 삭제되었습니다.`);
+    openAuditModal(); // Refresh audit modal
+  } catch (err) {
+    console.error('히스토리 삭제 실패:', err);
+    showToast(`⚠️ 히스토리 삭제 실패: ${err.message || err}`);
+  }
+}
+
+async function unapplyHistoryLog(logId, logSummary) {
+  if (!logId) return;
+  const ok = confirm(`해당 학생부 히스토리 로그 [${logSummary}] 를 [미적용] 상태로 전환하시겠습니까?\n\n※ 서버에는 영구 보존되며, 정합성 검증 및 재현 계산에서만 제외됩니다.`);
+  if (!ok) return;
+
+  try {
+    await updateDoc(doc(db, HISTORY_COL_NAME, logId), {
+      isApplied: false,
+      unappliedAt: new Date().toISOString(),
+      unapplyReason: '사용자 개별 미적용 처리'
+    });
+    showToast(`⏸️ 히스토리 로그가 [미적용] 보존 상태로 전환되었습니다.`);
+    openAuditModal();
+  } catch (err) {
+    console.error('히스토리 미적용 실패:', err);
+    showToast(`⚠️ 처리 실패: ${err.message || err}`);
+  }
+}
+
+async function reactivateHistoryLog(logId, logSummary) {
+  if (!logId) return;
+  const ok = confirm(`해당 학생부 히스토리 로그 [${logSummary}] 를 다시 [적용] 상태로 활성화하시겠습니까?`);
+  if (!ok) return;
+
+  try {
+    await updateDoc(doc(db, HISTORY_COL_NAME, logId), {
+      isApplied: true,
+      reactivatedAt: new Date().toISOString()
+    });
+    showToast(`▶️ 히스토리 로그가 다시 [적용] 상태로 활성화되었습니다.`);
+    openAuditModal();
+  } catch (err) {
+    console.error('히스토리 재활성화 실패:', err);
+    showToast(`⚠️ 처리 실패: ${err.message || err}`);
+  }
+}
+
+async function unapplyAllRecentLogs(activeLogs) {
+  if (!activeLogs || activeLogs.length === 0) return;
+  const ok = confirm(`최후 스냅샷 이후의 모든 활성 히스토리 (${activeLogs.length}건)를 [미적용] 상태로 일괄 전환하시겠습니까?\n\n※ 서버에는 영구 보존되며, 정합성 검증 일치율은 즉시 100%가 됩니다.`);
+  if (!ok) return;
+
+  try {
+    const nowIso = new Date().toISOString();
+    for (const log of activeLogs) {
+      if (log.id) {
+        await updateDoc(doc(db, HISTORY_COL_NAME, log.id), {
+          isApplied: false,
+          unappliedAt: nowIso,
+          unapplyReason: '스냅샷 기준 일괄 미적용 정리'
+        });
+      }
+    }
+    showToast(`🎉 ${activeLogs.length}건의 히스토리가 [미적용]으로 안전하게 보존 정리되었습니다!`);
+    openAuditModal();
+  } catch (err) {
+    console.error('일괄 미적용 실패:', err);
+    showToast(`⚠️ 처리 실패: ${err.message || err}`);
+  }
+}
+
+async function applyDiscrepancyDecisions(decisions) {
+  if (!decisions || decisions.length === 0) return;
+
+  const applyCurrentCount = decisions.filter(d => d.action === 'current').length;
+  const applyHistoryCount = decisions.filter(d => d.action === 'history').length;
+
+  const ok = confirm(
+    `총 ${decisions.length}건의 학생부 불일치 항목에 대해 선택하신 결정을 적용하시겠습니까?\n\n` +
+    `• 📝 현재값 적용 (히스토리 보정 등록): ${applyCurrentCount}건\n` +
+    `• ↩️ 히스토리값으로 원상복구 (학생부 DB 롤백): ${applyHistoryCount}건\n\n` +
+    `적용 후 스냅샷+히스토리 재현 결과와 현재 학생부 DB 정합성은 100% 완벽 일치하게 됩니다.`
+  );
+  if (!ok) return;
+
+  try {
+    const histCol = collection(db, HISTORY_COL_NAME);
+    const nowIso = new Date().toISOString();
+    let dbModified = false;
+
+    for (const item of decisions) {
+      const d = item.discrepancy;
+      const action = item.action;
+
+      if (action === 'current') {
+        // Option 1: Apply current live DB value -> Add history log
+        let logData;
+        if (d.field === 'member') {
+          logData = {
+            timestamp: nowIso,
+            type: 'MEMBER',
+            swimmer: d.name,
+            field: 'member',
+            label: '신규 회원 등록 (정합성 보정)',
+            prevVal: '',
+            newVal: d.currentVal
+          };
+        } else if (d.field === 'member_deleted') {
+          logData = {
+            timestamp: nowIso,
+            type: 'DELETE',
+            swimmer: d.name,
+            field: 'member',
+            label: '회원 삭제 (정합성 보정)',
+            prevVal: d.replayedVal,
+            newVal: '삭제됨'
+          };
+        } else {
+          logData = {
+            timestamp: nowIso,
+            type: 'INFO',
+            swimmer: d.name,
+            field: d.field,
+            label: `${d.fieldName} (정합성 보정)`,
+            prevVal: d.replayedVal === '(빈값)' ? '' : d.replayedVal,
+            newVal: d.currentVal === '(빈값)' ? '' : d.currentVal
+          };
+        }
+        await addDoc(histCol, logData);
+      } else if (action === 'history') {
+        // Option 2: Revert DB value back to history replayed value
+        dbModified = true;
+        if (d.field === 'member') {
+          // Member didn't exist in history -> delete from live DB
+          records = records.filter(r => r.name !== d.name && r.id !== d.id);
+        } else if (d.field === 'member_deleted') {
+          // Member existed in history -> restore to live DB
+          if (d.recordObj) {
+            records.push(JSON.parse(JSON.stringify(d.recordObj)));
+          }
+        } else {
+          const rec = records.find(r => r.name === d.name || r.id === d.id);
+          if (rec) {
+            rec[d.field] = (d.replayedVal === '(빈값)' || d.replayedVal === '(미존재)') ? '' : d.replayedVal;
+          }
+        }
+      }
+    }
+
+    if (dbModified) {
+      saveData();
+      renderAll();
+    }
+
+    showToast(`🎉 총 ${decisions.length}건의 정합성 결정이 적용되어 100% 일치되었습니다!`);
+    openAuditModal(); // Refresh audit modal
+  } catch (err) {
+    console.error('정합성 결정 적용 실패:', err);
+    showToast(`⚠️ 적용 실패: ${err.message || err}`);
+  }
 }
 
 async function openAuditModal() {
@@ -452,9 +807,9 @@ async function openAuditModal() {
 
   body.innerHTML = `
     <div style="text-align:center; padding:35px 20px; color:var(--text-muted);">
-      <div style="font-size: 24px; margin-bottom: 8px;">⏳</div>
-      <div style="font-weight: 700; color: var(--text-main); margin-bottom: 4px;">학생부 히스토리 데이터 정합성 검증 중...</div>
-      <div style="font-size: 13px;">클라우드 히스토리 로그 전체를 재현하여 현재 기록과 비교 분석합니다.</div>
+      <div style="font-size: 24px; margin-bottom: 8px; animation:spin 1s infinite linear;">⏳</div>
+      <div style="font-weight: 700; color: var(--text-main); margin-bottom: 4px;">최후 스냅샷 및 학생부 히스토리 로그 분석 중...</div>
+      <div style="font-size: 13px;">클라우드 최후 스냅샷 이후의 변경 이력을 시간순으로 재현 및 검증하고 있습니다.</div>
     </div>
   `;
   modal.classList.add('show');
@@ -463,98 +818,545 @@ async function openAuditModal() {
     const result = await compareHistoryWithCurrentRecords();
     if (tsSpan) tsSpan.textContent = `검증 시각: ${new Date().toLocaleTimeString('ko-KR')}`;
 
-    if (!result.success) {
+    if (!result || !result.success) {
       body.innerHTML = `
         <div style="background:#fef2f2; border:1px solid #fecaca; border-radius:10px; padding:18px; color:#991b1b;">
           <div style="font-weight:800; margin-bottom:6px;">⚠️ 검증 실패</div>
-          <div style="font-size:13px;">${escapeHtml(result.error || result.reason || '알 수 없는 오류가 발생했습니다.')}</div>
+          <div style="font-size:13px;">${escapeHtml(result ? result.error || result.reason : '알 수 없는 오류가 발생했습니다.')}</div>
         </div>
       `;
       return;
     }
 
+    lastAuditDiscrepancies = result.discrepancies || [];
+    window._lastReplayedRecords = result.replayedRecords;
+    window._lastRecentLogs = result.recentLogs || [];
+
+    let matchSectionHtml = '';
     if (result.isPerfectMatch) {
-      body.innerHTML = `
-        <div style="background:#ecfdf5; border:1px solid #a7f3d0; border-radius:10px; padding:20px; text-align:center; margin-bottom:16px;">
-          <div style="font-size:32px; margin-bottom:8px;">🎯</div>
-          <div style="color:#065f46; font-weight:800; font-size:17px; margin-bottom:6px;">
-            데이터 정합성 100% 완벽 일치!
+      matchSectionHtml = `
+        <div style="background:#ecfdf5; border:1px solid #6ee7b7; border-radius:10px; padding:16px; margin-bottom:14px;">
+          <div style="display:flex; align-items:center; gap:8px; color:#065f46; font-weight:800; font-size:15px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            <span>학생부 스냅샷 및 이후 히스토리가 현재 DB와 100% 완벽히 일치합니다!</span>
           </div>
-          <p style="color:#047857; font-size:13px; margin-bottom:12px; line-height:1.5;">
-            학생부 히스토리 로그 <strong>${result.totalLogs}건</strong>을 누적 재현한 결과와<br/>
-            현재 화면/서버에 로딩된 기록(총 ${result.totalFieldChecks}개 필드)이 <strong>단 하나의 오차 없이 100% 완벽하게 일치</strong>합니다.
+          <p style="margin-top:6px; font-size:12.5px; color:#047857; line-height:1.45;">
+            최후 스냅샷으로부터 적용 중인 총 <strong>${result.recentLogs.length}건</strong>의 변경 히스토리를 순차 적용한 결과, 현재 실시간 DB와 오차 없이 100% 완벽하게 일치함을 검증하였습니다.
+            ${result.unappliedLogs.length > 0 ? ` (※ 미적용 보존 히스토리: <strong>${result.unappliedLogs.length}건</strong>)` : ''}
           </p>
-          <div style="display:inline-flex; gap:16px; background:#fff; padding:8px 16px; border-radius:8px; border:1px solid #d1fae5; font-size:12px; font-weight:700; color:#065f46;">
-            <span>처리된 히스토리: ${result.totalLogs}건</span>
-            <span>일치율: 100.0%</span>
-            <span>불일치: 0건</span>
-          </div>
         </div>
       `;
     } else {
-      body.innerHTML = `
-        <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:10px; padding:18px; margin-bottom:16px;">
-          <div style="display:flex; align-items:center; gap:8px; color:#92400e; font-weight:800; font-size:16px;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-            <span>총 ${result.discrepancyCount}건의 차이가 발견되었습니다 (일치율: ${result.matchRate})</span>
+      matchSectionHtml = `
+        <div class="discrepancy-box">
+          <div class="discrepancy-header">
+            <div style="display:flex; align-items:center; gap:8px; color:#92400e; font-weight:800; font-size:15px;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              <span>총 ${result.discrepancyCount}건의 학생부 불일치 항목 (일치율: ${result.matchRate})</span>
+            </div>
+            <div class="bulk-select-group">
+              <span style="font-size:11.5px; color:var(--text-muted); font-weight:600;">일괄 선택:</span>
+              <button type="button" class="btn-bulk-select" id="btnSelectAllHistory">모두 미적용</button>
+              <button type="button" class="btn-bulk-select" id="btnSelectAllCurrent">모두 반영</button>
+            </div>
           </div>
-          <p style="margin-top:8px; font-size:13px; color:#b45309; line-height:1.5;">
-            히스토리 로그 재현 결과와 현재 서버/로컬 로딩 데이터 간에 일부 차이가 있습니다. 아래 목록을 확인하고 필요 시 <strong>[히스토리 데이터로 일괄 복구]</strong>를 진행할 수 있습니다.
+          <p style="font-size:12px; color:#b45309; margin-bottom:12px;">
+            각 항목별로 <strong>[미적용 (과거 히스토리값으로 DB 원상복구)]</strong> 또는 <strong>[반영 (현재 DB 내용 적용 및 히스토리 보정)]</strong>을 선택한 후 하단의 적용 버튼을 누르시면 다음에 검증할 때 100% 일치하게 됩니다.
           </p>
-        </div>
 
-        <div style="max-height: 250px; overflow-y: auto; border: 1px solid var(--border-light); border-radius: 8px; margin-bottom: 14px;">
-          <table class="audit-table" style="margin-top:0;">
-            <thead>
-              <tr>
-                <th>회원명</th>
-                <th>항목</th>
-                <th>히스토리 재현값</th>
-                <th>현재 로딩값</th>
-                <th>상태</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${result.discrepancies.map(d => `
+          <div style="max-height: 260px; overflow-y: auto; border-radius: 8px;">
+            <table class="discrepancy-table">
+              <thead>
                 <tr>
-                  <td style="font-weight:700;">${escapeHtml(d.name)}</td>
-                  <td>${escapeHtml(d.fieldName || d.field)}</td>
-                  <td style="color:#2563eb; font-weight:700;">${escapeHtml(d.replayedVal)}</td>
-                  <td style="color:#dc2626; font-weight:700;">${escapeHtml(d.currentVal)}</td>
-                  <td><span style="background:#fee2e2; color:#991b1b; padding:2px 6px; border-radius:4px; font-size:11px;">${escapeHtml(d.status)}</span></td>
+                  <th style="width:75px;">선수명</th>
+                  <th style="width:95px;">항목</th>
+                  <th style="width:100px;">변경시기</th>
+                  <th>과거</th>
+                  <th>현재</th>
+                  <th style="width:160px; text-align:center;">선택</th>
                 </tr>
-              `).join('')}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                ${result.discrepancies.map((d, idx) => `
+                  <tr>
+                    <td style="font-weight:700;">${escapeHtml(d.name)}</td>
+                    <td><span style="background:#f1f5f9; padding:2px 6px; border-radius:4px; font-size:11px; font-weight:600;">${escapeHtml(d.fieldName || d.field)}</span></td>
+                    <td style="color:var(--text-muted); font-size:11.5px; white-space:nowrap;">${escapeHtml(d.changeTime || '-')}</td>
+                    <td style="color:#2563eb; font-weight:700;">${escapeHtml(d.replayedVal)}</td>
+                    <td style="color:#dc2626; font-weight:700;">${escapeHtml(d.currentVal)}</td>
+                    <td>
+                      <div class="discrepancy-choice-group" data-disc-idx="${idx}">
+                        <label class="choice-label" data-choice="history" title="과거 히스토리값으로 DB를 원상복구합니다 (미적용)">
+                          <input type="radio" name="disc_choice_${idx}" value="history" />
+                          <span>미적용</span>
+                        </label>
+                        <label class="choice-label is-selected-current" data-choice="current" title="현재 DB값을 유지하고 히스토리에 반영합니다">
+                          <input type="radio" name="disc_choice_${idx}" value="current" checked />
+                          <span>반영</span>
+                        </label>
+                      </div>
+                    </td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
 
-        <div style="display: flex; justify-content: flex-end; gap: 8px;">
-          <button id="btnRestoreFromHistory" class="btn btn-primary" style="background:#059669; border-color:#059669; font-weight:700; display:flex; align-items:center; gap:6px; font-size:13px; padding:8px 16px;">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path><path d="M21 3v5h-5"></path><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path><path d="M8 16H3v5"></path></svg>
-            <span>히스토리 데이터로 일괄 복구하기 (${result.discrepancyCount}건 복원)</span>
-          </button>
+          <div class="discrepancy-footer-actions">
+            <div style="font-size:12px; color:#6b7280;">
+              💡 결정 적용 시 Firestore 히스토리 및 실시간 DB가 즉시 상호 동기화됩니다.
+            </div>
+            <button type="button" id="btnApplyDiscrepancyDecisions" class="btn-apply-disc-decisions">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>선택한 결정 적용 (100% 정합성 완료)</span>
+            </button>
+          </div>
         </div>
       `;
-
-      const btnRestore = body.querySelector('#btnRestoreFromHistory');
-      if (btnRestore) {
-        btnRestore.addEventListener('click', () => {
-          if (confirm(`히스토리에 기록된 ${result.discrepancyCount}건의 변경 내역을 현재 학생부 서버 데이터에 완벽하게 복구하시겠습니까?`)) {
-            records = JSON.parse(JSON.stringify(result.replayedRecords));
-            saveData();
-            renderAll();
-            showToast(`🎉 ${result.discrepancyCount}건의 기록이 히스토리 데이터로 완벽히 복구되었습니다!`);
-            closeAuditModal();
-          }
-        });
-      }
     }
+
+    body.innerHTML = `
+      <!-- 1. Latest Snapshot Header Card -->
+      <div class="audit-snapshot-header">
+        <div class="snap-title">
+          <span>📷 최후 기준 스냅샷: <strong>${escapeHtml(result.baseTitle)}</strong></span>
+          <span style="font-size:11px; background:#f1f5f9; padding:2px 8px; border-radius:12px; color:#475569; font-weight:600;">${result.baseRecordsCount}명 기준</span>
+        </div>
+        <div class="snap-meta">
+          <span>기준 시각: <strong>${escapeHtml(result.baseTimeFormatted)}</strong></span>
+          <span>적용 히스토리: <strong>${result.recentLogs.length}건</strong></span>
+          <span>미적용 보존: <strong>${result.unappliedLogs.length}건</strong></span>
+          <span>검증 필드수: <strong>${result.totalFieldChecks}개</strong></span>
+        </div>
+      </div>
+
+      <!-- 2. Match Summary & Discrepancies (with Sync button) -->
+      ${matchSectionHtml}
+
+      <!-- 3. Chronological History Logs Box with Tabs & Unapply / Reactivate Controls -->
+      <div class="audit-history-box">
+        <div class="audit-history-header">
+          <div style="display:flex; align-items:center; gap:6px;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            <span>스냅샷 이후 히스토리 (총 ${result.totalRecentCount}건)</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            ${result.recentLogs.length > 0 ? `
+              <button type="button" class="btn-bulk-select" id="btnUnapplyAllRecentLogs" title="스냅샷 이후 활성 히스토리를 모두 [미적용]으로 정리하고 100% 일치시킵니다">
+                ⏸️ 활성 히스토리 일괄 미적용
+              </button>
+            ` : ''}
+          </div>
+        </div>
+
+        <div class="audit-history-tabs">
+          <button type="button" class="audit-tab-btn active" data-tab="active">
+            <span>적용 중인 히스토리 (${result.recentLogs.length}건)</span>
+          </button>
+          <button type="button" class="audit-tab-btn" data-tab="unapplied">
+            <span>미적용 보존 히스토리 (${result.unappliedLogs.length}건)</span>
+          </button>
+        </div>
+
+        <!-- Active Tab Pane -->
+        <div id="auditTabPaneActive" class="audit-tab-pane">
+          ${result.recentLogs.length === 0 ? `
+            <div style="padding:24px; text-align:center; color:var(--text-muted); font-size:12.5px;">
+              스냅샷 생성 시점 이후 활성화된 변경 히스토리가 없습니다.
+            </div>
+          ` : `
+            <div style="max-height: 220px; overflow-y: auto;">
+              <table class="audit-history-table">
+                <thead>
+                  <tr>
+                    <th style="width:110px;">기록 시각</th>
+                    <th style="width:80px;">선수명</th>
+                    <th style="width:110px;">변경 항목</th>
+                    <th>변경 내용 (이전 ➔ 이후)</th>
+                    <th style="width:110px; text-align:center;">관리</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${result.recentLogs.map(log => {
+                    const timeStr = log.timestamp ? new Date(log.timestamp).toLocaleString('ko-KR', { month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit', second:'2-digit' }) : '-';
+                    const swimmer = log.swimmer || log.swimmerName || '-';
+                    const label = log.label || log.field || '-';
+                    const changeStr = `${log.prevVal ? escapeHtml(log.prevVal) : '(빈값)'} ➔ <strong style="color:var(--primary);">${log.newVal ? escapeHtml(log.newVal) : '(빈값)'}</strong>`;
+                    return `
+                      <tr>
+                        <td style="color:var(--text-muted); font-size:11.5px;">${timeStr}</td>
+                        <td style="font-weight:700;">${escapeHtml(swimmer)}</td>
+                        <td><span style="background:#f1f5f9; padding:2px 6px; border-radius:4px; font-size:11px; font-weight:600;">${escapeHtml(label)}</span></td>
+                        <td>${changeStr}</td>
+                        <td style="text-align:center;">
+                          <div style="display:inline-flex; gap:4px;">
+                            <button type="button" class="btn-unapply-log" data-log-id="${log.id}" data-log-summary="${escapeHtml(swimmer)} - ${escapeHtml(label)}" title="이 히스토리를 미적용 상태로 전환 (서버에는 보존됨)">
+                              <span>⏸️ 미적용</span>
+                            </button>
+                            <button type="button" class="btn-delete-log" data-log-id="${log.id}" data-log-summary="${escapeHtml(swimmer)} - ${escapeHtml(label)}" title="이 히스토리 영구 삭제">
+                              <span>🗑️</span>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    `;
+                  }).join('')}
+                </tbody>
+              </table>
+            </div>
+          `}
+        </div>
+
+        <!-- Unapplied Tab Pane -->
+        <div id="auditTabPaneUnapplied" class="audit-tab-pane" style="display:none;">
+          ${result.unappliedLogs.length === 0 ? `
+            <div style="padding:24px; text-align:center; color:var(--text-muted); font-size:12.5px;">
+              미적용으로 보존된 히스토리가 없습니다.
+            </div>
+          ` : `
+            <div style="max-height: 220px; overflow-y: auto;">
+              <table class="audit-history-table">
+                <thead>
+                  <tr>
+                    <th style="width:110px;">기록 시각</th>
+                    <th style="width:80px;">선수명</th>
+                    <th style="width:110px;">변경 항목</th>
+                    <th>변경 내용</th>
+                    <th style="width:140px;">상태 / 사유</th>
+                    <th style="width:110px; text-align:center;">관리</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${result.unappliedLogs.map(log => {
+                    const timeStr = log.timestamp ? new Date(log.timestamp).toLocaleString('ko-KR', { month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit', second:'2-digit' }) : '-';
+                    const swimmer = log.swimmer || log.swimmerName || '-';
+                    const label = log.label || log.field || '-';
+                    const changeStr = `<span style="text-decoration:line-through; color:var(--text-muted);">${log.prevVal ? escapeHtml(log.prevVal) : '(빈값)'} ➔ ${log.newVal ? escapeHtml(log.newVal) : '(빈값)'}</span>`;
+                    const reason = log.unapplyReason || '미적용 처리됨';
+                    return `
+                      <tr style="opacity: 0.85;">
+                        <td style="color:var(--text-muted); font-size:11.5px;">${timeStr}</td>
+                        <td style="font-weight:700; color:var(--text-muted);">${escapeHtml(swimmer)}</td>
+                        <td><span style="background:#f1f5f9; padding:2px 6px; border-radius:4px; font-size:11px; font-weight:600; color:var(--text-muted);">${escapeHtml(label)}</span></td>
+                        <td>${changeStr}</td>
+                        <td><span class="badge-unapplied" title="${escapeHtml(reason)}">⏸️ ${escapeHtml(reason)}</span></td>
+                        <td style="text-align:center;">
+                          <div style="display:inline-flex; gap:4px;">
+                            <button type="button" class="btn-reactivate-log" data-log-id="${log.id}" data-log-summary="${escapeHtml(swimmer)} - ${escapeHtml(label)}" title="이 히스토리를 다시 적용 활성화">
+                              <span>▶️ 다시 적용</span>
+                            </button>
+                            <button type="button" class="btn-delete-log" data-log-id="${log.id}" data-log-summary="${escapeHtml(swimmer)} - ${escapeHtml(label)}" title="이 히스토리 영구 삭제">
+                              <span>🗑️</span>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    `;
+                  }).join('')}
+                </tbody>
+              </table>
+            </div>
+          `}
+        </div>
+      </div>
+    `;
   }, 100);
 }
 
 function closeAuditModal() {
   const modal = document.getElementById('auditModal');
   if (modal) modal.classList.remove('show');
+}
+
+// ============================================================
+// FIRESTORE DB SNAPSHOT & VERSION RESTORE ENGINE (STUDENT)
+// ============================================================
+function initSnapshotModal() {
+  const btnOpen = document.getElementById('btnOpenSnapshotModal');
+  const modal = document.getElementById('snapshotModal');
+  const btnCloseX = document.getElementById('btnSnapshotModalCloseX');
+  const btnCloseFooter = document.getElementById('btnSnapshotModalClose');
+  const btnCreate = document.getElementById('btnCreateSnapshot');
+  const btnRefresh = document.getElementById('btnRefreshSnapshots');
+
+  if (btnOpen) {
+    btnOpen.addEventListener('click', () => {
+      openSnapshotModal();
+    });
+  }
+
+  if (btnCloseX) btnCloseX.addEventListener('click', closeSnapshotModal);
+  if (btnCloseFooter) btnCloseFooter.addEventListener('click', closeSnapshotModal);
+
+  if (modal) {
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeSnapshotModal();
+    });
+  }
+
+  if (btnCreate) {
+    btnCreate.addEventListener('click', async () => {
+      const inputTitle = document.getElementById('snapshotTitleInput');
+      const inputMemo = document.getElementById('snapshotMemoInput');
+      const title = inputTitle ? inputTitle.value.trim() : '';
+      const memo = inputMemo ? inputMemo.value.trim() : '';
+      
+      btnCreate.disabled = true;
+      btnCreate.innerHTML = '<span>⏳ 저장 중...</span>';
+      try {
+        await createDbSnapshot(title, memo);
+        if (inputTitle) inputTitle.value = '';
+        if (inputMemo) inputMemo.value = '';
+        await loadSnapshotsList();
+      } finally {
+        btnCreate.disabled = false;
+        btnCreate.innerHTML = `
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+            <circle cx="12" cy="13" r="4"></circle>
+          </svg>
+          <span>스냅샷 저장</span>
+        `;
+      }
+    });
+  }
+
+  if (btnRefresh) {
+    btnRefresh.addEventListener('click', () => {
+      loadSnapshotsList();
+    });
+  }
+
+  window.openSnapshotModal = openSnapshotModal;
+  window.closeSnapshotModal = closeSnapshotModal;
+  window.createDbSnapshot = createDbSnapshot;
+}
+
+async function openSnapshotModal() {
+  const modal = document.getElementById('snapshotModal');
+  if (!modal) return;
+  modal.classList.add('show');
+  
+  const inputTitle = document.getElementById('snapshotTitleInput');
+  if (inputTitle && !inputTitle.value) {
+    const now = new Date();
+    const defaultName = `${now.getFullYear()}.${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getDate()).padStart(2,'0')} 학생부 스냅샷`;
+    inputTitle.placeholder = `예: ${defaultName}`;
+  }
+
+  const currentCountBadge = document.getElementById('snapshotCurrentCountBadge');
+  if (currentCountBadge) {
+    currentCountBadge.textContent = `현재 등록 인원: 총 ${records.length}명`;
+  }
+
+  await loadSnapshotsList();
+}
+
+function closeSnapshotModal() {
+  const modal = document.getElementById('snapshotModal');
+  if (modal) modal.classList.remove('show');
+}
+
+async function createDbSnapshot(customTitle, memo = '') {
+  if (!db) {
+    showToast('⚠️ Firebase 연결이 필요합니다.');
+    return;
+  }
+
+  const now = new Date();
+  const timeFormatted = now.toLocaleString('ko-KR', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: true
+  });
+
+  const autoTitle = customTitle || `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} 학생부 스냅샷`;
+
+  const snapshotData = {
+    title: autoTitle,
+    memo: memo || '',
+    division: 'student',
+    records: JSON.parse(JSON.stringify(records)),
+    recordCount: records.length,
+    createdAt: now.toISOString(),
+    createdAtFormatted: timeFormatted,
+    device: navigator.userAgent.includes('Mobile') ? '모바일' : 'PC'
+  };
+
+  try {
+    const colRef = collection(db, SNAPSHOT_COL_NAME);
+    const docRef = await addDoc(colRef, snapshotData);
+    showToast(`📸 학생부 스냅샷이 성공적으로 저장되었습니다! (${autoTitle})`);
+    return docRef.id;
+  } catch (err) {
+    console.error('학생부 스냅샷 저장 실패:', err);
+    showToast(`⚠️ 스냅샷 저장 실패: ${err.message || err}`);
+    throw err;
+  }
+}
+
+async function loadSnapshotsList() {
+  const listContainer = document.getElementById('snapshotListContainer');
+  if (!listContainer) return;
+
+  if (!db) {
+    listContainer.innerHTML = `
+      <div style="text-align:center; padding:30px; color:#ef4444;">
+        ⚠️ Firebase 클라우드에 연결되지 않아 스냅샷 목록을 조회할 수 없습니다.
+      </div>
+    `;
+    return;
+  }
+
+  listContainer.innerHTML = `
+    <div style="text-align:center; padding:30px; color:var(--text-muted);">
+      <div style="font-size:24px; margin-bottom:8px; animation:spin 1s infinite linear;">⏳</div>
+      <div>스냅샷 목록 불러오는 중...</div>
+    </div>
+  `;
+
+  try {
+    const colRef = collection(db, SNAPSHOT_COL_NAME);
+    const q = query(colRef, orderBy("createdAt", "desc"), limit(50));
+    const querySnapshot = await getDocs(q);
+
+    const snapshots = [];
+    querySnapshot.forEach(docSnap => {
+      snapshots.push({ id: docSnap.id, ...docSnap.data() });
+    });
+
+    if (snapshots.length === 0) {
+      listContainer.innerHTML = `
+        <div style="text-align:center; padding:36px 20px; color:var(--text-muted); background:var(--bg-page); border-radius:8px; border:1px dashed var(--border-dark);">
+          <div style="font-size:28px; margin-bottom:6px;">📷</div>
+          <div style="font-weight:700; color:var(--text-main); font-size:14px;">저장된 학생부 스냅샷이 없습니다.</div>
+          <div style="font-size:12px; margin-top:4px;">위 입력창에서 [스냅샷 저장]을 눌러 첫 스냅샷을 생성해보세요.</div>
+        </div>
+      `;
+      return;
+    }
+
+    listContainer.innerHTML = snapshots.map(s => {
+      const recordsArr = Array.isArray(s.records) ? s.records : [];
+      const count = s.recordCount || recordsArr.length;
+      const timeStr = s.createdAtFormatted || (s.createdAt ? new Date(s.createdAt).toLocaleString('ko-KR') : '');
+
+      return `
+        <div class="snapshot-item" data-snapshot-id="${escapeHtml(s.id)}">
+          <div class="snapshot-item-top">
+            <div>
+              <div class="snapshot-title">${escapeHtml(s.title || '이름 없는 스냅샷')}</div>
+              ${s.memo ? `<div style="font-size:12px; color:var(--text-muted); margin-top:2px;">${escapeHtml(s.memo)}</div>` : ''}
+              <div class="snapshot-time">🕒 ${escapeHtml(timeStr)} ${s.device ? `· ${escapeHtml(s.device)}` : ''}</div>
+            </div>
+            <div class="snapshot-meta-badges">
+              <span class="snapshot-badge" style="background:#ffedd5; color:#c2410c;">총 ${count}명</span>
+            </div>
+          </div>
+          <div class="snapshot-actions">
+            <button type="button" class="btn-snapshot-action restore" data-action="restore" data-id="${escapeHtml(s.id)}" data-title="${escapeHtml(s.title || '')}">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path><path d="M21 3v5h-5"></path><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path><path d="M8 16H3v5"></path></svg>
+              <span>이 스냅샷으로 DB 복원</span>
+            </button>
+            <button type="button" class="btn-snapshot-action" data-action="copy" data-id="${escapeHtml(s.id)}">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <span>JSON 복사</span>
+            </button>
+            <button type="button" class="btn-snapshot-action delete" data-action="delete" data-id="${escapeHtml(s.id)}" data-title="${escapeHtml(s.title || '')}">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+              <span>삭제</span>
+            </button>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    // Attach button events
+    listContainer.querySelectorAll('[data-action="restore"]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const snapId = btn.dataset.id;
+        const snapTitle = btn.dataset.title;
+        const targetSnap = snapshots.find(s => s.id === snapId);
+        if (!targetSnap || !Array.isArray(targetSnap.records)) {
+          showToast('⚠️ 스냅샷 데이터를 찾을 수 없습니다.');
+          return;
+        }
+
+        if (!confirm(`정말로 [${snapTitle}] 스냅샷(${targetSnap.records.length}명)으로 현재 학생부 DB 데이터를 복원하시겠습니까?\n\n※ [스냅샷 복원] 이력이 히스토리에 자동 기록되며, 새로운 정합성 기준점으로 설정되어 100% 일치 상태가 됩니다.`)) {
+          return;
+        }
+
+        records = JSON.parse(JSON.stringify(targetSnap.records));
+        saveData();
+        renderAll();
+
+        // 1. Record RESTORE event into Firestore history
+        await logChangeHistory(
+          'RESTORE',
+          '(전체 명단)',
+          'snapshot_restore',
+          '스냅샷 복원',
+          '',
+          snapTitle,
+          `[스냅샷 복원] ${snapTitle} (${targetSnap.records.length}명)`,
+          {
+            snapshotId: snapId,
+            snapshotTitle: snapTitle,
+            snapshotCreatedAt: targetSnap.createdAt || targetSnap.savedAt || ''
+          }
+        );
+
+        showToast(`🎉 [${snapTitle}] 스냅샷으로 학생부 DB가 성공적으로 복원되었습니다! (복원 이력 기록 완료)`);
+        closeSnapshotModal();
+      });
+    });
+
+    listContainer.querySelectorAll('[data-action="copy"]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const snapId = btn.dataset.id;
+        const targetSnap = snapshots.find(s => s.id === snapId);
+        if (!targetSnap) return;
+        const jsonStr = JSON.stringify(targetSnap.records, null, 2);
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(jsonStr).then(() => {
+            showToast('📋 스냅샷 JSON 데이터가 클립보드에 복사되었습니다.');
+          }).catch(() => fallbackCopyText(jsonStr, targetSnap.records.length));
+        } else {
+          fallbackCopyText(jsonStr, targetSnap.records.length);
+        }
+      });
+    });
+
+    listContainer.querySelectorAll('[data-action="delete"]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const snapId = btn.dataset.id;
+        const snapTitle = btn.dataset.title;
+        if (confirm(`[${snapTitle}] 스냅샷을 삭제하시겠습니까? (삭제 후 복구 불가)`)) {
+          try {
+            await deleteDoc(doc(db, SNAPSHOT_COL_NAME, snapId));
+            showToast('🗑️ 스냅샷이 삭제되었습니다.');
+            await loadSnapshotsList();
+          } catch (err) {
+            console.error('스냅샷 삭제 에러:', err);
+            showToast('⚠️ 스냅샷 삭제 실패: ' + err.message);
+          }
+        }
+      });
+    });
+
+  } catch (err) {
+    console.error('스냅샷 목록 로딩 실패:', err);
+    listContainer.innerHTML = `
+      <div style="background:#fee2e2; border:1px solid #fca5a5; border-radius:8px; padding:16px; color:#991b1b;">
+        <div style="font-weight:700;">⚠️ 스냅샷 목록 로딩 실패</div>
+        <div style="font-size:12px; margin-top:4px;">${escapeHtml(err.message || err)}</div>
+      </div>
+    `;
+  }
 }
 
 function initRulesModal() {
@@ -588,22 +1390,86 @@ async function compareHistoryWithCurrentRecords() {
   }
 
   try {
+    // 1. Fetch latest snapshot (limit 1)
+    let latestSnapshot = null;
+    try {
+      const snapColRef = collection(db, SNAPSHOT_COL_NAME);
+      const snapQ = query(snapColRef, orderBy("createdAt", "desc"), limit(1));
+      const snapRes = await getDocs(snapQ);
+      if (!snapRes.empty) {
+        const snapDoc = snapRes.docs[0];
+        latestSnapshot = { id: snapDoc.id, ...snapDoc.data() };
+      }
+    } catch (snapErr) {
+      console.warn('학생부 스냅샷 컬렉션 조회 실패/없음:', snapErr);
+    }
+
+    // 2. Fetch recent 50 history logs (descending) for ultra-lightweight query
     const colRef = collection(db, HISTORY_COL_NAME);
-    const q = query(colRef, orderBy("timestamp", "asc"));
+    const q = query(colRef, orderBy("timestamp", "desc"), limit(50));
     const querySnapshot = await getDocs(q);
 
-    const historyLogs = [];
+    const recentHistoryLogs = [];
     querySnapshot.forEach(docSnap => {
-      historyLogs.push({ id: docSnap.id, ...docSnap.data() });
+      recentHistoryLogs.push({ id: docSnap.id, ...docSnap.data() });
     });
 
-    let replayed = JSON.parse(JSON.stringify(DEFAULT_STUDENT_RECORDS));
+    // 3. Find latest RESTORE event vs latest Snapshot created
+    const latestRestoreLog = recentHistoryLogs.find(l => l.type === 'RESTORE' && l.snapshotId);
+    const snapCreated = latestSnapshot ? (latestSnapshot.createdAt || latestSnapshot.savedAt || '') : '';
+    const restoreTime = latestRestoreLog ? (latestRestoreLog.timestamp || '') : '';
+    const isRestoreAnchor = Boolean(latestRestoreLog && (!snapCreated || restoreTime >= snapCreated));
 
-    historyLogs.forEach(log => {
-      const { type, swimmerName, field, newVal } = log;
-      if (!swimmerName) return;
+    let baseRecords = [];
+    let baseTimestamp = '1970-01-01T00:00:00.000Z';
+    let baseTitle = '최초 기본 데이터 (학생부)';
+    let baseTimeFormatted = '2026-01-01';
 
-      let target = replayed.find(r => r.name === swimmerName);
+    if (isRestoreAnchor) {
+      let restoredSnap = null;
+      if (latestSnapshot && latestSnapshot.id === latestRestoreLog.snapshotId) {
+        restoredSnap = latestSnapshot;
+      } else {
+        try {
+          const sDoc = await getDoc(doc(db, SNAPSHOT_COL_NAME, latestRestoreLog.snapshotId));
+          if (sDoc.exists()) restoredSnap = { id: sDoc.id, ...sDoc.data() };
+        } catch (e) {
+          console.warn('복원된 학생부 스냅샷 조회 실패:', e);
+        }
+      }
+
+      if (restoredSnap && Array.isArray(restoredSnap.records)) {
+        baseRecords = JSON.parse(JSON.stringify(restoredSnap.records));
+      } else {
+        baseRecords = JSON.parse(JSON.stringify(DEFAULT_STUDENT_RECORDS));
+      }
+
+      baseTimestamp = latestRestoreLog.timestamp;
+      baseTitle = `[스냅샷 복원] ${latestRestoreLog.snapshotTitle || latestRestoreLog.newVal || '스냅샷'}`;
+      baseTimeFormatted = latestRestoreLog.timeFormatted || (new Date(latestRestoreLog.timestamp).toLocaleString('ko-KR'));
+    } else if (latestSnapshot && Array.isArray(latestSnapshot.records) && latestSnapshot.records.length > 0) {
+      baseRecords = JSON.parse(JSON.stringify(latestSnapshot.records));
+      baseTimestamp = snapCreated || '1970-01-01T00:00:00.000Z';
+      baseTitle = latestSnapshot.title || `스냅샷 (${latestSnapshot.createdAtFormatted || snapCreated})`;
+      baseTimeFormatted = latestSnapshot.createdAtFormatted || (latestSnapshot.createdAt ? new Date(latestSnapshot.createdAt).toLocaleString('ko-KR') : '-');
+    } else {
+      baseRecords = JSON.parse(JSON.stringify(DEFAULT_STUDENT_RECORDS));
+    }
+
+    // 4. Filter logs that occurred strictly AFTER baseTimestamp (chronological order)
+    const recentLogs = recentHistoryLogs
+      .filter(l => (l.timestamp || '') > baseTimestamp && l.type !== 'RESTORE')
+      .reverse();
+
+    // 5. Replay from baseRecords using ONLY recentLogs
+    let replayed = JSON.parse(JSON.stringify(baseRecords));
+
+    recentLogs.forEach(log => {
+      const { type, swimmer, swimmerName, field, newVal } = log;
+      const targetName = swimmer || swimmerName;
+      if (!targetName) return;
+
+      let target = replayed.find(r => r.name === targetName || (field === 'name' && log.prevVal && r.name === log.prevVal) || (log.swimmerId && r.id === log.swimmerId));
 
       if (type === 'MEMBER') {
         if (!target) {
@@ -613,7 +1479,7 @@ async function compareHistoryWithCurrentRecords() {
             age: '',
             group: '2그룹',
             gender: '남',
-            name: swimmerName,
+            name: targetName,
             birthId: '',
             event1: '',
             event2: '',
@@ -628,15 +1494,16 @@ async function compareHistoryWithCurrentRecords() {
           replayed.push(target);
         }
       } else if (type === 'DELETE') {
-        replayed = replayed.filter(r => r.name !== swimmerName);
+        replayed = replayed.filter(r => r.name !== targetName && (!log.prevVal || r.name !== log.prevVal));
         return;
       }
 
-      if (target && field) {
+      if (target && field && field !== 'member') {
         target[field] = newVal !== undefined && newVal !== null ? String(newVal) : '';
       }
     });
 
+    // 5. Compare replayed with current records (serverRecordsCache or records)
     const currentList = serverRecordsCache || records;
     const discrepancies = [];
     const fieldsToCheck = ['group', 'age', 'gender', 'name', 'event1', 'event2', 'free', 'back', 'breast', 'fly'];
@@ -645,16 +1512,25 @@ async function compareHistoryWithCurrentRecords() {
     let matchingFieldChecks = 0;
 
     currentList.forEach(curr => {
-      const rep = replayed.find(r => r.id === curr.id || r.name === curr.name);
+      const rep = replayed.find(r => r.name === curr.name);
       if (!rep) {
+        const matchingLog = recentHistoryLogs.find(l => 
+          (l.swimmer === curr.name || l.swimmerName === curr.name) && l.type === 'MEMBER'
+        );
+        const changeTime = matchingLog 
+          ? (matchingLog.timeFormatted || (matchingLog.timestamp ? new Date(matchingLog.timestamp).toLocaleString('ko-KR', { month:'numeric', day:'numeric', hour:'2-digit', minute:'2-digit', hour12:false }) : '-'))
+          : '신규';
+
         discrepancies.push({
           id: curr.id,
           name: curr.name,
-          field: '(회원 존재 여부)',
-          fieldName: '회원 존재 여부',
-          replayedVal: '미존재',
-          currentVal: '존재함',
-          status: '히스토리 미기록'
+          field: 'member',
+          fieldName: '회원 신규 등록',
+          changeTime,
+          replayedVal: '(미존재)',
+          currentVal: `번호 ${curr.id} (${curr.group || ''}, ${curr.gender || ''})`,
+          status: '히스토리 미기록',
+          recordObj: curr
         });
         return;
       }
@@ -667,23 +1543,63 @@ async function compareHistoryWithCurrentRecords() {
         if (currVal === repVal) {
           matchingFieldChecks++;
         } else {
+          const matchingLog = recentHistoryLogs.find(l => 
+            (l.swimmer === curr.name || l.swimmerName === curr.name) && (l.field === f || l.fieldName === f)
+          );
+          const changeTime = matchingLog 
+            ? (matchingLog.timeFormatted || (matchingLog.timestamp ? new Date(matchingLog.timestamp).toLocaleString('ko-KR', { month:'numeric', day:'numeric', hour:'2-digit', minute:'2-digit', hour12:false }) : '-'))
+            : '최근';
+
           discrepancies.push({
             id: curr.id,
             name: curr.name,
             field: f,
-            fieldName: STROKE_NAMES[f] || f,
+            fieldName: STROKE_NAMES[f] || (f === 'group' ? '그룹' : f === 'age' ? '만나이' : f === 'gender' ? '성별' : f === 'name' ? '이름' : f),
+            changeTime,
             replayedVal: repVal || '(빈값)',
             currentVal: currVal || '(빈값)',
-            status: '불일치'
+            status: '내용 불일치',
+            recordObj: curr
           });
         }
       });
     });
 
+    // Check deleted in current
+    replayed.forEach(rep => {
+      const curr = currentList.find(r => r.name === rep.name);
+      if (!curr) {
+        const matchingLog = recentHistoryLogs.find(l => 
+          (l.swimmer === rep.name || l.swimmerName === rep.name) && l.type === 'DELETE'
+        );
+        const changeTime = matchingLog 
+          ? (matchingLog.timeFormatted || (matchingLog.timestamp ? new Date(matchingLog.timestamp).toLocaleString('ko-KR', { month:'numeric', day:'numeric', hour:'2-digit', minute:'2-digit', hour12:false }) : '-'))
+          : '삭제';
+
+        discrepancies.push({
+          id: rep.id,
+          name: rep.name,
+          field: 'member_deleted',
+          fieldName: '회원 삭제',
+          changeTime,
+          replayedVal: `존재함 (번호 ${rep.id})`,
+          currentVal: '(삭제됨)',
+          status: '삭제 히스토리 누락',
+          recordObj: rep
+        });
+      }
+    });
+
     const matchRate = totalFieldChecks > 0 ? ((matchingFieldChecks / totalFieldChecks) * 100).toFixed(1) : '100.0';
     const result = {
       success: true,
-      totalLogs: historyLogs.length,
+      baseTitle,
+      baseTimeFormatted,
+      baseRecordsCount: baseRecords.length,
+      recentLogs,
+      unappliedLogs: [],
+      totalRecentCount: recentLogs.length,
+      totalLogs: recentHistoryLogs.length,
       totalFieldChecks,
       matchingFieldChecks,
       matchRate: `${matchRate}%`,
@@ -694,14 +1610,14 @@ async function compareHistoryWithCurrentRecords() {
       timestamp: new Date().toISOString()
     };
 
-    console.group(`🔍 [GMDC 학생부] 히스토리 기반 데이터 정합성 검증 (${new Date().toLocaleTimeString('ko-KR')})`);
-    console.log(`📜 처리된 히스토리 로그: ${historyLogs.length}건`);
+    console.group(`🔍 [GMDC 학생부] 최후 스냅샷 기준 히스토리 정합성 검증 (${new Date().toLocaleTimeString('ko-KR')})`);
+    console.log(`📷 기준 스냅샷: ${baseTitle} (${baseRecords.length}명)`);
+    console.log(`📜 스냅샷 이후 히스토리 로그: ${recentLogs.length}건`);
     console.log(`🎯 데이터 일치율: ${matchRate}% (${matchingFieldChecks}/${totalFieldChecks}개 필드 일치)`);
     if (result.isPerfectMatch) {
-      console.log(`%c✅ 완벽 일치: 히스토리 실행 결과와 현재 서버/로딩 데이터가 100% 일치합니다.`, 'color: #10b981; font-weight: bold; font-size: 13px;');
+      console.log(`%c✅ 완벽 일치: 최후 스냅샷과 이후 히스토리가 현재 DB와 100% 일치합니다.`, 'color: #10b981; font-weight: bold;');
     } else {
       console.warn(`⚠️ 불일치 항목 ${discrepancies.length}건 발견:`, discrepancies);
-      console.table(discrepancies);
     }
     console.groupEnd();
 
@@ -806,11 +1722,11 @@ function formatHistoryTimestamp() {
   return `${month}. ${date}. ${time}`;
 }
 
-async function logChangeHistory(type, swimmerName, field, fieldName, prevVal, newVal, customMessage = '') {
+async function logChangeHistory(type, swimmerName, field, fieldName, prevVal, newVal, customMessage = '', extraProps = {}) {
   if (isScenarioMode) return;
-  if (prevVal === newVal && type !== 'MEMBER' && type !== 'DELETE') return;
+  if (prevVal === newVal && type !== 'MEMBER' && type !== 'DELETE' && type !== 'RESTORE') return;
 
-  const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  const isMobile = /Android|iPhone|iPad|IEMobile|Opera Mini/i.test(navigator.userAgent);
   const device = isMobile ? '모바일' : 'PC';
   const timeFormatted = formatHistoryTimestamp();
 
@@ -837,7 +1753,12 @@ async function logChangeHistory(type, swimmerName, field, fieldName, prevVal, ne
     } else if (type === 'DELETE') {
       typeLabel = '회원 삭제';
       message = `${swimmerName} 회원 삭제`;
+    } else if (type === 'RESTORE') {
+      typeLabel = '스냅샷 복원';
+      message = `[스냅샷 복원] ${newVal || '스냅샷'}`;
     }
+  } else if (type === 'RESTORE') {
+    typeLabel = '스냅샷 복원';
   }
 
   const logPayload = {
@@ -846,12 +1767,15 @@ async function logChangeHistory(type, swimmerName, field, fieldName, prevVal, ne
     device,
     type,
     typeLabel,
-    swimmerName,
-    field,
-    fieldName,
+    swimmerName: swimmerName || '무명',
+    swimmer: swimmerName || '무명',
+    field: field || '',
+    fieldName: fieldName || '',
     prevVal: prevVal !== undefined ? String(prevVal) : '',
     newVal: newVal !== undefined ? String(newVal) : '',
-    message
+    isApplied: true,
+    message,
+    ...extraProps
   };
 
   if (db) {
@@ -932,6 +1856,9 @@ function initFirebaseSync() {
     if (docSnap.exists()) {
       isInitialSyncCompleted = true;
       const data = docSnap.data();
+      if (data && data.pinnedRelays && typeof data.pinnedRelays === 'object') {
+        pinnedRelaysState = JSON.parse(JSON.stringify(data.pinnedRelays));
+      }
       if (data && Array.isArray(data.records)) {
         const merged = mergeWithDefaultData(data.records);
         serverRecordsCache = JSON.parse(JSON.stringify(merged));
@@ -1178,6 +2105,10 @@ function renderTable() {
   }
 
   const bests = calculateIndividualBest();
+  const canEdit = canEditRecords();
+  const admin = isAdmin();
+  const readonlyAttr = !canEdit ? 'readonly tabindex="-1"' : '';
+  const disabledStyle = !canEdit ? 'style="pointer-events:none; cursor:default;"' : '';
 
   tableBody.innerHTML = list.map((item) => {
     const genderClass = item.gender === '남' ? 'badge-male' : 'badge-female';
@@ -1194,11 +2125,11 @@ function renderTable() {
         <td class="col-group col-pb-detail">
           <span class="group-badge">${escapeHtml(item.group || '-')}</span>
         </td>
-        <td class="col-age col-pb-detail editable-age-cell" data-id="${item.id}" title="클릭하여 생년월일/만나이 변경" style="cursor: pointer; font-weight: 700;">
+        <td class="col-age col-pb-detail editable-age-cell" data-id="${item.id}" ${disabledStyle} title="${canEdit ? '클릭하여 생년월일/만나이 변경' : `만나이: ${item.age || '-'}`}" style="cursor: ${canEdit ? 'pointer' : 'default'}; font-weight: 700;">
           ${escapeHtml(item.age || '-')}
         </td>
         <td class="col-gender col-pb-detail">
-          <span class="gender-toggle ${genderClass}" data-id="${item.id}" title="클릭하여 성별 전환 (현재: ${item.gender})">
+          <span class="gender-toggle ${genderClass}" data-id="${item.id}" ${disabledStyle} title="${canEdit ? `클릭하여 성별 전환 (현재: ${item.gender})` : `성별: ${item.gender}`}">
             ${item.gender}
           </span>
         </td>
@@ -1211,8 +2142,9 @@ function renderTable() {
             data-field="name" 
             data-prev-val="${escapeHtml(item.name || '')}"
             placeholder="이름"
-            title="클릭하여 회원 이름 수정 (수정 시 재확인 창이 표시됩니다)"
+            title="${canEdit ? '클릭하여 회원 이름 수정 (수정 시 재확인 창이 표시됩니다)' : escapeHtml(item.name || '')}"
             autocomplete="off"
+            ${readonlyAttr}
           />
         </td>
         ${STROKE_FIELDS.map(field => {
@@ -1255,6 +2187,7 @@ function renderTable() {
                   placeholder="-"
                   title="${escapeHtml(fullTitle)}"
                   autocomplete="off"
+                  ${readonlyAttr}
                 />
                 ${isBest ? `<span class="best-badge" title="${isMale ? '남성' : '여성'} ${STROKE_NAMES[field]} 1위 (최고기록)">BEST</span>` : ''}
                 ${podiumList && podiumList.length > 0 ? `
@@ -1339,31 +2272,72 @@ function isValidStudentRelayGroup(swimmers) {
 
 // Find best student freestyle relay (자유형 50m x 4명, 학년 규정 충족)
 function findBestStudentFreestyleRelay(gender) {
-  const pool = records.filter(r => r.gender === gender && parseFloat(r.free) > 0 && parseFloat(r.free) < 90 && ['1그룹','2그룹','3그룹','4그룹','5그룹','6그룹'].includes(r.group));
+  const comboKey = gender === '남' ? 'combo1' : 'combo2';
+  const pinnedList = Array.isArray(pinnedRelaysState[comboKey]) 
+    ? pinnedRelaysState[comboKey].filter(name => records.some(r => r.name === name)) 
+    : [];
+
+  // Check if exactly 4 members are pinned
+  if (pinnedList.length === 4) {
+    const pinnedMembers = [];
+    let totalTime = 0;
+
+    pinnedList.forEach(name => {
+      const r = records.find(rec => rec.name === name);
+      if (r) {
+        const timeVal = parseFloat(r.free) || 0;
+        totalTime += timeVal;
+        pinnedMembers.push({
+          id: r.id,
+          strokeField: 'free',
+          strokeName: '자유형',
+          name: r.name,
+          age: r.age,
+          group: r.group,
+          time: timeVal,
+          gender: r.gender,
+          isPinned: true
+        });
+      }
+    });
+
+    if (pinnedMembers.length === 4) {
+      return {
+        status: 'SUCCESS',
+        totalTime: totalTime,
+        members: pinnedMembers,
+        isPinned: true
+      };
+    }
+  }
+
+  const pool = records.filter(r => r.gender === gender && ['1그룹','2그룹','3그룹','4그룹','5그룹','6그룹'].includes(r.group));
 
   if (pool.length < 4) {
     const names = pool.map(p => p.name).join(', ');
     const namesSuffix = names ? `: ${names}` : '';
     return {
       status: 'NOT_ENOUGH',
-      message: `조합불가: 자유형 기록 부족 (초등부 ${gender} ${pool.length}/4명)${namesSuffix}`
+      message: `조합불가: 선수 부족 (초등부 ${gender} ${pool.length}/4명)${namesSuffix}`
     };
   }
 
   const combos = getCombinations(pool, 4);
   let bestTime = Infinity;
-  let bestAge = 0;
   let bestMembers = null;
 
   for (const group of combos) {
     if (!isValidStudentRelayGroup(group)) continue;
+    // If some members are pinned, group must include all pinned members
+    if (pinnedList.length > 0) {
+      const groupNames = group.map(r => r.name);
+      if (!pinnedList.every(pn => groupNames.includes(pn))) continue;
+    }
 
-    const totalTime = group.reduce((sum, r) => sum + parseFloat(r.free), 0);
-    const totalAge = group.reduce((sum, r) => sum + (parseFloat(r.age) || 0), 0);
+    const totalTime = group.reduce((sum, r) => sum + (parseFloat(r.free) || 0), 0);
 
-    if (totalTime < bestTime) {
+    if (totalTime < bestTime || bestMembers === null) {
       bestTime = totalTime;
-      bestAge = totalAge;
       bestMembers = group.map(r => ({
         id: r.id,
         strokeField: 'free',
@@ -1371,19 +2345,19 @@ function findBestStudentFreestyleRelay(gender) {
         name: r.name,
         age: r.age,
         group: r.group,
-        time: parseFloat(r.free),
-        gender: r.gender
+        time: parseFloat(r.free) || 0,
+        gender: r.gender,
+        isPinned: pinnedList.includes(r.name)
       }));
     }
   }
 
   if (bestMembers) {
-    bestMembers.sort((a, b) => a.time - b.time);
     return {
       status: 'SUCCESS',
-      totalTime: bestTime,
-      totalAge: bestAge,
-      members: bestMembers
+      totalTime: bestTime === Infinity ? 0 : bestTime,
+      members: bestMembers,
+      isPinned: pinnedList.length > 0
     };
   } else {
     const g12 = pool.filter(r => r.group === '1그룹' || r.group === '2그룹');
@@ -1394,17 +2368,11 @@ function findBestStudentFreestyleRelay(gender) {
     if (g34.length === 0) missingGrps.push('3·4학년');
     if (g56.length === 0) missingGrps.push('5·6학년');
 
-    const essential = [];
-    if (g12.length === 1) essential.push(`${g12[0].name}(${g12[0].group})`);
-    if (g34.length === 1) essential.push(`${g34[0].name}(${g34[0].group})`);
-    if (g56.length === 1) essential.push(`${g56[0].name}(${g56[0].group})`);
-
-    let msg = '조합불가: 학년 안배 불충족';
+    let msg = pinnedList.length > 0 
+      ? `고정 멤버 [${pinnedList.join(', ')}] 포함 시 학년 안배 조건 충족 불가`
+      : '조합불가: 학년 안배 불충족';
     if (missingGrps.length > 0) {
       msg += ` (미등록: ${missingGrps.join(', ')})`;
-    }
-    if (essential.length > 0) {
-      msg += ` [필수선발: ${essential.join(', ')}]`;
     }
     return {
       status: 'RULE_NOT_MET',
@@ -1415,62 +2383,85 @@ function findBestStudentFreestyleRelay(gender) {
 
 // Find best student medley relay (배·평·접·자 4명 고유, 학년 규정 충족)
 function findBestStudentMedleyRelay(gender) {
-  const pool = records.filter(r => r.gender === gender && ['1그룹','2그룹','3그룹','4그룹','5그룹','6그룹'].includes(r.group));
+  const comboKey = gender === '남' ? 'combo3' : 'combo4';
+  const medleyPins = pinnedRelaysState[comboKey] || {};
 
-  const backList = pool.filter(r => parseFloat(r.back) > 0 && parseFloat(r.back) < 90);
-  const breastList = pool.filter(r => parseFloat(r.breast) > 0 && parseFloat(r.breast) < 90);
-  const flyList = pool.filter(r => parseFloat(r.fly) > 0 && parseFloat(r.fly) < 90);
-  const freeList = pool.filter(r => parseFloat(r.free) > 0 && parseFloat(r.free) < 90);
+  // Check if all 4 stroke positions are pinned
+  if (medleyPins.back && medleyPins.breast && medleyPins.fly && medleyPins.free) {
+    const assignment = [];
+    let totalTime = 0;
+    const strokes = [
+      { field: 'back', name: '배영' },
+      { field: 'breast', name: '평영' },
+      { field: 'fly', name: '접영' },
+      { field: 'free', name: '자유형' }
+    ];
 
-  const missing = [];
-  if (backList.length === 0) missing.push('배영');
-  if (breastList.length === 0) missing.push('평영');
-  if (flyList.length === 0) missing.push('접영');
-  if (freeList.length === 0) missing.push('자유형');
+    strokes.forEach(st => {
+      const swName = medleyPins[st.field];
+      const r = records.find(rec => rec.name === swName);
+      if (r) {
+        const timeVal = parseFloat(r[st.field]) || 0;
+        totalTime += timeVal;
+        assignment.push({
+          id: r.id,
+          strokeField: st.field,
+          strokeName: st.name,
+          name: r.name,
+          age: r.age,
+          group: r.group,
+          time: timeVal,
+          gender: r.gender,
+          isPinned: true
+        });
+      }
+    });
 
-  if (missing.length > 0) {
-    return {
-      status: 'MISSING_STROKES',
-      message: `조합불가: 기록 부족 (미등록 종목: ${missing.join(', ')})`
-    };
+    if (assignment.length === 4) {
+      return {
+        status: 'SUCCESS',
+        totalTime: totalTime,
+        members: assignment,
+        isPinned: true
+      };
+    }
   }
 
+  const pool = records.filter(r => r.gender === gender && ['1그룹','2그룹','3그룹','4그룹','5그룹','6그룹'].includes(r.group));
+  const backList = pool.filter(r => medleyPins.back ? r.name === medleyPins.back : (parseFloat(r.back) > 0 || pool.length <= 10));
+  const breastList = pool.filter(r => medleyPins.breast ? r.name === medleyPins.breast : (parseFloat(r.breast) > 0 || pool.length <= 10));
+  const flyList = pool.filter(r => medleyPins.fly ? r.name === medleyPins.fly : (parseFloat(r.fly) > 0 || pool.length <= 10));
+  const freeList = pool.filter(r => medleyPins.free ? r.name === medleyPins.free : (parseFloat(r.free) > 0 || pool.length <= 10));
+
   let bestTime = Infinity;
-  let bestAge = 0;
   let bestAssignment = null;
 
   for (const sBack of backList) {
-    const timeBack = parseFloat(sBack.back);
-    const ageBack = parseFloat(sBack.age) || 0;
+    const timeBack = parseFloat(sBack.back) || 0;
 
     for (const sBreast of breastList) {
       if (sBreast.id === sBack.id) continue;
-      const timeBreast = parseFloat(sBreast.breast);
-      const ageBreast = parseFloat(sBreast.age) || 0;
+      const timeBreast = parseFloat(sBreast.breast) || 0;
 
       for (const sFly of flyList) {
         if (sFly.id === sBack.id || sFly.id === sBreast.id) continue;
-        const timeFly = parseFloat(sFly.fly);
-        const ageFly = parseFloat(sFly.age) || 0;
+        const timeFly = parseFloat(sFly.fly) || 0;
 
         for (const sFree of freeList) {
           if (sFree.id === sBack.id || sFree.id === sBreast.id || sFree.id === sFly.id) continue;
-          const timeFree = parseFloat(sFree.free);
-          const ageFree = parseFloat(sFree.age) || 0;
+          const timeFree = parseFloat(sFree.free) || 0;
 
           if (!isValidStudentRelayGroup([sBack, sBreast, sFly, sFree])) continue;
 
           const totalTime = timeBack + timeBreast + timeFly + timeFree;
-          const totalAge = ageBack + ageBreast + ageFly + ageFree;
 
-          if (totalTime < bestTime) {
+          if (totalTime < bestTime || bestAssignment === null) {
             bestTime = totalTime;
-            bestAge = totalAge;
             bestAssignment = [
-              { id: sBack.id, strokeField: 'back', strokeName: '배영', name: sBack.name, age: sBack.age, group: sBack.group, time: timeBack, gender: sBack.gender },
-              { id: sBreast.id, strokeField: 'breast', strokeName: '평영', name: sBreast.name, age: sBreast.age, group: sBreast.group, time: timeBreast, gender: sBreast.gender },
-              { id: sFly.id, strokeField: 'fly', strokeName: '접영', name: sFly.name, age: sFly.age, group: sFly.group, time: timeFly, gender: sFly.gender },
-              { id: sFree.id, strokeField: 'free', strokeName: '자유형', name: sFree.name, age: sFree.age, group: sFree.group, time: timeFree, gender: sFree.gender }
+              { id: sBack.id, strokeField: 'back', strokeName: '배영', name: sBack.name, age: sBack.age, group: sBack.group, time: timeBack, gender: sBack.gender, isPinned: medleyPins.back === sBack.name },
+              { id: sBreast.id, strokeField: 'breast', strokeName: '평영', name: sBreast.name, age: sBreast.age, group: sBreast.group, time: timeBreast, gender: sBreast.gender, isPinned: medleyPins.breast === sBreast.name },
+              { id: sFly.id, strokeField: 'fly', strokeName: '접영', name: sFly.name, age: sFly.age, group: sFly.group, time: timeFly, gender: sFly.gender, isPinned: medleyPins.fly === sFly.name },
+              { id: sFree.id, strokeField: 'free', strokeName: '자유형', name: sFree.name, age: sFree.age, group: sFree.group, time: timeFree, gender: sFree.gender, isPinned: medleyPins.free === sFree.name }
             ];
           }
         }
@@ -1481,46 +2472,14 @@ function findBestStudentMedleyRelay(gender) {
   if (bestAssignment) {
     return {
       status: 'SUCCESS',
-      totalTime: bestTime,
-      totalAge: bestAge,
-      members: bestAssignment
+      totalTime: bestTime === Infinity ? 0 : bestTime,
+      members: bestAssignment,
+      isPinned: Object.values(medleyPins).some(Boolean)
     };
   } else {
-    const uniqueMap = new Map();
-    [...backList, ...breastList, ...flyList, ...freeList].forEach(r => uniqueMap.set(r.id, r));
-    const uniqueList = Array.from(uniqueMap.values());
-
-    if (uniqueList.length < 4) {
-      const names = uniqueList.map(r => r.name).join(', ');
-      return {
-        status: 'NOT_ENOUGH',
-        message: `조합불가: 4명 고유 배정 불가 (초등부 ${gender} ${uniqueList.length}/4명): ${names}`
-      };
-    }
-
-    const g12 = uniqueList.filter(r => r.group === '1그룹' || r.group === '2그룹');
-    const g34 = uniqueList.filter(r => r.group === '3그룹' || r.group === '4그룹');
-    const g56 = uniqueList.filter(r => r.group === '5그룹' || r.group === '6그룹');
-    const missingGrps = [];
-    if (g12.length === 0) missingGrps.push('1·2학년');
-    if (g34.length === 0) missingGrps.push('3·4학년');
-    if (g56.length === 0) missingGrps.push('5·6학년');
-
-    const essential = [];
-    if (g12.length === 1) essential.push(`${g12[0].name}(${g12[0].group})`);
-    if (g34.length === 1) essential.push(`${g34[0].name}(${g34[0].group})`);
-    if (g56.length === 1) essential.push(`${g56[0].name}(${g56[0].group})`);
-
-    let msg = '조합불가: 학년 안배 불충족';
-    if (missingGrps.length > 0) {
-      msg += ` (미등록: ${missingGrps.join(', ')})`;
-    }
-    if (essential.length > 0) {
-      msg += ` [필수선발: ${essential.join(', ')}]`;
-    }
     return {
-      status: 'RULE_NOT_MET',
-      message: msg
+      status: 'MISSING_STROKES',
+      message: '조합불가: 학년 안배 또는 4개 영법 배정 불가'
     };
   }
 }
@@ -1638,17 +2597,10 @@ function updateStats() {
 }
 
 function renderComboCard(prefix, result, isMedley = false, gender = '남') {
-  const timeEl = document.getElementById(`${prefix}Time`);
-  const ageEl = document.getElementById(`${prefix}Age`);
   const membersEl = document.getElementById(`${prefix}Members`);
-
-  if (!timeEl || !ageEl || !membersEl) return;
+  if (!membersEl) return;
 
   if (!result || result.status !== 'SUCCESS') {
-    timeEl.textContent = '-';
-    timeEl.classList.remove('time-highlight');
-    ageEl.textContent = '-';
-
     const recommendLine = getStudentRecommendedLineup(gender);
     const failMsg = result ? result.message : '기록 부족';
 
@@ -1664,23 +2616,35 @@ function renderComboCard(prefix, result, isMedley = false, gender = '남') {
     return;
   }
 
-  timeEl.textContent = formatRelayTime(result.totalTime);
-  timeEl.classList.add('time-highlight');
-  ageEl.textContent = `${result.totalAge}세`;
-
   membersEl.innerHTML = result.members.map(m => {
     const orig = getLastYearRecord(m.id, m.strokeField);
     const isLastYear = orig !== '' && (parseFloat(orig) === m.time);
     const timeClass = isLastYear ? 'is-last-year' : 'is-target';
+    const timeDisplay = m.time > 0 ? `${m.time.toFixed(2)}s` : (m.isPinned ? '고정선발' : '-');
+
+    const pinBtnHtml = `
+      <button 
+        type="button" 
+        class="btn-pin-member ${m.isPinned ? 'is-pinned' : ''}" 
+        data-combo="${prefix}" 
+        data-name="${escapeHtml(m.name)}" 
+        data-stroke="${m.strokeField || ''}" 
+        title="${m.isPinned ? `${m.name} 선수 고정됨 (클릭 시 고정 해제)` : `${m.name} 선수 고정 (클릭 시 이 선수를 필수로 포함하여 최적 조합 계산)`}"
+      >
+        ${m.isPinned ? '📌' : '📍'}
+      </button>
+    `;
+
     return `
-      <div class="member-pill">
+      <div class="member-pill ${m.isPinned ? 'is-pinned' : ''}">
         ${isMedley 
           ? `<span class="stroke-badge ${m.strokeName}">${m.strokeName}</span>` 
           : `<span class="member-gender ${m.gender === '남' ? 'male' : 'female'}">${m.gender}</span>`
         }
         <span>${escapeHtml(m.name || '무명')}</span>
         <span style="color:var(--text-subtle);font-size:11px;">(${m.group || m.age + '세'})</span>
-        <span class="member-time ${timeClass}">${m.time.toFixed(2)}s</span>
+        <span class="member-time ${timeClass}">${timeDisplay}</span>
+        ${pinBtnHtml}
       </div>
     `;
   }).join('');
@@ -1858,6 +2822,9 @@ function renderSummaryMatrices() {
 
 const EVENT_OPTIONS = [
   '',
+  '계영 200',
+  '혼성계영 200',
+  '혼계영 200',
   '자유형 50',
   '배영 50',
   '평영 50',
@@ -2129,6 +3096,25 @@ function bindEvents() {
     });
   });
 
+  // Individual Member Pin Click (Delegated on comboGrid)
+  if (comboGrid) {
+    comboGrid.addEventListener('click', (e) => {
+      const pinBtn = e.target.closest('.btn-pin-member');
+      if (pinBtn) {
+        e.stopPropagation();
+        if (!isAdmin()) {
+          showToast('🔒 관리자 로그인 후 선발 고정을 변경할 수 있습니다.');
+          return;
+        }
+        const comboKey = pinBtn.dataset.combo;
+        const name = pinBtn.dataset.name;
+        const stroke = pinBtn.dataset.stroke;
+        toggleMemberPin(comboKey, name, stroke);
+        return;
+      }
+    });
+  }
+
   // Combo Team Roster Copy Buttons
   document.querySelectorAll('.btn-copy-combo-team').forEach(btn => {
     btn.addEventListener('click', (e) => {
@@ -2193,7 +3179,13 @@ function bindEvents() {
 
   const btnCopyEvents = document.getElementById('btnCopyEventsTsv');
   if (btnCopyEvents) {
-    btnCopyEvents.addEventListener('click', copyEventsToClipboard);
+    btnCopyEvents.addEventListener('click', () => {
+      if (!isAdmin()) {
+        showToast('🔒 관리자 로그인 후 명단 복사가 가능합니다.');
+        return;
+      }
+      copyEventsToClipboard();
+    });
   }
 
   // Real-time table input handler
@@ -2316,6 +3308,11 @@ function bindEvents() {
     const toggle = e.target.closest('.gender-toggle');
     if (!toggle) return;
 
+    if (!canEditRecords()) {
+      showToast('⏳ 수정 가능 기간이 종료되었습니다. (관리자만 수정 가능)');
+      return;
+    }
+
     const id = parseInt(toggle.dataset.id, 10);
     const record = records.find(r => r.id === id);
     if (!record) return;
@@ -2338,6 +3335,11 @@ function bindEvents() {
   tableBody.addEventListener('click', (e) => {
     const cell = e.target.closest('.editable-age-cell');
     if (!cell) return;
+
+    if (!canEditRecords()) {
+      showToast('⏳ 수정 가능 기간이 종료되었습니다. (관리자만 수정 가능)');
+      return;
+    }
 
     const id = parseInt(cell.dataset.id, 10);
     const record = records.find(r => r.id === id);
@@ -2385,6 +3387,11 @@ function bindEvents() {
     eventsTableBody.addEventListener('change', (e) => {
       const select = e.target.closest('.event-select');
       if (!select) return;
+
+      if (!canEditRecords()) {
+        showToast('⏳ 수정 가능 기간이 종료되었습니다. (관리자만 수정 가능)');
+        return;
+      }
 
       const id = parseInt(select.dataset.id, 10);
       const eventIdx = select.dataset.eventIdx;
@@ -2439,16 +3446,34 @@ function bindEvents() {
 
   // Export CSV
   if (btnExportCsv) {
-    btnExportCsv.addEventListener('click', exportToCsv);
+    btnExportCsv.addEventListener('click', () => {
+      if (!isAdmin()) {
+        showToast('🔒 관리자 로그인 후 CSV 저장이 가능합니다.');
+        return;
+      }
+      exportToCsv();
+    });
   }
 
   // Copy TSV for Excel
   if (btnCopyTsv) {
-    btnCopyTsv.addEventListener('click', copyTsvToClipboard);
+    btnCopyTsv.addEventListener('click', () => {
+      if (!isAdmin()) {
+        showToast('🔒 관리자 로그인 후 클립보드 복사가 가능합니다.');
+        return;
+      }
+      copyTsvToClipboard();
+    });
   }
 
   // Excel paste (Ctrl+V) handler
-  document.addEventListener('paste', handleTablePaste);
+  document.addEventListener('paste', (e) => {
+    if (!canEditRecords()) {
+      showToast('⏳ 수정 가능 기간이 종료되었습니다. (관리자만 수정 가능)');
+      return;
+    }
+    handleTablePaste(e);
+  });
 }
 
 function handleTablePaste(e) {

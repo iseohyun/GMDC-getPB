@@ -4,7 +4,8 @@
  */
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, doc, setDoc, onSnapshot, getDoc, getDocs, collection, addDoc, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getFirestore, doc, setDoc, onSnapshot, getDoc, getDocs, collection, addDoc, deleteDoc, updateDoc, query, orderBy, limit, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { initAuth, isAdmin, canEditRecords, isDeadlineExpired, loginWithGoogle, logoutUser, getCurrentUser, formatUserDisplayName } from "./auth.js";
 
 // Firebase Configuration
 const firebaseConfig = {
@@ -21,6 +22,7 @@ const firebaseConfig = {
 let db = null;
 let DOC_REF = null;
 const HISTORY_COL_NAME = "gmdc_swim_history";
+const SNAPSHOT_COL_NAME = "gmdc_swim_snapshots";
 
 try {
   const app = initializeApp(firebaseConfig);
@@ -30,7 +32,7 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.08.18.01';
+const APP_VERSION = 'v2026.08.19.02';
 let isScenarioMode = false;
 let isInitialSyncCompleted = false;
 let serverRecordsCache = null;
@@ -43,11 +45,6 @@ const RECORDS_MODE_KEY = 'gmdc_records_view_mode';
 const ADULT_TEAM_KEY = 'gmdc_adult_team';
 
 let currentAdultTeam = localStorage.getItem(ADULT_TEAM_KEY) || 'A';
-
-// Deadline Configuration
-function isDeadlineExpired() {
-  return false;
-}
 
 // 6 Available Competition Events (출전 가능 종목)
 const EVENT_OPTIONS = [
@@ -83,47 +80,49 @@ const PREV_YEAR_DISTRIBUTION = {
 
 let isMatrixCompareMode = localStorage.getItem('gmdc_matrix_compare_mode') === 'true';
 
-// Initial 39 Swimmer Records (A팀: 30명, B팀: 9명)
+// Initial 40 Swimmer Records (A팀: 30명, B팀: 10명)
 const DEFAULT_RECORDS = [
-  { id: 1, age: '15', group: '1그룹', gender: '남', name: '박슬우', birthId: '20100223-3', phone: '010-2558-7116', club: 'GMDC', address: '거제시 문동 1길, 42, 문동푸르지오 104동 2104호', team: 'A', event1: '자유형 50', event2: '접영 50', finFly: '', finFree: '', free: '25.13', back: '31', breast: '34', fly: '28.28' },
-  { id: 2, age: '15', group: '1그룹', gender: '남', name: '이지훈', birthId: '20100908-3', phone: '010-4176-0239', club: 'GMDC', address: '거제시 옥포동 308 거제엘크루랜드마크 아파트 104동 2302호', team: 'A', event1: '자유형 50', event2: '접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 3, age: '16', group: '1그룹', gender: '남', name: '이채율', birthId: '20090814-3', phone: '010-7637-9313', club: 'GMDC', address: '거제시 연초면 거제북로57 연초일성유수안 104동 2302호', team: 'A', event1: '핀자유형 50', event2: '배영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 4, age: '17', group: '1그룹', gender: '남', name: '조성찬', birthId: '20080718-3', phone: '010-6681-9874', club: 'GMDC', address: '거제시 소동8길 11 스타힐스오션시티 105동 703호', team: 'A', event1: '자유형 50', event2: '접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 5, age: '17', group: '1그룹', gender: '여', name: '이지호', birthId: '20080506-4', phone: '010-6451-0229', club: 'GMDC', address: '거제시 옥포동 308 거제엘크루랜드마크 아파트 104동 2302호', team: 'A', event1: '핀자유형 50', event2: '자유형 50', finFly: '', finFree: '31.07', free: '36.78', back: '', breast: '', fly: '' },
-  { id: 6, age: '24', group: '2그룹', gender: '여', name: '추성비', birthId: '20010521-4', phone: '010-2818-2055', club: 'GMDC', address: '거제시 능포로 4길5 동헌하이츠 802호', team: 'A', event1: '자유형 50', event2: '접영 50', finFly: '', finFree: '', free: '40.48', back: '', breast: '', fly: '47.99' },
-  { id: 7, age: '24', group: '2그룹', gender: '여', name: '이영경', birthId: '20011204-4', phone: '010-6327-7828', club: 'GMDC', address: '거제시 장평1로 86, 삼성S빌리지 B동 1005호', team: 'A', event1: '자유형 50', event2: '접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 8, age: '33', group: '3그룹', gender: '남', name: '안재홍', birthId: '19920211-1', phone: '010-7199-7719', club: 'GMDC', address: '거제시 아주로 100-10 111동 501호', team: 'B', event1: '자유형 50', event2: '', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 9, age: '38', group: '3그룹', gender: '여', name: '노언영', birthId: '19870712-2', phone: '010-3833-3074', club: 'GMDC', address: '거제시 제산로86, 더샵 101동 406호', team: 'A', event1: '자유형 50', event2: '평영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 10, age: '37', group: '3그룹', gender: '여', name: '최이슬', birthId: '19881213-2', phone: '010-2398-6484', club: 'GMDC', address: '거제시 아주로73 석호해와루아파트 106동 403호', team: 'A', event1: '자유형 50', event2: '접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 11, age: '43', group: '4그룹', gender: '남', name: '고석보', birthId: '19821227-1', phone: '010-4040-6987', club: 'GMDC', address: '거제시 능포로 218 나동 503호', team: 'A', event1: '핀접영 50', event2: '자유형 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 12, age: '44', group: '4그룹', gender: '남', name: '김기용', birthId: '19810929-1', phone: '010-4018-3188', club: 'GMDC', address: '거제시 아주로 63 미진이지비아 103동 704호', team: 'A', event1: '핀자유형 50', event2: '핀접영 50', finFly: '', finFree: '', free: '35.69', back: '', breast: '41.65', fly: '' },
-  { id: 13, age: '42', group: '4그룹', gender: '남', name: '김준영', birthId: '19830201-1', phone: '010-4572-7285', club: 'GMDC', address: '거제시 고현항2로 51, 202동 1804호', team: 'A', event1: '자유형 50', event2: '평영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 14, age: '44', group: '4그룹', gender: '남', name: '손철수', birthId: '19810217-1', phone: '010-7142-8269', club: 'GMDC', address: '거제시 고현항2로51 207동 3002호', team: 'A', event1: '핀자유형 50', event2: '자유형 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 15, age: '44', group: '4그룹', gender: '남', name: '안상준', birthId: '19811115-1', phone: '010-4005-7171', club: 'GMDC', address: '거제시 아주2로 138, 102동 1801호', team: 'A', event1: '자유형 50', event2: '', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 16, age: '41', group: '4그룹', gender: '남', name: '양승진', birthId: '19840221-1', phone: '010-4252-4589', club: 'GMDC', address: '거제시 장평2로19 103동 402호', team: 'B', event1: '자유형 50', event2: '', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 17, age: '44', group: '4그룹', gender: '남', name: '이도형', birthId: '19810823-1', phone: '010-5155-2728', club: 'GMDC', address: '거제시 장평1로 86, 삼성S빌리지 B동 202호', team: 'A', event1: '자유형 50', event2: '평영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 18, age: '42', group: '4그룹', gender: '남', name: '정서현', birthId: '19830903-1', phone: '010-4266-4766', club: 'GMDC', address: '거제시 상동5길 117-16, 206동 402호', team: 'B', event1: '평영 50', event2: '배영 50', finFly: '', finFree: '27.92', free: '33.59', back: '', breast: '', fly: '' },
-  { id: 19, age: '47', group: '4그룹', gender: '여', name: '김상희', birthId: '19780602-2', phone: '010-6880-5472', club: 'GMDC', address: '거제시 제산로 2-5 삼성쉐르빌APT 105동 904호', team: 'B', event1: '핀자유형 50', event2: '', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 20, age: '43', group: '4그룹', gender: '여', name: '박다유', birthId: '19820825-2', phone: '010-8234-5210', club: 'GMDC', address: '거제시 장평1로 86, 삼성S빌리지 B동 202호', team: 'A', event1: '자유형 50', event2: '배영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 21, age: '48', group: '4그룹', gender: '여', name: '손혜정', birthId: '19770415-2', phone: '010-8603-9827', club: 'GMDC', address: '거제시 일운면 소동8길 11, 서희 108동 303호', team: 'A', event1: '핀자유형 50', event2: '핀접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 22, age: '40', group: '4그룹', gender: '여', name: '심민경', birthId: '19850520-2', phone: '010-9611-8332', club: 'GMDC', address: '거제시 거제 중앙로3길 15, 102동 1003호', team: 'A', event1: '자유형 50', event2: '배영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 23, age: '42', group: '4그룹', gender: '여', name: '여수연', birthId: '19830209-2', phone: '010-3723-8453', club: 'GMDC', address: '거제시 용소1길 17-17, 푸르지오 108동 203호', team: 'B', event1: '핀자유형 50', event2: '핀접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 24, age: '44', group: '4그룹', gender: '여', name: '이미영', birthId: '19811014-2', phone: '010-6866-2268', club: 'GMDC', address: '거제시 아주로 63 미진이지비아 103동 704호', team: 'A', event1: '핀자유형 50', event2: '핀접영 50', finFly: '', finFree: '30.42', free: '', back: '', breast: '', fly: '57.17' },
-  { id: 25, age: '41', group: '4그룹', gender: '여', name: '이은희', birthId: '19840528-2', phone: '010-7456-1512', club: 'GMDC', address: '거제시 상동1길 15-9, 302동 104호', team: 'A', event1: '배영 50', event2: '평영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 26, age: '50', group: '5그룹', gender: '남', name: '박재홍', birthId: '19750715-1', phone: '010-8707-5940', club: 'GMDC', address: '거재시 아주로 100-11 204동 602호', team: 'A', event1: '핀자유형 50', event2: '핀접영 50', finFly: '30.29', finFree: '28.08', free: '', back: '', breast: '', fly: '' },
-  { id: 27, age: '57', group: '5그룹', gender: '남', name: '박진홍', birthId: '19681220-1', phone: '010-2517-9826', club: 'GMDC', address: '거제시 일운면 소동8길 11, 서희 108동 303호', team: 'A', event1: '핀자유형 50', event2: '핀접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 28, age: '50', group: '5그룹', gender: '남', name: '서충근', birthId: '19750724-1', phone: '010-5566-3542', club: 'GMDC', address: '거제시 성산로42 옥포이편한세상', team: 'A', event1: '핀자유형 50', event2: '', finFly: '', finFree: '27.43', free: '', back: '', breast: '', fly: '99.99' },
-  { id: 29, age: '50', group: '5그룹', gender: '남', name: '성지경', birthId: '19750223-1', phone: '010-2587-7399', club: 'GMDC', address: '거제시 상동5길 117-50, 303동 204호', team: 'A', event1: '핀자유형 50', event2: '핀접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 30, age: '51', group: '5그룹', gender: '남', name: '이경열', birthId: '19740501-1', phone: '010-5065-8643', club: 'GMDC', address: '거제시 아주로 73, 석호해와루아파트 103동 603호', team: 'A', event1: '핀자유형 50', event2: '평영 50', finFly: '', finFree: '', free: '', back: '', breast: '43.51', fly: '' },
-  { id: 31, age: '53', group: '5그룹', gender: '여', name: '김애란', birthId: '19720727-2', phone: '010-5146-9873', club: 'GMDC', address: '거제시 소동8길 11 스타힐스오션시티 105동 703호', team: 'B', event1: '자유형 50', event2: '배영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 32, age: '58', group: '5그룹', gender: '여', name: '박선화', birthId: '19671212-2', phone: '010-2599-6441', club: 'GMDC', address: '거제시 옥수로6길160 조각공원빌 501호', team: 'A', event1: '핀자유형 50', event2: '평영 50', finFly: '', finFree: '33.64', free: '46.66', back: '', breast: '', fly: '' },
-  { id: 33, age: '56', group: '5그룹', gender: '여', name: '전경미', birthId: '19690201-2', phone: '010-6332-4009', club: 'GMDC', address: '거제시 아주2로 2길 10 코오랑하늘채 102동 302호', team: 'A', event1: '핀자유형 50', event2: '핀접영 50', finFly: '', finFree: '32.42', free: '', back: '55.88', breast: '', fly: '' },
-  { id: 34, age: '62', group: '6그룹', gender: '남', name: '박봉권', birthId: '19630807-1', phone: '010-9669-5629', club: 'GMDC', address: '', team: 'A', event1: '평영 50', event2: '배영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 35, age: '63', group: '6그룹', gender: '남', name: '성환용', birthId: '19620713-1', phone: '010-9689-2830', club: 'GMDC', address: '거제시 능포로2길 38, 옥명대우아파트 105동 1203호', team: 'B', event1: '핀자유형 50', event2: '', finFly: '', finFree: '99.99', free: '', back: '', breast: '', fly: '' },
-  { id: 36, age: '59', group: '6그룹', gender: '여', name: '송원자', birthId: '19660325-2', phone: '010-2854-3715', club: 'GMDC', address: '거제시 능포로2길62 롯데캐슬 302동 801호', team: 'A', event1: '자유형 50', event2: '평영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 37, age: '62', group: '6그룹', gender: '여', name: '최지희', birthId: '19630705-2', phone: '010-3560-6375', club: 'GMDC', address: '거제시 상동7길30, 대동다숲 124동 1406호', team: 'A', event1: '자유형 50', event2: '핀자유형 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 38, age: '61', group: '6그룹', gender: '남', name: '권순용', birthId: '19650101-1', phone: '010-5890-7052', club: 'GMDC', address: '거제시 동부면 거제남서로 3136', team: 'B', event1: '', event2: '', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 39, age: '27', group: '2그룹', gender: '남', name: '이석민', birthId: '19990101-1', phone: '010-9989-7218', club: 'GMDC', address: '거제시 동부면 산양리 671-1', team: 'B', event1: '', event2: '', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' }
+  { id: 1, age: '15', group: '1그룹', gender: '남', name: '박슬우', birthId: '20100223-3', phone: '010-2558-7116', club: 'GMDC', depositor: 'GMDC', address: '거제시 문동 1길, 42, 문동푸르지오 104동 2104호', team: 'A', event1: '자유형 50', event2: '접영 50', finFly: '', finFree: '', free: '25.13', back: '31', breast: '34', fly: '28.28' },
+  { id: 2, age: '15', group: '1그룹', gender: '남', name: '이지훈', birthId: '20100908-3', phone: '010-4176-0239', club: 'GMDC', depositor: 'GMDC', address: '거제시 옥포동 308 거제엘크루랜드마크 아파트 104동 2302호', team: 'A', event1: '핀자유형 50', event2: '접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 3, age: '16', group: '1그룹', gender: '남', name: '이채율', birthId: '20090814-3', phone: '010-7637-9313', club: 'GMDC', depositor: 'GMDC야호', address: '거제시 연초면 거제북로57 연초일성유수안 104동 2302호', team: 'B', event1: '핀자유형 50', event2: '배영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 4, age: '17', group: '1그룹', gender: '남', name: '조성찬', birthId: '20080718-3', phone: '010-6681-9874', club: 'GMDC', depositor: 'GMDC', address: '거제시 소동8길 11 스타힐스오션시티 105동 703호', team: 'A', event1: '자유형 50', event2: '배영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 5, age: '17', group: '1그룹', gender: '여', name: '이지호', birthId: '20080506-4', phone: '010-6451-0229', club: 'GMDC', depositor: 'GMDC', address: '거제시 옥포동 308 거제엘크루랜드마크 아파트 104동 2302호', team: 'A', event1: '핀자유형 50', event2: '접영 50', finFly: '', finFree: '31.07', free: '36.78', back: '', breast: '', fly: '' },
+  { id: 6, age: '24', group: '2그룹', gender: '여', name: '추성비', birthId: '20010521-4', phone: '010-2818-2055', club: 'GMDC', depositor: 'GMDC', address: '거제시 능포로 4길5 동헌하이츠 802호', team: 'A', event1: '자유형 50', event2: '접영 50', finFly: '', finFree: '', free: '40.48', back: '', breast: '', fly: '47.99' },
+  { id: 7, age: '24', group: '2그룹', gender: '여', name: '이영경', birthId: '20011204-4', phone: '010-6327-7828', club: 'GMDC', depositor: 'GMDC', address: '거제시 장평1로 86, 삼성S빌리지 B동 1005호', team: 'A', event1: '자유형 50', event2: '접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 8, age: '33', group: '3그룹', gender: '남', name: '안재홍', birthId: '19920211-1', phone: '010-7199-7719', club: 'GMDC', depositor: 'GMDC', address: '거제시 아주로 100-10 111동 501호', team: 'A', event1: '자유형 50', event2: '접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 9, age: '38', group: '3그룹', gender: '여', name: '노언영', birthId: '19870712-2', phone: '010-3833-3074', club: 'GMDC', depositor: 'GMDC', address: '거제시 제산로86, 더샵 101동 406호', team: 'A', event1: '자유형 50', event2: '평영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 10, age: '37', group: '3그룹', gender: '여', name: '최이슬', birthId: '19881213-2', phone: '010-2398-6484', club: 'GMDC', depositor: 'GMDC', address: '거제시 아주로73 석호해와루아파트 106동 403호', team: 'A', event1: '자유형 50', event2: '접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 11, age: '43', group: '4그룹', gender: '남', name: '고석보', birthId: '19821227-1', phone: '010-4040-6987', club: 'GMDC', depositor: 'GMDC', address: '거제시 능포로 218 나동 503호', team: 'A', event1: '핀접영 50', event2: '자유형 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 12, age: '44', group: '4그룹', gender: '남', name: '김기용', birthId: '19810929-1', phone: '010-4018-3188', club: 'GMDC', depositor: 'GMDC', address: '거제시 아주로 63 미진이지비아 103동 704호', team: 'A', event1: '핀자유형 50', event2: '핀접영 50', finFly: '', finFree: '', free: '35.69', back: '', breast: '41.65', fly: '' },
+  { id: 40, age: '44', group: '4그룹', gender: '남', name: '김승주', birthId: '19811211-1', phone: '010-4442-7682', club: 'GMDC', depositor: 'GMDC', address: '거제시 고현항2로51 유로아일랜드 102동 2603호', team: 'A', event1: '자유형 50', event2: '배영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 13, age: '42', group: '4그룹', gender: '남', name: '김준영', birthId: '19830201-1', phone: '010-4572-7285', club: 'GMDC', depositor: 'GMDC', address: '거제시 고현항2로 51, 202동 1804호', team: 'A', event1: '자유형 50', event2: '평영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 14, age: '44', group: '4그룹', gender: '남', name: '손철수', birthId: '19810217-1', phone: '010-7142-8269', club: 'GMDC', depositor: 'GMDC', address: '거제시 고현항2로51 207동 3002호', team: 'A', event1: '핀자유형 50', event2: '자유형 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 15, age: '44', group: '4그룹', gender: '남', name: '안상준', birthId: '19811115-1', phone: '010-4005-7171', club: 'GMDC', depositor: 'GMDC', address: '거제시 아주2로 138, 102동 1801호', team: 'A', event1: '자유형 50', event2: '접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 16, age: '41', group: '4그룹', gender: '남', name: '양승진', birthId: '19840221-1', phone: '010-4252-4589', club: 'GMDC', depositor: 'GMDC야호', address: '거제시 장평2로19 103동 402호', team: 'B', event1: '자유형 50', event2: '', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 17, age: '44', group: '4그룹', gender: '남', name: '이도형', birthId: '19810823-1', phone: '010-5155-2728', club: 'GMDC', depositor: 'GMDC', address: '거제시 장평1로 86, 삼성S빌리지 B동 202호', team: 'A', event1: '자유형 50', event2: '평영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 18, age: '42', group: '4그룹', gender: '남', name: '정서현', birthId: '19830903-1', phone: '010-4266-4766', club: 'GMDC', depositor: 'GMDC야호', address: '거제시 상동5길 117-16, 206동 402호', team: 'B', event1: '평영 50', event2: '배영 50', finFly: '', finFree: '27.92', free: '33.59', back: '', breast: '', fly: '' },
+  { id: 19, age: '47', group: '4그룹', gender: '여', name: '김상희', birthId: '19780602-2', phone: '010-6880-5472', club: 'GMDC', depositor: 'GMDC야호', address: '거제시 제산로 2-5 삼성쉐르빌APT 105동 904호', team: 'B', event1: '자유형 50', event2: '평영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 20, age: '43', group: '4그룹', gender: '여', name: '박다유', birthId: '19820825-2', phone: '010-8234-5210', club: 'GMDC', depositor: 'GMDC', address: '거제시 장평1로 86, 삼성S빌리지 B동 202호', team: 'A', event1: '자유형 50', event2: '배영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 21, age: '48', group: '4그룹', gender: '여', name: '손혜정', birthId: '19770415-2', phone: '010-8603-9827', club: 'GMDC', depositor: 'GMDC', address: '거제시 일운면 소동8길 11, 서희 108동 303호', team: 'A', event1: '핀자유형 50', event2: '핀접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 22, age: '40', group: '4그룹', gender: '여', name: '심민경', birthId: '19850520-2', phone: '010-9611-8332', club: 'GMDC', depositor: 'GMDC야호', address: '거제시 거제 중앙로3길 15, 102동 1003호', team: 'B', event1: '자유형 50', event2: '배영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 23, age: '42', group: '4그룹', gender: '여', name: '여수연', birthId: '19830209-2', phone: '010-3723-8453', club: 'GMDC', depositor: 'GMDC야호', address: '거제시 용소1길 17-17, 푸르지오 108동 203호', team: 'B', event1: '핀자유형 50', event2: '핀접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 24, age: '44', group: '4그룹', gender: '여', name: '이미영', birthId: '19811014-2', phone: '010-9688-1754', club: 'GMDC', depositor: 'GMDC', address: '거제시 아주로 63 미진이지비아 103동 704호', team: 'A', event1: '핀자유형 50', event2: '핀접영 50', finFly: '', finFree: '30.42', free: '', back: '', breast: '', fly: '57.17' },
+  { id: 25, age: '41', group: '4그룹', gender: '여', name: '이은희', birthId: '19840528-2', phone: '010-7456-1512', club: 'GMDC', depositor: 'GMDC야호', address: '거제시 상동1길 15-9, 302동 104호', team: 'B', event1: '배영 50', event2: '평영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 26, age: '50', group: '5그룹', gender: '남', name: '박재홍', birthId: '19750715-1', phone: '010-8707-5940', club: 'GMDC', depositor: 'GMDC', address: '거재시 아주로 100-11 204동 602호', team: 'A', event1: '핀자유형 50', event2: '핀접영 50', finFly: '30.29', finFree: '28.08', free: '', back: '', breast: '', fly: '' },
+  { id: 27, age: '57', group: '5그룹', gender: '남', name: '박진홍', birthId: '19681220-1', phone: '010-2517-9826', club: 'GMDC', depositor: 'GMDC', address: '거제시 일운면 소동8길 11, 서희 108동 303호', team: 'A', event1: '핀자유형 50', event2: '핀접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 28, age: '50', group: '5그룹', gender: '남', name: '서충근', birthId: '19750724-1', phone: '010-5566-3542', club: 'GMDC', depositor: 'GMDC', address: '거제시 성산로42 옥포이편한세상', team: 'A', event1: '핀자유형 50', event2: '핀접영 50', finFly: '', finFree: '27.43', free: '', back: '', breast: '', fly: '99.99' },
+  { id: 29, age: '50', group: '5그룹', gender: '남', name: '성지경', birthId: '19750223-1', phone: '010-2587-7399', club: 'GMDC', depositor: 'GMDC', address: '거제시 상동5길 117-50, 303동 204호', team: 'A', event1: '핀자유형 50', event2: '핀접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 30, age: '51', group: '5그룹', gender: '남', name: '이경열', birthId: '19740501-1', phone: '010-5065-8643', club: 'GMDC', depositor: 'GMDC', address: '거제시 아주로 73, 석호해와루아파트 103동 603호', team: 'A', event1: '핀자유형 50', event2: '평영 50', finFly: '', finFree: '', free: '', back: '', breast: '43.51', fly: '' },
+  { id: 31, age: '53', group: '5그룹', gender: '여', name: '김애란', birthId: '19720727-2', phone: '010-5146-9873', club: 'GMDC', depositor: 'GMDC야호', address: '거제시 소동8길 11 스타힐스오션시티 105동 703호', team: 'B', event1: '자유형 50', event2: '배영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 32, age: '58', group: '5그룹', gender: '여', name: '박선화', birthId: '19671212-2', phone: '010-2599-6441', club: 'GMDC', depositor: 'GMDC', address: '거제시 옥수로6길160 조각공원빌 501호', team: 'A', event1: '핀자유형 50', event2: '평영 50', finFly: '', finFree: '33.64', free: '46.66', back: '', breast: '', fly: '' },
+  { id: 33, age: '56', group: '5그룹', gender: '여', name: '전경미', birthId: '19690201-2', phone: '010-6332-4009', club: 'GMDC', depositor: 'GMDC', address: '거제시 아주2로 2길 10 코오랑하늘채 102동 302호', team: 'A', event1: '핀자유형 50', event2: '핀접영 50', finFly: '', finFree: '32.42', free: '', back: '55.88', breast: '', fly: '' },
+  { id: 34, age: '62', group: '6그룹', gender: '남', name: '박봉권', birthId: '19630807-1', phone: '010-9669-5629', club: 'GMDC', depositor: 'GMDC', address: '거제시 장승포로 16번  1호', team: 'A', event1: '배영 50', event2: '평영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 35, age: '63', group: '6그룹', gender: '남', name: '성환용', birthId: '19620713-1', phone: '010-9689-2830', club: 'GMDC', depositor: 'GMDC', address: '거제시 능포로2길 38, 옥명대우아파트 105동 1203호', team: 'A', event1: '핀자유형 50', event2: '핀접영 50', finFly: '', finFree: '99.99', free: '', back: '', breast: '', fly: '' },
+  { id: 36, age: '59', group: '6그룹', gender: '여', name: '송원자', birthId: '19660325-2', phone: '010-2854-3715', club: 'GMDC', depositor: 'GMDC', address: '거제시 능포로2길62 롯데캐슬 302동 801호', team: 'A', event1: '자유형 50', event2: '평영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 37, age: '62', group: '6그룹', gender: '여', name: '최지희', birthId: '19630705-2', phone: '010-3560-6375', club: 'GMDC', depositor: 'GMDC', address: '거제시 상동7길30, 대동다숲 124동 1406호', team: 'A', event1: '자유형 50', event2: '핀자유형 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 38, age: '61', group: '6그룹', gender: '남', name: '권순용', birthId: '19650101-1', phone: '010-5890-7052', club: 'GMDC', depositor: 'GMDC야호', address: '거제시 동부면 거제남서로 3136', team: 'B', event1: '자유형 50', event2: '평영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 39, age: '27', group: '2그룹', gender: '남', name: '정성민', birthId: '19990101-1', phone: '010-9989-7218', club: 'GMDC', depositor: 'GMDC야호', address: '거제시 동부면 산양리 671-1', team: 'B', event1: '자유형 50', event2: '평영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 41, age: '17', group: '1그룹', gender: '남', name: '이동규', birthId: '20080508-3', phone: '010-8301-1709', club: 'GMDC', depositor: 'GMDC야호', address: '거제시 문동1길 42, 110동 1202호', team: 'B', event1: '', event2: '', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' }
 ];
 
 // Baseline Map of Last Year's Records (Original 37 swimmers)
@@ -170,6 +169,232 @@ let eventsViewMode = 'simple'; // 'simple' (기본) | 'detailed'
 let pinnedComboCardId = null; // 고정된 조합 카드 ID (최대 1개)
 let saveTimeout = null;
 
+// ==========================================
+// PINNED RELAY SELECTIONS (개인별 단체전 선발 고정)
+// ==========================================
+const PINNED_RELAYS_STORAGE_KEY = "gmdc_pinned_relays_v2";
+
+const RELAY_TITLES = {
+  combo1: '혼성 핀계영 300m',
+  combo2: '남자 계영 200m',
+  combo3: '여자 계영 200m',
+  combo4: '남자 혼계영 200m',
+  combo5: '여자 혼계영 200m'
+};
+
+const DEFAULT_PINNED_RELAYS = {
+  A: {
+    combo1: ['이지훈', '서충근', '박재홍', '이지호', '전경미', '박선화'],
+    combo2: ['박슬우', '안상준', '김기용', '박봉권'],
+    combo3: ['이영경', '손혜정', '이미영', '박선화'],
+    combo4: { back: '조성찬', breast: '이경열', fly: '박재홍', free: '안상준' },
+    combo5: { back: '전경미', breast: '이지호', fly: '이미영', free: '손혜정' }
+  },
+  B: {
+    combo1: ['이채율', '정서현', '권순용', '김애란', '이은희', '김상희'],
+    combo2: ['이채율', '정서현', '양승진', '권순용'],
+    combo3: ['이은희', '김애란', '김상희', '심민경'],
+    combo4: { back: '이채율', breast: '권순용', fly: '정서현', free: '양승진' },
+    combo5: { back: '심민경', breast: '이은희', fly: '김애란', free: '김상희' }
+  }
+};
+
+let pinnedRelaysState = JSON.parse(JSON.stringify(DEFAULT_PINNED_RELAYS));
+
+function loadPinnedRelays() {
+  try {
+    const saved = localStorage.getItem(PINNED_RELAYS_STORAGE_KEY);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (parsed && parsed.A && parsed.B) {
+        pinnedRelaysState = {
+          A: { ...DEFAULT_PINNED_RELAYS.A, ...parsed.A },
+          B: { ...DEFAULT_PINNED_RELAYS.B, ...parsed.B }
+        };
+        ['combo1', 'combo2', 'combo3'].forEach(key => {
+          if (!pinnedRelaysState.B[key] || pinnedRelaysState.B[key].length === 0) {
+            pinnedRelaysState.B[key] = [...DEFAULT_PINNED_RELAYS.B[key]];
+          }
+        });
+        ['combo4', 'combo5'].forEach(key => {
+          if (!pinnedRelaysState.B[key] || Object.values(pinnedRelaysState.B[key]).filter(Boolean).length === 0) {
+            pinnedRelaysState.B[key] = { ...DEFAULT_PINNED_RELAYS.B[key] };
+          }
+        });
+        return;
+      }
+    }
+  } catch (e) {
+    console.warn("Failed to load pinned relays:", e);
+  }
+  pinnedRelaysState = JSON.parse(JSON.stringify(DEFAULT_PINNED_RELAYS));
+}
+
+function savePinnedRelays() {
+  try {
+    localStorage.setItem(PINNED_RELAYS_STORAGE_KEY, JSON.stringify(pinnedRelaysState));
+    if (db && DOC_REF && !isScenarioMode) {
+      setDoc(DOC_REF, {
+        pinnedRelays: pinnedRelaysState,
+        updatedAt: new Date().toISOString()
+      }, { merge: true }).catch(err => console.warn('Firestore pinnedRelays 저장 실패:', err));
+    }
+  } catch (e) {
+    console.warn("Failed to save pinned relays:", e);
+  }
+}
+
+function getSwimmerRelayAssignments(swimmerName) {
+  if (!swimmerName) return [];
+  const assignments = [];
+  ['A', 'B'].forEach(team => {
+    const teamPins = pinnedRelaysState[team];
+    if (!teamPins) return;
+    
+    // Combo 1: 혼성 핀계영
+    if (Array.isArray(teamPins.combo1) && teamPins.combo1.includes(swimmerName)) {
+      assignments.push({ team, key: 'combo1', label: '혼성핀', strokeName: '핀자유' });
+    }
+    // Combo 2: 남계영
+    if (Array.isArray(teamPins.combo2) && teamPins.combo2.includes(swimmerName)) {
+      assignments.push({ team, key: 'combo2', label: '남계영', strokeName: '자유형' });
+    }
+    // Combo 3: 여계영
+    if (Array.isArray(teamPins.combo3) && teamPins.combo3.includes(swimmerName)) {
+      assignments.push({ team, key: 'combo3', label: '여계영', strokeName: '자유형' });
+    }
+    // Combo 4: 남혼계
+    if (teamPins.combo4 && typeof teamPins.combo4 === 'object') {
+      for (const [st, name] of Object.entries(teamPins.combo4)) {
+        if (name === swimmerName) {
+          const stName = STROKE_NAMES[st] || st;
+          assignments.push({ team, key: 'combo4', label: `남혼계(${stName.slice(0, 1)})`, strokeName: stName });
+        }
+      }
+    }
+    // Combo 5: 여혼계
+    if (teamPins.combo5 && typeof teamPins.combo5 === 'object') {
+      for (const [st, name] of Object.entries(teamPins.combo5)) {
+        if (name === swimmerName) {
+          const stName = STROKE_NAMES[st] || st;
+          assignments.push({ team, key: 'combo5', label: `여혼계(${stName.slice(0, 1)})`, strokeName: stName });
+        }
+      }
+    }
+  });
+  return assignments;
+}
+
+function toggleMemberPin(comboKey, team, swimmerName, strokeField = null) {
+  if (!pinnedRelaysState[team]) pinnedRelaysState[team] = {};
+  const relayTitle = RELAY_TITLES[comboKey] || comboKey;
+
+  if (comboKey === 'combo4' || comboKey === 'combo5') {
+    if (!pinnedRelaysState[team][comboKey]) {
+      pinnedRelaysState[team][comboKey] = { back: null, breast: null, fly: null, free: null };
+    }
+    const current = pinnedRelaysState[team][comboKey][strokeField];
+    const isCurrentlyPinned = current === swimmerName;
+    const stName = STROKE_NAMES[strokeField] || strokeField;
+
+    if (isCurrentlyPinned) {
+      pinnedRelaysState[team][comboKey][strokeField] = null;
+      showToast(`⚡ [${relayTitle}] ${swimmerName} (${stName}) 선수 고정이 해제되었습니다.`);
+      logChangeHistory('PIN', swimmerName, `relay_pin_${team}_${comboKey}_${strokeField}`, `단체전 선발 [${team}팀 ${relayTitle} - ${stName}]`, `${stName} 고정`, '미고정 (자동추천)', `[${team}팀 ${relayTitle}] ${swimmerName} (${stName}) 고정 해제`, { team, comboKey, strokeField });
+    } else {
+      pinnedRelaysState[team][comboKey][strokeField] = swimmerName;
+      showToast(`📌 [${relayTitle}] ${swimmerName} (${stName}) 선수가 필수로 고정되었습니다.`);
+      logChangeHistory('PIN', swimmerName, `relay_pin_${team}_${comboKey}_${strokeField}`, `단체전 선발 [${team}팀 ${relayTitle} - ${stName}]`, '미고정 (자동추천)', `${stName} 고정`, `[${team}팀 ${relayTitle}] ${swimmerName} (${stName}) 선발 고정`, { team, comboKey, strokeField });
+    }
+  } else {
+    if (!Array.isArray(pinnedRelaysState[team][comboKey])) {
+      pinnedRelaysState[team][comboKey] = [];
+    }
+    const list = pinnedRelaysState[team][comboKey];
+    const idx = list.indexOf(swimmerName);
+    if (idx >= 0) {
+      list.splice(idx, 1);
+      showToast(`⚡ [${relayTitle}] ${swimmerName} 선수 고정이 해제되었습니다.`);
+      logChangeHistory('PIN', swimmerName, `relay_pin_${team}_${comboKey}`, `단체전 선발 [${team}팀 ${relayTitle}]`, '선발 고정됨', '미고정 (자동추천)', `[${team}팀 ${relayTitle}] ${swimmerName} 고정 해제`, { team, comboKey });
+    } else {
+      list.push(swimmerName);
+      const totalReq = comboKey === 'combo1' ? 6 : 4;
+      const remaining = Math.max(0, totalReq - list.length);
+      showToast(`📌 [${relayTitle}] ${swimmerName} 선수가 필수로 고정되었습니다. (나머지 ${remaining}명 자동 최적화)`);
+      logChangeHistory('PIN', swimmerName, `relay_pin_${team}_${comboKey}`, `단체전 선발 [${team}팀 ${relayTitle}]`, '미고정 (자동추천)', '선발 고정됨', `[${team}팀 ${relayTitle}] ${swimmerName} 선발 고정`, { team, comboKey });
+    }
+  }
+
+  savePinnedRelays();
+  updateStats();
+  renderTable();
+  renderEventsTable();
+}
+
+function toggleTeamRelayAllPins(comboKey, team) {
+  if (!pinnedRelaysState[team]) pinnedRelaysState[team] = {};
+  const relayTitle = RELAY_TITLES[comboKey] || comboKey;
+  const currentCombos = calculateRelayCombinations(team);
+  const result = currentCombos[comboKey];
+
+  if (!result || !result.members) return;
+
+  const isMedley = comboKey === 'combo4' || comboKey === 'combo5';
+  let hasAnyPinned = false;
+
+  if (isMedley) {
+    const pins = pinnedRelaysState[team][comboKey] || {};
+    hasAnyPinned = Object.values(pins).some(Boolean);
+  } else {
+    const pins = pinnedRelaysState[team][comboKey] || [];
+    hasAnyPinned = pins.length > 0;
+  }
+
+  if (hasAnyPinned) {
+    // Unpin all
+    if (isMedley) {
+      const prevPins = { ...pinnedRelaysState[team][comboKey] };
+      pinnedRelaysState[team][comboKey] = { back: null, breast: null, fly: null, free: null };
+      Object.entries(prevPins).forEach(([st, name]) => {
+        if (name) {
+          const stName = STROKE_NAMES[st] || st;
+          logChangeHistory('PIN', name, `relay_pin_${team}_${comboKey}_${st}`, `단체전 선발 [${team}팀 ${relayTitle} - ${stName}]`, `${stName} 고정`, '미고정 (자동추천)', `[${team}팀 ${relayTitle}] ${name} (${stName}) 고정 해제`, { team, comboKey, strokeField: st });
+        }
+      });
+    } else {
+      const prevList = [...(pinnedRelaysState[team][comboKey] || [])];
+      pinnedRelaysState[team][comboKey] = [];
+      prevList.forEach(name => {
+        logChangeHistory('PIN', name, `relay_pin_${team}_${comboKey}`, `단체전 선발 [${team}팀 ${relayTitle}]`, '선발 고정됨', '미고정 (자동추천)', `[${team}팀 ${relayTitle}] ${name} 고정 해제`, { team, comboKey });
+      });
+    }
+    showToast(`⚡ ${team}팀 [${relayTitle}] 모든 선수 고정이 해제되어 실시간 자동 추천 모드로 전환되었습니다.`);
+  } else {
+    // Pin all current members
+    if (isMedley) {
+      pinnedRelaysState[team][comboKey] = {};
+      result.members.forEach(m => {
+        if (m.strokeField) {
+          pinnedRelaysState[team][comboKey][m.strokeField] = m.name;
+          const stName = STROKE_NAMES[m.strokeField] || m.strokeField;
+          logChangeHistory('PIN', m.name, `relay_pin_${team}_${comboKey}_${m.strokeField}`, `단체전 선발 [${team}팀 ${relayTitle} - ${stName}]`, '미고정 (자동추천)', `${stName} 고정`, `[${team}팀 ${relayTitle}] ${m.name} (${stName}) 선발 고정`, { team, comboKey, strokeField: m.strokeField });
+        }
+      });
+    } else {
+      pinnedRelaysState[team][comboKey] = result.members.map(m => m.name);
+      result.members.forEach(m => {
+        logChangeHistory('PIN', m.name, `relay_pin_${team}_${comboKey}`, `단체전 선발 [${team}팀 ${relayTitle}]`, '미고정 (자동추천)', '선발 고정됨', `[${team}팀 ${relayTitle}] ${m.name} 선발 고정`, { team, comboKey });
+      });
+    }
+    showToast(`📌 ${team}팀 [${relayTitle}] 현재 선발 ${result.members.length}명이 모두 고정되었습니다.`);
+  }
+
+  savePinnedRelays();
+  updateStats();
+  renderTable();
+  renderEventsTable();
+}
+
 // Header Toggle Buttons & View Containers
 const btnToggleRecords = document.getElementById('btnToggleRecords');
 const btnToggleEvents = document.getElementById('btnToggleEvents');
@@ -211,9 +436,18 @@ const eventsFilteredCount = document.getElementById('eventsFilteredCount');
 function init() {
   window.__GMDC_VERSION__ = APP_VERSION;
   console.log(`%c[GMDC Swim] App Version: ${APP_VERSION}`, 'color: #0284c7; font-weight: bold; font-size: 12px;');
+  initAuth({
+    showToast: showToast,
+    onAuthChange: () => {
+      renderTable();
+      renderEventsTable();
+    }
+  });
+  loadPinnedRelays();
   initStickyPreference();
   initNoticeModal();
   initAuditModal();
+  initSnapshotModal();
   initRulesModal();
   initScenarioMode();
   initMatrixCompareMode();
@@ -295,13 +529,16 @@ function updateScenarioModeUI(isOn) {
 
 // ============================================================
 // HISTORY RECONCILIATION & AUDIT ENGINE
-// (히스토리 로그를 초기 기본값부터 순차 재현하여 현재 PB 데이터와 정합성 비교)
+// (최후 스냅샷으로부터 히스토리를 시간순 재현하여 현재 DB와 정합성 검증)
 // ============================================================
+let lastAuditDiscrepancies = [];
+
 function initAuditModal() {
   const btnAudit = document.getElementById('btnAuditHistory');
   const modal = document.getElementById('auditModal');
   const btnCloseX = document.getElementById('btnAuditModalCloseX');
   const btnConfirm = document.getElementById('btnAuditModalConfirm');
+  const body = document.getElementById('auditModalBody');
 
   if (btnAudit) {
     btnAudit.addEventListener('click', openAuditModal);
@@ -323,9 +560,324 @@ function initAuditModal() {
     });
   }
 
-  // Expose to window for developer/console debugging
+  if (body) {
+    body.addEventListener('click', async (e) => {
+      // 1. Delete specific history log
+      const delBtn = e.target.closest('.btn-delete-log');
+      if (delBtn) {
+        const logId = delBtn.dataset.logId;
+        const logSummary = delBtn.dataset.logSummary || '';
+        await deleteHistoryLog(logId, logSummary);
+        return;
+      }
+
+      // 1-1. Unapply specific history log
+      const unapplyBtn = e.target.closest('.btn-unapply-log');
+      if (unapplyBtn) {
+        const logId = unapplyBtn.dataset.logId;
+        const logSummary = unapplyBtn.dataset.logSummary || '';
+        await unapplyHistoryLog(logId, logSummary);
+        return;
+      }
+
+      // 1-2. Reactivate specific unapplied log
+      const reactBtn = e.target.closest('.btn-reactivate-log');
+      if (reactBtn) {
+        const logId = reactBtn.dataset.logId;
+        const logSummary = reactBtn.dataset.logSummary || '';
+        await reactivateHistoryLog(logId, logSummary);
+        return;
+      }
+
+      // 1-3. Unapply all recent logs button
+      const unapplyAllBtn = e.target.closest('#btnUnapplyAllRecentLogs');
+      if (unapplyAllBtn) {
+        await unapplyAllRecentLogs(window._lastRecentLogs || []);
+        return;
+      }
+
+      // 1-4. History Tab Switching
+      const tabBtn = e.target.closest('.audit-tab-btn');
+      if (tabBtn) {
+        const tabName = tabBtn.dataset.tab;
+        body.querySelectorAll('.audit-tab-btn').forEach(b => b.classList.toggle('active', b === tabBtn));
+        const paneActive = body.querySelector('#auditTabPaneActive');
+        const paneUnapplied = body.querySelector('#auditTabPaneUnapplied');
+        if (paneActive && paneUnapplied) {
+          paneActive.style.display = tabName === 'active' ? 'block' : 'none';
+          paneUnapplied.style.display = tabName === 'unapplied' ? 'block' : 'none';
+        }
+        return;
+      }
+
+      // 2. Bulk select all current
+      const btnAllCurrent = e.target.closest('#btnSelectAllCurrent');
+      if (btnAllCurrent) {
+        body.querySelectorAll('.discrepancy-choice-group').forEach(group => {
+          const radioCurrent = group.querySelector('input[value="current"]');
+          if (radioCurrent) radioCurrent.checked = true;
+          group.querySelectorAll('.choice-label').forEach(lbl => {
+            lbl.classList.toggle('is-selected-current', lbl.dataset.choice === 'current');
+            lbl.classList.toggle('is-selected-history', lbl.dataset.choice === 'history' && !radioCurrent.checked);
+          });
+        });
+        return;
+      }
+
+      // 3. Bulk select all history
+      const btnAllHistory = e.target.closest('#btnSelectAllHistory');
+      if (btnAllHistory) {
+        body.querySelectorAll('.discrepancy-choice-group').forEach(group => {
+          const radioHistory = group.querySelector('input[value="history"]');
+          if (radioHistory) radioHistory.checked = true;
+          group.querySelectorAll('.choice-label').forEach(lbl => {
+            lbl.classList.toggle('is-selected-history', lbl.dataset.choice === 'history');
+            lbl.classList.toggle('is-selected-current', lbl.dataset.choice === 'current' && !radioHistory.checked);
+          });
+        });
+        return;
+      }
+
+      // 4. Apply selected decisions
+      const btnApply = e.target.closest('#btnApplyDiscrepancyDecisions');
+      if (btnApply) {
+        const decisions = lastAuditDiscrepancies.map((d, idx) => {
+          const radio = body.querySelector(`input[name="disc_choice_${idx}"]:checked`);
+          const action = radio ? radio.value : 'current';
+          return { discrepancy: d, action };
+        });
+        await applyDiscrepancyDecisions(decisions);
+        return;
+      }
+    });
+
+    body.addEventListener('change', (e) => {
+      const radio = e.target.closest('input[type="radio"]');
+      if (radio && radio.name && radio.name.startsWith('disc_choice_')) {
+        const group = radio.closest('.discrepancy-choice-group');
+        if (group) {
+          group.querySelectorAll('.choice-label').forEach(lbl => {
+            const isCurr = radio.value === 'current' && lbl.dataset.choice === 'current';
+            const isHist = radio.value === 'history' && lbl.dataset.choice === 'history';
+            lbl.classList.toggle('is-selected-current', isCurr);
+            lbl.classList.toggle('is-selected-history', isHist);
+          });
+        }
+      }
+    });
+  }
+
   window.compareHistoryWithCurrentRecords = compareHistoryWithCurrentRecords;
   window.openAuditModal = openAuditModal;
+}
+
+async function deleteHistoryLog(logId, logSummary) {
+  if (!logId) return;
+  const ok = confirm(`해당 히스토리 로그 [${logSummary}] 를 완전히 영구 삭제하시겠습니까?\n\n※ 삭제된 히스토리는 서버 DB에서도 완전히 제거됩니다.`);
+  if (!ok) return;
+
+  try {
+    await deleteDoc(doc(db, HISTORY_COL_NAME, logId));
+    showToast(`🗑️ 히스토리 로그가 영구 삭제되었습니다.`);
+    openAuditModal(); // Refresh audit modal
+  } catch (err) {
+    console.error('히스토리 삭제 실패:', err);
+    showToast(`⚠️ 히스토리 삭제 실패: ${err.message || err}`);
+  }
+}
+
+async function unapplyHistoryLog(logId, logSummary) {
+  if (!logId) return;
+  const ok = confirm(`해당 히스토리 로그 [${logSummary}] 를 [미적용] 상태로 전환하시겠습니까?\n\n※ 서버에는 영구 보존되며, 정합성 검증 및 재현 계산에서만 제외됩니다.`);
+  if (!ok) return;
+
+  try {
+    await updateDoc(doc(db, HISTORY_COL_NAME, logId), {
+      isApplied: false,
+      unappliedAt: new Date().toISOString(),
+      unapplyReason: '사용자 개별 미적용 처리'
+    });
+    showToast(`⏸️ 히스토리 로그가 [미적용] 보존 상태로 전환되었습니다.`);
+    openAuditModal();
+  } catch (err) {
+    console.error('히스토리 미적용 실패:', err);
+    showToast(`⚠️ 처리 실패: ${err.message || err}`);
+  }
+}
+
+async function reactivateHistoryLog(logId, logSummary) {
+  if (!logId) return;
+  const ok = confirm(`해당 히스토리 로그 [${logSummary}] 를 다시 [적용] 상태로 활성화하시겠습니까?`);
+  if (!ok) return;
+
+  try {
+    await updateDoc(doc(db, HISTORY_COL_NAME, logId), {
+      isApplied: true,
+      reactivatedAt: new Date().toISOString()
+    });
+    showToast(`▶️ 히스토리 로그가 다시 [적용] 상태로 활성화되었습니다.`);
+    openAuditModal();
+  } catch (err) {
+    console.error('히스토리 재활성화 실패:', err);
+    showToast(`⚠️ 처리 실패: ${err.message || err}`);
+  }
+}
+
+async function unapplyAllRecentLogs(activeLogs) {
+  if (!activeLogs || activeLogs.length === 0) return;
+  const ok = confirm(`최후 스냅샷 이후의 모든 활성 히스토리 (${activeLogs.length}건)를 [미적용] 상태로 일괄 전환하시겠습니까?\n\n※ 서버에는 영구 보존되며, 정합성 검증 일치율은 즉시 100%가 됩니다.`);
+  if (!ok) return;
+
+  try {
+    const nowIso = new Date().toISOString();
+    for (const log of activeLogs) {
+      if (log.id) {
+        await updateDoc(doc(db, HISTORY_COL_NAME, log.id), {
+          isApplied: false,
+          unappliedAt: nowIso,
+          unapplyReason: '스냅샷 기준 일괄 미적용 정리'
+        });
+      }
+    }
+    showToast(`🎉 ${activeLogs.length}건의 히스토리가 [미적용]으로 안전하게 보존 정리되었습니다!`);
+    openAuditModal();
+  } catch (err) {
+    console.error('일괄 미적용 실패:', err);
+    showToast(`⚠️ 처리 실패: ${err.message || err}`);
+  }
+}
+
+async function applyDiscrepancyDecisions(decisions) {
+  if (!decisions || decisions.length === 0) return;
+
+  const applyCurrentCount = decisions.filter(d => d.action === 'current').length;
+  const applyHistoryCount = decisions.filter(d => d.action === 'history').length;
+
+  const ok = confirm(
+    `총 ${decisions.length}건의 불일치 항목에 대해 선택하신 결정을 적용하시겠습니까?\n\n` +
+    `• 📝 현재값 적용 (히스토리 보정 등록): ${applyCurrentCount}건\n` +
+    `• ↩️ 히스토리값으로 원상복구 (실시간 DB 롤백): ${applyHistoryCount}건\n\n` +
+    `적용 후 스냅샷+히스토리 재현 결과와 현재 DB 정합성은 100% 완벽 일치하게 됩니다.`
+  );
+  if (!ok) return;
+
+  try {
+    const histCol = collection(db, HISTORY_COL_NAME);
+    const nowIso = new Date().toISOString();
+    let dbModified = false;
+
+    for (const item of decisions) {
+      const d = item.discrepancy;
+      const action = item.action;
+
+      if (d.isPinDiscrepancy) {
+        if (action === 'current') {
+          // Save PIN log matching current live state
+          const logData = {
+            timestamp: nowIso,
+            type: 'PIN',
+            swimmer: d.name,
+            swimmerName: d.name,
+            team: d.team,
+            comboKey: d.comboKey,
+            strokeField: d.strokeField || null,
+            field: `relay_pin_${d.team}_${d.comboKey}${d.strokeField ? `_${d.strokeField}` : ''}`,
+            fieldName: d.fieldName,
+            label: `${d.fieldName} (정합성 보정)`,
+            prevVal: d.replayedVal,
+            newVal: d.currentVal
+          };
+          await addDoc(histCol, logData);
+        } else if (action === 'history') {
+          // Revert pinnedRelaysState to replayed value
+          dbModified = true;
+          const isMedley = d.comboKey === 'combo4' || d.comboKey === 'combo5';
+          if (!pinnedRelaysState[d.team]) pinnedRelaysState[d.team] = {};
+
+          if (isMedley && d.strokeField) {
+            if (!pinnedRelaysState[d.team][d.comboKey]) pinnedRelaysState[d.team][d.comboKey] = {};
+            pinnedRelaysState[d.team][d.comboKey][d.strokeField] = d.repName || null;
+          } else if (!isMedley) {
+            if (!Array.isArray(pinnedRelaysState[d.team][d.comboKey])) pinnedRelaysState[d.team][d.comboKey] = [];
+            const list = pinnedRelaysState[d.team][d.comboKey];
+            if (d.replayedVal === '선발 고정됨') {
+              if (!list.includes(d.name)) list.push(d.name);
+            } else {
+              const idx = list.indexOf(d.name);
+              if (idx >= 0) list.splice(idx, 1);
+            }
+          }
+          savePinnedRelays();
+        }
+        continue;
+      }
+
+      if (action === 'current') {
+        // Option 1: Apply current live DB value -> Add history log
+        let logData;
+        if (d.field === 'member') {
+          logData = {
+            timestamp: nowIso,
+            type: 'MEMBER',
+            swimmer: d.name,
+            field: 'member',
+            label: '신규 회원 등록 (정합성 보정)',
+            prevVal: '',
+            newVal: d.currentVal
+          };
+        } else if (d.field === 'member_deleted') {
+          logData = {
+            timestamp: nowIso,
+            type: 'DELETE',
+            swimmer: d.name,
+            field: 'member',
+            label: '회원 삭제 (정합성 보정)',
+            prevVal: d.replayedVal,
+            newVal: '삭제됨'
+          };
+        } else {
+          logData = {
+            timestamp: nowIso,
+            type: 'INFO',
+            swimmer: d.name,
+            field: d.field,
+            label: `${d.fieldName} (정합성 보정)`,
+            prevVal: d.replayedVal === '(빈값)' ? '' : d.replayedVal,
+            newVal: d.currentVal === '(빈값)' ? '' : d.currentVal
+          };
+        }
+        await addDoc(histCol, logData);
+      } else if (action === 'history') {
+        // Option 2: Revert DB value back to history replayed value
+        dbModified = true;
+        if (d.field === 'member') {
+          // Member didn't exist in history -> delete from live DB
+          records = records.filter(r => r.name !== d.name && r.id !== d.id);
+        } else if (d.field === 'member_deleted') {
+          // Member existed in history -> restore to live DB
+          if (d.recordObj) {
+            records.push(JSON.parse(JSON.stringify(d.recordObj)));
+          }
+        } else {
+          const rec = records.find(r => r.name === d.name || r.id === d.id);
+          if (rec) {
+            rec[d.field] = (d.replayedVal === '(빈값)' || d.replayedVal === '(미존재)') ? '' : d.replayedVal;
+          }
+        }
+      }
+    }
+
+    if (dbModified) {
+      saveData();
+      renderAll();
+    }
+
+    showToast(`🎉 총 ${decisions.length}건의 정합성 결정이 적용되어 100% 일치되었습니다!`);
+    openAuditModal(); // Refresh audit modal
+  } catch (err) {
+    console.error('정합성 결정 적용 실패:', err);
+    showToast(`⚠️ 적용 실패: ${err.message || err}`);
+  }
 }
 
 function openAuditModal() {
@@ -339,8 +891,8 @@ function openAuditModal() {
   body.innerHTML = `
     <div style="text-align:center; padding:35px 20px; color:var(--text-muted);">
       <div style="font-size:28px; margin-bottom:10px; animation:spin 1s infinite linear;">⏳</div>
-      <div style="font-size:14px; font-weight:700; color:var(--text-main);">Firebase 히스토리 로그 분석 및 정합성 검증 중...</div>
-      <div style="font-size:12px; margin-top:5px;">클라우드 히스토리 컬렉션에서 전체 변경 이력을 순차 재현하고 있습니다.</div>
+      <div style="font-size:14px; font-weight:700; color:var(--text-main);">최후 스냅샷 및 히스토리 로그 분석 중...</div>
+      <div style="font-size:12px; margin-top:5px;">클라우드 최후 스냅샷 이후의 변경 이력을 시간순으로 재현 및 검증하고 있습니다.</div>
     </div>
   `;
 
@@ -361,101 +913,550 @@ function openAuditModal() {
       return;
     }
 
+    lastAuditDiscrepancies = result.discrepancies || [];
+    window._lastReplayedRecords = result.replayedRecords;
+    window._lastRecentLogs = result.recentLogs || [];
+
+    let matchSectionHtml = '';
     if (result.isPerfectMatch) {
-      body.innerHTML = `
-        <div style="background:#ecfdf5; border:1px solid #6ee7b7; border-radius:10px; padding:18px; margin-bottom:16px;">
-          <div style="display:flex; align-items:center; gap:8px; color:#065f46; font-weight:800; font-size:16px;">
+      matchSectionHtml = `
+        <div style="background:#ecfdf5; border:1px solid #6ee7b7; border-radius:10px; padding:16px; margin-bottom:14px;">
+          <div style="display:flex; align-items:center; gap:8px; color:#065f46; font-weight:800; font-size:15px;">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-            <span>히스토리와 현재 데이터가 100% 완벽히 일치합니다!</span>
+            <span>스냅샷 및 이후 히스토리가 현재 DB와 100% 완벽히 일치합니다!</span>
           </div>
-          <p style="margin-top:8px; font-size:13px; color:#047857; line-height:1.5;">
-            서버의 <strong>${HISTORY_COL_NAME}</strong> 컬렉션에 기록된 총 <strong>${result.totalLogs}건</strong>의 변경 로그를 2026-01-01 초기 기본 데이터부터 순차적으로 재현한 결과, 현재 로딩된 모든 회원(37명) 및 <strong>${result.totalFieldChecks}개</strong>의 세부 필드 값과 오차 없이 100% 정확하게 일치함을 검증하였습니다.
+          <p style="margin-top:6px; font-size:12.5px; color:#047857; line-height:1.45;">
+            최후 스냅샷으로부터 적용 중인 총 <strong>${result.recentLogs.length}건</strong>의 변경 히스토리를 순차 적용한 결과, 현재 실시간 DB와 오차 없이 100% 완벽하게 일치함을 검증하였습니다.
+            ${result.unappliedLogs.length > 0 ? ` (※ 미적용 보존 히스토리: <strong>${result.unappliedLogs.length}건</strong>)` : ''}
           </p>
-        </div>
-
-        <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:12px; margin-bottom:14px; text-align:center;">
-          <div style="background:var(--bg-page); padding:14px 10px; border-radius:8px; border:1px solid var(--border-light);">
-            <div style="font-size:11.5px; color:var(--text-muted); font-weight:600;">처리된 히스토리</div>
-            <div style="font-size:20px; font-weight:800; color:var(--primary); margin-top:4px;">${result.totalLogs}건</div>
-          </div>
-          <div style="background:var(--bg-page); padding:14px 10px; border-radius:8px; border:1px solid var(--border-light);">
-            <div style="font-size:11.5px; color:var(--text-muted); font-weight:600;">검증된 데이터 필드</div>
-            <div style="font-size:20px; font-weight:800; color:var(--secondary); margin-top:4px;">${result.totalFieldChecks}개</div>
-          </div>
-          <div style="background:var(--bg-page); padding:14px 10px; border-radius:8px; border:1px solid var(--border-light);">
-            <div style="font-size:11.5px; color:var(--text-muted); font-weight:600;">데이터 정합성</div>
-            <div style="font-size:20px; font-weight:800; color:#10b981; margin-top:4px;">100% 일치</div>
-          </div>
-        </div>
-
-        <div style="font-size:12px; color:var(--text-muted); background:var(--bg-page); padding:10px 14px; border-radius:6px; border-left:3px solid #10b981;">
-          💡 <strong>무결성 보증:</strong> 코드 재배포나 동기화 과정에서 서버 데이터의 유실이나 임의 롤백이 전혀 없었음을 확인하였습니다.
         </div>
       `;
     } else {
-      body.innerHTML = `
-        <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:10px; padding:18px; margin-bottom:16px;">
-          <div style="display:flex; align-items:center; gap:8px; color:#92400e; font-weight:800; font-size:16px;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-            <span>총 ${result.discrepancyCount}건의 차이가 발견되었습니다 (일치율: ${result.matchRate})</span>
+      matchSectionHtml = `
+        <div class="discrepancy-box">
+          <div class="discrepancy-header">
+            <div style="display:flex; align-items:center; gap:8px; color:#92400e; font-weight:800; font-size:15px;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              <span>총 ${result.discrepancyCount}건의 내용 불일치 항목 (일치율: ${result.matchRate})</span>
+            </div>
+            <div class="bulk-select-group">
+              <span style="font-size:11.5px; color:var(--text-muted); font-weight:600;">일괄 선택:</span>
+              <button type="button" class="btn-bulk-select" id="btnSelectAllHistory">모두 미적용</button>
+              <button type="button" class="btn-bulk-select" id="btnSelectAllCurrent">모두 반영</button>
+            </div>
           </div>
-          <p style="margin-top:8px; font-size:13px; color:#b45309; line-height:1.5;">
-            히스토리 로그 재현 결과와 현재 서버/로컬 로딩 데이터 간에 일부 차이가 있습니다. 아래 목록을 확인하고, 필요 시 아래 <strong>[히스토리 데이터로 일괄 복구]</strong> 버튼을 눌러 원상 복구할 수 있습니다.
+          <p style="font-size:12px; color:#b45309; margin-bottom:12px;">
+            각 항목별로 <strong>[미적용 (과거 히스토리값으로 DB 원상복구)]</strong> 또는 <strong>[반영 (현재 DB 내용 적용 및 히스토리 보정)]</strong>을 선택한 후 하단의 적용 버튼을 누르시면 다음에 검증할 때 100% 일치하게 됩니다.
           </p>
-        </div>
 
-        <div style="max-height: 250px; overflow-y: auto; border: 1px solid var(--border-light); border-radius: 8px; margin-bottom: 14px;">
-          <table class="audit-table" style="margin-top:0;">
-            <thead>
-              <tr>
-                <th>회원명</th>
-                <th>항목</th>
-                <th>히스토리 재현값</th>
-                <th>현재 로딩값</th>
-                <th>상태</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${result.discrepancies.map(d => `
+          <div style="max-height: 260px; overflow-y: auto; border-radius: 8px;">
+            <table class="discrepancy-table">
+              <thead>
                 <tr>
-                  <td style="font-weight:700;">${escapeHtml(d.name)}</td>
-                  <td>${escapeHtml(d.fieldName || d.field)}</td>
-                  <td style="color:#2563eb; font-weight:700;">${escapeHtml(d.replayedVal)}</td>
-                  <td style="color:#dc2626; font-weight:700;">${escapeHtml(d.currentVal)}</td>
-                  <td><span style="background:#fee2e2; color:#991b1b; padding:2px 6px; border-radius:4px; font-size:11px;">${escapeHtml(d.status)}</span></td>
+                  <th style="width:75px;">선수명</th>
+                  <th style="width:95px;">항목</th>
+                  <th style="width:100px;">변경시기</th>
+                  <th>과거</th>
+                  <th>현재</th>
+                  <th style="width:160px; text-align:center;">선택</th>
                 </tr>
-              `).join('')}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                ${result.discrepancies.map((d, idx) => `
+                  <tr>
+                    <td style="font-weight:700;">${escapeHtml(d.name)}</td>
+                    <td><span style="background:#f1f5f9; padding:2px 6px; border-radius:4px; font-size:11px; font-weight:600;">${escapeHtml(d.fieldName || d.field)}</span></td>
+                    <td style="color:var(--text-muted); font-size:11.5px; white-space:nowrap;">${escapeHtml(d.changeTime || '-')}</td>
+                    <td style="color:#2563eb; font-weight:700;">${escapeHtml(d.replayedVal)}</td>
+                    <td style="color:#dc2626; font-weight:700;">${escapeHtml(d.currentVal)}</td>
+                    <td>
+                      <div class="discrepancy-choice-group" data-disc-idx="${idx}">
+                        <label class="choice-label" data-choice="history" title="과거 히스토리값으로 DB를 원상복구합니다 (미적용)">
+                          <input type="radio" name="disc_choice_${idx}" value="history" />
+                          <span>미적용</span>
+                        </label>
+                        <label class="choice-label is-selected-current" data-choice="current" title="현재 DB값을 유지하고 히스토리에 반영합니다">
+                          <input type="radio" name="disc_choice_${idx}" value="current" checked />
+                          <span>반영</span>
+                        </label>
+                      </div>
+                    </td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
 
-        <div style="display: flex; justify-content: flex-end; gap: 8px;">
-          <button id="btnRestoreFromHistory" class="btn btn-primary" style="background:#059669; border-color:#059669; font-weight:700; display:flex; align-items:center; gap:6px; font-size:13px; padding:8px 16px;">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path><path d="M21 3v5h-5"></path><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path><path d="M8 16H3v5"></path></svg>
-            <span>히스토리 데이터로 일괄 복구하기 (${result.discrepancyCount}건 복원)</span>
-          </button>
+          <div class="discrepancy-footer-actions">
+            <div style="font-size:12px; color:#6b7280;">
+              💡 결정 적용 시 Firestore 히스토리 및 실시간 DB가 즉시 상호 동기화됩니다.
+            </div>
+            <button type="button" id="btnApplyDiscrepancyDecisions" class="btn-apply-disc-decisions">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>선택한 결정 적용 (100% 정합성 완료)</span>
+            </button>
+          </div>
         </div>
       `;
-
-      const btnRestore = body.querySelector('#btnRestoreFromHistory');
-      if (btnRestore) {
-        btnRestore.addEventListener('click', () => {
-          if (confirm(`히스토리에 기록된 ${result.discrepancyCount}건의 변경 내역을 현재 서버 데이터에 완벽하게 복구하시겠습니까?`)) {
-            records = JSON.parse(JSON.stringify(result.replayedRecords));
-            saveData();
-            renderAll();
-            showToast(`🎉 ${result.discrepancyCount}건의 기록이 히스토리 데이터로 완벽히 복구되었습니다!`);
-            closeAuditModal();
-          }
-        });
-      }
     }
+
+    body.innerHTML = `
+      <!-- 1. Latest Snapshot Header Card -->
+      <div class="audit-snapshot-header">
+        <div class="snap-title">
+          <span>📷 최후 기준 스냅샷: <strong>${escapeHtml(result.baseTitle)}</strong></span>
+          <span style="font-size:11px; background:#f1f5f9; padding:2px 8px; border-radius:12px; color:#475569; font-weight:600;">${result.baseRecordsCount}명 기준</span>
+        </div>
+        <div class="snap-meta">
+          <span>기준 시각: <strong>${escapeHtml(result.baseTimeFormatted)}</strong></span>
+          <span>적용 히스토리: <strong>${result.recentLogs.length}건</strong></span>
+          <span>미적용 보존: <strong>${result.unappliedLogs.length}건</strong></span>
+          <span>검증 필드수: <strong>${result.totalFieldChecks}개</strong></span>
+        </div>
+      </div>
+
+      <!-- 2. Match Summary & Discrepancies (with Per-Item Decision Controls) -->
+      ${matchSectionHtml}
+
+      <!-- 3. Chronological History Logs Box with Tabs & Unapply / Reactivate Controls -->
+      <div class="audit-history-box">
+        <div class="audit-history-header">
+          <div style="display:flex; align-items:center; gap:6px;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            <span>스냅샷 이후 히스토리 (총 ${result.totalRecentCount}건)</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            ${result.recentLogs.length > 0 ? `
+              <button type="button" class="btn-bulk-select" id="btnUnapplyAllRecentLogs" title="스냅샷 이후 활성 히스토리를 모두 [미적용]으로 정리하고 100% 일치시킵니다">
+                ⏸️ 활성 히스토리 일괄 미적용
+              </button>
+            ` : ''}
+          </div>
+        </div>
+
+        <div class="audit-history-tabs">
+          <button type="button" class="audit-tab-btn active" data-tab="active">
+            <span>적용 중인 히스토리 (${result.recentLogs.length}건)</span>
+          </button>
+          <button type="button" class="audit-tab-btn" data-tab="unapplied">
+            <span>미적용 보존 히스토리 (${result.unappliedLogs.length}건)</span>
+          </button>
+        </div>
+
+        <!-- Active Tab Pane -->
+        <div id="auditTabPaneActive" class="audit-tab-pane">
+          ${result.recentLogs.length === 0 ? `
+            <div style="padding:24px; text-align:center; color:var(--text-muted); font-size:12.5px;">
+              스냅샷 생성 시점 이후 활성화된 변경 히스토리가 없습니다.
+            </div>
+          ` : `
+            <div style="max-height: 220px; overflow-y: auto;">
+              <table class="audit-history-table">
+                <thead>
+                  <tr>
+                    <th style="width:110px;">기록 시각</th>
+                    <th style="width:80px;">선수명</th>
+                    <th style="width:110px;">변경 항목</th>
+                    <th>변경 내용 (이전 ➔ 이후)</th>
+                    <th style="width:110px; text-align:center;">관리</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${result.recentLogs.map(log => {
+                    const timeStr = log.timestamp ? new Date(log.timestamp).toLocaleString('ko-KR', { month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit', second:'2-digit' }) : '-';
+                    const swimmer = log.swimmer || log.swimmerName || '-';
+                    const label = log.label || log.field || '-';
+                    const changeStr = `${log.prevVal ? escapeHtml(log.prevVal) : '(빈값)'} ➔ <strong style="color:var(--primary);">${log.newVal ? escapeHtml(log.newVal) : '(빈값)'}</strong>`;
+                    return `
+                      <tr>
+                        <td style="color:var(--text-muted); font-size:11.5px;">${timeStr}</td>
+                        <td style="font-weight:700;">${escapeHtml(swimmer)}</td>
+                        <td><span style="background:#f1f5f9; padding:2px 6px; border-radius:4px; font-size:11px; font-weight:600;">${escapeHtml(label)}</span></td>
+                        <td>${changeStr}</td>
+                        <td style="text-align:center;">
+                          <div style="display:inline-flex; gap:4px;">
+                            <button type="button" class="btn-unapply-log" data-log-id="${log.id}" data-log-summary="${escapeHtml(swimmer)} - ${escapeHtml(label)}" title="이 히스토리를 미적용 상태로 전환 (서버에는 보존됨)">
+                              <span>⏸️ 미적용</span>
+                            </button>
+                            <button type="button" class="btn-delete-log" data-log-id="${log.id}" data-log-summary="${escapeHtml(swimmer)} - ${escapeHtml(label)}" title="이 히스토리 영구 삭제">
+                              <span>🗑️</span>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    `;
+                  }).join('')}
+                </tbody>
+              </table>
+            </div>
+          `}
+        </div>
+
+        <!-- Unapplied Tab Pane -->
+        <div id="auditTabPaneUnapplied" class="audit-tab-pane" style="display:none;">
+          ${result.unappliedLogs.length === 0 ? `
+            <div style="padding:24px; text-align:center; color:var(--text-muted); font-size:12.5px;">
+              미적용으로 보존된 히스토리가 없습니다.
+            </div>
+          ` : `
+            <div style="max-height: 220px; overflow-y: auto;">
+              <table class="audit-history-table">
+                <thead>
+                  <tr>
+                    <th style="width:110px;">기록 시각</th>
+                    <th style="width:80px;">선수명</th>
+                    <th style="width:110px;">변경 항목</th>
+                    <th>변경 내용</th>
+                    <th style="width:140px;">상태 / 사유</th>
+                    <th style="width:110px; text-align:center;">관리</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${result.unappliedLogs.map(log => {
+                    const timeStr = log.timestamp ? new Date(log.timestamp).toLocaleString('ko-KR', { month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit', second:'2-digit' }) : '-';
+                    const swimmer = log.swimmer || log.swimmerName || '-';
+                    const label = log.label || log.field || '-';
+                    const changeStr = `<span style="text-decoration:line-through; color:var(--text-muted);">${log.prevVal ? escapeHtml(log.prevVal) : '(빈값)'} ➔ ${log.newVal ? escapeHtml(log.newVal) : '(빈값)'}</span>`;
+                    const reason = log.unapplyReason || '미적용 처리됨';
+                    return `
+                      <tr style="opacity: 0.85;">
+                        <td style="color:var(--text-muted); font-size:11.5px;">${timeStr}</td>
+                        <td style="font-weight:700; color:var(--text-muted);">${escapeHtml(swimmer)}</td>
+                        <td><span style="background:#f1f5f9; padding:2px 6px; border-radius:4px; font-size:11px; font-weight:600; color:var(--text-muted);">${escapeHtml(label)}</span></td>
+                        <td>${changeStr}</td>
+                        <td><span class="badge-unapplied" title="${escapeHtml(reason)}">⏸️ ${escapeHtml(reason)}</span></td>
+                        <td style="text-align:center;">
+                          <div style="display:inline-flex; gap:4px;">
+                            <button type="button" class="btn-reactivate-log" data-log-id="${log.id}" data-log-summary="${escapeHtml(swimmer)} - ${escapeHtml(label)}" title="이 히스토리를 다시 적용 활성화">
+                              <span>▶️ 다시 적용</span>
+                            </button>
+                            <button type="button" class="btn-delete-log" data-log-id="${log.id}" data-log-summary="${escapeHtml(swimmer)} - ${escapeHtml(label)}" title="이 히스토리 영구 삭제">
+                              <span>🗑️</span>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    `;
+                  }).join('')}
+                </tbody>
+              </table>
+            </div>
+          `}
+        </div>
+      </div>
+    `;
   }, 100);
 }
 
 function closeAuditModal() {
   const modal = document.getElementById('auditModal');
   if (modal) modal.classList.remove('show');
+}
+
+// ============================================================
+// FIRESTORE DB SNAPSHOT & VERSION RESTORE ENGINE
+// ============================================================
+function initSnapshotModal() {
+  const btnOpen = document.getElementById('btnOpenSnapshotModal');
+  const modal = document.getElementById('snapshotModal');
+  const btnCloseX = document.getElementById('btnSnapshotModalCloseX');
+  const btnCloseFooter = document.getElementById('btnSnapshotModalClose');
+  const btnCreate = document.getElementById('btnCreateSnapshot');
+  const btnRefresh = document.getElementById('btnRefreshSnapshots');
+
+  if (btnOpen) {
+    btnOpen.addEventListener('click', () => {
+      openSnapshotModal();
+    });
+  }
+
+  if (btnCloseX) btnCloseX.addEventListener('click', closeSnapshotModal);
+  if (btnCloseFooter) btnCloseFooter.addEventListener('click', closeSnapshotModal);
+
+  if (modal) {
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeSnapshotModal();
+    });
+  }
+
+  if (btnCreate) {
+    btnCreate.addEventListener('click', async () => {
+      const inputTitle = document.getElementById('snapshotTitleInput');
+      const inputMemo = document.getElementById('snapshotMemoInput');
+      const title = inputTitle ? inputTitle.value.trim() : '';
+      const memo = inputMemo ? inputMemo.value.trim() : '';
+      
+      btnCreate.disabled = true;
+      btnCreate.innerHTML = '<span>⏳ 저장 중...</span>';
+      try {
+        await createDbSnapshot(title, memo);
+        if (inputTitle) inputTitle.value = '';
+        if (inputMemo) inputMemo.value = '';
+        await loadSnapshotsList();
+      } finally {
+        btnCreate.disabled = false;
+        btnCreate.innerHTML = `
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+            <circle cx="12" cy="13" r="4"></circle>
+          </svg>
+          <span>스냅샷 저장</span>
+        `;
+      }
+    });
+  }
+
+  if (btnRefresh) {
+    btnRefresh.addEventListener('click', () => {
+      loadSnapshotsList();
+    });
+  }
+
+  window.openSnapshotModal = openSnapshotModal;
+  window.closeSnapshotModal = closeSnapshotModal;
+  window.createDbSnapshot = createDbSnapshot;
+}
+
+async function openSnapshotModal() {
+  const modal = document.getElementById('snapshotModal');
+  if (!modal) return;
+  modal.classList.add('show');
+  
+  const inputTitle = document.getElementById('snapshotTitleInput');
+  if (inputTitle && !inputTitle.value) {
+    const now = new Date();
+    const defaultName = `${now.getFullYear()}.${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')} 스냅샷`;
+    inputTitle.placeholder = `예: ${defaultName}`;
+  }
+
+  const currentCountBadge = document.getElementById('snapshotCurrentCountBadge');
+  if (currentCountBadge) {
+    const teamA = records.filter(r => (r.team || 'A') === 'A').length;
+    const teamB = records.filter(r => (r.team || 'A') === 'B').length;
+    currentCountBadge.textContent = `현재 등록 인원: 총 ${records.length}명 (A팀 ${teamA}명, B팀 ${teamB}명)`;
+  }
+
+  await loadSnapshotsList();
+}
+
+function closeSnapshotModal() {
+  const modal = document.getElementById('snapshotModal');
+  if (modal) modal.classList.remove('show');
+}
+
+async function createDbSnapshot(customTitle, memo = '') {
+  if (!db) {
+    showToast('⚠️ Firebase 연결이 필요합니다.');
+    return;
+  }
+
+  const now = new Date();
+  const timeFormatted = now.toLocaleString('ko-KR', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: true
+  });
+
+  const teamACount = records.filter(r => (r.team || 'A') === 'A').length;
+  const teamB = records.filter(r => (r.team || 'A') === 'B').length;
+  const autoTitle = customTitle || `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')} 스냅샷`;
+
+  const snapshotData = {
+    title: autoTitle,
+    memo: memo || '',
+    division: 'adult',
+    records: JSON.parse(JSON.stringify(records)),
+    pinnedRelays: JSON.parse(JSON.stringify(pinnedRelaysState)),
+    recordCount: records.length,
+    teamACount: teamACount,
+    teamBCount: teamB,
+    createdAt: now.toISOString(),
+    createdAtFormatted: timeFormatted,
+    device: navigator.userAgent.includes('Mobile') ? '모바일' : 'PC'
+  };
+
+  try {
+    const colRef = collection(db, SNAPSHOT_COL_NAME);
+    const docRef = await addDoc(colRef, snapshotData);
+    showToast(`📸 스냅샷이 성공적으로 저장되었습니다! (${autoTitle})`);
+    return docRef.id;
+  } catch (err) {
+    console.error('스냅샷 저장 실패:', err);
+    showToast(`⚠️ 스냅샷 저장 실패: ${err.message || err}`);
+    throw err;
+  }
+}
+
+async function loadSnapshotsList() {
+  const listContainer = document.getElementById('snapshotListContainer');
+  if (!listContainer) return;
+
+  if (!db) {
+    listContainer.innerHTML = `
+      <div style="text-align:center; padding:30px; color:#ef4444;">
+        ⚠️ Firebase 클라우드에 연결되지 않아 스냅샷 목록을 조회할 수 없습니다.
+      </div>
+    `;
+    return;
+  }
+
+  listContainer.innerHTML = `
+    <div style="text-align:center; padding:30px; color:var(--text-muted);">
+      <div style="font-size:24px; margin-bottom:8px; animation:spin 1s infinite linear;">⏳</div>
+      <div>스냅샷 목록 불러오는 중...</div>
+    </div>
+  `;
+
+  try {
+    const colRef = collection(db, SNAPSHOT_COL_NAME);
+    const q = query(colRef, orderBy("createdAt", "desc"), limit(50));
+    const querySnapshot = await getDocs(q);
+
+    const snapshots = [];
+    querySnapshot.forEach(docSnap => {
+      snapshots.push({ id: docSnap.id, ...docSnap.data() });
+    });
+
+    if (snapshots.length === 0) {
+      listContainer.innerHTML = `
+        <div style="text-align:center; padding:36px 20px; color:var(--text-muted); background:var(--bg-page); border-radius:8px; border:1px dashed var(--border-dark);">
+          <div style="font-size:28px; margin-bottom:6px;">📷</div>
+          <div style="font-weight:700; color:var(--text-main); font-size:14px;">저장된 스냅샷이 없습니다.</div>
+          <div style="font-size:12px; margin-top:4px;">위 입력창에서 [스냅샷 저장]을 눌러 첫 스냅샷을 생성해보세요.</div>
+        </div>
+      `;
+      return;
+    }
+
+    listContainer.innerHTML = snapshots.map(s => {
+      const recordsArr = Array.isArray(s.records) ? s.records : [];
+      const count = s.recordCount || recordsArr.length;
+      const countA = s.teamACount !== undefined ? s.teamACount : recordsArr.filter(r => (r.team || 'A') === 'A').length;
+      const countB = s.teamBCount !== undefined ? s.teamBCount : recordsArr.filter(r => (r.team || 'A') === 'B').length;
+      const timeStr = s.createdAtFormatted || (s.createdAt ? new Date(s.createdAt).toLocaleString('ko-KR') : '');
+
+      return `
+        <div class="snapshot-item" data-snapshot-id="${escapeHtml(s.id)}">
+          <div class="snapshot-item-top">
+            <div>
+              <div class="snapshot-title">${escapeHtml(s.title || '이름 없는 스냅샷')}</div>
+              ${s.memo ? `<div style="font-size:12px; color:var(--text-muted); margin-top:2px;">${escapeHtml(s.memo)}</div>` : ''}
+              <div class="snapshot-time">🕒 ${escapeHtml(timeStr)} ${s.device ? `· ${escapeHtml(s.device)}` : ''}</div>
+            </div>
+            <div class="snapshot-meta-badges">
+              <span class="snapshot-badge">총 ${count}명</span>
+              <span class="snapshot-badge team-a">A팀 ${countA}명</span>
+              <span class="snapshot-badge team-b">B팀 ${countB}명</span>
+            </div>
+          </div>
+          <div class="snapshot-actions">
+            <button type="button" class="btn-snapshot-action restore" data-action="restore" data-id="${escapeHtml(s.id)}" data-title="${escapeHtml(s.title || '')}">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path><path d="M21 3v5h-5"></path><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path><path d="M8 16H3v5"></path></svg>
+              <span>이 스냅샷으로 DB 복원</span>
+            </button>
+            <button type="button" class="btn-snapshot-action" data-action="copy" data-id="${escapeHtml(s.id)}">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <span>JSON 복사</span>
+            </button>
+            <button type="button" class="btn-snapshot-action delete" data-action="delete" data-id="${escapeHtml(s.id)}" data-title="${escapeHtml(s.title || '')}">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+              <span>삭제</span>
+            </button>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    // Attach button events
+    listContainer.querySelectorAll('[data-action="restore"]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const snapId = btn.dataset.id;
+        const snapTitle = btn.dataset.title;
+        const targetSnap = snapshots.find(s => s.id === snapId);
+        if (!targetSnap || !Array.isArray(targetSnap.records)) {
+          showToast('⚠️ 스냅샷 데이터를 찾을 수 없습니다.');
+          return;
+        }
+
+        if (!confirm(`정말로 [${snapTitle}] 스냅샷(${targetSnap.records.length}명)으로 현재 DB 데이터를 복원하시겠습니까?\n\n※ [스냅샷 복원] 이력이 히스토리에 자동 기록되며, 새로운 정합성 기준점으로 설정되어 100% 일치 상태가 됩니다.`)) {
+          return;
+        }
+
+        records = JSON.parse(JSON.stringify(targetSnap.records));
+        if (targetSnap.pinnedRelays && typeof targetSnap.pinnedRelays === 'object') {
+          pinnedRelaysState = JSON.parse(JSON.stringify(targetSnap.pinnedRelays));
+          savePinnedRelays();
+        }
+        saveData();
+        renderAll();
+
+        // 1. Record RESTORE event into Firestore history as the new baseline anchor
+        await logChangeHistory(
+          'RESTORE',
+          '(전체 명단)',
+          'snapshot_restore',
+          '스냅샷 복원',
+          '',
+          snapTitle,
+          `[스냅샷 복원] ${snapTitle} (${targetSnap.records.length}명)`,
+          {
+            snapshotId: snapId,
+            snapshotTitle: snapTitle,
+            snapshotCreatedAt: targetSnap.createdAt || targetSnap.savedAt || ''
+          }
+        );
+
+        showToast(`🎉 [${snapTitle}] 스냅샷으로 DB가 성공적으로 복원되었습니다! (복원 이력 기록 완료)`);
+        closeSnapshotModal();
+      });
+    });
+
+    listContainer.querySelectorAll('[data-action="copy"]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const snapId = btn.dataset.id;
+        const targetSnap = snapshots.find(s => s.id === snapId);
+        if (!targetSnap) return;
+        const jsonStr = JSON.stringify(targetSnap.records, null, 2);
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(jsonStr).then(() => {
+            showToast('📋 스냅샷 JSON 데이터가 클립보드에 복사되었습니다.');
+          }).catch(() => fallbackCopyText(jsonStr, targetSnap.records.length));
+        } else {
+          fallbackCopyText(jsonStr, targetSnap.records.length);
+        }
+      });
+    });
+
+    listContainer.querySelectorAll('[data-action="delete"]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const snapId = btn.dataset.id;
+        const snapTitle = btn.dataset.title;
+        if (confirm(`[${snapTitle}] 스냅샷을 삭제하시겠습니까? (삭제 후 복구 불가)`)) {
+          try {
+            await deleteDoc(doc(db, SNAPSHOT_COL_NAME, snapId));
+            showToast('🗑️ 스냅샷이 삭제되었습니다.');
+            await loadSnapshotsList();
+          } catch (err) {
+            console.error('스냅샷 삭제 에러:', err);
+            showToast('⚠️ 스냅샷 삭제 실패: ' + err.message);
+          }
+        }
+      });
+    });
+
+  } catch (err) {
+    console.error('스냅샷 목록 로딩 실패:', err);
+    listContainer.innerHTML = `
+      <div style="background:#fee2e2; border:1px solid #fca5a5; border-radius:8px; padding:16px; color:#991b1b;">
+        <div style="font-weight:700;">⚠️ 스냅샷 목록 로딩 실패</div>
+        <div style="font-size:12px; margin-top:4px;">${escapeHtml(err.message || err)}</div>
+      </div>
+    `;
+  }
 }
 
 function initRulesModal() {
@@ -489,24 +1490,117 @@ async function compareHistoryWithCurrentRecords() {
   }
 
   try {
+    // 1. Fetch latest snapshot (limit 1)
+    let latestSnapshot = null;
+    try {
+      const snapColRef = collection(db, SNAPSHOT_COL_NAME);
+      const snapQ = query(snapColRef, orderBy("createdAt", "desc"), limit(1));
+      const snapRes = await getDocs(snapQ);
+      if (!snapRes.empty) {
+        const snapDoc = snapRes.docs[0];
+        latestSnapshot = { id: snapDoc.id, ...snapDoc.data() };
+      }
+    } catch (snapErr) {
+      console.warn('스냅샷 컬렉션 조회 실패/없음:', snapErr);
+    }
+
+    // 2. Fetch recent 50 history logs (descending) for ultra-lightweight query
     const colRef = collection(db, HISTORY_COL_NAME);
-    const q = query(colRef, orderBy("timestamp", "asc"));
+    const q = query(colRef, orderBy("timestamp", "desc"), limit(50));
     const querySnapshot = await getDocs(q);
 
-    const historyLogs = [];
+    const recentHistoryLogs = [];
     querySnapshot.forEach(docSnap => {
-      historyLogs.push({ id: docSnap.id, ...docSnap.data() });
+      recentHistoryLogs.push({ id: docSnap.id, ...docSnap.data() });
     });
 
-    // 1. Start from initial DEFAULT_RECORDS (deep clone)
-    let replayed = JSON.parse(JSON.stringify(DEFAULT_RECORDS));
+    // 3. Find latest RESTORE event vs latest Snapshot created
+    const latestRestoreLog = recentHistoryLogs.find(l => l.type === 'RESTORE' && l.snapshotId);
+    const snapCreated = latestSnapshot ? (latestSnapshot.createdAt || latestSnapshot.savedAt || '') : '';
+    const restoreTime = latestRestoreLog ? (latestRestoreLog.timestamp || '') : '';
+    const isRestoreAnchor = Boolean(latestRestoreLog && (!snapCreated || restoreTime >= snapCreated));
 
-    // 2. Replay all logs chronologically
-    historyLogs.forEach(log => {
-      const { type, swimmerName, field, newVal } = log;
-      if (!swimmerName) return;
+    let baseRecords = [];
+    let basePinnedRelays = JSON.parse(JSON.stringify(DEFAULT_PINNED_RELAYS));
+    let baseTimestamp = '1970-01-01T00:00:00.000Z';
+    let baseTitle = '최초 기본 데이터 (DEFAULT_RECORDS)';
+    let baseTimeFormatted = '2026-01-01';
 
-      let target = replayed.find(r => r.name === swimmerName);
+    if (isRestoreAnchor) {
+      let restoredSnap = null;
+      if (latestSnapshot && latestSnapshot.id === latestRestoreLog.snapshotId) {
+        restoredSnap = latestSnapshot;
+      } else {
+        try {
+          const sDoc = await getDoc(doc(db, SNAPSHOT_COL_NAME, latestRestoreLog.snapshotId));
+          if (sDoc.exists()) restoredSnap = { id: sDoc.id, ...sDoc.data() };
+        } catch (e) {
+          console.warn('복원된 스냅샷 조회 실패:', e);
+        }
+      }
+
+      if (restoredSnap && Array.isArray(restoredSnap.records)) {
+        baseRecords = JSON.parse(JSON.stringify(restoredSnap.records));
+        if (restoredSnap.pinnedRelays && typeof restoredSnap.pinnedRelays === 'object') {
+          basePinnedRelays = JSON.parse(JSON.stringify(restoredSnap.pinnedRelays));
+        }
+      } else {
+        baseRecords = JSON.parse(JSON.stringify(DEFAULT_RECORDS));
+      }
+
+      baseTimestamp = latestRestoreLog.timestamp;
+      baseTitle = `[스냅샷 복원] ${latestRestoreLog.snapshotTitle || latestRestoreLog.newVal || '스냅샷'}`;
+      baseTimeFormatted = latestRestoreLog.timeFormatted || (new Date(latestRestoreLog.timestamp).toLocaleString('ko-KR'));
+    } else if (latestSnapshot && Array.isArray(latestSnapshot.records) && latestSnapshot.records.length > 0) {
+      baseRecords = JSON.parse(JSON.stringify(latestSnapshot.records));
+      if (latestSnapshot.pinnedRelays && typeof latestSnapshot.pinnedRelays === 'object') {
+        basePinnedRelays = JSON.parse(JSON.stringify(latestSnapshot.pinnedRelays));
+      }
+      baseTimestamp = snapCreated || '1970-01-01T00:00:00.000Z';
+      baseTitle = latestSnapshot.title || `스냅샷 (${latestSnapshot.createdAtFormatted || snapCreated})`;
+      baseTimeFormatted = latestSnapshot.createdAtFormatted || (latestSnapshot.createdAt ? new Date(latestSnapshot.createdAt).toLocaleString('ko-KR') : '-');
+    } else {
+      baseRecords = JSON.parse(JSON.stringify(DEFAULT_RECORDS));
+    }
+
+    // 4. Filter logs that occurred strictly AFTER baseTimestamp (chronological order)
+    const recentLogs = recentHistoryLogs
+      .filter(l => (l.timestamp || '') > baseTimestamp && l.type !== 'RESTORE')
+      .reverse();
+
+    // 5. Replay forward from baseRecords & basePinnedRelays
+    let replayed = JSON.parse(JSON.stringify(baseRecords));
+    let replayedPins = JSON.parse(JSON.stringify(basePinnedRelays));
+
+    recentLogs.forEach(log => {
+      const { type, swimmer, swimmerName, field, newVal, team, comboKey, strokeField } = log;
+      const targetName = swimmer || swimmerName;
+      if (!targetName) return;
+
+      if (type === 'PIN') {
+        if (team && comboKey) {
+          if (!replayedPins[team]) replayedPins[team] = {};
+          const isMedley = comboKey === 'combo4' || comboKey === 'combo5';
+          const isUnpin = newVal === '미고정 (자동추천)' || newVal === '해제' || newVal === '(빈값)' || !newVal;
+
+          if (isMedley && strokeField) {
+            if (!replayedPins[team][comboKey]) replayedPins[team][comboKey] = {};
+            replayedPins[team][comboKey][strokeField] = isUnpin ? null : targetName;
+          } else if (!isMedley) {
+            if (!Array.isArray(replayedPins[team][comboKey])) replayedPins[team][comboKey] = [];
+            const list = replayedPins[team][comboKey];
+            const idx = list.indexOf(targetName);
+            if (isUnpin && idx >= 0) {
+              list.splice(idx, 1);
+            } else if (!isUnpin && idx < 0) {
+              list.push(targetName);
+            }
+          }
+        }
+        return;
+      }
+
+      let target = replayed.find(r => r.name === targetName || (field === 'name' && log.prevVal && r.name === log.prevVal) || (log.swimmerId && r.id === log.swimmerId));
 
       if (type === 'MEMBER') {
         if (!target) {
@@ -516,8 +1610,9 @@ async function compareHistoryWithCurrentRecords() {
             age: '',
             group: '1그룹',
             gender: '남',
-            name: swimmerName,
+            name: targetName,
             birthId: '',
+            team: 'A',
             event1: '',
             event2: '',
             finFly: '',
@@ -530,34 +1625,43 @@ async function compareHistoryWithCurrentRecords() {
           replayed.push(target);
         }
       } else if (type === 'DELETE') {
-        replayed = replayed.filter(r => r.name !== swimmerName);
+        replayed = replayed.filter(r => r.name !== targetName && (!log.prevVal || r.name !== log.prevVal));
         return;
       }
 
-      if (target && field) {
+      if (target && field && field !== 'member' && !field.startsWith('relay_pin')) {
         target[field] = newVal !== undefined && newVal !== null ? String(newVal) : '';
       }
     });
 
-    // 3. Compare replayed with current records (serverRecordsCache or records)
+    // 5. Compare replayed with current records (serverRecordsCache or records)
     const currentList = serverRecordsCache || records;
     const discrepancies = [];
-    const fieldsToCheck = ['group', 'age', 'gender', 'name', 'event1', 'event2', 'finFly', 'finFree', 'free', 'back', 'breast', 'fly'];
+    const fieldsToCheck = ['team', 'group', 'age', 'gender', 'name', 'event1', 'event2', 'finFly', 'finFree', 'free', 'back', 'breast', 'fly'];
 
     let totalFieldChecks = 0;
     let matchingFieldChecks = 0;
 
     currentList.forEach(curr => {
-      const rep = replayed.find(r => r.id === curr.id || r.name === curr.name);
+      const rep = replayed.find(r => r.name === curr.name);
       if (!rep) {
+        const matchingLog = recentHistoryLogs.find(l => 
+          (l.swimmer === curr.name || l.swimmerName === curr.name) && l.type === 'MEMBER'
+        );
+        const changeTime = matchingLog 
+          ? (matchingLog.timeFormatted || (matchingLog.timestamp ? new Date(matchingLog.timestamp).toLocaleString('ko-KR', { month:'numeric', day:'numeric', hour:'2-digit', minute:'2-digit', hour12:false }) : '-'))
+          : '신규';
+
         discrepancies.push({
           id: curr.id,
           name: curr.name,
-          field: '(회원 존재 여부)',
-          fieldName: '회원 존재 여부',
-          replayedVal: '미존재',
-          currentVal: '존재함',
-          status: '히스토리 미기록'
+          field: 'member',
+          fieldName: '회원 신규 등록',
+          changeTime,
+          replayedVal: '(미존재)',
+          currentVal: `번호 ${curr.id} (${curr.team || 'A'}팀, ${curr.group || ''}, ${curr.gender || ''})`,
+          status: '히스토리 미기록',
+          recordObj: curr
         });
         return;
       }
@@ -570,42 +1674,174 @@ async function compareHistoryWithCurrentRecords() {
         if (currVal === repVal) {
           matchingFieldChecks++;
         } else {
+          const matchingLog = recentHistoryLogs.find(l => 
+            (l.swimmer === curr.name || l.swimmerName === curr.name) && (l.field === f || l.fieldName === f)
+          );
+          const changeTime = matchingLog 
+            ? (matchingLog.timeFormatted || (matchingLog.timestamp ? new Date(matchingLog.timestamp).toLocaleString('ko-KR', { month:'numeric', day:'numeric', hour:'2-digit', minute:'2-digit', hour12:false }) : '-'))
+            : '최근';
+
           discrepancies.push({
             id: curr.id,
             name: curr.name,
             field: f,
-            fieldName: STROKE_NAMES[f] || f,
+            fieldName: STROKE_NAMES[f] || (f === 'team' ? '소속팀' : f === 'group' ? '그룹' : f === 'age' ? '만나이' : f === 'gender' ? '성별' : f === 'name' ? '이름' : f),
+            changeTime,
             replayedVal: repVal || '(빈값)',
             currentVal: currVal || '(빈값)',
-            status: '불일치'
+            status: '내용 불일치',
+            recordObj: curr
           });
         }
+      });
+    });
+
+    // Check deleted in current
+    replayed.forEach(rep => {
+      const curr = currentList.find(r => r.name === rep.name);
+      if (!curr) {
+        const matchingLog = recentHistoryLogs.find(l => 
+          (l.swimmer === rep.name || l.swimmerName === rep.name) && l.type === 'DELETE'
+        );
+        const changeTime = matchingLog 
+          ? (matchingLog.timeFormatted || (matchingLog.timestamp ? new Date(matchingLog.timestamp).toLocaleString('ko-KR', { month:'numeric', day:'numeric', hour:'2-digit', minute:'2-digit', hour12:false }) : '-'))
+          : '삭제';
+
+        discrepancies.push({
+          id: rep.id,
+          name: rep.name,
+          field: 'member_deleted',
+          fieldName: '회원 삭제',
+          changeTime,
+          replayedVal: `존재함 (번호 ${rep.id})`,
+          currentVal: '(삭제됨)',
+          status: '삭제 히스토리 누락',
+          recordObj: rep
+        });
+      }
+    });
+
+    // 6. Compare replayedPinnedRelays with current pinnedRelaysState
+    ['A', 'B'].forEach(team => {
+      const curTeamPins = pinnedRelaysState[team] || {};
+      const repTeamPins = replayedPins[team] || {};
+
+      ['combo1', 'combo2', 'combo3'].forEach(comboKey => {
+        const curList = Array.isArray(curTeamPins[comboKey]) ? curTeamPins[comboKey] : [];
+        const repList = Array.isArray(repTeamPins[comboKey]) ? repTeamPins[comboKey] : [];
+        const relayTitle = RELAY_TITLES[comboKey] || comboKey;
+
+        const allSwimmers = Array.from(new Set([...curList, ...repList]));
+        allSwimmers.forEach(name => {
+          totalFieldChecks++;
+          const inCur = curList.includes(name);
+          const inRep = repList.includes(name);
+
+          if (inCur === inRep) {
+            matchingFieldChecks++;
+          } else {
+            const matchingPinLog = recentHistoryLogs.find(l => 
+              (l.swimmer === name || l.swimmerName === name) && 
+              l.type === 'PIN' && 
+              l.comboKey === comboKey && 
+              l.team === team
+            );
+            const changeTime = matchingPinLog 
+              ? (matchingPinLog.timeFormatted || (matchingPinLog.timestamp ? new Date(matchingPinLog.timestamp).toLocaleString('ko-KR', { month:'numeric', day:'numeric', hour:'2-digit', minute:'2-digit', hour12:false }) : '-'))
+              : '선발수정';
+
+            discrepancies.push({
+              id: `pin_${team}_${comboKey}_${name}`,
+              name: name,
+              field: 'relay_pin',
+              fieldName: `단체전 선발 [${team}팀 ${relayTitle}]`,
+              changeTime,
+              replayedVal: inRep ? '선발 고정됨' : '미고정 (자동추천)',
+              currentVal: inCur ? '선발 고정됨' : '미고정 (자동추천)',
+              status: '선발 고정 불일치',
+              team,
+              comboKey,
+              strokeField: null,
+              isPinDiscrepancy: true
+            });
+          }
+        });
+      });
+
+      ['combo4', 'combo5'].forEach(comboKey => {
+        const curMedley = curTeamPins[comboKey] || {};
+        const repMedley = repTeamPins[comboKey] || {};
+        const relayTitle = RELAY_TITLES[comboKey] || comboKey;
+
+        ['back', 'breast', 'fly', 'free'].forEach(st => {
+          totalFieldChecks++;
+          const curName = curMedley[st] || '';
+          const repName = repMedley[st] || '';
+          const stName = STROKE_NAMES[st] || st;
+
+          if (curName === repName) {
+            matchingFieldChecks++;
+          } else {
+            const matchingPinLog = recentHistoryLogs.find(l => 
+              l.type === 'PIN' && 
+              l.comboKey === comboKey && 
+              l.team === team && 
+              l.strokeField === st
+            );
+            const changeTime = matchingPinLog 
+              ? (matchingPinLog.timeFormatted || (matchingPinLog.timestamp ? new Date(matchingPinLog.timestamp).toLocaleString('ko-KR', { month:'numeric', day:'numeric', hour:'2-digit', minute:'2-digit', hour12:false }) : '-'))
+              : '선발수정';
+
+            discrepancies.push({
+              id: `pin_${team}_${comboKey}_${st}`,
+              name: curName || repName || '(선수 미정)',
+              field: 'relay_pin',
+              fieldName: `단체전 선발 [${team}팀 ${relayTitle} - ${stName}]`,
+              changeTime,
+              replayedVal: repName ? `${repName} (${stName} 고정)` : '미고정 (자동추천)',
+              currentVal: curName ? `${curName} (${stName} 고정)` : '미고정 (자동추천)',
+              status: '선발 고정 불일치',
+              team,
+              comboKey,
+              strokeField: st,
+              curName,
+              repName,
+              isPinDiscrepancy: true
+            });
+          }
+        });
       });
     });
 
     const matchRate = totalFieldChecks > 0 ? ((matchingFieldChecks / totalFieldChecks) * 100).toFixed(1) : '100.0';
     const result = {
       success: true,
-      totalLogs: historyLogs.length,
+      baseTitle,
+      baseTimeFormatted,
+      baseRecordsCount: baseRecords.length,
+      recentLogs,
+      unappliedLogs: [],
+      totalRecentCount: recentLogs.length,
+      totalLogs: recentHistoryLogs.length,
       totalFieldChecks,
       matchingFieldChecks,
       matchRate: `${matchRate}%`,
       discrepancyCount: discrepancies.length,
       discrepancies,
       replayedRecords: replayed,
+      replayedPins: replayedPins,
       isPerfectMatch: discrepancies.length === 0,
       timestamp: new Date().toISOString()
     };
 
-    // Formatted Developer Console Group
-    console.group(`🔍 [GMDC] 히스토리 기반 데이터 정합성 검증 (${new Date().toLocaleTimeString('ko-KR')})`);
-    console.log(`📜 처리된 히스토리 로그: ${historyLogs.length}건`);
+    console.group(`🔍 [GMDC] 최후 스냅샷 기준 히스토리 정합성 검증 (${new Date().toLocaleTimeString('ko-KR')})`);
+    console.log(`📷 기준 스냅샷: ${baseTitle} (${baseRecords.length}명)`);
+    console.log(`📜 스냅샷 이후 히스토리 로그: ${recentLogs.length}건`);
     console.log(`🎯 데이터 일치율: ${matchRate}% (${matchingFieldChecks}/${totalFieldChecks}개 필드 일치)`);
     if (result.isPerfectMatch) {
-      console.log(`%c✅ 완벽 일치: 히스토리 실행 결과와 현재 서버/로딩 데이터가 100% 일치합니다.`, 'color: #10b981; font-weight: bold; font-size: 13px;');
+      console.log(`%c✅ 완벽 일치: 최후 스냅샷과 이후 히스토리가 현재 DB와 100% 일치합니다.`, 'color: #10b981; font-weight: bold;');
     } else {
       console.warn(`⚠️ 불일치 항목 ${discrepancies.length}건 발견:`, discrepancies);
-      console.table(discrepancies);
     }
     console.groupEnd();
 
@@ -646,8 +1882,7 @@ function applyEventsViewMode(mode) {
   }
 }
 
-// Log history change to Firestore & local state
-async function logChangeHistory(type, swimmerName, field, fieldName, oldVal, newVal, customMsg = '') {
+async function logChangeHistory(type, swimmerName, field, fieldName, oldVal, newVal, customMsg = '', extraProps = {}) {
   if (isScenarioMode) return;
   if (oldVal === newVal && type !== 'MEMBER' && type !== 'DELETE') return;
 
@@ -656,7 +1891,9 @@ async function logChangeHistory(type, swimmerName, field, fieldName, oldVal, new
     EVENT: '종목 변경',
     INFO: '정보 수정',
     MEMBER: '회원 추가',
-    DELETE: '회원 삭제'
+    DELETE: '회원 삭제',
+    PIN: '선발 고정/해제',
+    RESTORE: '스냅샷 복원'
   };
 
   let msg = customMsg;
@@ -666,6 +1903,8 @@ async function logChangeHistory(type, swimmerName, field, fieldName, oldVal, new
     } else if (type === 'EVENT') {
       msg = `${swimmerName}: ${fieldName} (${oldVal || '미신청'} ➔ ${newVal || '미신청'})`;
     } else if (type === 'INFO') {
+      msg = `${swimmerName}: ${fieldName} (${oldVal} ➔ ${newVal})`;
+    } else if (type === 'PIN') {
       msg = `${swimmerName}: ${fieldName} (${oldVal} ➔ ${newVal})`;
     }
   }
@@ -683,15 +1922,19 @@ async function logChangeHistory(type, swimmerName, field, fieldName, oldVal, new
   const logData = {
     type,
     typeLabel: typeLabels[type] || '수정',
+    swimmer: swimmerName || '무명',
     swimmerName: swimmerName || '무명',
     field: field || '',
     fieldName: fieldName || '',
+    label: customMsg || (fieldName ? `${fieldName}` : ''),
     prevVal: oldVal !== undefined ? String(oldVal) : '',
     newVal: newVal !== undefined ? String(newVal) : '',
     message: msg,
     timestamp: now.toISOString(),
     timeFormatted: timeStr,
-    device: navigator.userAgent.includes('Mobile') ? '모바일' : 'PC'
+    isApplied: true,
+    device: navigator.userAgent.includes('Mobile') ? '모바일' : 'PC',
+    ...extraProps
   };
 
   // Save directly to Firestore for server history reference
@@ -1159,11 +2402,29 @@ function renderTable() {
     const tr = document.createElement('tr');
     tr.dataset.id = item.id;
 
-    // Events summary tags
+    // Events summary tags & Relay assignments
     const eventsList = [item.event1, item.event2].filter(Boolean);
-    const eventsTagHtml = eventsList.length > 0
-      ? `<div class="pb-events-tag-container">${eventsList.map(e => `<span class="pb-event-chip">${escapeHtml(e)}</span>`).join('')}</div>`
-      : `<span class="pb-event-chip empty">미신청</span>`;
+    const relayAssignments = getSwimmerRelayAssignments(item.name);
+    
+    let tagsHtml = '';
+    if (eventsList.length > 0) {
+      tagsHtml += eventsList.map(e => `<span class="pb-event-chip">${escapeHtml(e)}</span>`).join('');
+    } else if (relayAssignments.length === 0) {
+      tagsHtml += `<span class="pb-event-chip empty">미신청</span>`;
+    }
+    if (relayAssignments.length > 0) {
+      tagsHtml += relayAssignments.map(a => `
+        <span class="relay-chip relay-${a.team.toLowerCase()}" title="${a.team}팀 ${a.label} 출전 고정 (${a.strokeName})">
+          🔒 ${a.team === 'B' ? 'B-' : ''}${a.label}
+        </span>
+      `).join('');
+    }
+    const eventsTagHtml = `<div class="pb-events-tag-container">${tagsHtml}</div>`;
+
+    const canEdit = canEditRecords();
+    const admin = isAdmin();
+    const readonlyAttr = !canEdit ? 'readonly tabindex="-1"' : '';
+    const disabledStyle = !canEdit ? 'style="pointer-events:none; cursor:default;"' : '';
 
     tr.innerHTML = `
       <td class="col-team" style="text-align:center;">
@@ -1171,7 +2432,8 @@ function renderTable() {
           type="button" 
           class="btn-team-toggle team-${item.team || 'A'}" 
           data-team-id="${item.id}" 
-          title="클릭하여 소속팀 변경 (현재: ${item.team || 'A'}팀)"
+          ${disabledStyle}
+          title="${canEdit ? `클릭하여 소속팀 변경 (현재: ${item.team || 'A'}팀)` : `소속팀: ${item.team || 'A'}팀`}"
         >
           ${item.team || 'A'}팀
         </button>
@@ -1181,15 +2443,15 @@ function renderTable() {
         <span class="group-badge">${escapeHtml(item.group || '-')}</span>
       </td>
       <td class="col-age col-pb-detail">
-        <input type="text" class="cell-input age-input" data-id="${item.id}" data-field="age" value="${escapeHtml(item.age || '')}" placeholder="만나이" inputmode="numeric" />
+        <input type="text" class="cell-input age-input" data-id="${item.id}" data-field="age" value="${escapeHtml(item.age || '')}" placeholder="만나이" inputmode="numeric" ${readonlyAttr} />
       </td>
       <td class="col-gender col-pb-detail">
-        <span class="gender-badge ${item.gender === '남' ? 'male' : 'female'}" data-id="${item.id}" data-field="gender" title="클릭하여 성별 전환">
+        <span class="gender-badge ${item.gender === '남' ? 'male' : 'female'}" data-id="${item.id}" data-field="gender" ${disabledStyle} title="${canEdit ? '클릭하여 성별 전환' : `성별: ${item.gender || '남'}`}">
           ${item.gender || '남'}
         </span>
       </td>
       <td class="col-name">
-        <input type="text" class="cell-input name-input" data-id="${item.id}" data-field="name" value="${escapeHtml(item.name || '')}" placeholder="이름" title="클릭하여 이름 수정 (수정 시 확인 절차가 진행됩니다)" />
+        <input type="text" class="cell-input name-input" data-id="${item.id}" data-field="name" value="${escapeHtml(item.name || '')}" placeholder="이름" ${readonlyAttr} title="${canEdit ? '클릭하여 이름 수정' : escapeHtml(item.name || '')}" />
       </td>
       ${STROKE_FIELDS.map(field => {
         const val = item[field] || '';
@@ -1220,6 +2482,7 @@ function renderTable() {
                 inputmode="decimal"
                 autocomplete="off"
                 title="${titleText}"
+                ${readonlyAttr}
               />
             </div>
           </td>
@@ -1499,6 +2762,15 @@ function renderEventsTable() {
     const tr = document.createElement('tr');
     tr.dataset.id = item.id;
 
+    const relayAssignments = getSwimmerRelayAssignments(item.name);
+    const relayTagsHtml = relayAssignments.length > 0
+      ? `<div style="display:flex;gap:3px;flex-wrap:wrap;margin-top:3px;">${relayAssignments.map(a => `
+          <span class="relay-chip relay-${a.team.toLowerCase()}" title="${a.team}팀 ${a.label} 출전 고정 (${a.strokeName})">
+            🔒 ${a.team === 'B' ? 'B-' : ''}${a.label}
+          </span>
+        `).join('')}</div>`
+      : '';
+
     tr.innerHTML = `
       <td class="col-team" style="text-align:center;">
         <button 
@@ -1519,6 +2791,7 @@ function renderEventsTable() {
       </td>
       <td class="col-name" style="font-weight:700;">
         ${escapeHtml(item.name || '무명')}
+        ${relayTagsHtml}
       </td>
       <td class="col-age col-simple" style="text-align:center; font-weight:600; color:var(--text-main);">
         ${item.age ? `${item.age}세` : '-'}
@@ -1610,26 +2883,31 @@ function fallbackCopyText(text, count) {
 }
 
 // Copy Selected Team Combination Members to Clipboard
-// Format: 그룹, 성별, 성명, 생년월일, 나이, 종목, 전화번호
+// Format: 그룹, 성별, 성명, 생년월일, 나이, 단체전종목, 세부영법, 전화번호, 소속, 입금자명
 function copyComboTeamToClipboard(comboKey, team) {
   const combos = calculateRelayCombinations(team);
   const result = combos[comboKey];
 
-  if (!result || result.status !== 'SUCCESS' || !result.members || result.members.length === 0) {
+  if (!result || !result.members || result.members.length === 0) {
     showToast('⚠️ 선발된 팀 멤버 명단이 없습니다.');
     return;
   }
 
+  const relayTitle = RELAY_TITLES[comboKey] || comboKey;
+
   const rows = result.members.map(m => {
-    const swimmer = records.find(r => r.id === m.id) || {};
+    const swimmer = records.find(r => r.name === m.name) || records.find(r => r.id === m.id) || {};
     return [
       swimmer.group || m.group || '',
       swimmer.gender || m.gender || '',
       swimmer.name || m.name || '',
       swimmer.birthId || '',
       swimmer.age || m.age || '',
-      m.strokeName || '',
-      swimmer.phone || ''
+      relayTitle,
+      m.strokeName ? `${m.strokeName} 50` : '',
+      swimmer.phone || '',
+      swimmer.club || (team === 'B' ? 'GMDC야호' : 'GMDC'),
+      swimmer.depositor || 'GMDC'
     ].join('\t');
   });
 
@@ -1638,7 +2916,7 @@ function copyComboTeamToClipboard(comboKey, team) {
 
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(tsvText).then(() => {
-      showToast(`📋 ${teamLabel} 선발 명단(${result.members.length}명)이 복사되었습니다.`);
+      showToast(`📋 ${teamLabel} [${relayTitle}] 선발 명단(${result.members.length}명)이 복사되었습니다.`);
     }).catch(() => {
       fallbackCopyText(tsvText, result.members.length);
     });
@@ -1665,68 +2943,300 @@ function getCombinations(arr, k) {
   return result;
 }
 
-// Find best medley relay (배영, 평영, 접영, 자유형 각 1명씩 배정, 4명 고유, 도합나이 >= minAge)
-function findBestMedleyRelay(gender, minAge = 160, team = 'A') {
-  const teamRecords = records.filter(r => (r.team || 'A') === team);
-  const pool = teamRecords.filter(r => r.gender === gender && parseFloat(r.age) > 0);
+// Get rank optimization score for a swimmer
+function getRankTime(swimmer, strokeField) {
+  if (!swimmer) return 99.99;
+  const val = parseFloat(swimmer[strokeField]);
+  if (!isNaN(val) && val > 0) return val;
+  if (strokeField === 'finFree') {
+    const freeVal = parseFloat(swimmer.free);
+    if (!isNaN(freeVal) && freeVal > 0) return freeVal;
+  }
+  return 99.99;
+}
 
-  const backList = pool.filter(r => parseFloat(r.back) > 0);
-  const breastList = pool.filter(r => parseFloat(r.breast) > 0);
-  const flyList = pool.filter(r => parseFloat(r.fly) > 0);
-  const freeList = pool.filter(r => parseFloat(r.free) > 0);
+// 1. 혼성 핀계영 300m (남3, 여3, 도합 >= 240세)
+function computeFinRelay(team = 'A', records, pinnedList = [], excludeSwimmerNames = new Set()) {
+  const teamRecords = records.filter(r => (r.team || 'A') === team && !excludeSwimmerNames.has(r.name));
 
-  const missing = [];
-  if (backList.length === 0) missing.push('배영');
-  if (breastList.length === 0) missing.push('평영');
-  if (flyList.length === 0) missing.push('접영');
-  if (freeList.length === 0) missing.push('자유형');
+  const pinnedMen = [];
+  const pinnedWomen = [];
+  pinnedList.forEach(name => {
+    const s = teamRecords.find(r => r.name === name) || records.find(r => r.name === name);
+    if (s) {
+      if (s.gender === '남') pinnedMen.push(s);
+      else if (s.gender === '여') pinnedWomen.push(s);
+    }
+  });
 
-  if (missing.length > 0) {
-    return {
-      status: 'MISSING_STROKES',
-      message: `기록 부족 (미등록: ${missing.join(', ')})`
-    };
+  const neededMen = 3 - pinnedMen.length;
+  const neededWomen = 3 - pinnedWomen.length;
+
+  if (neededMen < 0 || neededWomen < 0) {
+    return { status: 'ERROR', message: '고정 인원이 성별 정원(3명)을 초과했습니다.' };
   }
 
-  let bestTime = Infinity;
+  const pinnedMenNames = new Set(pinnedMen.map(s => s.name));
+  const pinnedWomenNames = new Set(pinnedWomen.map(s => s.name));
+
+  const availableMen = teamRecords.filter(r => r.gender === '남' && parseFloat(r.age) > 0 && !pinnedMenNames.has(r.name));
+  const availableWomen = teamRecords.filter(r => r.gender === '여' && parseFloat(r.age) > 0 && !pinnedWomenNames.has(r.name));
+
+  if (availableMen.length < neededMen || availableWomen.length < neededWomen) {
+    return { status: 'NOT_ENOUGH', message: `핀자유 후보 인원 부족 (남 필요: ${neededMen}, 여 필요: ${neededWomen})` };
+  }
+
+  const menCombos = neededMen === 0 ? [[]] : getCombinations(availableMen, neededMen);
+  const womenCombos = neededWomen === 0 ? [[]] : getCombinations(availableWomen, neededWomen);
+
+  const pinnedMenAge = pinnedMen.reduce((sum, r) => sum + (parseFloat(r.age) || 0), 0);
+  const pinnedMenScore = pinnedMen.reduce((sum, r) => sum + getRankTime(r, 'finFree'), 0);
+  const pinnedWomenAge = pinnedWomen.reduce((sum, r) => sum + (parseFloat(r.age) || 0), 0);
+  const pinnedWomenScore = pinnedWomen.reduce((sum, r) => sum + getRankTime(r, 'finFree'), 0);
+
+  let bestScore = Infinity;
+  let bestAge = 0;
+  let bestMenGroup = null;
+  let bestWomenGroup = null;
+  let maxAgeFound = 0;
+
+  for (const mSub of menCombos) {
+    const mAge = pinnedMenAge + mSub.reduce((sum, r) => sum + parseFloat(r.age), 0);
+    const mScore = pinnedMenScore + mSub.reduce((sum, r) => sum + getRankTime(r, 'finFree'), 0);
+
+    for (const wSub of womenCombos) {
+      const wAge = pinnedWomenAge + wSub.reduce((sum, r) => sum + parseFloat(r.age), 0);
+      const totalAge = mAge + wAge;
+      if (totalAge > maxAgeFound) maxAgeFound = totalAge;
+
+      if (totalAge >= 240) {
+        const wScore = pinnedWomenScore + wSub.reduce((sum, r) => sum + getRankTime(r, 'finFree'), 0);
+        const totalScore = mScore + wScore;
+
+        if (totalScore < bestScore) {
+          bestScore = totalScore;
+          bestAge = totalAge;
+          bestMenGroup = mSub;
+          bestWomenGroup = wSub;
+        }
+      }
+    }
+  }
+
+  if (bestMenGroup && bestWomenGroup) {
+    const allMembers = [
+      ...pinnedMen.map(r => {
+        const t = parseFloat(r.finFree);
+        const valid = !isNaN(t) && t > 0;
+        return { id: r.id, strokeField: 'finFree', strokeName: '핀자유', name: r.name, age: parseFloat(r.age) || 0, time: valid ? t : 0, hasTime: valid, gender: '남', isPinned: true };
+      }),
+      ...bestMenGroup.map(r => {
+        const t = parseFloat(r.finFree) || parseFloat(r.free);
+        const valid = !isNaN(t) && t > 0;
+        return { id: r.id, strokeField: 'finFree', strokeName: '핀자유', name: r.name, age: parseFloat(r.age) || 0, time: valid ? t : 0, hasTime: valid, gender: '남', isPinned: false };
+      }),
+      ...pinnedWomen.map(r => {
+        const t = parseFloat(r.finFree);
+        const valid = !isNaN(t) && t > 0;
+        return { id: r.id, strokeField: 'finFree', strokeName: '핀자유', name: r.name, age: parseFloat(r.age) || 0, time: valid ? t : 0, hasTime: valid, gender: '여', isPinned: true };
+      }),
+      ...bestWomenGroup.map(r => {
+        const t = parseFloat(r.finFree) || parseFloat(r.free);
+        const valid = !isNaN(t) && t > 0;
+        return { id: r.id, strokeField: 'finFree', strokeName: '핀자유', name: r.name, age: parseFloat(r.age) || 0, time: valid ? t : 0, hasTime: valid, gender: '여', isPinned: false };
+      })
+    ];
+
+    let actualTotalTime = 0;
+    let hasMissingTime = false;
+    let validCount = 0;
+    allMembers.forEach(m => {
+      if (m.hasTime) {
+        actualTotalTime += m.time;
+        validCount++;
+      } else {
+        hasMissingTime = true;
+      }
+    });
+
+    return {
+      status: 'SUCCESS',
+      totalTime: actualTotalTime,
+      hasMissingTime,
+      validCount,
+      totalMembers: 6,
+      totalAge: bestAge,
+      minAge: 240,
+      pinnedCount: pinnedMen.length + pinnedWomen.length,
+      members: allMembers
+    };
+  } else {
+    return {
+      status: 'AGE_NOT_MET',
+      message: `나이 부족: 고정 선수 포함 도합 240세 이상 조합 없음 (최대 ${maxAgeFound}세)`
+    };
+  }
+}
+
+// 2 & 3. 자유형 계영 200m (4명, 도합 >= 160세)
+function computeFreestyleRelay(gender, team = 'A', records, pinnedList = [], excludeSwimmerNames = new Set()) {
+  const teamRecords = records.filter(r => (r.team || 'A') === team && !excludeSwimmerNames.has(r.name));
+
+  const pinnedSwimmers = [];
+  pinnedList.forEach(name => {
+    const s = teamRecords.find(r => r.name === name) || records.find(r => r.name === name);
+    if (s && s.gender === gender) pinnedSwimmers.push(s);
+  });
+
+  const needed = 4 - pinnedSwimmers.length;
+  if (needed < 0) return { status: 'ERROR', message: '고정 인원이 4명을 초과했습니다.' };
+
+  const pinnedNames = new Set(pinnedSwimmers.map(s => s.name));
+  const available = teamRecords.filter(r => r.gender === gender && parseFloat(r.age) > 0 && !pinnedNames.has(r.name));
+
+  if (available.length < needed) {
+    return { status: 'NOT_ENOUGH', message: `자유형 인원 부족 (${gender} 필요: ${needed}, 후보: ${available.length})` };
+  }
+
+  const combos = needed === 0 ? [[]] : getCombinations(available, needed);
+  const pinnedAge = pinnedSwimmers.reduce((sum, r) => sum + (parseFloat(r.age) || 0), 0);
+  const pinnedScore = pinnedSwimmers.reduce((sum, r) => sum + getRankTime(r, 'free'), 0);
+
+  let bestScore = Infinity;
+  let bestAge = 0;
+  let bestAutoGroup = null;
+  let maxAgeFound = 0;
+
+  for (const sub of combos) {
+    const subAge = sub.reduce((sum, r) => sum + parseFloat(r.age), 0);
+    const totalAge = pinnedAge + subAge;
+    if (totalAge > maxAgeFound) maxAgeFound = totalAge;
+
+    if (totalAge >= 160) {
+      const subScore = sub.reduce((sum, r) => sum + getRankTime(r, 'free'), 0);
+      const totalScore = pinnedScore + subScore;
+
+      if (totalScore < bestScore) {
+        bestScore = totalScore;
+        bestAge = totalAge;
+        bestAutoGroup = sub;
+      }
+    }
+  }
+
+  if (bestAutoGroup) {
+    const allMembers = [
+      ...pinnedSwimmers.map(r => {
+        const t = parseFloat(r.free);
+        const valid = !isNaN(t) && t > 0;
+        return { id: r.id, strokeField: 'free', strokeName: '자유형', name: r.name, age: parseFloat(r.age) || 0, time: valid ? t : 0, hasTime: valid, gender: r.gender, isPinned: true };
+      }),
+      ...bestAutoGroup.map(r => {
+        const t = parseFloat(r.free);
+        const valid = !isNaN(t) && t > 0;
+        return { id: r.id, strokeField: 'free', strokeName: '자유형', name: r.name, age: parseFloat(r.age) || 0, time: valid ? t : 0, hasTime: valid, gender: r.gender, isPinned: false };
+      })
+    ];
+
+    let actualTotalTime = 0;
+    let hasMissingTime = false;
+    let validCount = 0;
+    allMembers.forEach(m => {
+      if (m.hasTime) {
+        actualTotalTime += m.time;
+        validCount++;
+      } else {
+        hasMissingTime = true;
+      }
+    });
+
+    return {
+      status: 'SUCCESS',
+      totalTime: actualTotalTime,
+      hasMissingTime,
+      validCount,
+      totalMembers: 4,
+      totalAge: bestAge,
+      minAge: 160,
+      pinnedCount: pinnedSwimmers.length,
+      members: allMembers
+    };
+  } else {
+    return {
+      status: 'AGE_NOT_MET',
+      message: `나이 부족: 고정 선수 포함 도합 160세 이상 조합 없음 (최대 ${maxAgeFound}세)`
+    };
+  }
+}
+
+// 4 & 5. 혼계영 200m (배영, 평영, 접영, 자유형 각 1명, 4명 고유, 도합 >= 160세)
+function computeMedleyRelay(gender, team = 'A', records, pinnedMap = {}, excludeSwimmerNames = new Set()) {
+  const teamRecords = records.filter(r => (r.team || 'A') === team && !excludeSwimmerNames.has(r.name));
+  const pool = teamRecords.filter(r => r.gender === gender && parseFloat(r.age) > 0);
+
+  const strokes = ['back', 'breast', 'fly', 'free'];
+
+  // Identify pinned swimmers
+  const pinnedMembers = {};
+  const pinnedNames = new Set();
+  strokes.forEach(st => {
+    const name = pinnedMap[st];
+    if (name) {
+      const s = teamRecords.find(r => r.name === name) || records.find(r => r.name === name);
+      if (s) {
+        pinnedMembers[st] = s;
+        pinnedNames.add(s.name);
+      }
+    }
+  });
+
+  // Candidate lists per stroke
+  const candidates = {};
+  strokes.forEach(st => {
+    if (pinnedMembers[st]) {
+      candidates[st] = [pinnedMembers[st]];
+    } else {
+      candidates[st] = pool.filter(r => !pinnedNames.has(r.name));
+    }
+  });
+
+  let bestScore = Infinity;
   let bestAge = 0;
   let bestAssignment = null;
   let maxAgeFound = 0;
 
-  for (const sBack of backList) {
-    const ageBack = parseFloat(sBack.age);
-    const timeBack = parseFloat(sBack.back);
+  for (const sBack of candidates.back) {
+    const ageBack = parseFloat(sBack.age) || 0;
+    const scoreBack = getRankTime(sBack, 'back');
 
-    for (const sBreast of breastList) {
-      if (sBreast.id === sBack.id) continue;
-      const ageBreast = parseFloat(sBreast.age);
-      const timeBreast = parseFloat(sBreast.breast);
+    for (const sBreast of candidates.breast) {
+      if (sBreast.name === sBack.name) continue;
+      const ageBreast = parseFloat(sBreast.age) || 0;
+      const scoreBreast = getRankTime(sBreast, 'breast');
 
-      for (const sFly of flyList) {
-        if (sFly.id === sBack.id || sFly.id === sBreast.id) continue;
-        const ageFly = parseFloat(sFly.age);
-        const timeFly = parseFloat(sFly.fly);
+      for (const sFly of candidates.fly) {
+        if (sFly.name === sBack.name || sFly.name === sBreast.name) continue;
+        const ageFly = parseFloat(sFly.age) || 0;
+        const scoreFly = getRankTime(sFly, 'fly');
 
-        for (const sFree of freeList) {
-          if (sFree.id === sBack.id || sFree.id === sBreast.id || sFree.id === sFly.id) continue;
-          const ageFree = parseFloat(sFree.age);
-          const timeFree = parseFloat(sFree.free);
+        for (const sFree of candidates.free) {
+          if (sFree.name === sBack.name || sFree.name === sBreast.name || sFree.name === sFly.name) continue;
+          const ageFree = parseFloat(sFree.age) || 0;
+          const scoreFree = getRankTime(sFree, 'free');
 
           const totalAge = ageBack + ageBreast + ageFly + ageFree;
-          if (totalAge > maxAgeFound) {
-            maxAgeFound = totalAge;
-          }
+          if (totalAge > maxAgeFound) maxAgeFound = totalAge;
 
-          if (totalAge >= minAge) {
-            const totalTime = timeBack + timeBreast + timeFly + timeFree;
-            if (totalTime < bestTime) {
-              bestTime = totalTime;
+          if (totalAge >= 160) {
+            const totalScore = scoreBack + scoreBreast + scoreFly + scoreFree;
+            if (totalScore < bestScore) {
+              bestScore = totalScore;
               bestAge = totalAge;
               bestAssignment = [
-                { id: sBack.id, strokeField: 'back', strokeName: '배영', name: sBack.name, age: sBack.age, time: timeBack, gender: sBack.gender },
-                { id: sBreast.id, strokeField: 'breast', strokeName: '평영', name: sBreast.name, age: sBreast.age, time: timeBreast, gender: sBreast.gender },
-                { id: sFly.id, strokeField: 'fly', strokeName: '접영', name: sFly.name, age: sFly.age, time: timeFly, gender: sFly.gender },
-                { id: sFree.id, strokeField: 'free', strokeName: '자유형', name: sFree.name, age: sFree.age, time: timeFree, gender: sFree.gender }
+                { id: sBack.id, strokeField: 'back', strokeName: '배영', name: sBack.name, age: ageBack, time: parseFloat(sBack.back) || 0, hasTime: !isNaN(parseFloat(sBack.back)) && parseFloat(sBack.back) > 0, gender: sBack.gender, isPinned: !!pinnedMembers.back },
+                { id: sBreast.id, strokeField: 'breast', strokeName: '평영', name: sBreast.name, age: ageBreast, time: parseFloat(sBreast.breast) || 0, hasTime: !isNaN(parseFloat(sBreast.breast)) && parseFloat(sBreast.breast) > 0, gender: sBreast.gender, isPinned: !!pinnedMembers.breast },
+                { id: sFly.id, strokeField: 'fly', strokeName: '접영', name: sFly.name, age: ageFly, time: parseFloat(sFly.fly) || 0, hasTime: !isNaN(parseFloat(sFly.fly)) && parseFloat(sFly.fly) > 0, gender: sFly.gender, isPinned: !!pinnedMembers.fly },
+                { id: sFree.id, strokeField: 'free', strokeName: '자유형', name: sFree.name, age: ageFree, time: parseFloat(sFree.free) || 0, hasTime: !isNaN(parseFloat(sFree.free)) && parseFloat(sFree.free) > 0, gender: sFree.gender, isPinned: !!pinnedMembers.free }
               ];
             }
           }
@@ -1736,158 +3246,64 @@ function findBestMedleyRelay(gender, minAge = 160, team = 'A') {
   }
 
   if (bestAssignment) {
+    let actualTotalTime = 0;
+    let hasMissingTime = false;
+    let validCount = 0;
+    bestAssignment.forEach(m => {
+      if (m.hasTime) {
+        actualTotalTime += m.time;
+        validCount++;
+      } else {
+        hasMissingTime = true;
+      }
+    });
+
     return {
       status: 'SUCCESS',
-      totalTime: bestTime,
+      totalTime: actualTotalTime,
+      hasMissingTime,
+      validCount,
+      totalMembers: 4,
       totalAge: bestAge,
+      minAge: 160,
+      pinnedCount: Object.keys(pinnedMembers).length,
       members: bestAssignment
     };
   } else {
-    const ageSuffix = maxAgeFound > 0 ? ` (최대 ${maxAgeFound}세)` : '';
     return {
       status: 'AGE_NOT_MET',
-      message: `나이 부족: 도합 ${minAge}세 이상 조합 없음${ageSuffix}`
-    };
-  }
-}
-
-// Find best freestyle relay (자유형 50m x 4명, 도합나이 >= minAge)
-function findBestFreestyleRelay(gender, minAge = 160, team = 'A') {
-  const teamRecords = records.filter(r => (r.team || 'A') === team);
-  const pool = teamRecords.filter(r => r.gender === gender && parseFloat(r.free) > 0 && parseFloat(r.age) > 0);
-
-  if (pool.length < 4) {
-    return {
-      status: 'NOT_ENOUGH',
-      message: `자유형 인원 부족 (${gender} ${pool.length}/4명)`
-    };
-  }
-
-  const combos = getCombinations(pool, 4);
-  let bestTime = Infinity;
-  let bestAge = 0;
-  let bestMembers = null;
-  let maxAgeFound = 0;
-
-  for (const group of combos) {
-    const totalAge = group.reduce((sum, r) => sum + parseFloat(r.age), 0);
-    if (totalAge > maxAgeFound) {
-      maxAgeFound = totalAge;
-    }
-
-    if (totalAge >= minAge) {
-      const totalTime = group.reduce((sum, r) => sum + parseFloat(r.free), 0);
-      if (totalTime < bestTime) {
-        bestTime = totalTime;
-        bestAge = totalAge;
-        bestMembers = group.map(r => ({
-          id: r.id,
-          strokeField: 'free',
-          strokeName: '자유형',
-          name: r.name,
-          age: r.age,
-          time: parseFloat(r.free),
-          gender: r.gender
-        }));
-      }
-    }
-  }
-
-  if (bestMembers) {
-    bestMembers.sort((a, b) => a.time - b.time);
-    return {
-      status: 'SUCCESS',
-      totalTime: bestTime,
-      totalAge: bestAge,
-      members: bestMembers
-    };
-  } else {
-    const ageSuffix = maxAgeFound > 0 ? ` (최대 ${maxAgeFound}세)` : '';
-    return {
-      status: 'AGE_NOT_MET',
-      message: `나이 부족: 도합 ${minAge}세 이상 조합 없음${ageSuffix}`
+      message: `나이 부족: 고정 선수 포함 도합 160세 이상 조합 없음 (최대 ${maxAgeFound}세)`
     };
   }
 }
 
 // Compute Optimal Relay Combinations (5 Combinations) for a given team
 function calculateRelayCombinations(team = 'A') {
-  const teamRecords = records.filter(r => (r.team || 'A') === team);
-  const finMen = teamRecords.filter(r => r.gender === '남' && parseFloat(r.finFree) > 0 && parseFloat(r.age) > 0);
-  const finWomen = teamRecords.filter(r => r.gender === '여' && parseFloat(r.finFree) > 0 && parseFloat(r.age) > 0);
+  const teamPins = pinnedRelaysState[team] || {};
 
-  let combo1Result = null;
-  if (finMen.length < 3 || finWomen.length < 3) {
-    combo1Result = {
-      status: 'NOT_ENOUGH',
-      message: `핀자유 인원 부족 (남 ${finMen.length}/3명, 여 ${finWomen.length}/3명)`
-    };
-  } else {
-    const menCombos = getCombinations(finMen, 3);
-    const womenCombos = getCombinations(finWomen, 3);
-    let bestTime = Infinity;
-    let bestAge = 0;
-    let bestMembers = null;
-    let maxAgeFound = 0;
-
-    for (const mGroup of menCombos) {
-      const mAge = mGroup.reduce((sum, r) => sum + parseFloat(r.age), 0);
-      const mTime = mGroup.reduce((sum, r) => sum + parseFloat(r.finFree), 0);
-
-      for (const wGroup of womenCombos) {
-        const wAge = wGroup.reduce((sum, r) => sum + parseFloat(r.age), 0);
-        const totalAge = mAge + wAge;
-        if (totalAge > maxAgeFound) {
-          maxAgeFound = totalAge;
-        }
-
-        if (totalAge >= 240) {
-          const wTime = wGroup.reduce((sum, r) => sum + parseFloat(r.finFree), 0);
-          const totalTime = mTime + wTime;
-
-          if (totalTime < bestTime) {
-            bestTime = totalTime;
-            bestAge = totalAge;
-            bestMembers = [
-              ...mGroup.map(r => ({ id: r.id, strokeField: 'finFree', strokeName: '핀자유', name: r.name, age: r.age, time: parseFloat(r.finFree), gender: r.gender })),
-              ...wGroup.map(r => ({ id: r.id, strokeField: 'finFree', strokeName: '핀자유', name: r.name, age: r.age, time: parseFloat(r.finFree), gender: r.gender }))
-            ];
+  // Helper: In scenario mode, collect pinned swimmers from other relays to exclude
+  const getExcludeSwimmerNames = (currentKey) => {
+    const exclude = new Set();
+    if (isScenarioMode && pinnedRelaysState[team]) {
+      for (const [key, pins] of Object.entries(pinnedRelaysState[team])) {
+        if (key !== currentKey && pins) {
+          if (Array.isArray(pins)) {
+            pins.forEach(n => exclude.add(n));
+          } else if (typeof pins === 'object') {
+            Object.values(pins).forEach(n => { if (n) exclude.add(n); });
           }
         }
       }
     }
-
-    if (bestMembers) {
-      bestMembers.sort((a, b) => a.time - b.time);
-      combo1Result = {
-        status: 'SUCCESS',
-        totalTime: bestTime,
-        totalAge: bestAge,
-        members: bestMembers
-      };
-    } else {
-      const ageSuffix = maxAgeFound > 0 ? ` (최대 ${maxAgeFound}세)` : '';
-      combo1Result = {
-        status: 'AGE_NOT_MET',
-        message: `나이 부족: 도합 240세 이상 조합 없음${ageSuffix}`
-      };
-    }
-  }
-
-  // Combinations 2 & 3: Freestyle Relay (계영 200m)
-  const combo2Result = findBestFreestyleRelay('남', 160, team);
-  const combo3Result = findBestFreestyleRelay('여', 160, team);
-
-  // Combinations 4 & 5: Medley Relay (혼계영 200m)
-  const combo4Result = findBestMedleyRelay('남', 160, team);
-  const combo5Result = findBestMedleyRelay('여', 160, team);
+    return exclude;
+  };
 
   return {
-    combo1: combo1Result,
-    combo2: combo2Result,
-    combo3: combo3Result,
-    combo4: combo4Result,
-    combo5: combo5Result
+    combo1: computeFinRelay(team, records, teamPins.combo1 || [], getExcludeSwimmerNames('combo1')),
+    combo2: computeFreestyleRelay('남', team, records, teamPins.combo2 || [], getExcludeSwimmerNames('combo2')),
+    combo3: computeFreestyleRelay('여', team, records, teamPins.combo3 || [], getExcludeSwimmerNames('combo3')),
+    combo4: computeMedleyRelay('남', team, records, teamPins.combo4 || {}, getExcludeSwimmerNames('combo4')),
+    combo5: computeMedleyRelay('여', team, records, teamPins.combo5 || {}, getExcludeSwimmerNames('combo5'))
   };
 }
 
@@ -1919,8 +3335,29 @@ function renderComboCardTeam(prefix, team, result, isMedley = false) {
   const timeEl = document.getElementById(`${prefix}${team}Time`);
   const ageEl = document.getElementById(`${prefix}${team}Age`);
   const membersEl = document.getElementById(`${prefix}${team}Members`);
+  const blockEl = document.getElementById(`${prefix}${team}Block`);
+  const lockBtn = document.querySelector(`.btn-lock-combo-team[data-combo="${prefix}"][data-team="${team}"]`);
 
   if (!timeEl || !ageEl || !membersEl) return;
+
+  const pinnedCount = result ? (result.pinnedCount || 0) : 0;
+  const isAnyPinned = pinnedCount > 0;
+
+  if (blockEl) {
+    blockEl.classList.toggle('is-fixed-block', isAnyPinned);
+  }
+
+  if (lockBtn) {
+    if (isAnyPinned) {
+      lockBtn.classList.add('is-fixed');
+      lockBtn.innerHTML = `<span class="lock-icon">📌</span><span class="lock-label">${pinnedCount}명 고정</span>`;
+      lockBtn.title = `${team}팀 ${pinnedCount}명 고정됨 (클릭 시 모든 고정 해제)`;
+    } else {
+      lockBtn.classList.remove('is-fixed');
+      lockBtn.innerHTML = '<span class="lock-icon">⚡</span><span class="lock-label">자동 추천</span>';
+      lockBtn.title = `${team}팀 자동 추천 모드 (클릭 시 현재 선발 전체 고정)`;
+    }
+  }
 
   if (!result || result.status !== 'SUCCESS') {
     timeEl.textContent = '-';
@@ -1930,23 +3367,63 @@ function renderComboCardTeam(prefix, team, result, isMedley = false) {
     return;
   }
 
-  timeEl.textContent = formatRelayTime(result.totalTime);
-  timeEl.classList.add('time-highlight');
-  ageEl.textContent = `${result.totalAge}세`;
+  // Time display
+  if (result.hasMissingTime) {
+    if (result.validCount > 0) {
+      timeEl.textContent = `${formatRelayTime(result.totalTime)} (${result.validCount}/${result.totalMembers}명)`;
+      timeEl.classList.add('time-highlight');
+    } else {
+      timeEl.textContent = '기록 미입력';
+      timeEl.classList.remove('time-highlight');
+    }
+  } else {
+    timeEl.textContent = formatRelayTime(result.totalTime);
+    timeEl.classList.add('time-highlight');
+  }
+
+  const ageOk = result.totalAge >= (result.minAge || 160);
+  ageEl.textContent = `${result.totalAge}세 ${ageOk ? '✅' : '⚠️'}`;
+  ageEl.title = `최소 기준: ${result.minAge || 160}세 이상 (현재: ${result.totalAge}세)`;
+
+  if (!result.members || result.members.length === 0) {
+    membersEl.innerHTML = `<span class="combo-empty-msg">선발 인원 없음</span>`;
+    return;
+  }
 
   membersEl.innerHTML = result.members.map(m => {
     const orig = getLastYearRecord(m.id, m.strokeField);
     const isLastYear = orig !== '' && (parseFloat(orig) === m.time);
     const timeClass = isLastYear ? 'is-last-year' : 'is-target';
+    const hasTime = m.hasTime !== undefined ? m.hasTime : (m.time > 0);
+
+    const timeDisplayHtml = hasTime
+      ? `<span class="member-time ${timeClass}">${m.time.toFixed(2)}s</span>`
+      : `<span class="member-time is-empty" title="PB 기록 미입력">-</span>`;
+
+    const pinBtnHtml = `
+      <button 
+        type="button" 
+        class="btn-pin-member ${m.isPinned ? 'is-pinned' : ''}" 
+        data-combo="${prefix}" 
+        data-team="${team}" 
+        data-name="${escapeHtml(m.name)}" 
+        data-stroke="${m.strokeField || ''}" 
+        title="${m.isPinned ? `${m.name} 선수 고정됨 (클릭 시 고정 해제)` : `${m.name} 선수 고정 (클릭 시 이 선수를 필수로 포함하여 최적 조합 계산)`}"
+      >
+        ${m.isPinned ? '📌' : '📍'}
+      </button>
+    `;
+
     return `
-      <div class="member-pill">
+      <div class="member-pill ${m.isPinned ? 'is-pinned' : ''}">
         ${isMedley 
           ? `<span class="stroke-badge ${m.strokeName}">${m.strokeName}</span>` 
           : `<span class="member-gender ${m.gender === '남' ? 'male' : 'female'}">${m.gender}</span>`
         }
         <span>${escapeHtml(m.name || '무명')}</span>
         <span style="color:var(--text-subtle);font-size:11px;">(${m.age}세)</span>
-        <span class="member-time ${timeClass}">${m.time.toFixed(2)}s</span>
+        ${timeDisplayHtml}
+        ${pinBtnHtml}
       </div>
     `;
   }).join('');
@@ -2277,6 +3754,10 @@ function bindEvents() {
   tableBody.addEventListener('click', (e) => {
     const teamBtn = e.target.closest('[data-team-id]');
     if (teamBtn) {
+      if (!canEditRecords()) {
+        showToast('⏳ 수정 가능 기간이 종료되었습니다. (관리자만 수정 가능)');
+        return;
+      }
       const id = parseInt(teamBtn.dataset.teamId, 10);
       const record = records.find(r => r.id === id);
       if (!record) return;
@@ -2301,6 +3782,10 @@ function bindEvents() {
 
     const genderBadge = e.target.closest('.gender-badge');
     if (genderBadge) {
+      if (!canEditRecords()) {
+        showToast('⏳ 수정 가능 기간이 종료되었습니다. (관리자만 수정 가능)');
+        return;
+      }
       const id = parseInt(genderBadge.dataset.id, 10);
       const record = records.find(r => r.id === id);
       if (record) {
@@ -2326,6 +3811,10 @@ function bindEvents() {
 
     const deleteBtn = e.target.closest('[data-delete-id]');
     if (deleteBtn) {
+      if (!canEditRecords()) {
+        showToast('⏳ 수정 가능 기간이 종료되었습니다. (관리자만 삭제 가능)');
+        return;
+      }
       const id = parseInt(deleteBtn.dataset.deleteId, 10);
       const record = records.find(r => r.id === id);
       const name = record ? (record.name || '해당 회원') : '해당 회원';
@@ -2343,7 +3832,13 @@ function bindEvents() {
   tableBody.addEventListener('keydown', handleKeyNavigation);
 
   // Paste from Excel / TSV
-  tableBody.addEventListener('paste', handleTablePaste);
+  tableBody.addEventListener('paste', (e) => {
+    if (!canEditRecords()) {
+      showToast('⏳ 수정 가능 기간이 종료되었습니다. (관리자만 수정 가능)');
+      return;
+    }
+    handleTablePaste(e);
+  });
 
   // Search input in PB table
   searchInput.addEventListener('input', (e) => {
@@ -2351,11 +3846,13 @@ function bindEvents() {
     renderTable();
   });
 
-
-
   // Add Row Button (If element exists)
   if (btnAddRow) {
     btnAddRow.addEventListener('click', () => {
+      if (!canEditRecords()) {
+        showToast('⏳ 수정 가능 기간이 종료되었습니다. (관리자만 추가 가능)');
+        return;
+      }
       const newId = records.length > 0 ? Math.max(...records.map(r => r.id)) + 1 : 1;
       const newRecord = {
         id: newId,
@@ -2413,10 +3910,47 @@ function bindEvents() {
     });
   });
 
+  // Individual Member Pin Click & Team Lock Toggle (Delegated on comboGrid)
+  if (comboGrid) {
+    comboGrid.addEventListener('click', (e) => {
+      const pinBtn = e.target.closest('.btn-pin-member');
+      if (pinBtn) {
+        e.stopPropagation();
+        if (!isAdmin()) {
+          showToast('🔒 관리자 로그인 후 선발 고정을 변경할 수 있습니다.');
+          return;
+        }
+        const comboKey = pinBtn.dataset.combo;
+        const team = pinBtn.dataset.team || 'A';
+        const name = pinBtn.dataset.name;
+        const stroke = pinBtn.dataset.stroke;
+        toggleMemberPin(comboKey, team, name, stroke);
+        return;
+      }
+
+      const lockBtn = e.target.closest('.btn-lock-combo-team');
+      if (lockBtn) {
+        e.stopPropagation();
+        if (!isAdmin()) {
+          showToast('🔒 관리자 로그인 후 선발 고정을 변경할 수 있습니다.');
+          return;
+        }
+        const comboKey = lockBtn.dataset.combo;
+        const team = lockBtn.dataset.team || 'A';
+        toggleTeamRelayAllPins(comboKey, team);
+        return;
+      }
+    });
+  }
+
   // Combo Team Roster Copy Buttons
   document.querySelectorAll('.btn-copy-combo-team').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
+      if (!isAdmin()) {
+        showToast('🔒 관리자 로그인 후 명단 복사가 가능합니다.');
+        return;
+      }
       const comboKey = btn.dataset.combo;
       const team = btn.dataset.team || 'A';
       copyComboTeamToClipboard(comboKey, team);
