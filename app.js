@@ -32,7 +32,7 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.08.19.09';
+const APP_VERSION = 'v2026.08.19.10';
 let isScenarioMode = false;
 let isInitialSyncCompleted = false;
 let serverRecordsCache = null;
@@ -123,7 +123,7 @@ const DEFAULT_RECORDS = [
   { id: 38, age: '61', group: '6그룹', gender: '남', name: '권순용', birthId: '19650101-1', phone: '010-5890-7052', club: 'GMDC', depositor: 'GMDC야호', address: '거제시 동부면 거제남서로 3136', team: 'B', event1: '자유형 50', event2: '평영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
   { id: 39, age: '27', group: '2그룹', gender: '남', name: '정성민', birthId: '19990101-1', phone: '010-9989-7218', club: 'GMDC', depositor: 'GMDC야호', address: '거제시 동부면 산양리 671-1', team: 'B', event1: '자유형 50', event2: '평영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
   { id: 41, age: '17', group: '1그룹', gender: '남', name: '이동규', birthId: '20080508-3', phone: '010-8301-1709', club: 'GMDC', depositor: 'GMDC야호', address: '거제시 문동1길 42, 110동 1202호', team: 'B', event1: '', event2: '', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 42, age: '56', group: '5그룹', gender: '남', name: '서정찬', birthId: '19700310-1', phone: '010-8501-0605', club: 'GMDC', depositor: 'GMDC', address: '', team: 'A', event1: '', event2: '', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' }
+  { id: 42, age: '56', group: '5그룹', gender: '남', name: '서정찬', birthId: '19700310-1', phone: '010-8501-0605', club: 'GMDC', depositor: 'GMDC', address: '옥포대첩로 115 영진자이온 104동1101호', team: 'A', event1: '', event2: '', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' }
 ];
 
 // Baseline Map of Last Year's Records (Original 37 swimmers)
