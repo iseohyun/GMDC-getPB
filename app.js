@@ -32,7 +32,7 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.08.19.10';
+const APP_VERSION = 'v2026.08.20.01';
 let isScenarioMode = false;
 let isInitialSyncCompleted = false;
 let serverRecordsCache = null;
@@ -94,7 +94,6 @@ const DEFAULT_RECORDS = [
   { id: 10, age: '37', group: '3그룹', gender: '여', name: '최이슬', birthId: '19881213-2', phone: '010-2398-6484', club: 'GMDC', depositor: 'GMDC', address: '거제시 아주로73 석호해와루아파트 106동 403호', team: 'A', event1: '자유형 50', event2: '접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
   { id: 11, age: '43', group: '4그룹', gender: '남', name: '고석보', birthId: '19821227-1', phone: '010-4040-6987', club: 'GMDC', depositor: 'GMDC', address: '거제시 능포로 218 나동 503호', team: 'A', event1: '핀접영 50', event2: '자유형 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
   { id: 12, age: '44', group: '4그룹', gender: '남', name: '김기용', birthId: '19810929-1', phone: '010-4018-3188', club: 'GMDC', depositor: 'GMDC', address: '거제시 아주로 63 미진이지비아 103동 704호', team: 'A', event1: '핀자유형 50', event2: '핀접영 50', finFly: '', finFree: '', free: '35.69', back: '', breast: '41.65', fly: '' },
-  { id: 40, age: '44', group: '4그룹', gender: '남', name: '김승주', birthId: '19811211-1', phone: '010-4442-7682', club: 'GMDC', depositor: 'GMDC', address: '거제시 고현항2로51 유로아일랜드 102동 2603호', team: 'A', event1: '자유형 50', event2: '배영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
   { id: 13, age: '42', group: '4그룹', gender: '남', name: '김준영', birthId: '19830201-1', phone: '010-4572-7285', club: 'GMDC', depositor: 'GMDC', address: '거제시 고현항2로 51, 202동 1804호', team: 'A', event1: '자유형 50', event2: '평영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
   { id: 14, age: '44', group: '4그룹', gender: '남', name: '손철수', birthId: '19810217-1', phone: '010-7142-8269', club: 'GMDC', depositor: 'GMDC', address: '거제시 고현항2로51 207동 3002호', team: 'A', event1: '핀자유형 50', event2: '자유형 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
   { id: 15, age: '44', group: '4그룹', gender: '남', name: '안상준', birthId: '19811115-1', phone: '010-4005-7171', club: 'GMDC', depositor: 'GMDC', address: '거제시 아주2로 138, 102동 1801호', team: 'A', event1: '자유형 50', event2: '접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
@@ -1983,7 +1982,9 @@ function cleanAddress(addr) {
 function mergeWithDefaultData(remoteList) {
   if (!Array.isArray(remoteList)) return JSON.parse(JSON.stringify(DEFAULT_RECORDS));
 
-  const list = remoteList.map(item => {
+  const validRemote = remoteList.filter(item => item && item.name !== '김승주' && item.id !== 40);
+
+  const list = validRemote.map(item => {
     const def = DEFAULT_RECORDS.find(d => d.id === item.id || d.name === item.name) || {};
     return {
       id: item.id || def.id || 0,
@@ -2010,7 +2011,7 @@ function mergeWithDefaultData(remoteList) {
 
   // Ensure any new members in DEFAULT_RECORDS (e.g. ID 38 권순용, ID 39 이석민) are appended if missing
   DEFAULT_RECORDS.forEach(def => {
-    if (!list.some(r => r.id === def.id || r.name === def.name)) {
+    if (def.name !== '김승주' && def.id !== 40 && !list.some(r => r.id === def.id || r.name === def.name)) {
       list.push(JSON.parse(JSON.stringify(def)));
     }
   });
@@ -2036,6 +2037,7 @@ function initFirebaseSync() {
       isInitialSyncCompleted = true;
       const data = docSnap.data();
       if (data && Array.isArray(data.records)) {
+        const hasDeletedMember = data.records.some(r => r.name === '김승주' || r.id === 40);
         const merged = mergeWithDefaultData(data.records);
         serverRecordsCache = JSON.parse(JSON.stringify(merged));
 
@@ -2055,6 +2057,9 @@ function initFirebaseSync() {
               updateStats();
               renderSummaryMatrices();
             }
+          }
+          if (hasDeletedMember) {
+            saveData();
           }
         }
       }
