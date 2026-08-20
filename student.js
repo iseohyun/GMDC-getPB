@@ -25,7 +25,7 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.08.19.10_student';
+const APP_VERSION = 'v2026.08.20.02_student';
 let isScenarioMode = false;
 let isInitialSyncCompleted = false;
 let serverRecordsCache = null;
@@ -2097,7 +2097,7 @@ function defaultRecordComparator(a, b) {
   return nameA.localeCompare(nameB, 'ko');
 }
 
-function renderTable() {
+function getProcessedRecords() {
   let list = [...records];
 
   if (currentFilter === '남' || currentFilter === '여') {
@@ -2147,6 +2147,12 @@ function renderTable() {
   } else {
     list.sort(defaultRecordComparator);
   }
+
+  return list;
+}
+
+function renderTable() {
+  const list = getProcessedRecords();
 
   const recordsDetailTitle = document.getElementById('recordsDetailTitle');
   if (recordsDetailTitle) {
@@ -3609,31 +3615,59 @@ function handleTablePaste(e) {
 }
 
 function copyTsvToClipboard() {
-  const headers = ['번호', '그룹', '만나이', '성별', '이름', '자유형', '배영', '평영', '접영', '출전종목1', '출전종목2', '연락처', '주소'];
-  const rows = records.map(r => [
-    r.id,
-    r.group,
-    r.age,
-    r.gender,
-    r.name,
-    r.free,
-    r.back,
-    r.breast,
-    r.fly,
-    r.event1 || '',
-    r.event2 || '',
-    r.phone || '',
-    r.address || ''
-  ]);
+  let rows;
+  if (currentView === 'events') {
+    const list = getFilteredEventsList();
+    if (!list || list.length === 0) {
+      showToast('⚠️ 복사할 출전 선수 명단이 없습니다.');
+      return;
+    }
+    rows = list.map((r, idx) => [
+      idx + 1,
+      r.group || '',
+      r.gender || '',
+      r.name || '',
+      r.birthId || '',
+      r.event1 || '',
+      r.event2 || '',
+      r.phone || '',
+      r.address || ''
+    ]);
+  } else {
+    const list = getProcessedRecords();
+    if (!list || list.length === 0) {
+      showToast('⚠️ 복사할 학생부 기록 데이터가 없습니다.');
+      return;
+    }
+    rows = list.map((r, idx) => [
+      idx + 1,
+      r.group || '',
+      r.age || '',
+      r.gender || '',
+      r.name || '',
+      r.free || '',
+      r.back || '',
+      r.breast || '',
+      r.fly || '',
+      r.event1 || '',
+      r.event2 || '',
+      r.phone || '',
+      r.address || ''
+    ]);
+  }
 
-  const tsvContent = [headers.join('\t'), ...rows.map(row => row.join('\t'))].join('\n');
+  const tsvContent = rows.map(row => row.join('\t')).join('\n');
 
-  navigator.clipboard.writeText(tsvContent).then(() => {
-    showToast('📋 학생부 전체 데이터가 엑셀 붙여넣기용(TSV)으로 복사되었습니다.');
-  }).catch(err => {
-    console.error('Clipboard copy error', err);
-    showToast('⚠️ 클립보드 복사 실패');
-  });
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(tsvContent).then(() => {
+      showToast(`📋 현재 표시된 학생부 데이터(${rows.length}명, 헤더 제외)가 복사되었습니다.`);
+    }).catch(err => {
+      console.error('Clipboard copy error', err);
+      showToast('⚠️ 클립보드 복사 실패');
+    });
+  } else {
+    fallbackCopyText(tsvContent, rows.length);
+  }
 }
 
 function exportToCsv() {

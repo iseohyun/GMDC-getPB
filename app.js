@@ -32,7 +32,7 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.08.20.01';
+const APP_VERSION = 'v2026.08.20.02';
 let isScenarioMode = false;
 let isInitialSyncCompleted = false;
 let serverRecordsCache = null;
@@ -122,7 +122,8 @@ const DEFAULT_RECORDS = [
   { id: 38, age: '61', group: '6그룹', gender: '남', name: '권순용', birthId: '19650101-1', phone: '010-5890-7052', club: 'GMDC', depositor: 'GMDC야호', address: '거제시 동부면 거제남서로 3136', team: 'B', event1: '자유형 50', event2: '평영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
   { id: 39, age: '27', group: '2그룹', gender: '남', name: '정성민', birthId: '19990101-1', phone: '010-9989-7218', club: 'GMDC', depositor: 'GMDC야호', address: '거제시 동부면 산양리 671-1', team: 'B', event1: '자유형 50', event2: '평영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
   { id: 41, age: '17', group: '1그룹', gender: '남', name: '이동규', birthId: '20080508-3', phone: '010-8301-1709', club: 'GMDC', depositor: 'GMDC야호', address: '거제시 문동1길 42, 110동 1202호', team: 'B', event1: '', event2: '', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
-  { id: 42, age: '56', group: '5그룹', gender: '남', name: '서정찬', birthId: '19700310-1', phone: '010-8501-0605', club: 'GMDC', depositor: 'GMDC', address: '옥포대첩로 115 영진자이온 104동1101호', team: 'A', event1: '', event2: '', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' }
+  { id: 42, age: '56', group: '5그룹', gender: '남', name: '서정찬', birthId: '19700310-1', phone: '010-8501-0605', club: 'GMDC', depositor: 'GMDC', address: '옥포대첩로 115 영진자이온 104동1101호', team: 'A', event1: '', event2: '', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' },
+  { id: 43, age: '47', group: '4그룹', gender: '남', name: '윤주권', birthId: '19790522-1', phone: '010-6606-7048', club: 'GMDC', depositor: 'GMDC야호', address: '거제 용소7길20, 104동 501호', team: 'B', event1: '핀자유형 50', event2: '핀접영 50', finFly: '', finFree: '', free: '', back: '', breast: '', fly: '' }
 ];
 
 // Baseline Map of Last Year's Records (Original 37 swimmers)
@@ -1986,6 +1987,8 @@ function mergeWithDefaultData(remoteList) {
 
   const list = validRemote.map(item => {
     const def = DEFAULT_RECORDS.find(d => d.id === item.id || d.name === item.name) || {};
+    const team = item.team !== undefined ? item.team : (def.team || 'A');
+    const depositor = team === 'B' ? 'GMDC야호' : 'GMDC';
     return {
       id: item.id || def.id || 0,
       age: item.age !== undefined ? item.age : (def.age || ''),
@@ -1993,11 +1996,11 @@ function mergeWithDefaultData(remoteList) {
       gender: item.gender || def.gender || '남',
       name: item.name || def.name || '',
       birthId: item.birthId || def.birthId || '',
-      team: item.team !== undefined ? item.team : (def.team || 'A'),
+      team: team,
       phone: (item.phone && String(item.phone).trim() !== '') ? item.phone : (def.phone || ''),
       address: cleanAddress((item.address && String(item.address).trim() !== '') ? item.address : (def.address || '')),
       club: (item.club && String(item.club).trim() !== '') ? item.club : (def.club || 'GMDC'),
-      depositor: (item.depositor && String(item.depositor).trim() !== '') ? item.depositor : 'GMDC',
+      depositor: depositor,
       event1: item.event1 !== undefined ? item.event1 : (def.event1 || ''),
       event2: item.event2 !== undefined ? item.event2 : (def.event2 || ''),
       finFly: item.finFly !== undefined ? item.finFly : (def.finFly || ''),
@@ -2009,7 +2012,7 @@ function mergeWithDefaultData(remoteList) {
     };
   });
 
-  // Ensure any new members in DEFAULT_RECORDS (e.g. ID 38 권순용, ID 39 이석민) are appended if missing
+  // Ensure any new members in DEFAULT_RECORDS (e.g. ID 38 권순용, ID 39 정성민, ID 43 윤주권) are appended if missing
   DEFAULT_RECORDS.forEach(def => {
     if (def.name !== '김승주' && def.id !== 40 && !list.some(r => r.id === def.id || r.name === def.name)) {
       list.push(JSON.parse(JSON.stringify(def)));
@@ -2038,6 +2041,11 @@ function initFirebaseSync() {
       const data = docSnap.data();
       if (data && Array.isArray(data.records)) {
         const hasDeletedMember = data.records.some(r => r.name === '김승주' || r.id === 40);
+        const hasMissingMember = !data.records.some(r => r.name === '윤주권');
+        const hasMismatchedDepositor = data.records.some(r => {
+          const expected = (r.team || 'A') === 'B' ? 'GMDC야호' : 'GMDC';
+          return r.depositor !== expected;
+        });
         const merged = mergeWithDefaultData(data.records);
         serverRecordsCache = JSON.parse(JSON.stringify(merged));
 
@@ -2058,7 +2066,7 @@ function initFirebaseSync() {
               renderSummaryMatrices();
             }
           }
-          if (hasDeletedMember) {
+          if (hasDeletedMember || hasMissingMember || hasMismatchedDepositor) {
             saveData();
           }
         }
@@ -3597,6 +3605,7 @@ function bindEvents() {
 
         const prevTeam = currentTeam;
         record.team = targetTeam;
+        record.depositor = targetTeam === 'B' ? 'GMDC야호' : 'GMDC';
 
         // Log to server history
         logChangeHistory('INFO', record.name, 'team', '소속팀', `${prevTeam}팀`, `${targetTeam}팀`);
@@ -3811,6 +3820,7 @@ function bindEvents() {
 
       const prevTeam = currentTeam;
       record.team = targetTeam;
+      record.depositor = targetTeam === 'B' ? 'GMDC야호' : 'GMDC';
 
       // Log to server history
       logChangeHistory('INFO', record.name, 'team', '소속팀', `${prevTeam}팀`, `${targetTeam}팀`);
@@ -4133,21 +4143,36 @@ function handleTablePaste(e) {
 }
 
 // Copy to Clipboard as TSV (Records only, Exclude Table Headers)
+// Copies only the currently visible list according to active view ('events' vs 'records') and filters
 function copyToClipboardTsv() {
   let rows;
   if (currentView === 'events') {
-    rows = records.map(r => [
-      r.id,
+    const list = getFilteredEventsList();
+    if (!list || list.length === 0) {
+      showToast('⚠️ 복사할 출전 선수 명단이 없습니다.');
+      return;
+    }
+    rows = list.map((r, idx) => [
+      idx + 1,
       r.group || '',
       r.gender || '',
       r.name || '',
       r.birthId || '',
       r.event1 || '',
-      r.event2 || ''
+      r.event2 || '',
+      r.phone || '',
+      r.depositor || ((r.team || 'A') === 'B' ? 'GMDC야호' : 'GMDC'),
+      r.address || ''
     ]);
   } else {
-    rows = records.map(r => [
-      r.id,
+    const list = getProcessedRecords();
+    if (!list || list.length === 0) {
+      showToast('⚠️ 복사할 기록표 데이터가 없습니다.');
+      return;
+    }
+    rows = list.map((r, idx) => [
+      `${r.team || 'A'}팀`,
+      idx + 1,
       r.group || '',
       r.age || '',
       r.gender || '',
@@ -4168,7 +4193,7 @@ function copyToClipboardTsv() {
 
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(tsv).then(() => {
-      showToast(`📋 레코드 데이터(${rows.length}명, 헤더 제외)가 복사되었습니다. 엑셀에 붙여넣기(Ctrl+V)하세요!`);
+      showToast(`📋 현재 표시된 데이터(${rows.length}명, 헤더 제외)가 복사되었습니다. 엑셀에 붙여넣기(Ctrl+V)하세요!`);
     }).catch(() => {
       fallbackCopy(tsv, rows.length);
     });
