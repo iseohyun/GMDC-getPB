@@ -25,7 +25,7 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.08.20.02_student';
+const APP_VERSION = 'v2026.08.21.01_student';
 let isScenarioMode = false;
 let isInitialSyncCompleted = false;
 let serverRecordsCache = null;
@@ -232,7 +232,10 @@ const DEFAULT_STUDENT_RECORDS = [
   { id: 16, age: '14', group: '7그룹', gender: '남', name: '박현민', birthId: '20110608-3', event1: '평영 50', event2: '접영 50', phone: '010-4447-5186', club: 'GMDC', depositor: 'GMDC', address: '거제시 마전5길8-2 영승한마음 710호', free: '', back: '', breast: '', fly: '' },
   { id: 17, age: '12', group: '7그룹', gender: '남', name: '이선우', birthId: '20130829-3', event1: '자유형 50', event2: '배영 50', phone: '010-4101-8171', club: 'GMDC', depositor: 'GMDC', address: '거제시 사등면 두동로54-40 영진 201동 1505호', free: '', back: '', breast: '', fly: '' },
   { id: 18, age: '12', group: '7그룹', gender: '여', name: '안서윤', birthId: '20130806-4', event1: '자유형 50', event2: '배영 50', phone: '010-4005-7171', club: 'GMDC', depositor: 'GMDC', address: '거제시 아주2로138 102동 1801호', free: '', back: '', breast: '', fly: '' },
-  { id: 19, age: '13', group: '7그룹', gender: '여', name: '정채윤', birthId: '20120321-4', event1: '자유형 50', event2: '평영 50', phone: '010-8312-5384', club: 'GMDC', depositor: 'GMDC', address: '거제시 장평1로86 B동 204호', free: '', back: '', breast: '', fly: '' }
+  { id: 19, age: '13', group: '7그룹', gender: '여', name: '정채윤', birthId: '20120321-4', event1: '자유형 50', event2: '평영 50', phone: '010-8312-5384', club: 'GMDC', depositor: 'GMDC', address: '거제시 장평1로86 B동 204호', free: '', back: '', breast: '', fly: '' },
+  { id: 21, age: '7', group: '2그룹', gender: '여', name: '이설아', birthId: '', event1: '', event2: '', phone: '010-9374-1091', club: 'GMDC', depositor: 'GMDC', address: '거제시 제산로 51 힐스테이트 106동 102호', free: '', back: '', breast: '', fly: '' },
+  { id: 22, age: '7', group: '2그룹', gender: '여', name: '지상희', birthId: '20181211-4', event1: '자유형 50', event2: '접영 50', phone: '010-3419-1020', club: 'GMDC', depositor: 'GMDC', address: '거제시문동1길 42, 109동1501호(센트럴푸르지오)', free: '', back: '', breast: '', fly: '' },
+  { id: 23, age: '9', group: '4그룹', gender: '남', name: '이승후', birthId: '', event1: '자유형 50', event2: '배영 50', phone: '010-9374-1091', club: 'GMDC', depositor: 'GMDC', address: '거제시 제산로 51 힐스테이트 106동 102호', free: '', back: '', breast: '', fly: '' }
 ];
 
 // Default Student Pinned Relay Members (학생부 단체전 고정 멤버)
@@ -1862,7 +1865,7 @@ function cleanAddress(addr) {
 function mergeWithDefaultData(remoteList) {
   if (!Array.isArray(remoteList)) return JSON.parse(JSON.stringify(DEFAULT_STUDENT_RECORDS));
 
-  return remoteList.map(item => {
+  const list = remoteList.map(item => {
     const def = DEFAULT_STUDENT_RECORDS.find(d => d.id === item.id || d.name === item.name) || {};
     return {
       id: item.id || def.id || 0,
@@ -1875,6 +1878,7 @@ function mergeWithDefaultData(remoteList) {
       event2: item.event2 !== undefined ? item.event2 : (def.event2 || ''),
       phone: item.phone || def.phone || '',
       club: item.club || def.club || 'GMDC',
+      depositor: item.depositor || def.depositor || 'GMDC',
       address: cleanAddress(item.address || def.address || ''),
       free: item.free !== undefined ? item.free : (def.free || ''),
       back: item.back !== undefined ? item.back : (def.back || ''),
@@ -1882,6 +1886,15 @@ function mergeWithDefaultData(remoteList) {
       fly: item.fly !== undefined ? item.fly : (def.fly || '')
     };
   });
+
+  // Ensure any new members in DEFAULT_STUDENT_RECORDS (e.g. ID 21 이설아, ID 22 지상희, ID 23 이승후) are appended if missing
+  DEFAULT_STUDENT_RECORDS.forEach(def => {
+    if (!list.some(r => r.id === def.id || r.name === def.name)) {
+      list.push(JSON.parse(JSON.stringify(def)));
+    }
+  });
+
+  return list;
 }
 
 function initFirebaseSync() {
@@ -1904,6 +1917,7 @@ function initFirebaseSync() {
         pinnedRelaysState = JSON.parse(JSON.stringify(data.pinnedRelays));
       }
       if (data && Array.isArray(data.records)) {
+        const hasMissingMember = !data.records.some(r => r.name === '이설아') || !data.records.some(r => r.name === '지상희') || !data.records.some(r => r.name === '이승후');
         const merged = mergeWithDefaultData(data.records);
         serverRecordsCache = JSON.parse(JSON.stringify(merged));
 
@@ -1922,6 +1936,9 @@ function initFirebaseSync() {
               updateStats();
               renderSummaryMatrices();
             }
+          }
+          if (hasMissingMember) {
+            saveData();
           }
         }
       }
