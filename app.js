@@ -2040,12 +2040,6 @@ function initFirebaseSync() {
       isInitialSyncCompleted = true;
       const data = docSnap.data();
       if (data && Array.isArray(data.records)) {
-        const hasDeletedMember = data.records.some(r => r.name === '김승주' || r.id === 40);
-        const hasMissingMember = !data.records.some(r => r.name === '윤주권');
-        const hasMismatchedDepositor = data.records.some(r => {
-          const expected = (r.team || 'A') === 'B' ? 'GMDC야호' : 'GMDC';
-          return r.depositor !== expected;
-        });
         const merged = mergeWithDefaultData(data.records);
         serverRecordsCache = JSON.parse(JSON.stringify(merged));
 
@@ -2065,9 +2059,6 @@ function initFirebaseSync() {
               updateStats();
               renderSummaryMatrices();
             }
-          }
-          if (hasDeletedMember || hasMissingMember || hasMismatchedDepositor) {
-            saveData();
           }
         }
       }

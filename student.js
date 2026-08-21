@@ -1902,19 +1902,25 @@ function initFirebaseSync() {
     if (docSnap.exists()) {
       isInitialSyncCompleted = true;
       const data = docSnap.data();
+      let isRelayChanged = false;
       if (data && data.pinnedRelays && typeof data.pinnedRelays === 'object') {
-        pinnedRelaysState = JSON.parse(JSON.stringify(data.pinnedRelays));
+        if (JSON.stringify(pinnedRelaysState) !== JSON.stringify(data.pinnedRelays)) {
+          pinnedRelaysState = JSON.parse(JSON.stringify(data.pinnedRelays));
+          localStorage.setItem(PINNED_RELAYS_STORAGE_KEY, JSON.stringify(pinnedRelaysState));
+          isRelayChanged = true;
+        }
       }
       if (data && Array.isArray(data.records)) {
-        const hasMissingMember = !data.records.some(r => r.name === '이설아') || !data.records.some(r => r.name === '지상희') || !data.records.some(r => r.name === '이승후');
         const merged = mergeWithDefaultData(data.records);
         serverRecordsCache = JSON.parse(JSON.stringify(merged));
 
         if (!isScenarioMode) {
           const isDataChanged = JSON.stringify(records) !== JSON.stringify(merged);
-          if (isDataChanged) {
-            records = merged;
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
+          if (isDataChanged || isRelayChanged) {
+            if (isDataChanged) {
+              records = merged;
+              localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
+            }
             
             const activeEl = document.activeElement;
             const isUserTyping = activeEl && activeEl.classList && (activeEl.classList.contains('cell-input') || activeEl.classList.contains('event-select'));
@@ -1926,10 +1932,11 @@ function initFirebaseSync() {
               renderSummaryMatrices();
             }
           }
-          if (hasMissingMember) {
-            saveData();
-          }
         }
+      } else if (isRelayChanged && !isScenarioMode) {
+        updateStats();
+        renderTable();
+        renderEventsTable();
       }
       if (saveStatusText && !isScenarioMode) {
         saveStatusText.innerHTML = `<span class="status-dot"></span><span>Firebase 클라우드 동기화 (${new Date().toLocaleTimeString('ko-KR')})</span>`;
