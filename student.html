@@ -209,50 +209,83 @@
         <section class="toolbar">
           <div class="toolbar-left">
             <div class="search-box">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
               <input type="text" id="searchInput" placeholder="이름 또는 나이 검색..." autocomplete="off">
             </div>
+
+            <div class="filter-group">
+              <select id="filterGenderSelect" class="filter-select">
+                <option value="all" selected>성별</option>
+                <option value="남">남자</option>
+                <option value="여">여자</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <select id="filterGroupSelect" class="filter-select">
+                <option value="all" selected>모든 그룹</option>
+                <option value="1그룹">1그룹</option>
+                <option value="2그룹">2그룹</option>
+                <option value="3그룹">3그룹</option>
+                <option value="4그룹">4그룹</option>
+                <option value="5그룹">5그룹</option>
+                <option value="6그룹">6그룹</option>
+                <option value="7그룹">7그룹</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label for="recordsModeSelect" class="filter-label">보기</label>
+              <select id="recordsModeSelect" class="filter-select">
+                <option value="simple">간단히</option>
+                <option value="detailed" selected>자세히</option>
+              </select>
+            </div>
+
+            <label class="scenario-checkbox-label" title="시나리오 테스트 모드 (서버 저장 없이 가상 테스트)">
+              <input type="checkbox" id="chkScenarioMode" class="scenario-checkbox" />
+              <span>시나리오 모드</span>
+            </label>
+
             <div class="header-view-toggle">
               <button class="view-toggle-btn active" data-view="records" title="단체전 보기 (단축키: T)">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                </svg>
                 <span>단체전</span>
               </button>
               <button class="view-toggle-btn" data-view="events" title="개인전 보기 (단축키: I)">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="M9 12h6"></path><path d="M9 16h6"></path></svg>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                  <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+                  <path d="M9 12h6"></path>
+                  <path d="M9 16h6"></path>
+                </svg>
                 <span>개인전</span>
               </button>
             </div>
-          </div>
-
-          <div class="toolbar-right">
-            <!-- 엑셀 데이터 직접 붙여넣기 안내 팁 -->
-            <span class="paste-tip-badge" title="엑셀에서 셀들을 복사(Ctrl+C)한 뒤, 표의 원하는 위치를 클릭하고 Ctrl+V를 누르면 일괄 입력됩니다.">
-              📋 엑셀 붙여넣기 지원 (Ctrl+V)
-            </span>
           </div>
         </section>
 
         <!-- Notice & Legend Bar -->
         <div class="notice-bar">
           <div class="notice-legend">
-            <div class="legend-item">
-              <span class="legend-dot dot-blue"></span>
-              <span>작년기록 (자동보존)</span>
-            </div>
-            <div class="legend-item">
-              <span class="legend-dot dot-green"></span>
-              <span>신규입력 PB</span>
-            </div>
-            <div class="legend-item" style="color: #64748b; font-size: 11.5px;">
-              ※ 기록 삭제 시 공란으로 비워집니다.
-            </div>
+            <span class="legend-item"><span class="legend-dot dot-blue"></span><strong>작년기록 (파란색):</strong> 기존 등록 데이터</span>
+            <span class="legend-item"><span class="legend-dot dot-red"></span><strong>희망기록 (붉은색):</strong> 새로 입력/수정한 데이터</span>
+            <span class="legend-tip">※ 기록 삭제 시 작년기록이 존재하면 자동으로 작년기록으로 원복됩니다.</span>
           </div>
         </div>
 
         <!-- Table Container -->
         <main class="table-card">
           <div class="table-responsive" id="tableContainer">
-            <table class="record-table pb-table is-simple" id="recordTable">
+            <table class="record-table pb-table" id="recordTable">
               <thead>
                 <tr>
                   <th class="col-no col-pb-detail" data-sort="no">번호</th>
@@ -363,7 +396,7 @@
       <section class="events-detail-section">
         <div class="events-detail-header">
           <div class="events-detail-title-group">
-            <h3 id="eventsDetailTitle">📋 출전 선수별 명단 (19명 표시 중 / 총 19명)</h3>
+            <h3 id="eventsDetailTitle">📋 출전 선수별 명단 (23명 표시 중 / 총 23명)</h3>
           </div>
           <div class="events-detail-actions">
             <button type="button" id="btnCopyEventsTsv" class="btn-copy-events admin-only" title="현재 표시된 명단 복사 (엑셀/스프레드시트 붙여넣기용)" style="display: none;">
@@ -373,43 +406,68 @@
               </svg>
               <span>명단 복사</span>
             </button>
-            <div class="events-mode-toggle">
-              <button class="mode-btn active" id="btnModeSimple" data-events-mode="simple" title="이름과 출전 종목만 간단히 표시">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
-                <span>간단히 (기본)</span>
-              </button>
-              <button class="mode-btn" id="btnModeDetailed" data-events-mode="detailed" title="그룹, 성별, 생년월일, 연락처, 주소, 개인PB 등 모든 정보 표시">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
-                <span>자세히</span>
-              </button>
-            </div>
           </div>
         </div>
 
         <section class="toolbar">
           <div class="toolbar-left">
             <div class="search-box">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-              <input type="text" id="eventsSearchInput" placeholder="이름, 그룹, 생년월일, 연락처 검색..." autocomplete="off">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input type="text" id="eventsSearchInput" placeholder="이름 또는 나이 검색..." autocomplete="off">
             </div>
+
             <div class="filter-group">
-              <button class="events-filter-btn active" data-events-filter="all">전체</button>
-              <button class="events-filter-btn" data-events-filter="남">남성</button>
-              <button class="events-filter-btn" data-events-filter="여">여성</button>
+              <select id="eventsGenderSelect" class="filter-select">
+                <option value="all" selected>성별</option>
+                <option value="남">남자</option>
+                <option value="여">여자</option>
+              </select>
             </div>
+
+            <div class="filter-group">
+              <select id="eventsGroupSelect" class="filter-select">
+                <option value="all" selected>모든 그룹</option>
+                <option value="1그룹">1그룹</option>
+                <option value="2그룹">2그룹</option>
+                <option value="3그룹">3그룹</option>
+                <option value="4그룹">4그룹</option>
+                <option value="5그룹">5그룹</option>
+                <option value="6그룹">6그룹</option>
+                <option value="7그룹">7그룹</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label for="eventsModeSelect" class="filter-label">보기</label>
+              <select id="eventsModeSelect" class="filter-select">
+                <option value="simple" selected>간단히</option>
+                <option value="detailed">자세히</option>
+              </select>
+            </div>
+
             <div class="header-view-toggle">
               <button class="view-toggle-btn" data-view="records" title="단체전 보기 (단축키: T)">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                </svg>
                 <span>단체전</span>
               </button>
               <button class="view-toggle-btn active" data-view="events" title="개인전 보기 (단축키: I)">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="M9 12h6"></path><path d="M9 16h6"></path></svg>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                  <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+                  <path d="M9 12h6"></path>
+                  <path d="M9 16h6"></path>
+                </svg>
                 <span>개인전</span>
               </button>
             </div>
-          </div>
-          <div class="toolbar-right">
-            <span class="events-count-info" id="eventsFilteredCount">19명 표시 중</span>
           </div>
         </section>
 
@@ -418,17 +476,18 @@
             <table class="record-table events-table is-simple" id="eventsDetailTable">
               <thead>
                 <tr>
-                  <th class="col-no col-detail" style="width: 50px;">번호</th>
+                  <th class="col-no col-detail" style="width: 50px;">NO</th>
                   <th class="col-group col-detail" style="width: 75px;">그룹</th>
                   <th class="col-gender col-detail" style="width: 60px;">성별</th>
                   <th class="col-name" style="width: 100px;">이름</th>
-                  <th class="col-relay" style="width: 130px;">팀출전</th>
+                  <th class="col-relay" style="width: 140px;">팀출전</th>
+                  <th class="col-age col-simple" style="width: 65px;">연령</th>
                   <th class="col-birth col-detail" style="width: 130px;">생년월일</th>
                   <th class="col-event" style="width: 180px;">출전 종목 1</th>
                   <th class="col-event" style="width: 180px;">출전 종목 2</th>
-                  <th class="col-detail" style="width: 120px;">연락처</th>
+                  <th class="col-detail" style="width: 130px;">선수연락처</th>
+                  <th class="col-detail" style="width: 100px;">입금자성명</th>
                   <th class="col-detail" style="width: 220px;">주소</th>
-                  <th class="col-count col-detail" style="width: 80px;">출전 수</th>
                 </tr>
               </thead>
               <tbody id="eventsTableBody">
@@ -854,7 +913,7 @@
     </div>
   </div>
 
-  <script src="shortcut.js?v=20260821_01"></script>
-  <script type="module" src="student.js?v=20260821_01"></script>
+  <script src="shortcut.js?v=20260821_02"></script>
+  <script type="module" src="student.js?v=20260821_02"></script>
 </body>
 </html>

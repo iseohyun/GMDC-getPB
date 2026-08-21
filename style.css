@@ -2502,6 +2502,10 @@ body.theme-student .btn-panel-pin.active {
   width: calc((100% - 195px) / 6);
 }
 
+.pb-table:not(:has(.col-team)).is-simple .col-record {
+  width: calc((100% - 130px) / 4);
+}
+
 .team-badge {
   display: inline-flex;
   align-items: center;
@@ -2560,6 +2564,10 @@ body.theme-student .btn-panel-pin.active {
 
 .events-table.is-simple .col-event {
   width: calc((100% - 260px) / 2);
+}
+
+.events-table:not(:has(.col-team)).is-simple .col-event {
+  width: calc((100% - 325px) / 2);
 }
 
 .group-filter-dropdown select,

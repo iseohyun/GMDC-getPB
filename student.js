@@ -25,7 +25,7 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.08.21.01_student';
+const APP_VERSION = 'v2026.08.21.02_student';
 let isScenarioMode = false;
 let isInitialSyncCompleted = false;
 let serverRecordsCache = null;
@@ -372,21 +372,26 @@ function getLastYearRecord(id, field) {
 let records = [];
 let sortCol = null;
 let sortAsc = true;
-let currentFilter = 'all';
-let currentEventsFilter = 'all';
-let currentEventsGroup = 'all';
+let currentFilter = 'all'; // Records view gender ('all', '남', '여')
+let currentGroupFilter = 'all'; // Records view group ('all', '1그룹' ~ '7그룹')
 let searchQuery = '';
+
+let eventsGenderFilter = 'all'; // Events view gender ('all', '남', '여')
+let eventsGroupFilter = 'all'; // Events view group ('all', '1그룹' ~ '7그룹')
 let eventsSearchQuery = '';
+
 let currentView = 'records';
 let eventsViewMode = 'simple';
-let recordsViewMode = 'simple';
+let recordsViewMode = 'detailed';
 let pinnedComboCardId = null; // 고정된 조합 카드 ID (최대 1개)
 let saveTimeout = null;
 
 // DOM Elements
 const tableBody = document.getElementById('tableBody');
 const searchInput = document.getElementById('searchInput');
-const filterBtns = document.querySelectorAll('.filter-btn');
+const filterGenderSelect = document.getElementById('filterGenderSelect');
+const filterGroupSelect = document.getElementById('filterGroupSelect');
+const recordsModeSelect = document.getElementById('recordsModeSelect');
 const toast = document.getElementById('toast');
 const saveStatus = document.getElementById('saveStatus');
 const saveStatusText = document.getElementById('saveStatusText');
@@ -399,11 +404,7 @@ const viewEvents = document.getElementById('viewEvents');
 const comboGrid = document.getElementById('comboGrid');
 const recordTable = document.getElementById('recordTable');
 const eventsDetailTable = document.getElementById('eventsDetailTable');
-const btnModeSimple = document.getElementById('btnModeSimple');
-const btnModeDetailed = document.getElementById('btnModeDetailed');
-const btnRecordsModeSimple = document.getElementById('btnRecordsModeSimple');
-const btnRecordsModeDetailed = document.getElementById('btnRecordsModeDetailed');
-const btnScenarioMode = document.getElementById('btnScenarioMode');
+const chkScenarioMode = document.getElementById('chkScenarioMode');
 
 const combo1Members = document.getElementById('combo1Members');
 const combo2Members = document.getElementById('combo2Members');
@@ -416,10 +417,11 @@ const femaleMatrixBody = document.getElementById('femaleMatrixBody');
 const femaleMatrixFoot = document.getElementById('femaleMatrixFoot');
 
 const eventsSearchInput = document.getElementById('eventsSearchInput');
-const eventsFilterBtns = document.querySelectorAll('.events-filter-btn');
+const eventsGenderSelect = document.getElementById('eventsGenderSelect');
 const eventsGroupSelect = document.getElementById('eventsGroupSelect');
+const eventsModeSelect = document.getElementById('eventsModeSelect');
+const btnCopyEventsTsv = document.getElementById('btnCopyEventsTsv');
 const eventsTableBody = document.getElementById('eventsTableBody');
-const eventsFilteredCount = document.getElementById('eventsFilteredCount');
 
 function init() {
   window.__GMDC_VERSION__ = APP_VERSION;
@@ -493,60 +495,53 @@ function initNoticeModal() {
 }
 
 function initScenarioMode() {
-  isScenarioMode = false;
-  updateScenarioModeUI();
-
-  if (btnScenarioMode) {
-    btnScenarioMode.addEventListener('click', toggleScenarioMode);
+  const chk = document.getElementById('chkScenarioMode');
+  if (chk) {
+    chk.checked = isScenarioMode;
+    chk.addEventListener('change', handleScenarioToggle);
   }
 }
 
-function toggleScenarioMode() {
-  if (!isScenarioMode) {
+function handleScenarioToggle(e) {
+  const chk = e.target;
+  if (chk.checked) {
+    alert("서버에 업로드 하지 않고, 입력결과를 테스트합니다.");
     isScenarioMode = true;
-    updateScenarioModeUI();
-    alert('🧪 [시나리오 모드 ON]\n서버에 업로드하지 않고, 입력 결과를 가상으로 테스트합니다.\n(상단 최적 계영 조합 및 통계를 마음껏 테스트해보세요.)');
-    showToast('🧪 시나리오 모드가 켜졌습니다. (서버 저장 차단)');
+    if (!serverRecordsCache) {
+      serverRecordsCache = JSON.parse(JSON.stringify(records));
+    }
+    updateScenarioModeUI(true);
+    showToast('🧪 시나리오 테스트 모드가 활성화되었습니다. (서버 미저장)');
   } else {
-    const doRevert = confirm('서버값으로 되돌립니다.\n시나리오 모드 중에 변경한 테스트 데이터를 취소하고 원래 서버 데이터로 복구하시겠습니까?');
-    if (doRevert) {
+    if (confirm("서버값으로 되돌립니다.")) {
       isScenarioMode = false;
-      if (serverRecordsCache) {
+      if (serverRecordsCache && Array.isArray(serverRecordsCache)) {
         records = JSON.parse(JSON.stringify(serverRecordsCache));
-        try {
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
-        } catch (e) {}
       } else {
         records = JSON.parse(JSON.stringify(DEFAULT_STUDENT_RECORDS));
       }
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
+      } catch (e) {}
+      updateScenarioModeUI(false);
       renderAll();
-      updateScenarioModeUI();
-      showToast('🔄 서버 데이터로 안전하게 복구되었습니다.');
+      showToast('✅ 서버 데이터로 원복되었습니다.');
+    } else {
+      chk.checked = true;
     }
   }
 }
 
-function updateScenarioModeUI() {
-  if (!btnScenarioMode) return;
-  if (isScenarioMode) {
-    btnScenarioMode.classList.add('active');
-    btnScenarioMode.innerHTML = `
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 2v7.31"></path><path d="M14 9.3V1.99"></path><path d="M8.5 2h7"></path><path d="M14 9.3a6.5 6.5 0 1 1-4 0"></path><path d="M5.52 16h12.96"></path></svg>
-      <span>🧪 시나리오 ON</span>
-    `;
-    if (saveStatus) {
-      saveStatus.classList.add('is-scenario');
-      if (saveStatusText) saveStatusText.innerHTML = `<span>🧪 시나리오 가상 테스트 중 (서버 미업로드)</span>`;
-    }
-  } else {
-    btnScenarioMode.classList.remove('active');
-    btnScenarioMode.innerHTML = `
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 2v7.31"></path><path d="M14 9.3V1.99"></path><path d="M8.5 2h7"></path><path d="M14 9.3a6.5 6.5 0 1 1-4 0"></path><path d="M5.52 16h12.96"></path></svg>
-      <span>시나리오 OFF</span>
-    `;
-    if (saveStatus) {
-      saveStatus.classList.remove('is-scenario');
-      if (saveStatusText) saveStatusText.innerHTML = `<span class="status-dot"></span><span>자동 저장 활성화</span>`;
+function updateScenarioModeUI(isOn) {
+  const chk = document.getElementById('chkScenarioMode');
+  if (chk) chk.checked = isOn;
+
+  if (saveStatus && saveStatusText) {
+    saveStatus.classList.toggle('is-scenario', isOn);
+    if (isOn) {
+      saveStatusText.innerHTML = `<span>🧪 시나리오 모드 (서버 저장 안 됨)</span>`;
+    } else {
+      saveStatusText.innerHTML = `<span class="status-dot"></span><span>자동 저장 활성화</span>`;
     }
   }
 }
@@ -1677,38 +1672,32 @@ async function compareHistoryWithCurrentRecords() {
 
 function initRecordsViewMode() {
   const saved = localStorage.getItem(RECORDS_MODE_KEY);
-  recordsViewMode = (saved === 'detailed') ? 'detailed' : 'simple';
+  recordsViewMode = saved ? saved : 'detailed'; // 기본: 자세히 (detailed)
   applyRecordsViewMode(recordsViewMode);
 }
 
 function applyRecordsViewMode(mode) {
   recordsViewMode = mode;
-  if (btnRecordsModeSimple) btnRecordsModeSimple.classList.toggle('active', mode === 'simple');
-  if (btnRecordsModeDetailed) btnRecordsModeDetailed.classList.toggle('active', mode === 'detailed');
+  const select = document.getElementById('recordsModeSelect');
+  if (select) select.value = mode;
   if (recordTable) recordTable.classList.toggle('is-simple', mode === 'simple');
-  try {
-    localStorage.setItem(RECORDS_MODE_KEY, mode);
-  } catch (e) {}
 }
 
 function initEventsViewMode() {
   const saved = localStorage.getItem(EVENTS_MODE_KEY);
-  eventsViewMode = (saved === 'detailed') ? 'detailed' : 'simple';
+  eventsViewMode = (saved === 'detailed') ? 'detailed' : 'simple'; // 기본: simple
   applyEventsViewMode(eventsViewMode);
 }
 
 function applyEventsViewMode(mode) {
   eventsViewMode = mode;
-  if (btnModeSimple) btnModeSimple.classList.toggle('active', mode === 'simple');
-  if (btnModeDetailed) btnModeDetailed.classList.toggle('active', mode === 'detailed');
+  const select = document.getElementById('eventsModeSelect');
+  if (select) select.value = mode;
   if (eventsDetailTable) eventsDetailTable.classList.toggle('is-simple', mode === 'simple');
   const btnCopyEvents = document.getElementById('btnCopyEventsTsv');
   if (btnCopyEvents) {
     btnCopyEvents.style.display = (mode === 'detailed') ? 'inline-flex' : 'none';
   }
-  try {
-    localStorage.setItem(EVENTS_MODE_KEY, mode);
-  } catch (e) {}
 }
 
 function initStickyPreference() {
@@ -2057,6 +2046,7 @@ function switchView(viewName) {
     window.scrollTo({ top: currentScroll, behavior: 'instant' });
   }
 }
+window.switchView = switchView;
 
 function escapeHtml(str) {
   if (str === null || str === undefined) return '';
@@ -2119,13 +2109,10 @@ function getProcessedRecords() {
 
   if (currentFilter === '남' || currentFilter === '여') {
     list = list.filter(r => r.gender === currentFilter);
-  } else if (currentFilter === 'recorded') {
-    list = list.filter(r => {
-      return STROKE_FIELDS.some(field => {
-        const val = parseFloat(r[field]);
-        return !isNaN(val) && val > 0;
-      });
-    });
+  }
+
+  if (currentGroupFilter && currentGroupFilter !== 'all') {
+    list = list.filter(r => r.group === currentGroupFilter);
   }
 
   if (searchQuery) {
@@ -2146,20 +2133,20 @@ function getProcessedRecords() {
       if (sortCol === 'no') {
         aVal = a.id;
         bVal = b.id;
+        return sortAsc ? aVal - bVal : bVal - aVal;
       } else if (sortCol === 'age') {
         aVal = parseFloat(aVal) || 0;
         bVal = parseFloat(bVal) || 0;
+        return sortAsc ? aVal - bVal : bVal - aVal;
       } else if (STROKE_FIELDS.includes(sortCol)) {
         aVal = parseFloat(aVal) || (sortAsc ? 9999 : -1);
         bVal = parseFloat(bVal) || (sortAsc ? 9999 : -1);
+        return sortAsc ? aVal - bVal : bVal - aVal;
       } else {
         aVal = String(aVal || '');
         bVal = String(bVal || '');
+        return sortAsc ? aVal.localeCompare(bVal, 'ko') : bVal.localeCompare(aVal, 'ko');
       }
-
-      if (aVal < bVal) return sortAsc ? -1 : 1;
-      if (aVal > bVal) return sortAsc ? 1 : -1;
-      return a.id - b.id;
     });
   } else {
     list.sort(defaultRecordComparator);
@@ -2182,14 +2169,33 @@ function renderTable() {
   const readonlyAttr = !canEdit ? 'readonly tabindex="-1"' : '';
   const disabledStyle = !canEdit ? 'style="pointer-events:none; cursor:default;"' : '';
 
-  tableBody.innerHTML = list.map((item) => {
-    const genderClass = item.gender === '남' ? 'badge-male' : 'badge-female';
+  tableBody.innerHTML = '';
+
+  if (list.length === 0) {
+    const emptyRow = document.createElement('tr');
+    emptyRow.innerHTML = `
+      <td colspan="11" style="padding: 36px; color: var(--text-muted); font-size: 14px; text-align: center;">
+        일치하는 데이터가 없습니다.
+      </td>
+    `;
+    tableBody.appendChild(emptyRow);
+    return;
+  }
+
+  list.forEach((item) => {
+    const tr = document.createElement('tr');
+    tr.dataset.id = item.id;
+
     const isMale = item.gender === '남';
 
-    const eventsList = [];
-    if (item.event1) eventsList.push(item.event1);
-    if (item.event2) eventsList.push(item.event2);
-    const eventsText = eventsList.length > 0 ? eventsList.join(', ') : '-';
+    const eventsList = [item.event1, item.event2].filter(Boolean);
+    let eventsTagsHtml = '';
+    if (eventsList.length > 0) {
+      eventsTagsHtml = eventsList.map(e => `<span class="pb-event-chip">${escapeHtml(e)}</span>`).join('');
+    } else {
+      eventsTagsHtml = `<span class="pb-event-chip empty">미신청</span>`;
+    }
+    const eventsTagHtml = `<div class="pb-events-tag-container">${eventsTagsHtml}</div>`;
 
     const relayAssignments = getStudentRelayAssignments(item.name);
     let relayTagsHtml = '';
@@ -2204,109 +2210,107 @@ function renderTable() {
     }
     const relayTagHtml = `<div class="pb-events-tag-container">${relayTagsHtml}</div>`;
 
-    return `
-      <tr data-id="${item.id}">
-        <td class="col-no col-pb-detail">${item.id}</td>
-        <td class="col-group col-pb-detail">
-          <span class="group-badge">${escapeHtml(item.group || '-')}</span>
-        </td>
-        <td class="col-age col-pb-detail editable-age-cell" data-id="${item.id}" ${disabledStyle} title="${canEdit ? '클릭하여 생년월일/만나이 변경' : `만나이: ${item.age || '-'}`}" style="cursor: ${canEdit ? 'pointer' : 'default'}; font-weight: 700;">
-          ${escapeHtml(item.age || '-')}
-        </td>
-        <td class="col-gender col-pb-detail">
-          <span class="gender-toggle ${genderClass}" data-id="${item.id}" ${disabledStyle} title="${canEdit ? `클릭하여 성별 전환 (현재: ${item.gender})` : `성별: ${item.gender}`}">
-            ${item.gender}
-          </span>
-        </td>
-        <td class="col-name">
-          <input 
-            type="text" 
-            class="cell-input cell-name" 
-            value="${escapeHtml(item.name || '')}" 
-            data-id="${item.id}" 
-            data-field="name" 
-            data-prev-val="${escapeHtml(item.name || '')}"
-            placeholder="이름"
-            title="${canEdit ? '클릭하여 회원 이름 수정 (수정 시 재확인 창이 표시됩니다)' : escapeHtml(item.name || '')}"
-            autocomplete="off"
-            ${readonlyAttr}
-          />
-        </td>
-        <td class="col-relay-summary col-pb-detail" style="text-align:center;">
-          ${relayTagHtml}
-        </td>
-        ${STROKE_FIELDS.map(field => {
-          const val = item[field] || '';
-          const numVal = parseFloat(val);
-          const lastYearVal = getLastYearRecord(item.id, field);
-          const isBest = !isNaN(numVal) && numVal > 0 && numVal === bests[field][item.gender];
-          const podiumList = getPodiumData(item.gender, item.group, field);
-          const podiumInfo = formatPodiumTooltip(item.gender, item.group, field);
+    tr.innerHTML = `
+      <td class="col-no col-pb-detail">${item.id}</td>
+      <td class="col-group col-pb-detail">
+        <span class="group-badge">${escapeHtml(item.group || '-')}</span>
+      </td>
+      <td class="col-age col-pb-detail">
+        <input type="text" class="cell-input age-input" data-id="${item.id}" data-field="age" value="${escapeHtml(item.age || '')}" placeholder="만나이" inputmode="numeric" ${readonlyAttr} />
+      </td>
+      <td class="col-gender col-pb-detail">
+        <span class="gender-badge ${item.gender === '남' ? 'male' : 'female'}" data-id="${item.id}" data-field="gender" ${disabledStyle} title="${canEdit ? '클릭하여 성별 전환' : `성별: ${item.gender || '남'}`}">
+          ${item.gender || '남'}
+        </span>
+      </td>
+      <td class="col-name">
+        <input 
+          type="text" 
+          class="cell-input cell-name" 
+          value="${escapeHtml(item.name || '')}" 
+          data-id="${item.id}" 
+          data-field="name" 
+          data-prev-val="${escapeHtml(item.name || '')}"
+          placeholder="이름"
+          title="${canEdit ? '클릭하여 회원 이름 수정 (수정 시 재확인 창이 표시됩니다)' : escapeHtml(item.name || '')}"
+          autocomplete="off"
+          ${readonlyAttr}
+        />
+      </td>
+      <td class="col-relay-summary col-pb-detail" style="text-align:center;">
+        ${relayTagHtml}
+      </td>
+      ${STROKE_FIELDS.map(field => {
+        const val = item[field] || '';
+        const numVal = parseFloat(val);
+        const lastYearVal = getLastYearRecord(item.id, field);
+        const isBest = !isNaN(numVal) && numVal > 0 && numVal === bests[field][item.gender];
+        const podiumList = getPodiumData(item.gender, item.group, field);
+        const podiumInfo = formatPodiumTooltip(item.gender, item.group, field);
 
-          let colorClass = '';
-          let titleText = '';
+        let colorClass = '';
+        let titleText = '';
 
-          if (val !== '') {
-            if (val === '99.99' || parseFloat(val) >= 99) {
-              colorClass = 'is-last-year';
-              titleText = '실격 점수 (99.99)';
-            } else if (lastYearVal !== '' && val === lastYearVal) {
-              colorClass = 'is-last-year';
-              titleText = '작년기록 (파란색)';
-            } else {
-              colorClass = 'is-target';
-              titleText = lastYearVal ? `희망기록 (붉은색, 작년: ${lastYearVal}s)` : '희망기록 (붉은색)';
-            }
+        if (val !== '') {
+          if (val === '99.99' || parseFloat(val) >= 99) {
+            colorClass = 'is-last-year';
+            titleText = '실격 점수 (99.99)';
+          } else if (lastYearVal !== '' && val === lastYearVal) {
+            colorClass = 'is-last-year';
+            titleText = '작년기록 (파란색)';
+          } else {
+            colorClass = 'is-target';
+            titleText = lastYearVal ? `희망기록 (붉은색, 작년: ${lastYearVal}s)` : '희망기록 (붉은색)';
           }
+        }
 
-          const fullTitle = [titleText, podiumInfo].filter(Boolean).join('\n');
+        const fullTitle = [titleText, podiumInfo].filter(Boolean).join('\n');
 
-          return `
-            <td class="col-record ${isBest ? 'is-best' : ''}">
-              <div class="input-wrapper pb-input-wrapper">
-                <input 
-                  type="text" 
-                  inputmode="decimal" 
-                  class="cell-input ${colorClass}" 
-                  value="${escapeHtml(val)}" 
-                  data-id="${item.id}" 
-                  data-field="${field}" 
-                  data-prev-val="${escapeHtml(val)}"
-                  placeholder="-"
-                  title="${escapeHtml(fullTitle)}"
-                  autocomplete="off"
-                  ${readonlyAttr}
-                />
-                ${isBest ? `<span class="best-badge" title="${isMale ? '남성' : '여성'} ${STROKE_NAMES[field]} 1위 (최고기록)">BEST</span>` : ''}
-                ${podiumList && podiumList.length > 0 ? `
-                  <div class="podium-popover" role="tooltip">
-                    <div class="popover-header">
-                      <span class="popover-group-tag">${item.group} ${item.gender === '남' ? '남' : '여'}</span>
-                      <span class="popover-title">${STROKE_NAMES[field]} 입상기록</span>
-                    </div>
-                    <div class="popover-ranks">
-                      ${podiumList.map((time, idx) => `
-                        <span class="popover-rank rank-${idx + 1}">
-                          <span class="medal-icon">${['🥇', '🥈', '🥉'][idx]}</span>
-                          <span class="rank-label">${idx + 1}위</span>
-                          <strong class="rank-time">${time}s</strong>
-                        </span>
-                      `).join('')}
-                    </div>
+        return `
+          <td class="col-record ${isBest ? 'is-best' : ''}">
+            <div class="input-wrapper pb-input-wrapper">
+              <input 
+                type="text" 
+                inputmode="decimal" 
+                class="cell-input record-input ${colorClass}" 
+                value="${escapeHtml(val)}" 
+                data-id="${item.id}" 
+                data-field="${field}" 
+                data-prev-val="${escapeHtml(val)}"
+                placeholder="-"
+                title="${escapeHtml(fullTitle)}"
+                autocomplete="off"
+                ${readonlyAttr}
+              />
+              ${isBest ? `<span class="best-badge" title="${isMale ? '남성' : '여성'} ${STROKE_NAMES[field]} 1위 (최고기록)">BEST</span>` : ''}
+              ${podiumList && podiumList.length > 0 ? `
+                <div class="podium-popover" role="tooltip">
+                  <div class="popover-header">
+                    <span class="popover-group-tag">${item.group} ${item.gender === '남' ? '남' : '여'}</span>
+                    <span class="popover-title">${STROKE_NAMES[field]} 입상기록</span>
                   </div>
-                ` : ''}
-              </div>
-            </td>
-          `;
-        }).join('')}
-        <td class="col-events-summary col-pb-detail">
-          <span class="events-summary-text ${eventsList.length > 0 ? 'has-events' : ''}" title="${escapeHtml(eventsText)}">
-            ${escapeHtml(eventsText)}
-          </span>
-        </td>
-      </tr>
+                  <div class="popover-ranks">
+                    ${podiumList.map((time, idx) => `
+                      <span class="popover-rank rank-${idx + 1}">
+                        <span class="medal-icon">${['🥇', '🥈', '🥉'][idx]}</span>
+                        <span class="rank-label">${idx + 1}위</span>
+                        <strong class="rank-time">${time}s</strong>
+                      </span>
+                    `).join('')}
+                  </div>
+                </div>
+              ` : ''}
+            </div>
+          </td>
+        `;
+      }).join('')}
+      <td class="col-events-summary col-pb-detail">
+        ${eventsTagHtml}
+      </td>
     `;
-  }).join('');
+
+    tableBody.appendChild(tr);
+  });
 
   updateSortHeaders();
 }
@@ -2926,24 +2930,25 @@ const EVENT_OPTIONS = [
 function getFilteredEventsList() {
   let list = [...records];
 
-  if (currentEventsFilter === '남' || currentEventsFilter === '여') {
-    list = list.filter(r => r.gender === currentEventsFilter);
-  }
-
-  if (currentEventsGroup !== 'all') {
-    list = list.filter(r => r.group === currentEventsGroup);
-  }
-
-  if (eventsSearchQuery) {
-    const q = eventsSearchQuery.toLowerCase();
+  if (eventsSearchQuery.trim()) {
+    const q = eventsSearchQuery.trim().toLowerCase();
     list = list.filter(r => {
       const name = (r.name || '').toLowerCase();
       const birth = (r.birthId || '').toLowerCase();
       const group = (r.group || '').toLowerCase();
       const phone = (r.phone || '').toLowerCase();
       const address = (r.address || '').toLowerCase();
-      return name.includes(q) || birth.includes(q) || group.includes(q) || phone.includes(q) || address.includes(q);
+      const age = String(r.age || '');
+      return name.includes(q) || birth.includes(q) || group.includes(q) || phone.includes(q) || address.includes(q) || age.includes(q);
     });
+  }
+
+  if (eventsGenderFilter === '남' || eventsGenderFilter === '여') {
+    list = list.filter(r => r.gender === eventsGenderFilter);
+  }
+
+  if (eventsGroupFilter && eventsGroupFilter !== 'all') {
+    list = list.filter(r => r.group === eventsGroupFilter);
   }
 
   // Default sorting: 1. Group asc, 2. Gender asc, 3. Name asc
@@ -2962,24 +2967,22 @@ function renderEventsTable() {
     eventsDetailTitle.textContent = `📋 출전 선수별 명단 (${list.length}명 표시 중 / 총 ${records.length}명)`;
   }
 
-  if (eventsFilteredCount) {
-    eventsFilteredCount.textContent = `총 ${list.length}명 표시 중`;
-  }
+  eventsTableBody.innerHTML = '';
 
   if (list.length === 0) {
-    eventsTableBody.innerHTML = `
-      <tr>
-        <td colspan="11" style="padding: 36px; color: var(--text-muted); font-size: 14px; text-align: center;">
-          일치하는 출전 선수가 없습니다.
-        </td>
-      </tr>
+    const emptyRow = document.createElement('tr');
+    emptyRow.innerHTML = `
+      <td colspan="12" style="padding: 36px; color: var(--text-muted); font-size: 14px; text-align: center;">
+        일치하는 출전 선수가 없습니다.
+      </td>
     `;
+    eventsTableBody.appendChild(emptyRow);
     return;
   }
 
-  eventsTableBody.innerHTML = list.map((item, idx) => {
-    const genderClass = item.gender === '남' ? 'badge-male' : 'badge-female';
-    const eventCount = (item.event1 ? 1 : 0) + (item.event2 ? 1 : 0);
+  list.forEach((item, idx) => {
+    const tr = document.createElement('tr');
+    tr.dataset.id = item.id;
 
     const relayAssignments = getStudentRelayAssignments(item.name);
     const relayTagsHtml = relayAssignments.length > 0
@@ -2990,74 +2993,79 @@ function renderEventsTable() {
         `).join('')}</div>`
       : '<span class="relay-chip empty">-</span>';
 
-    return `
-      <tr data-id="${item.id}">
-        <td class="col-no col-detail" style="text-align:center;">${idx + 1}</td>
-        <td class="col-group col-detail" style="text-align:center;">
-          <span class="group-badge">${escapeHtml(item.group || '-')}</span>
-        </td>
-        <td class="col-gender col-detail" style="text-align:center;">
-          <span class="gender-toggle ${genderClass}" data-id="${item.id}" title="클릭하여 성별 전환 (현재: ${item.gender})">
-            ${item.gender}
-          </span>
-        </td>
-        <td class="col-name" style="font-weight:700;">
-          <span class="swimmer-name-text">${escapeHtml(item.name)}</span>
-        </td>
-        <td class="col-relay" style="text-align:center;">
-          ${relayTagsHtml}
-        </td>
-        <td class="col-birth col-detail" style="text-align:center;">
-          <span class="birth-code">${escapeHtml(item.birthId || '-')}</span>
-        </td>
-        <td class="col-event">
-          <select 
-            class="event-select ${item.event1 ? 'has-event' : ''}" 
-            data-id="${item.id}" 
-            data-event-idx="1"
-            title="${escapeHtml(item.event1 ? formatPodiumTooltip(item.gender, item.group, item.event1) : '출전 종목 선택 (선택 시 작년 입상기록 확인)')}"
-          >
-            ${EVENT_OPTIONS.map(opt => {
-              const optPodium = opt ? getPodiumShort(item.gender, item.group, opt) : '';
-              const optLabel = opt ? (optPodium ? `${opt} [${optPodium}]` : opt) : '(선택 안 함)';
-              return `
-                <option value="${escapeHtml(opt)}" ${item.event1 === opt ? 'selected' : ''}>
-                  ${escapeHtml(optLabel)}
-                </option>
-              `;
-            }).join('')}
-          </select>
-        </td>
-        <td class="col-event">
-          <select 
-            class="event-select ${item.event2 ? 'has-event' : ''}" 
-            data-id="${item.id}" 
-            data-event-idx="2"
-            title="${escapeHtml(item.event2 ? formatPodiumTooltip(item.gender, item.group, item.event2) : '출전 종목 선택 (선택 시 작년 입상기록 확인)')}"
-          >
-            ${EVENT_OPTIONS.map(opt => {
-              const optPodium = opt ? getPodiumShort(item.gender, item.group, opt) : '';
-              const optLabel = opt ? (optPodium ? `${opt} [${optPodium}]` : opt) : '(선택 안 함)';
-              return `
-                <option value="${escapeHtml(opt)}" ${item.event2 === opt ? 'selected' : ''}>
-                  ${escapeHtml(optLabel)}
-                </option>
-              `;
-            }).join('')}
-          </select>
-        </td>
-        <td class="col-detail" style="text-align:center; font-size:12px; color:var(--text-muted); font-variant-numeric:tabular-nums;">
-          ${escapeHtml(item.phone || '-')}
-        </td>
-        <td class="col-detail" style="font-size:12px; color:var(--text-muted); text-align:left; max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${escapeHtml(item.address || '')}">
-          ${escapeHtml(item.address || '-')}
-        </td>
-        <td class="col-count col-detail" style="text-align:center;">
-          <span class="event-count-badge ${eventCount > 0 ? 'has-events' : ''}">${eventCount}개</span>
-        </td>
-      </tr>
+    tr.innerHTML = `
+      <td class="col-no col-detail" style="text-align:center;">${idx + 1}</td>
+      <td class="col-group col-detail" style="text-align:center;">
+        <span class="group-badge">${escapeHtml(item.group || '-')}</span>
+      </td>
+      <td class="col-gender col-detail" style="text-align:center;">
+        <span class="gender-badge ${item.gender === '남' ? 'male' : 'female'}">${item.gender || '남'}</span>
+      </td>
+      <td class="col-name" style="font-weight:700;">
+        ${escapeHtml(item.name || '무명')}
+      </td>
+      <td class="col-relay" style="text-align:center;">
+        ${relayTagsHtml}
+      </td>
+      <td class="col-age col-simple" style="text-align:center; font-weight:600; color:var(--text-main);">
+        ${item.age ? `${item.age}세` : '-'}
+      </td>
+      <td class="col-birth col-detail" style="text-align:center;">
+        <span class="birth-code">${escapeHtml(item.birthId || '-')}</span>
+      </td>
+      <td class="col-event">
+        <select 
+          class="event-select ${item.event1 ? 'has-event' : ''}" 
+          data-id="${item.id}" 
+          data-field="event1"
+          data-event-idx="1" 
+          title="${escapeHtml(item.event1 ? formatPodiumTooltip(item.gender, item.group, item.event1) : '출전 종목 선택 (선택 시 작년 입상기록 확인)')}"
+        >
+          <option value="">(미신청)</option>
+          ${EVENT_OPTIONS.filter(Boolean).map(opt => {
+            const optPodium = opt ? getPodiumShort(item.gender, item.group, opt) : '';
+            const optLabel = opt ? (optPodium ? `${opt} [${optPodium}]` : opt) : '(미신청)';
+            return `
+              <option value="${escapeHtml(opt)}" ${item.event1 === opt ? 'selected' : ''}>
+                ${escapeHtml(optLabel)}
+              </option>
+            `;
+          }).join('')}
+        </select>
+      </td>
+      <td class="col-event">
+        <select 
+          class="event-select ${item.event2 ? 'has-event' : ''}" 
+          data-id="${item.id}" 
+          data-field="event2"
+          data-event-idx="2" 
+          title="${escapeHtml(item.event2 ? formatPodiumTooltip(item.gender, item.group, item.event2) : '출전 종목 선택 (선택 시 작년 입상기록 확인)')}"
+        >
+          <option value="">(미신청)</option>
+          ${EVENT_OPTIONS.filter(Boolean).map(opt => {
+            const optPodium = opt ? getPodiumShort(item.gender, item.group, opt) : '';
+            const optLabel = opt ? (optPodium ? `${opt} [${optPodium}]` : opt) : '(미신청)';
+            return `
+              <option value="${escapeHtml(opt)}" ${item.event2 === opt ? 'selected' : ''}>
+                ${escapeHtml(optLabel)}
+              </option>
+            `;
+          }).join('')}
+        </select>
+      </td>
+      <td class="col-detail" style="text-align:center; font-size:12px; color:var(--text-muted); font-variant-numeric:tabular-nums;">
+        ${escapeHtml(item.phone || '-')}
+      </td>
+      <td class="col-detail" style="text-align:center; font-size:12px; font-weight:600; color:var(--text-main);">
+        ${escapeHtml(item.depositor || 'GMDC')}
+      </td>
+      <td class="col-detail" style="text-align:left; font-size:12px; color:var(--text-muted); max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${escapeHtml(item.address || '')}">
+        ${escapeHtml(item.address || '-')}
+      </td>
     `;
-  }).join('');
+
+    eventsTableBody.appendChild(tr);
+  });
 }
 
 function copyEventsToClipboard() {
@@ -3067,7 +3075,7 @@ function copyEventsToClipboard() {
     return;
   }
 
-  // Omit <th> headers, copy sequence (1-based), group, gender, name, birthId, event1, event2, phone, address, eventCount
+  // Omit <th> headers, copy sequence (1-based), group, gender, name, birthId, event1, event2, phone, depositor, address
   const rows = list.map((item, idx) => {
     return [
       idx + 1,
@@ -3078,8 +3086,8 @@ function copyEventsToClipboard() {
       item.event1 || '',
       item.event2 || '',
       item.phone || '',
-      item.address || '',
-      `${(item.event1 ? 1 : 0) + (item.event2 ? 1 : 0)}개`
+      item.depositor || 'GMDC',
+      item.address || ''
     ].join('\t');
   });
 
@@ -3158,18 +3166,16 @@ function bindEvents() {
     });
   });
 
-  if (btnRecordsModeSimple) {
-    btnRecordsModeSimple.addEventListener('click', () => applyRecordsViewMode('simple'));
-  }
-  if (btnRecordsModeDetailed) {
-    btnRecordsModeDetailed.addEventListener('click', () => applyRecordsViewMode('detailed'));
+  if (recordsModeSelect) {
+    recordsModeSelect.addEventListener('change', (e) => {
+      applyRecordsViewMode(e.target.value);
+    });
   }
 
-  if (btnModeSimple) {
-    btnModeSimple.addEventListener('click', () => applyEventsViewMode('simple'));
-  }
-  if (btnModeDetailed) {
-    btnModeDetailed.addEventListener('click', () => applyEventsViewMode('detailed'));
+  if (eventsModeSelect) {
+    eventsModeSelect.addEventListener('change', (e) => {
+      applyEventsViewMode(e.target.value);
+    });
   }
 
   // Panel Pin Buttons (Only 1 pinned at a time, hiding remaining cards)
@@ -3244,14 +3250,19 @@ function bindEvents() {
     });
   }
 
-  filterBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      filterBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      currentFilter = btn.dataset.filter;
+  if (filterGenderSelect) {
+    filterGenderSelect.addEventListener('change', (e) => {
+      currentFilter = e.target.value;
       renderTable();
     });
-  });
+  }
+
+  if (filterGroupSelect) {
+    filterGroupSelect.addEventListener('change', (e) => {
+      currentGroupFilter = e.target.value;
+      renderTable();
+    });
+  }
 
   if (eventsSearchInput) {
     eventsSearchInput.addEventListener('input', (e) => {
@@ -3260,18 +3271,16 @@ function bindEvents() {
     });
   }
 
-  eventsFilterBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      eventsFilterBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      currentEventsFilter = btn.dataset.eventsFilter;
+  if (eventsGenderSelect) {
+    eventsGenderSelect.addEventListener('change', (e) => {
+      eventsGenderFilter = e.target.value;
       renderEventsTable();
     });
-  });
+  }
 
   if (eventsGroupSelect) {
     eventsGroupSelect.addEventListener('change', (e) => {
-      currentEventsGroup = e.target.value;
+      eventsGroupFilter = e.target.value;
       renderEventsTable();
     });
   }
@@ -3404,7 +3413,7 @@ function bindEvents() {
 
   // Gender toggle with confirmation
   tableBody.addEventListener('click', (e) => {
-    const toggle = e.target.closest('.gender-toggle');
+    const toggle = e.target.closest('.gender-toggle, .gender-badge');
     if (!toggle) return;
 
     if (!canEditRecords()) {
