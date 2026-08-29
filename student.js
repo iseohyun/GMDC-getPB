@@ -25,7 +25,7 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.08.21.03_student';
+const APP_VERSION = 'v2026.08.30.01_student';
 let isScenarioMode = false;
 let isInitialSyncCompleted = false;
 let serverRecordsCache = null;
@@ -235,7 +235,8 @@ const DEFAULT_STUDENT_RECORDS = [
   {"id":19,"age":"13","group":"7그룹","gender":"여","name":"정채윤","birthId":"20120321-4","event1":"자유형 50","event2":"평영 50","phone":"010-8312-5384","club":"GMDC","depositor":"GMDC","address":"거제시 장평1로86 B동 204호","free":"31.06","back":"36.08","breast":"40.06","fly":"35.99"},
   {"id":21,"age":"7","group":"2그룹","gender":"여","name":"이설아","birthId":"","event1":"","event2":"","phone":"010-9374-1091","club":"GMDC","depositor":"GMDC","address":"거제시 제산로 51 힐스테이트 106동 102호","free":"","back":"","breast":"","fly":""},
   {"id":22,"age":"7","group":"2그룹","gender":"여","name":"지상희","birthId":"20181211-4","event1":"자유형 50","event2":"접영 50","phone":"010-3419-1020","club":"GMDC","depositor":"GMDC","address":"거제시문동1길 42, 109동1501호(센트럴푸르지오)","free":"","back":"","breast":"","fly":""},
-  {"id":23,"age":"9","group":"4그룹","gender":"남","name":"이승후","birthId":"","event1":"자유형 50","event2":"배영 50","phone":"010-9374-1091","club":"GMDC","depositor":"GMDC","address":"거제시 제산로 51 힐스테이트 106동 102호","free":"","back":"","breast":"","fly":""}
+  {"id":23,"age":"9","group":"4그룹","gender":"남","name":"이승후","birthId":"","event1":"자유형 50","event2":"배영 50","phone":"010-9374-1091","club":"GMDC","depositor":"GMDC","address":"거제시 제산로 51 힐스테이트 106동 102호","free":"","back":"","breast":"","fly":""},
+  {"id":24,"age":"8","group":"2그룹","gender":"남","name":"이서빈","birthId":"20180102-3","event1":"자유형 50","event2":"접영 50","phone":"010-3016-1982","club":"GMDC","depositor":"GMDC","address":"거제시 문동1길42, 110동 2501호","free":"","back":"","breast":"","fly":""}
 ];
 
 // Default Student Pinned Relay Members (학생부 단체전 고정 멤버)
@@ -1876,7 +1877,7 @@ function mergeWithDefaultData(remoteList) {
     };
   });
 
-  // Ensure any new members in DEFAULT_STUDENT_RECORDS (e.g. ID 21 이설아, ID 22 지상희, ID 23 이승후) are appended if missing
+  // Ensure any new members in DEFAULT_STUDENT_RECORDS (e.g. ID 21 이설아, ID 22 지상희, ID 23 이승후, ID 24 이서빈) are appended if missing
   DEFAULT_STUDENT_RECORDS.forEach(def => {
     if (!list.some(r => r.id === def.id || r.name === def.name)) {
       list.push(JSON.parse(JSON.stringify(def)));
