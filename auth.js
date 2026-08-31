@@ -38,7 +38,7 @@ googleProvider.setCustomParameters({ prompt: 'select_account' });
 
 // Admin & Deadline Configurations
 export const ADMIN_EMAIL = 'iseohyun@hanmail.net';
-export const DEADLINE_ISO = '2026-08-17T18:00:00+09:00';
+export const DEADLINE_ISO = '2026-09-01T18:00:00+09:00';
 
 let currentUser = null;
 let toastHandler = null;

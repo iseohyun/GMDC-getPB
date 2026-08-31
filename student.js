@@ -25,7 +25,7 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.08.30.01_student';
+const APP_VERSION = 'v2026.09.01.01_student';
 let isScenarioMode = false;
 let isInitialSyncCompleted = false;
 let serverRecordsCache = null;
@@ -36,8 +36,8 @@ const MODAL_STORAGE_KEY = 'gmdc_student_hide_notice_modal_date';
 const EVENTS_MODE_KEY = 'gmdc_student_events_view_mode';
 const RECORDS_MODE_KEY = 'gmdc_student_records_view_mode';
 
-// Deadline Configuration: 8월 17일(월) 18:00:00 KST
-const DEADLINE_ISO = '2026-08-17T18:00:00+09:00';
+// Deadline Configuration: 9월 1일(화) 18:00:00 KST
+const DEADLINE_ISO = '2026-09-01T18:00:00+09:00';
 const DEADLINE = new Date(DEADLINE_ISO);
 
 const STROKE_FIELDS = ['free', 'back', 'breast', 'fly'];
