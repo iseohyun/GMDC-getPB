@@ -25,7 +25,7 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.09.01.01_student';
+const APP_VERSION = 'v2026.09.01.02_student';
 let isScenarioMode = false;
 let isInitialSyncCompleted = false;
 let serverRecordsCache = null;
@@ -382,8 +382,8 @@ let eventsGroupFilter = 'all'; // Events view group ('all', '1그룹' ~ '7그룹
 let eventsSearchQuery = '';
 
 let currentView = 'records';
-let eventsViewMode = 'simple';
-let recordsViewMode = 'detailed';
+let eventsViewMode = 'simple'; // 'simple' (기본) | 'detailed' (관리자 전용)
+let recordsViewMode = 'simple'; // 'simple' (기본) | 'detailed' (관리자 전용)
 let pinnedComboCardId = null; // 고정된 조합 카드 ID (최대 1개)
 let saveTimeout = null;
 
@@ -430,6 +430,8 @@ function init() {
   initAuth({
     showToast: showToast,
     onAuthChange: () => {
+      initRecordsViewMode();
+      initEventsViewMode();
       renderTable();
       renderEventsTable();
     }
@@ -3176,13 +3178,31 @@ function bindEvents() {
 
   if (recordsModeSelect) {
     recordsModeSelect.addEventListener('change', (e) => {
+      if (e.target.value === 'detailed' && !isAdmin()) {
+        showToast('🔒 관리자 로그인 후 자세히 보기가 가능합니다.');
+        applyRecordsViewMode('simple');
+        return;
+      }
       applyRecordsViewMode(e.target.value);
+      if (isAdmin()) {
+        localStorage.setItem(RECORDS_MODE_KEY, e.target.value);
+      }
+      showToast(e.target.value === 'detailed' ? '📋 단체전 자세히 보기 모드로 전환되었습니다.' : '📋 단체전 간단히 보기 모드로 전환되었습니다.');
     });
   }
 
   if (eventsModeSelect) {
     eventsModeSelect.addEventListener('change', (e) => {
+      if (e.target.value === 'detailed' && !isAdmin()) {
+        showToast('🔒 관리자 로그인 후 자세히 보기가 가능합니다.');
+        applyEventsViewMode('simple');
+        return;
+      }
       applyEventsViewMode(e.target.value);
+      if (isAdmin()) {
+        localStorage.setItem(EVENTS_MODE_KEY, e.target.value);
+      }
+      showToast(e.target.value === 'detailed' ? '📋 개인전 자세히 보기 모드로 전환되었습니다.' : '📋 개인전 간단히 보기 모드로 전환되었습니다.');
     });
   }
 

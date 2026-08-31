@@ -32,7 +32,7 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.09.01.01';
+const APP_VERSION = 'v2026.09.01.02';
 let isScenarioMode = false;
 let isInitialSyncCompleted = false;
 let serverRecordsCache = null;
@@ -159,14 +159,14 @@ let currentTeamFilter = 'all'; // 'all', 'A', 'B'
 let currentGroupFilter = 'all'; // 'all', '1그룹' ~ '6그룹'
 let sortColumn = null;
 let sortDirection = 'asc';
-let recordsViewMode = 'detailed'; // 'detailed' (기본) | 'simple'
+let recordsViewMode = 'simple'; // 'simple' (기본) | 'detailed' (관리자 전용)
 
 // Events View State
 let eventsSearchQuery = '';
 let eventsGenderFilter = 'all';
 let eventsTeamFilter = 'all';
 let eventsGroupFilter = 'all';
-let eventsViewMode = 'simple'; // 'simple' (기본) | 'detailed'
+let eventsViewMode = 'simple'; // 'simple' (기본) | 'detailed' (관리자 전용)
 
 let pinnedComboCardId = null; // 고정된 조합 카드 ID (최대 1개)
 let saveTimeout = null;
@@ -442,6 +442,8 @@ function init() {
   initAuth({
     showToast: showToast,
     onAuthChange: () => {
+      initRecordsViewMode();
+      initEventsViewMode();
       renderTable();
       renderEventsTable();
     }
@@ -1856,32 +1858,56 @@ async function compareHistoryWithCurrentRecords() {
 }
 
 function initRecordsViewMode() {
-  const saved = localStorage.getItem(RECORDS_MODE_KEY);
-  recordsViewMode = saved ? saved : 'detailed'; // 기본: 자세히 (detailed)
+  if (!isAdmin()) {
+    recordsViewMode = 'simple';
+  } else {
+    const saved = localStorage.getItem(RECORDS_MODE_KEY);
+    recordsViewMode = saved ? saved : 'detailed';
+  }
   applyRecordsViewMode(recordsViewMode);
 }
 
 function applyRecordsViewMode(mode) {
+  if (!isAdmin() && mode === 'detailed') {
+    mode = 'simple';
+  }
   recordsViewMode = mode;
   const select = document.getElementById('recordsModeSelect');
-  if (select) select.value = mode;
+  if (select) {
+    const admin = isAdmin();
+    select.innerHTML = admin
+      ? `<option value="simple"${mode === 'simple' ? ' selected' : ''}>간단히</option><option value="detailed"${mode === 'detailed' ? ' selected' : ''}>자세히</option>`
+      : `<option value="simple" selected>간단히</option>`;
+  }
   if (recordTable) recordTable.classList.toggle('is-simple', mode === 'simple');
 }
 
 function initEventsViewMode() {
-  const saved = localStorage.getItem(EVENTS_MODE_KEY);
-  eventsViewMode = (saved === 'detailed') ? 'detailed' : 'simple'; // 기본: simple
+  if (!isAdmin()) {
+    eventsViewMode = 'simple';
+  } else {
+    const saved = localStorage.getItem(EVENTS_MODE_KEY);
+    eventsViewMode = (saved === 'detailed') ? 'detailed' : 'simple';
+  }
   applyEventsViewMode(eventsViewMode);
 }
 
 function applyEventsViewMode(mode) {
+  if (!isAdmin() && mode === 'detailed') {
+    mode = 'simple';
+  }
   eventsViewMode = mode;
   const select = document.getElementById('eventsModeSelect');
-  if (select) select.value = mode;
+  if (select) {
+    const admin = isAdmin();
+    select.innerHTML = admin
+      ? `<option value="simple"${mode === 'simple' ? ' selected' : ''}>간단히</option><option value="detailed"${mode === 'detailed' ? ' selected' : ''}>자세히</option>`
+      : `<option value="simple" selected>간단히</option>`;
+  }
   if (eventsDetailTable) eventsDetailTable.classList.toggle('is-simple', mode === 'simple');
   const btnCopyEvents = document.getElementById('btnCopyEventsTsv');
   if (btnCopyEvents) {
-    btnCopyEvents.style.display = (mode === 'detailed') ? 'inline-flex' : 'none';
+    btnCopyEvents.style.display = (mode === 'detailed' && isAdmin()) ? 'inline-flex' : 'none';
   }
 }
 
@@ -3536,8 +3562,15 @@ function bindEvents() {
 
   if (recordsModeSelect) {
     recordsModeSelect.addEventListener('change', (e) => {
+      if (e.target.value === 'detailed' && !isAdmin()) {
+        showToast('🔒 관리자 로그인 후 자세히 보기가 가능합니다.');
+        applyRecordsViewMode('simple');
+        return;
+      }
       applyRecordsViewMode(e.target.value);
-      localStorage.setItem(RECORDS_MODE_KEY, e.target.value);
+      if (isAdmin()) {
+        localStorage.setItem(RECORDS_MODE_KEY, e.target.value);
+      }
       showToast(e.target.value === 'detailed' ? '📋 단체전 자세히 보기 모드로 전환되었습니다.' : '📋 단체전 간단히 보기 모드로 전환되었습니다.');
     });
   }
@@ -3646,8 +3679,15 @@ function bindEvents() {
 
   if (eventsModeSelect) {
     eventsModeSelect.addEventListener('change', (e) => {
+      if (e.target.value === 'detailed' && !isAdmin()) {
+        showToast('🔒 관리자 로그인 후 자세히 보기가 가능합니다.');
+        applyEventsViewMode('simple');
+        return;
+      }
       applyEventsViewMode(e.target.value);
-      localStorage.setItem(EVENTS_MODE_KEY, e.target.value);
+      if (isAdmin()) {
+        localStorage.setItem(EVENTS_MODE_KEY, e.target.value);
+      }
       showToast(e.target.value === 'detailed' ? '📋 개인전 자세히 보기 모드로 전환되었습니다.' : '📋 개인전 간단히 보기 모드로 전환되었습니다.');
     });
   }
