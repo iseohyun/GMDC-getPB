@@ -25,7 +25,7 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.09.01.03_student';
+const APP_VERSION = 'v2026.09.01.04_student';
 let isScenarioMode = false;
 let isInitialSyncCompleted = false;
 let serverRecordsCache = null;
@@ -1674,32 +1674,56 @@ async function compareHistoryWithCurrentRecords() {
 }
 
 function initRecordsViewMode() {
-  const saved = localStorage.getItem(RECORDS_MODE_KEY);
-  recordsViewMode = saved ? saved : 'detailed'; // 기본: 자세히 (detailed)
+  if (!isAdmin()) {
+    recordsViewMode = 'simple';
+  } else {
+    const saved = localStorage.getItem(RECORDS_MODE_KEY);
+    recordsViewMode = saved ? saved : 'detailed';
+  }
   applyRecordsViewMode(recordsViewMode);
 }
 
 function applyRecordsViewMode(mode) {
+  if (!isAdmin() && mode === 'detailed') {
+    mode = 'simple';
+  }
   recordsViewMode = mode;
   const select = document.getElementById('recordsModeSelect');
-  if (select) select.value = mode;
+  if (select) {
+    const admin = isAdmin();
+    select.innerHTML = admin
+      ? `<option value="simple"${mode === 'simple' ? ' selected' : ''}>간단히</option><option value="detailed"${mode === 'detailed' ? ' selected' : ''}>자세히</option>`
+      : `<option value="simple" selected>간단히</option>`;
+  }
   if (recordTable) recordTable.classList.toggle('is-simple', mode === 'simple');
 }
 
 function initEventsViewMode() {
-  const saved = localStorage.getItem(EVENTS_MODE_KEY);
-  eventsViewMode = (saved === 'detailed') ? 'detailed' : 'simple'; // 기본: simple
+  if (!isAdmin()) {
+    eventsViewMode = 'simple';
+  } else {
+    const saved = localStorage.getItem(EVENTS_MODE_KEY);
+    eventsViewMode = (saved === 'detailed') ? 'detailed' : 'simple';
+  }
   applyEventsViewMode(eventsViewMode);
 }
 
 function applyEventsViewMode(mode) {
+  if (!isAdmin() && mode === 'detailed') {
+    mode = 'simple';
+  }
   eventsViewMode = mode;
   const select = document.getElementById('eventsModeSelect');
-  if (select) select.value = mode;
+  if (select) {
+    const admin = isAdmin();
+    select.innerHTML = admin
+      ? `<option value="simple"${mode === 'simple' ? ' selected' : ''}>간단히</option><option value="detailed"${mode === 'detailed' ? ' selected' : ''}>자세히</option>`
+      : `<option value="simple" selected>간단히</option>`;
+  }
   if (eventsDetailTable) eventsDetailTable.classList.toggle('is-simple', mode === 'simple');
   const btnCopyEvents = document.getElementById('btnCopyEventsTsv');
   if (btnCopyEvents) {
-    btnCopyEvents.style.display = (mode === 'detailed') ? 'inline-flex' : 'none';
+    btnCopyEvents.style.display = (mode === 'detailed' && isAdmin()) ? 'inline-flex' : 'none';
   }
 }
 
