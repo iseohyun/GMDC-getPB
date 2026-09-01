@@ -25,7 +25,7 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.09.01.09_student';
+const APP_VERSION = 'v2026.09.02.01_student';
 let isScenarioMode = false;
 let isInitialSyncCompleted = false;
 let serverRecordsCache = null;
@@ -233,9 +233,9 @@ const DEFAULT_STUDENT_RECORDS = [
   {"id": 17, "age": "13", "group": "7그룹", "gender": "남", "name": "이선우", "birthId": "20130829-3", "event1": "자유형 50", "event2": "배영 50", "phone": "010-4101-8171", "club": "거제야호", "depositor": "거제야호", "address": "거제시 사등면 두동로54-40 영진 201동 1505호", "free": "33.15", "back": "", "breast": "", "fly": ""},
   {"id": 18, "age": "13", "group": "7그룹", "gender": "여", "name": "안서윤", "birthId": "20130806-4", "event1": "자유형 50", "event2": "배영 50", "phone": "010-4005-7171", "club": "거제야호", "depositor": "거제야호", "address": "거제시 아주2로138 102동 1801호", "free": "35.48", "back": "", "breast": "", "fly": ""},
   {"id": 19, "age": "14", "group": "7그룹", "gender": "여", "name": "정채윤", "birthId": "20120321-4", "event1": "자유형 50", "event2": "평영 50", "phone": "010-8312-5384", "club": "거제야호", "depositor": "거제야호", "address": "거제시 장평1로86 B동 204호", "free": "35.78", "back": "", "breast": "", "fly": ""},
-  {"id": 21, "age": "8", "group": "2그룹", "gender": "여", "name": "이설아", "birthId": "", "event1": "", "event2": "", "phone": "010-9374-1091", "club": "거제야호", "depositor": "거제야호", "address": "거제시 제산로 51 힐스테이트 106동 102호", "free": "", "back": "", "breast": "", "fly": ""},
-  {"id": 22, "age": "8", "group": "2그룹", "gender": "여", "name": "지상희", "birthId": "20181211-4", "event1": "자유형 50", "event2": "평영 50", "phone": "010-3419-1020", "club": "거제야호", "depositor": "거제야호", "address": "거제시문동1길 42, 109동1501호(센트럴푸르지오)", "free": "", "back": "", "breast": "", "fly": ""},
-  {"id": 23, "age": "10", "group": "4그룹", "gender": "남", "name": "이승후", "birthId": "", "event1": "자유형 50", "event2": "배영 50", "phone": "010-9374-1091", "club": "거제야호", "depositor": "거제야호", "address": "거제시 제산로 51 힐스테이트 106동 102호", "free": "", "back": "", "breast": "", "fly": ""},
+  {"id": 21, "age": "8", "group": "2그룹", "gender": "여", "name": "이설하", "birthId": "20180316-4", "event1": "자유형 50", "event2": "배영 50", "phone": "010-9374-1091", "club": "거제야호", "depositor": "거제야호", "address": "거제시 제산로 51 힐스테이트 106동 102호", "free": "", "back": "", "breast": "", "fly": ""},
+  {"id": 22, "age": "8", "group": "2그룹", "gender": "여", "name": "지상희", "birthId": "20181211-4", "event1": "자유형 50", "event2": "접영 50", "phone": "010-3419-1020", "club": "거제야호", "depositor": "거제야호", "address": "거제시문동1길 42, 109동1501호(센트럴푸르지오)", "free": "", "back": "", "breast": "", "fly": ""},
+  {"id": 23, "age": "10", "group": "4그룹", "gender": "남", "name": "이승후", "birthId": "20160329-3", "event1": "자유형 50", "event2": "배영 50", "phone": "010-9374-1091", "club": "거제야호", "depositor": "거제야호", "address": "거제시 제산로 51 힐스테이트 106동 102호", "free": "", "back": "", "breast": "", "fly": ""},
   {"id": 24, "age": "8", "group": "2그룹", "gender": "남", "name": "이서빈", "birthId": "20180102-3", "event1": "자유형 50", "event2": "접영 50", "phone": "010-3016-1982", "club": "거제야호", "depositor": "거제야호", "address": "거제시 문동1길42, 110동 2501호", "free": "", "back": "", "breast": "", "fly": ""}
 ];
 
