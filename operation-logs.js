@@ -15,7 +15,7 @@ import {
   query, 
   orderBy
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-import { initAuth, isAdmin, getCurrentUser, formatUserDisplayName } from "./auth.js";
+import { initAuth, isAdmin, getCurrentUser, formatUserDisplayName, canViewOperationNotes, canEditOperationNotes } from "./auth.js";
 import { 
   DEFAULT_OPERATION_LOGS, 
   STORAGE_LOGS_CACHE_KEY, 
@@ -153,7 +153,14 @@ function renderLogsList() {
   const container = document.getElementById('logsListContainer');
   if (!container) return;
 
-  const admin = isAdmin();
+  const canView = canViewOperationNotes();
+  const canEdit = canEditOperationNotes();
+
+  // Dynamic visibility for toolbar buttons
+  const btnNewLog = document.getElementById('btnNewLog');
+  if (btnNewLog) {
+    btnNewLog.style.display = canEdit ? 'inline-flex' : 'none';
+  }
 
   // Apply filters
   let filtered = [...logsState];
@@ -187,9 +194,9 @@ function renderLogsList() {
         <div class="logs-empty-icon">📝</div>
         <div class="logs-empty-title">등록된 운영기록이 없습니다.</div>
         <div class="logs-empty-desc">
-          ${admin ? '상단의 <strong>[+ 신규 운영기록 작성]</strong> 버튼을 눌러 새로운 회의록 또는 훈련 운영 기록을 작성해 주세요.' : '현재 등록된 기록이 없습니다. 관리자 로그인 후 신규 등록이 가능합니다.'}
+          ${canEdit ? '상단의 <strong>[+ 신규 운영기록 작성]</strong> 버튼을 눌러 새로운 회의록 또는 훈련 운영 기록을 작성해 주세요.' : '현재 등록된 기록이 없습니다.'}
         </div>
-        ${admin ? `
+        ${canEdit ? `
           <button type="button" class="btn btn-primary" id="btnEmptyNewLog" style="font-weight:700;">
             + 신규 운영기록 작성하기
           </button>
@@ -202,14 +209,14 @@ function renderLogsList() {
   container.innerHTML = filtered.map(log => {
     const catClass = getCategoryBadgeClass(log.category);
     
-    // Header action and toggle icon depending on admin state
-    const actionAttr = admin ? 'data-action="toggle-card"' : 'data-action="locked-card"';
-    const toggleIconHtml = admin 
+    // Header action and toggle icon depending on canView permission
+    const actionAttr = canView ? 'data-action="toggle-card"' : 'data-action="locked-card"';
+    const toggleIconHtml = canView 
       ? `<span class="log-toggle-chevron" title="세부사항 펼치기/접기">▶</span>`
-      : `<span class="log-lock-badge" title="세부사항은 관리자 로그인 후 확인 가능합니다">🔒</span>`;
+      : `<span class="log-lock-badge" title="세부사항은 운영진 로그인 후 확인 가능합니다">🔒</span>`;
 
-    // Details block: rendered for admin only
-    const detailsHtml = admin ? `
+    // Details block: rendered when canView is true
+    const detailsHtml = canView ? `
       <div class="log-card-details">
         <div class="meeting-meta" style="margin-bottom: 14px; font-size: 12.5px;">
           <div class="meeting-meta-item"><strong>📅 일시:</strong> ${escapeHtml(log.date || '-')}${log.time ? ' ' + escapeHtml(log.time) : ''}</div>
@@ -234,30 +241,30 @@ function renderLogsList() {
       <div class="log-card-details log-card-locked-details">
         <div class="log-locked-notice">
           <span class="log-locked-icon">🔒</span>
-          <span>상세 회의록 및 훈련 운영 세부사항은 관리자 로그인 후 확인하실 수 있습니다.</span>
+          <span>상세 회의록 및 훈련 운영 세부사항은 운영진 로그인 후 확인하실 수 있습니다.</span>
         </div>
       </div>
     `;
 
     return `
-      <article class="log-item-card ${admin ? 'is-admin-card' : 'is-user-locked-card'}" id="log_card_${escapeHtml(log.id)}" data-log-id="${escapeHtml(log.id)}" data-date="${escapeHtml(log.date || '')}">
-        <div class="log-card-header" ${actionAttr} title="${admin ? '클릭하여 세부사항 펼치기/접기' : '세부사항은 관리자 로그인 후 확인 가능합니다'}">
+      <article class="log-item-card ${canView ? 'is-admin-card' : 'is-user-locked-card'}" id="log_card_${escapeHtml(log.id)}" data-log-id="${escapeHtml(log.id)}" data-date="${escapeHtml(log.date || '')}">
+        <div class="log-card-header" ${actionAttr} title="${canView ? '클릭하여 세부사항 펼치기/접기' : '세부사항은 운영진 로그인 후 확인 가능합니다'}">
           <div class="log-title-area">
             ${toggleIconHtml}
             <span class="log-date-tag">📅 ${escapeHtml(log.date || '-')}</span>
             <span class="log-category-badge ${catClass}">${escapeHtml(log.category || '기록')}</span>
             <span class="log-title-text">${escapeHtml(log.title || '제목 없음')}</span>
           </div>
-          ${admin ? `
+          ${canEdit ? `
             <div class="log-admin-actions">
               <button type="button" class="btn-log-action edit" data-action="edit" data-id="${escapeHtml(log.id)}">✏️ 수정</button>
               <button type="button" class="btn-log-action delete" data-action="delete" data-id="${escapeHtml(log.id)}">🗑️ 삭제</button>
             </div>
-          ` : `
+          ` : (!canView ? `
             <div class="log-user-lock-tag" title="관리자 전용 세부내용">
-              <span class="lock-tag-text">🔒 관리자 전용</span>
+              <span class="lock-tag-text">🔒 운영진 전용</span>
             </div>
-          `}
+          ` : '')}
         </div>
 
         ${detailsHtml}
@@ -270,8 +277,8 @@ function renderLogsList() {
  * Open Modal for New or Edit Log
  */
 function openLogModal(logId = null) {
-  if (!isAdmin()) {
-    showToast('🔒 관리자 로그인 후 작성이 가능합니다.');
+  if (!canEditOperationNotes()) {
+    showToast('🔒 운영기록 작성 및 수정 권한이 없습니다. (운영진 권한 필요)');
     return;
   }
 
@@ -388,8 +395,8 @@ async function saveLogToFirestore() {
  * Delete Log from Firestore (Tombstone & Local Cache Instant Sync)
  */
 async function deleteLogFromFirestore(logId) {
-  if (!isAdmin()) {
-    showToast('🔒 관리자 권한이 필요합니다.');
+  if (!canEditOperationNotes()) {
+    showToast('🔒 운영기록 삭제 권한이 없습니다. (운영진 권한 필요)');
     return;
   }
 
@@ -551,8 +558,8 @@ export function initOperationLogs() {
     // 3. Print All Detailed Logs as PDF (Expand all cards and window.print)
     if (e.target.closest('#btnPrintAllSchedule') || e.target.closest('#btnPrintAllPdf')) {
       e.preventDefault();
-      if (!isAdmin()) {
-        showToast('🔒 세부사항이 포함된 PDF 저장은 관리자 로그인 후 지원됩니다.');
+      if (!canViewOperationNotes()) {
+        showToast('🔒 세부사항이 포함된 PDF 저장은 열람 권한(운영진 로그인)이 필요합니다.');
         const loginBtn = document.getElementById('btnGoogleLogin');
         if (loginBtn) {
           loginBtn.classList.add('pulse-highlight');

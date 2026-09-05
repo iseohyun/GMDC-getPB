@@ -11,9 +11,18 @@ import {
   signOut, 
   onAuthStateChanged 
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { 
+  getFirestore, 
+  doc, 
+  onSnapshot,
+  setDoc,
+  collection,
+  getDocs
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const auth = getAuth(firebaseApp);
 const googleProvider = new GoogleAuthProvider();
+const db = getFirestore(firebaseApp);
 
 // Re-export for backward compatibility (modules that import ADMIN_EMAIL from auth.js)
 export const ADMIN_EMAIL = ADMIN_EMAILS[0];
@@ -22,6 +31,77 @@ export { DEADLINE_ISO };
 let currentUser = null;
 let toastHandler = null;
 let authChangeCallbacks = [];
+
+// Dynamic Permissions State from Firestore (config/permissions)
+let permissionState = {
+  masterAdmin: "iseohyun@hanmail.net",
+  adminEmails: [...ADMIN_EMAILS],
+  admins: {
+    "iseohyun@hanmail.net": {
+      role: "master",
+      name: "최고 관리자",
+      permissions: { attendance: true, roster: true, operation: true, calendar: true, adminManage: true }
+    }
+  },
+  attendanceEdit: "all",   // 'all' | 'admin'
+  rosterEdit: "admin",     // 'admin' | 'all'
+  operationView: "all"     // 'all' | 'admin' (운영기록 열람 권한)
+};
+
+// Start listening to config/permissions in Firestore
+try {
+  const permDocRef = doc(db, "config", "permissions");
+  onSnapshot(permDocRef, (snap) => {
+    if (snap.exists()) {
+      const data = snap.data();
+      const master = data.masterAdmin || "iseohyun@hanmail.net";
+      const emails = Array.isArray(data.adminEmails) 
+        ? data.adminEmails.map(e => String(e).toLowerCase().trim()) 
+        : [...ADMIN_EMAILS];
+      if (!emails.includes(master.toLowerCase().trim())) {
+        emails.unshift(master.toLowerCase().trim());
+      }
+
+      // Restore or build granular admins map
+      const adminsMap = data.admins && typeof data.admins === 'object' ? { ...data.admins } : {};
+      // Ensure master admin has full permissions
+      adminsMap[master.toLowerCase().trim()] = {
+        role: "master",
+        name: (adminsMap[master.toLowerCase().trim()] && adminsMap[master.toLowerCase().trim()].name) || "최고 관리자",
+        permissions: { attendance: true, roster: true, operation: true, calendar: true, adminManage: true }
+      };
+
+      // Ensure any email in adminEmails exists in admins map
+      emails.forEach(em => {
+        if (!adminsMap[em]) {
+          adminsMap[em] = {
+            role: "manager",
+            name: em.split('@')[0],
+            permissions: { attendance: true, roster: true, operation: true, calendar: true, adminManage: false }
+          };
+        }
+      });
+
+      permissionState = {
+        masterAdmin: master,
+        adminEmails: emails,
+        admins: adminsMap,
+        attendanceEdit: data.attendanceEdit || "all",
+        rosterEdit: data.rosterEdit || "admin",
+        operationView: data.operationView || "all"
+      };
+    }
+    applyAuthState();
+  }, (err) => {
+    console.warn("Firestore config/permissions listener warning:", err);
+  });
+} catch (e) {
+  console.warn("Could not attach permissions listener:", e);
+}
+
+export function getPermissionState() {
+  return { ...permissionState };
+}
 
 export function isDeadlineExpired() {
   return new Date() > new Date(DEADLINE_ISO);
@@ -37,17 +117,127 @@ export function isLoggedIn() {
 
 export function isAdmin() {
   if (!currentUser || !currentUser.email) return false;
-  return ADMIN_EMAILS.includes(currentUser.email.toLowerCase());
+  const userEmail = currentUser.email.toLowerCase().trim();
+  return permissionState.adminEmails.includes(userEmail) || ADMIN_EMAILS.includes(userEmail);
+}
+
+export function isMasterAdmin() {
+  if (!currentUser || !currentUser.email) return false;
+  return currentUser.email.toLowerCase().trim() === permissionState.masterAdmin.toLowerCase().trim();
+}
+
+export function hasPermission(permKey) {
+  if (!currentUser || !currentUser.email) return false;
+  const userEmail = currentUser.email.toLowerCase().trim();
+  if (isMasterAdmin()) return true; // Master Admin has all permissions
+  if (!isAdmin()) return false;
+
+  const adminDetail = permissionState.admins && permissionState.admins[userEmail];
+  if (adminDetail && adminDetail.permissions) {
+    return adminDetail.permissions[permKey] === true;
+  }
+  // Fallback for legacy admin without explicit flags: true
+  return true;
+}
+
+export function canEditAttendance() {
+  if (permissionState.attendanceEdit === 'all') return true;
+  return hasPermission('attendance');
+}
+
+export function isAttendanceEditAllowed() {
+  return canEditAttendance(); // Backward compatible alias
 }
 
 export function canEditRecords() {
-  if (isAdmin()) {
-    return true; // Admin can always edit records even after deadline
+  if (hasPermission('roster')) {
+    return true; // Roster manager can always edit records even after deadline
   }
   if (isDeadlineExpired()) {
-    return false; // After deadline: non-admins cannot edit records
+    return false; // After deadline: non-managers cannot edit records
   }
-  return true; // During open period: editing permitted
+  return permissionState.rosterEdit === 'all'; // Depends on dynamic policy
+}
+
+export function canViewOperationNotes() {
+  if (permissionState.operationView === 'all') return true;
+  return isAdmin() || hasPermission('operation');
+}
+
+export function canEditOperationNotes() {
+  return hasPermission('operation');
+}
+
+export function canEditCalendar() {
+  return hasPermission('calendar');
+}
+
+export function canManageAdmins() {
+  if (isMasterAdmin()) return true;
+  return hasPermission('adminManage');
+}
+
+/**
+ * Record user profile to Firestore `users` collection upon successful login
+ */
+export async function recordUserLogin(user) {
+  if (!user || !user.email) return;
+  try {
+    const emailKey = user.email.toLowerCase().trim().replace(/[./@]/g, '_');
+    const userDocRef = doc(db, "users", emailKey);
+    await setDoc(userDocRef, {
+      email: user.email.toLowerCase().trim(),
+      displayName: user.displayName || '',
+      photoURL: user.photoURL || '',
+      lastLoginAt: Date.now()
+    }, { merge: true });
+  } catch (err) {
+    console.warn("Could not record user login history to Firestore:", err);
+  }
+}
+
+/**
+ * Fetch known/previously logged-in users for admin autocomplete suggestions
+ */
+export async function getKnownUsers() {
+  const usersMap = new Map();
+
+  // 1. Add current admin emails and master admin as baseline
+  const seedEmails = [
+    permissionState.masterAdmin,
+    ...permissionState.adminEmails,
+    ...ADMIN_EMAILS
+  ];
+  seedEmails.forEach(em => {
+    if (em) {
+      const clean = em.toLowerCase().trim();
+      const name = (permissionState.admins && permissionState.admins[clean] && permissionState.admins[clean].name) || clean.split('@')[0];
+      usersMap.set(clean, { email: clean, displayName: name, source: 'admin' });
+    }
+  });
+
+  // 2. Fetch from Firestore `users` collection
+  try {
+    const usersColRef = collection(db, "users");
+    const snap = await getDocs(usersColRef);
+    snap.forEach(docSnap => {
+      const data = docSnap.data();
+      if (data && data.email) {
+        const email = data.email.toLowerCase().trim();
+        usersMap.set(email, {
+          email: email,
+          displayName: data.displayName || usersMap.get(email)?.displayName || email.split('@')[0],
+          photoURL: data.photoURL || '',
+          lastLoginAt: data.lastLoginAt || 0,
+          source: 'login_history'
+        });
+      }
+    });
+  } catch (err) {
+    console.warn("Could not query `users` collection (using baseline fallback):", err);
+  }
+
+  return Array.from(usersMap.values());
 }
 
 export function formatUserDisplayName(user) {
@@ -166,6 +356,36 @@ export function applyAuthState() {
     }
   }
 
+  // Dynamic Admin Nav Tab in division-nav
+  const navBar = document.querySelector('.division-nav');
+  if (navBar) {
+    let adminTab = document.getElementById('adminNavTab');
+    if (admin) {
+      if (!adminTab) {
+        adminTab = document.createElement('a');
+        adminTab.href = 'admin.html';
+        adminTab.id = 'adminNavTab';
+        adminTab.className = 'division-tab admin-tab';
+        adminTab.innerHTML = '⚙️ 관리자 설정';
+        adminTab.title = '시스템 권한 및 정책 관리자 페이지';
+        navBar.appendChild(adminTab);
+      }
+      const isCurrentAdminPage = window.location.pathname.endsWith('admin.html');
+      adminTab.classList.toggle('active', isCurrentAdminPage);
+    } else {
+      if (adminTab && !window.location.pathname.endsWith('admin.html')) {
+        adminTab.remove();
+      }
+      // If user is on admin.html and not admin, guard and redirect
+      if (window.location.pathname.endsWith('admin.html')) {
+        if (toastHandler) toastHandler('⚠️ 관리자 전용 페이지입니다. 메인 화면으로 이동합니다.');
+        setTimeout(() => {
+          window.location.href = 'index.html';
+        }, 1200);
+      }
+    }
+  }
+
   // Dispatch auth state event
   window.dispatchEvent(new CustomEvent('gmdc:auth-change', { 
     detail: { 
@@ -230,6 +450,9 @@ export function initAuth(options = {}) {
   // Listen to Firebase Auth state changes
   onAuthStateChanged(auth, (user) => {
     currentUser = user;
+    if (user) {
+      recordUserLogin(user);
+    }
     applyAuthState();
   });
 }

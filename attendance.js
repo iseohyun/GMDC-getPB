@@ -25,7 +25,7 @@ import {
   exportRosterAsPng as _exportRosterAsPng
 } from "./exportService.js";
 import { getFirestore, doc, onSnapshot, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-import { initAuth, isAdmin, getCurrentUser } from "./auth.js";
+import { initAuth, isAdmin, getCurrentUser, isAttendanceEditAllowed } from "./auth.js";
 import { openRulesModal } from "./prospectus.js";
 
 // Re-export for backward compatibility
@@ -784,7 +784,7 @@ async function recordAttendanceTime(swimmerKey, dateKey, timeStr) {
       await setDoc(docAttendanceRef, {
         updatedAt: now,
         records: updatedMap,
-        lastEditor: getCurrentUser() ? getCurrentUser().email : 'admin'
+        lastEditor: getCurrentUser() ? getCurrentUser().email : (isAdmin() ? 'admin' : 'swimmer')
       }, { merge: true });
     } catch (e) {
       console.error('Failed to sync attendance to Firestore:', e);
@@ -904,7 +904,7 @@ export function renderAttendanceTable() {
           data-swimmer-name="${s.name}" 
           data-date-key="${nearestDate.key}" 
           data-date-label="${nearestDate.label}"
-          title="${isAdmin() ? `클릭하여 ${s.name}의 ${nearestDate.label} 출퇴장 시간 수정` : `${s.name} - ${nearestDate.label}: ${isAtt ? timeVal : '미출석'}`}"
+          title="${isAttendanceEditAllowed() ? `클릭하여 ${s.name} 선수의 ${nearestDate.label} 출퇴장 시간 입력 및 수정` : `${s.name} - ${nearestDate.label}: ${isAtt ? timeVal : '미출석'}`}"
         >
           ${renderAttendanceCellContent(timeVal)}
         </td>
@@ -937,7 +937,7 @@ export function renderAttendanceTable() {
               data-swimmer-name="${s.name}" 
               data-date-key="${d.key}" 
               data-date-label="${d.label}"
-              title="${isAdmin() ? `클릭하여 ${s.name}의 ${d.label} 출퇴장 시간 수정` : `${s.name} - ${d.label}: ${isAtt ? timeVal : '미출석'}`}"
+              title="${isAttendanceEditAllowed() ? `클릭하여 ${s.name} 선수의 ${d.label} 출퇴장 시간 입력 및 수정` : `${s.name} - ${d.label}: ${isAtt ? timeVal : '미출석'}`}"
             >
               ${renderAttendanceCellContent(timeVal)}
             </td>
@@ -1199,9 +1199,9 @@ function setupTimePickerModal() {
     const cell = e.target.closest('.cell-attendance');
     if (!cell) return;
 
-    if (!isAdmin()) {
+    if (!isAttendanceEditAllowed()) {
       if (window.showToast) {
-        window.showToast('⚠️ 훈련 출석 체크는 관리자 계정으로 로그인 후 수정할 수 있습니다.');
+        window.showToast('⚠️ 훈련 출석 체크가 현재 [관리자 전용]으로 설정되어 있습니다. (관리자 로그인 필요)');
       }
       return;
     }
