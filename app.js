@@ -20,7 +20,7 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.09.02.01';
+const APP_VERSION = 'v2026.09.06.08';
 let isScenarioMode = false;
 let isInitialSyncCompleted = false;
 let serverRecordsCache = null;
@@ -4367,4 +4367,8 @@ function escapeHtml(str) {
 }
 
 // Run on page load
-document.addEventListener('DOMContentLoaded', init);
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}

@@ -20,7 +20,7 @@
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚙️</text></svg>">
-  <link rel="stylesheet" href="style.css?v=20260906_07">
+  <link rel="stylesheet" href="style.css?v=20260906_08">
 </head>
 
 <body>
@@ -95,17 +95,17 @@
           <div class="card-body">
             <div class="radio-option-group">
               <label class="radio-option-card">
-                <input type="radio" name="optAttendanceEdit" value="all" checked />
-                <div class="radio-option-content">
-                  <strong class="opt-title">🌐 전체 공개 (누구나 입력/수정)</strong>
-                  <span class="opt-desc">비로그인 일반 회원 및 참가 선수 누구나 본인 및 동료의 출퇴장 시간을 자유롭게 입력할 수 있습니다. (권장)</span>
-                </div>
-              </label>
-              <label class="radio-option-card">
                 <input type="radio" name="optAttendanceEdit" value="admin" />
                 <div class="radio-option-content">
                   <strong class="opt-title">🔒 관리자 전용 (관리자만 입력/수정)</strong>
                   <span class="opt-desc">등록된 관리자 계정으로 로그인한 사용자만 출퇴장 시간을 입력 및 수정할 수 있습니다.</span>
+                </div>
+              </label>
+              <label class="radio-option-card">
+                <input type="radio" name="optAttendanceEdit" value="all" checked />
+                <div class="radio-option-content">
+                  <strong class="opt-title">🌐 전체 공개 (누구나 입력/수정)</strong>
+                  <span class="opt-desc">비로그인 일반 회원 및 참가 선수 누구나 본인 및 동료의 출퇴장 시간을 자유롭게 입력할 수 있습니다. (권장)</span>
                 </div>
               </label>
             </div>
@@ -141,10 +141,10 @@
           </div>
         </section>
 
-        <!-- Setting Card 3: 운영기록(회의록) 열람 권한 (신규) -->
+        <!-- Setting Card 3: 운영기록(회의록) 열람 권한 -->
         <section class="admin-setting-card" style="margin-top: 16px;">
           <div class="card-header">
-            <span class="card-icon">📝</span>
+            <span class="card-icon">📖</span>
             <div>
               <h3 class="card-title">운영기록 (회의록) 열람 권한</h3>
               <p class="card-desc">운영기록 화면에서 상세 회의록 및 훈련 운영 세부사항을 열람할 수 있는 범위를 설정합니다.</p>
@@ -153,24 +153,53 @@
           <div class="card-body">
             <div class="radio-option-group">
               <label class="radio-option-card">
-                <input type="radio" name="optOperationView" value="all" checked />
-                <div class="radio-option-content">
-                  <strong class="opt-title">🌐 전체 공개 (누구나 열람)</strong>
-                  <span class="opt-desc">일반 회원 및 참가 선수 누구나 상세 회의록과 의결사항을 자유롭게 열람할 수 있습니다. (작성/수정은 운영진 전용)</span>
-                </div>
-              </label>
-              <label class="radio-option-card">
                 <input type="radio" name="optOperationView" value="admin" />
                 <div class="radio-option-content">
                   <strong class="opt-title">🔒 관리자 전용 (운영진만 열람)</strong>
                   <span class="opt-desc">등록된 운영진 및 관리자 계정으로 로그인한 경우에만 상세 회의록을 열람할 수 있습니다. (비관리자 자물쇠 잠금 처리)</span>
                 </div>
               </label>
+              <label class="radio-option-card">
+                <input type="radio" name="optOperationView" value="all" checked />
+                <div class="radio-option-content">
+                  <strong class="opt-title">🌐 전체 공개 (누구나 열람)</strong>
+                  <span class="opt-desc">일반 회원 및 참가 선수 누구나 상세 회의록과 의결사항을 자유롭게 열람할 수 있습니다. (권장)</span>
+                </div>
+              </label>
             </div>
           </div>
         </section>
 
-        <!-- Setting Card 4: 관리자 계정 및 세부 권한 매트릭스 (RBAC) -->
+        <!-- Setting Card 4: 운영기록(회의록) 작성 및 편집 권한 -->
+        <section class="admin-setting-card" style="margin-top: 16px;">
+          <div class="card-header">
+            <span class="card-icon">✍️</span>
+            <div>
+              <h3 class="card-title">운영기록 (회의록) 작성 및 편집 권한</h3>
+              <p class="card-desc">운영기록 화면에서 새 회의록을 작성하거나 기존 기록을 수정/삭제할 수 있는 대상을 설정합니다.</p>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="radio-option-group">
+              <label class="radio-option-card">
+                <input type="radio" name="optOperationEdit" value="admin" checked />
+                <div class="radio-option-content">
+                  <strong class="opt-title">🔒 관리자 전용 (운영진만 편집)</strong>
+                  <span class="opt-desc">등록된 운영진 및 관리자 계정으로 로그인한 사용자만 회의록을 작성/수정/삭제할 수 있습니다. (권장)</span>
+                </div>
+              </label>
+              <label class="radio-option-card">
+                <input type="radio" name="optOperationEdit" value="all" />
+                <div class="radio-option-content">
+                  <strong class="opt-title">🌐 전체 공개 (누구나 편집 가능)</strong>
+                  <span class="opt-desc">비로그인 일반 회원 및 참가 선수 누구나 새 운영기록을 작성하거나 기존 회의록을 편집할 수 있습니다.</span>
+                </div>
+              </label>
+            </div>
+          </div>
+        </section>
+
+        <!-- Setting Card 5: 관리자 계정 및 세부 권한 매트릭스 (RBAC) -->
         <section class="admin-setting-card" style="margin-top: 16px;">
           <div class="card-header">
             <span class="card-icon">👑</span>
@@ -365,11 +394,15 @@
       const rosRadio = document.querySelector(`input[name="optRosterEdit"][value="${data.rosterEdit || 'admin'}"]`);
       if (rosRadio) rosRadio.checked = true;
 
-      // 3. Operation View Radio (신규)
+      // 3. Operation View Radio
       const opvRadio = document.querySelector(`input[name="optOperationView"][value="${data.operationView || 'all'}"]`);
       if (opvRadio) opvRadio.checked = true;
 
-      // 4. Render Admin List
+      // 4. Operation Edit Radio
+      const opeRadio = document.querySelector(`input[name="optOperationEdit"][value="${data.operationEdit || 'admin'}"]`);
+      if (opeRadio) opeRadio.checked = true;
+
+      // 5. Render Admin List
       renderAdminEmails();
     }
 
@@ -519,10 +552,12 @@
         const attRadio = document.querySelector('input[name="optAttendanceEdit"]:checked');
         const rosRadio = document.querySelector('input[name="optRosterEdit"]:checked');
         const opvRadio = document.querySelector('input[name="optOperationView"]:checked');
+        const opeRadio = document.querySelector('input[name="optOperationEdit"]:checked');
 
         const attendanceEdit = attRadio ? attRadio.value : 'all';
         const rosterEdit = rosRadio ? rosRadio.value : 'admin';
         const operationView = opvRadio ? opvRadio.value : 'all';
+        const operationEdit = opeRadio ? opeRadio.value : 'admin';
 
         btnSavePermissions.disabled = true;
         btnSavePermissions.textContent = '⏳ 저장 중...';
@@ -535,6 +570,7 @@
             attendanceEdit: attendanceEdit,
             rosterEdit: rosterEdit,
             operationView: operationView,
+            operationEdit: operationEdit,
             updatedAt: Date.now(),
             lastEditor: getCurrentUser() ? getCurrentUser().email : 'admin'
           }, { merge: true });

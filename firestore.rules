@@ -1,0 +1,69 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // 헬퍼 함수: 권한 설정 문서(config/permissions) 데이터 안전 조회
+    function getPerms() {
+      return exists(/databases/$(database)/documents/config/permissions)
+        ? get(/databases/$(database)/documents/config/permissions).data
+        : {};
+    }
+    
+    // 헬퍼 함수: 최고 관리자 또는 등록된 관리자 여부 확인
+    function isAdmin() {
+      return request.auth != null && (
+        request.auth.token.email == "iseohyun@hanmail.net" ||
+        (exists(/databases/$(database)/documents/config/permissions) && 
+         request.auth.token.email in get(/databases/$(database)/documents/config/permissions).data.adminEmails)
+      );
+    }
+
+    // 1. 시스템 관리자 및 동적 권한 정책 문서 (최고 관리자 및 관리자만 수정 가능)
+    match /config/permissions {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // 2. 구글 로그인 사용자 프로필 및 최근 로그인 접속 기록 (로그인 사용자 누구나 본인 기록 저장)
+    match /users/{userEmail} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // 3. 훈련 출석부 (출석 입력 정책에 따라 전체 공개 또는 관리자 전용)
+    match /attendance/{docId} {
+      allow read: if true;
+      allow write: if getPerms().attendanceEdit == 'all' || isAdmin();
+    }
+
+    // 4. 참가신청 명단 및 기록표 (성인부 및 학생부)
+    match /gmdc_swim_club/{docId} {
+      allow read: if true;
+      allow write: if getPerms().rosterEdit == 'all' || isAdmin();
+    }
+
+    // 5. 운영기록 (회의록) 및 훈련 일정표 연동 데이터 (신규 추가!)
+    match /gmdc_operation_logs/{logId} {
+      allow read: if getPerms().operationView == 'all' || isAdmin();
+      allow write: if getPerms().operationEdit == 'all' || isAdmin();
+    }
+
+    // 6. 기록 변경 감사 로그(History) 및 스냅샷 백업
+    match /gmdc_swim_history/{docId} {
+      allow read: if true;
+      allow write: if true;
+    }
+    match /gmdc_swim_history_student/{docId} {
+      allow read: if true;
+      allow write: if true;
+    }
+    match /gmdc_swim_snapshots/{docId} {
+      allow read: if true;
+      allow write: if true;
+    }
+    match /gmdc_swim_snapshots_student/{docId} {
+      allow read: if true;
+      allow write: if true;
+    }
+  }
+}

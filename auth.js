@@ -45,7 +45,8 @@ let permissionState = {
   },
   attendanceEdit: "all",   // 'all' | 'admin'
   rosterEdit: "admin",     // 'admin' | 'all'
-  operationView: "all"     // 'all' | 'admin' (운영기록 열람 권한)
+  operationView: "all",    // 'all' | 'admin' (운영기록 열람 권한)
+  operationEdit: "admin"   // 'admin' | 'all' (운영기록 편집 권한)
 };
 
 // Start listening to config/permissions in Firestore
@@ -88,7 +89,8 @@ try {
         admins: adminsMap,
         attendanceEdit: data.attendanceEdit || "all",
         rosterEdit: data.rosterEdit || "admin",
-        operationView: data.operationView || "all"
+        operationView: data.operationView || "all",
+        operationEdit: data.operationEdit || "admin"
       };
     }
     applyAuthState();
@@ -165,6 +167,7 @@ export function canViewOperationNotes() {
 }
 
 export function canEditOperationNotes() {
+  if (permissionState.operationEdit === 'all') return true;
   return hasPermission('operation');
 }
 

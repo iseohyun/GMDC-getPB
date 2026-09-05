@@ -699,7 +699,10 @@ function initAttendanceSync() {
       if (docSnap.exists()) {
         const data = docSnap.data();
         if (data && data.records) {
-          const remoteUpdatedAt = data.updatedAt || 0;
+          const rawRemote = data.updatedAt;
+          const remoteUpdatedAt = typeof rawRemote === 'number' 
+            ? rawRemote 
+            : (Date.parse(rawRemote) || 0);
           const localUpdatedAt = parseInt(localStorage.getItem(STORAGE_LAST_UPDATED_KEY) || '0', 10);
 
           if (remoteUpdatedAt > localUpdatedAt || Object.keys(attendanceMap).length === 0) {
@@ -1379,24 +1382,37 @@ window.showToast = showToast;
  * Initialize Attendance App
  */
 export function initAttendanceApp() {
-  initAuth({
-    showToast: showToast,
-    onAuthChange: (authInfo) => {
-      document.body.classList.toggle('is-readonly', !authInfo.isAdmin);
-      renderAttendanceTable();
-    }
-  });
+  try {
+    initAuth({
+      showToast: showToast,
+      onAuthChange: (authInfo) => {
+        document.body.classList.toggle('is-readonly', !authInfo.isAdmin);
+        renderAttendanceTable();
+      }
+    });
 
-  loadPinnedRelaysState();
-  loadSwimmerRoster();
-  loadLocalAttendanceCache();
-  bindAttendanceToolbar();
-  setupTimePickerModal();
-  ensureSwimmerScheduleModal();
-  ensureRosterExportModal();
+    loadPinnedRelaysState();
+    loadSwimmerRoster();
+    loadLocalAttendanceCache();
+    bindAttendanceToolbar();
+    setupTimePickerModal();
+    ensureSwimmerScheduleModal();
+    ensureRosterExportModal();
+  } catch (err) {
+    console.error('Error during attendance pre-init:', err);
+  }
 
-  renderAttendanceTable();
-  initAttendanceSync();
+  try {
+    renderAttendanceTable();
+  } catch (err) {
+    console.error('Error during initial renderAttendanceTable:', err);
+  }
+
+  try {
+    initAttendanceSync();
+  } catch (err) {
+    console.error('Error during initAttendanceSync:', err);
+  }
 }
 
 // Auto init on DOMContentLoaded
