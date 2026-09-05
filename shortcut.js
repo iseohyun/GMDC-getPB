@@ -49,14 +49,15 @@
     const key = e.key.toLowerCase();
 
     switch (key) {
-      case 'g': {
-        // 성인부 페이지로 이동
+      case 'c':
+      case 'h': {
+        // 훈련 출석부 페이지로 이동
         e.preventDefault();
         const currentPath = window.location.pathname;
-        const isAdultPage = currentPath.endsWith('index.html') || currentPath === '/' || currentPath.endsWith('/');
-        if (isAdultPage) {
+        const isAttendancePage = currentPath.endsWith('index.html') || currentPath === '/' || currentPath.endsWith('/');
+        if (isAttendancePage) {
           if (typeof window.showToast === 'function') {
-            window.showToast('🏊 현재 성인부 페이지입니다.');
+            window.showToast('📋 현재 훈련 출석부 페이지입니다.');
           }
         } else {
           sessionStorage.setItem(SCROLL_POS_KEY, window.scrollY.toString());
@@ -64,18 +65,64 @@
         }
         break;
       }
+      case 'g':
+      case 'a': {
+        // 성인부 페이지로 이동
+        e.preventDefault();
+        const currentPath = window.location.pathname;
+        const isAdultPage = currentPath.endsWith('adult-member.html');
+        if (isAdultPage) {
+          if (typeof window.showToast === 'function') {
+            window.showToast('🏆 현재 성인부 참가신청 페이지입니다.');
+          }
+        } else {
+          sessionStorage.setItem(SCROLL_POS_KEY, window.scrollY.toString());
+          window.location.href = 'adult-member.html' + (window.location.hash || '');
+        }
+        break;
+      }
+      case 'k': {
+        // 훈련 일정표 페이지로 이동
+        e.preventDefault();
+        const currentPath = window.location.pathname;
+        const isCalendarPage = currentPath.endsWith('training_calendar.html');
+        if (isCalendarPage) {
+          if (typeof window.showToast === 'function') {
+            window.showToast('📅 현재 훈련 일정표 페이지입니다.');
+          }
+        } else {
+          sessionStorage.setItem(SCROLL_POS_KEY, window.scrollY.toString());
+          window.location.href = 'training_calendar.html' + (window.location.hash || '');
+        }
+        break;
+      }
+      case 'm': {
+        // 운영기록 페이지로 이동
+        e.preventDefault();
+        const currentPath = window.location.pathname;
+        const isMeetingPage = currentPath.endsWith('meeting_notes.html');
+        if (isMeetingPage) {
+          if (typeof window.showToast === 'function') {
+            window.showToast('📝 현재 운영기록 페이지입니다.');
+          }
+        } else {
+          sessionStorage.setItem(SCROLL_POS_KEY, window.scrollY.toString());
+          window.location.href = 'meeting_notes.html' + (window.location.hash || '');
+        }
+        break;
+      }
       case 's': {
         // 학생부 페이지로 이동
         e.preventDefault();
         const currentPath = window.location.pathname;
-        const isStudentPage = currentPath.endsWith('student.html');
+        const isStudentPage = currentPath.endsWith('student-member.html');
         if (isStudentPage) {
           if (typeof window.showToast === 'function') {
-            window.showToast('🏊 현재 학생부 페이지입니다.');
+            window.showToast('🧒 현재 학생부 참가신청 페이지입니다.');
           }
         } else {
           sessionStorage.setItem(SCROLL_POS_KEY, window.scrollY.toString());
-          window.location.href = 'student.html' + (window.location.hash || '');
+          window.location.href = 'student-member.html' + (window.location.hash || '');
         }
         break;
       }

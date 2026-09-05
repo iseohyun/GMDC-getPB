@@ -17,12 +17,18 @@ const MIME_TYPES = {
   '.svg': 'image/svg+xml',
   '.ico': 'image/x-icon',
   '.csv': 'text/csv; charset=utf-8',
+  '.xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
   '.txt': 'text/plain; charset=utf-8'
 };
 
 const server = http.createServer((req, res) => {
   const parsedUrl = new URL(req.url, `http://${req.headers.host}`);
-  let pathname = decodeURIComponent(parsedUrl.pathname);
+  let pathname = parsedUrl.pathname;
+  try {
+    pathname = decodeURIComponent(parsedUrl.pathname);
+  } catch (e) {
+    pathname = parsedUrl.pathname;
+  }
 
   if (pathname === '/') {
     pathname = '/index.html';

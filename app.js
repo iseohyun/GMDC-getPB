@@ -3,30 +3,18 @@
  * Firebase Cloud Firestore 실시간 연동, 계영 최적 조합 연산, 출전 종목 현황 매트릭스
  */
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { firebaseApp } from "./firebase-config.js";
 import { getFirestore, doc, setDoc, onSnapshot, getDoc, getDocs, collection, addDoc, deleteDoc, updateDoc, query, orderBy, limit, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { initAuth, isAdmin, canEditRecords, isDeadlineExpired, loginWithGoogle, logoutUser, getCurrentUser, formatUserDisplayName } from "./auth.js";
 
-// Firebase Configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyBA0ykFrEfU9YS33Zp_HNf3OnBX39WCEkA",
-  authDomain: "gmdc-swim-records.firebaseapp.com",
-  projectId: "gmdc-swim-records",
-  storageBucket: "gmdc-swim-records.firebasestorage.app",
-  messagingSenderId: "4329922661",
-  appId: "1:4329922661:web:e0799bb08d37fd1e12668c",
-  measurementId: "G-5H98EB7ZSP"
-};
-
-// Initialize Firebase App & Firestore
+// Initialize Firestore (App singleton provided by firebase-config.js)
 let db = null;
 let DOC_REF = null;
 const HISTORY_COL_NAME = "gmdc_swim_history";
 const SNAPSHOT_COL_NAME = "gmdc_swim_snapshots";
 
 try {
-  const app = initializeApp(firebaseConfig);
-  db = getFirestore(app);
+  db = getFirestore(firebaseApp);
   DOC_REF = doc(db, "gmdc_swim_club", "records_2026_01_01");
 } catch (err) {
   console.error("Firebase 초기화 에러:", err);
@@ -84,7 +72,7 @@ let isMatrixCompareMode = localStorage.getItem('gmdc_matrix_compare_mode') === '
 const DEFAULT_RECORDS = [
   {"id": 1, "age": "15", "group": "1그룹", "gender": "남", "name": "박슬우", "birthId": "20100223-3", "team": "A", "phone": "010-2558-7116", "address": "거제시 문동 1길, 42, 문동푸르지오 104동 2104호", "club": "거제야호", "depositor": "거제야호", "event1": "자유형 50", "event2": "접영 50", "finFly": "", "finFree": "", "free": "25.13", "back": "31", "breast": "34", "fly": "28.28"},
   {"id": 2, "age": "15", "group": "1그룹", "gender": "남", "name": "이지훈", "birthId": "20100908-3", "team": "A", "phone": "010-4176-0239", "address": "거제시 옥포동 308 거제엘크루랜드마크 아파트 104동 2302호", "club": "거제야호", "depositor": "거제야호", "event1": "핀자유형 50", "event2": "접영 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
-  {"id": 3, "age": "16", "group": "1그룹", "gender": "남", "name": "이채율", "birthId": "20090814-3", "team": "B", "phone": "010-7637-9313", "address": "거제시 연초면 거제북로57 연초일성유수안 104동 2302호", "club": "거제야르", "depositor": "거제야르", "event1": "핀자유형 50", "event2": "배영 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
+  {"id": 3, "age": "16", "group": "1그룹", "gender": "남", "name": "이채율", "disabled": true, "birthId": "20090814-3", "team": "B", "phone": "010-7637-9313", "address": "거제시 연초면 거제북로57 연초일성유수안 104동 2302호", "club": "거제야르", "depositor": "거제야르", "event1": "핀자유형 50", "event2": "배영 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
   {"id": 4, "age": "17", "group": "1그룹", "gender": "남", "name": "조성찬", "birthId": "20080718-3", "team": "A", "phone": "010-6681-9874", "address": "거제시 소동8길 11 스타힐스오션시티 105동 703호", "club": "거제야호", "depositor": "거제야호", "event1": "자유형 50", "event2": "배영 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
   {"id": 5, "age": "17", "group": "1그룹", "gender": "여", "name": "이지호", "birthId": "20080506-4", "team": "A", "phone": "010-6451-0229", "address": "거제시 옥포동 308 거제엘크루랜드마크 아파트 104동 2302호", "club": "거제야호", "depositor": "거제야호", "event1": "핀자유형 50", "event2": "접영 50", "finFly": "", "finFree": "31.07", "free": "36.78", "back": "", "breast": "", "fly": ""},
   {"id": 6, "age": "24", "group": "2그룹", "gender": "여", "name": "추성비", "birthId": "20010521-4", "team": "A", "phone": "010-2818-2055", "address": "거제시 능포로 4길5 동헌하이츠 802호", "club": "거제야호", "depositor": "거제야호", "event1": "자유형 50", "event2": "접영 50", "finFly": "", "finFree": "", "free": "40.48", "back": "", "breast": "", "fly": "47.99"},
@@ -121,7 +109,7 @@ const DEFAULT_RECORDS = [
   {"id": 37, "age": "62", "group": "6그룹", "gender": "여", "name": "최지희", "birthId": "19630705-2", "team": "A", "phone": "010-3560-6375", "address": "거제시 상동7길30, 대동다숲 124동 1406호", "club": "거제야호", "depositor": "거제야호", "event1": "자유형 50", "event2": "핀자유형 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
   {"id": 38, "age": "61", "group": "6그룹", "gender": "남", "name": "권순용", "birthId": "19650101-1", "team": "B", "phone": "010-5890-7052", "address": "거제시 동부면 거제남서로 3136", "club": "거제야르", "depositor": "거제야르", "event1": "자유형 50", "event2": "평영 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
   {"id": 39, "age": "27", "group": "2그룹", "gender": "남", "name": "정성민", "birthId": "19990101-1", "team": "B", "phone": "010-9989-7218", "address": "거제시 동부면 산양리 671-1", "club": "거제야르", "depositor": "거제야르", "event1": "자유형 50", "event2": "평영 50", "finFly": "", "finFree": "", "free": "33", "back": "", "breast": "", "fly": ""},
-  {"id": 41, "age": "17", "group": "1그룹", "gender": "남", "name": "이동규", "birthId": "20080508-3", "team": "A", "phone": "010-8301-1709", "address": "거제시 문동1길 42, 110동 1202호", "club": "거제야호", "depositor": "거제야호", "event1": "자유형 50", "event2": "평영 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
+  {"id": 41, "age": "17", "group": "1그룹", "gender": "남", "name": "이동규", "disabled": true, "birthId": "20080508-3", "team": "A", "phone": "010-8301-1709", "address": "거제시 문동1길 42, 110동 1202호", "club": "거제야호", "depositor": "거제야호", "event1": "자유형 50", "event2": "평영 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
   {"id": 42, "age": "56", "group": "5그룹", "gender": "남", "name": "서정찬", "birthId": "19700310-1", "team": "A", "phone": "010-8501-0605", "address": "옥포대첩로 115 영진자이온 104동1101호", "club": "거제야호", "depositor": "거제야호", "event1": "핀접영 50", "event2": "평영 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
   {"id": 43, "age": "47", "group": "4그룹", "gender": "남", "name": "윤주권", "birthId": "19790522-1", "team": "B", "phone": "010-6606-7048", "address": "거제 용소7길20, 104동 501호", "club": "거제야르", "depositor": "거제야르", "event1": "핀자유형 50", "event2": "핀접영 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""}
 ];
@@ -150,8 +138,25 @@ const STROKE_NAMES = {
   fly: '접영'
 };
 
+// Swimmer active state checker
+export function isSwimmerActive(swimmer) {
+  if (!swimmer) return false;
+  if (swimmer.disabled === true || swimmer.disabled === 'true') return false;
+  if (swimmer.inactive === true || swimmer.inactive === 'true') return false;
+  if (swimmer.active === false || swimmer.active === 'false') return false;
+  const name = (swimmer.name || '').trim();
+  if (name === '이동규' || name === '이채율') return false;
+  return true;
+}
+
 // Application State
 let records = [];
+window.gmdcRecords = records;
+export function getGmdcRecords() {
+  return records;
+}
+window.getGmdcRecords = getGmdcRecords;
+let showDisabledSwimmers = localStorage.getItem('gmdc_show_disabled_swimmers') === 'true';
 let currentView = 'records'; // 'records' | 'events'
 let searchQuery = '';
 let currentFilter = 'all'; // 'all', '남', '여'
@@ -193,10 +198,10 @@ const DEFAULT_PINNED_RELAYS = {
     combo5: { back: '전경미', breast: '이지호', fly: '이미영', free: '손혜정' }
   },
   B: {
-    combo1: ['이채율', '정서현', '권순용', '김애란', '이은희', '김상희'],
-    combo2: ['이채율', '정서현', '양승진', '권순용'],
+    combo1: ['윤주권', '정서현', '권순용', '김애란', '이은희', '김상희'],
+    combo2: ['양승진', '정서현', '윤주권', '권순용'],
     combo3: ['이은희', '김애란', '김상희', '심민경'],
-    combo4: { back: '이채율', breast: '권순용', fly: '정서현', free: '양승진' },
+    combo4: { back: '윤주권', breast: '권순용', fly: '정서현', free: '양승진' },
     combo5: { back: '심민경', breast: '이은희', fly: '김애란', free: '김상희' }
   }
 };
@@ -435,6 +440,45 @@ const eventsSearchInput = document.getElementById('eventsSearchInput');
 const eventsTableBody = document.getElementById('eventsTableBody');
 const eventsFilteredCount = document.getElementById('eventsFilteredCount');
 
+
+function updateDisabledToggleButtons() {
+  const btns = [document.getElementById('btnToggleDisabledRecords'), document.getElementById('btnToggleDisabledEvents')];
+  btns.forEach(btn => {
+    if (!btn) return;
+    const textEl = btn.querySelector('.btn-toggle-disabled-text');
+    if (showDisabledSwimmers) {
+      btn.classList.add('active');
+      btn.title = '비활성화 선수 숨기기 (현재 표시 중)';
+      if (textEl) textEl.textContent = '비활성 표시 중';
+    } else {
+      btn.classList.remove('active');
+      btn.title = '비활성화(출전취소) 선수 보이기 (현재 숨김)';
+      if (textEl) textEl.textContent = '비활성 숨김';
+    }
+  });
+}
+
+function handleDisabledToggle() {
+  showDisabledSwimmers = !showDisabledSwimmers;
+  localStorage.setItem('gmdc_show_disabled_swimmers', String(showDisabledSwimmers));
+  updateDisabledToggleButtons();
+  renderTable();
+  renderEventsTable();
+  showToast(showDisabledSwimmers ? '👁️ 비활성화 선수가 명단에 표시됩니다.' : '🙈 비활성화 선수가 명단에서 숨겨졌습니다.');
+}
+
+function initDisabledToggle() {
+  updateDisabledToggleButtons();
+  const btnRecords = document.getElementById('btnToggleDisabledRecords');
+  if (btnRecords) {
+    btnRecords.addEventListener('click', handleDisabledToggle);
+  }
+  const btnEvents = document.getElementById('btnToggleDisabledEvents');
+  if (btnEvents) {
+    btnEvents.addEventListener('click', handleDisabledToggle);
+  }
+}
+
 // Init application
 function init() {
   window.__GMDC_VERSION__ = APP_VERSION;
@@ -456,6 +500,7 @@ function init() {
   initRulesModal();
   initScenarioMode();
   initMatrixCompareMode();
+  initDisabledToggle();
   initRecordsViewMode();
   initEventsViewMode();
   initDeadlineCountdown();
@@ -1998,6 +2043,7 @@ function loadLocalData() {
     console.error('Failed to parse localStorage data', e);
     records = JSON.parse(JSON.stringify(DEFAULT_RECORDS));
   }
+  window.gmdcRecords = records;
 }
 
 function cleanAddress(addr) {
@@ -2026,6 +2072,7 @@ function mergeWithDefaultData(remoteList) {
       phone: (item.phone && String(item.phone).trim() !== '') ? item.phone : (def.phone || ''),
       address: cleanAddress((item.address && String(item.address).trim() !== '') ? item.address : (def.address || '')),
       club: (item.club && !['GMDC', 'GMDC야호'].includes(item.club)) ? item.club : (team === 'B' ? '거제야르' : '거제야호'),
+      disabled: item.disabled !== undefined ? item.disabled : (def.disabled || (item.name === '이동규' || item.name === '이채율' ? true : false)),
       depositor: depositor,
       event1: item.event1 !== undefined ? item.event1 : (def.event1 || ''),
       event2: item.event2 !== undefined ? item.event2 : (def.event2 || ''),
@@ -2074,13 +2121,20 @@ function initFirebaseSync() {
 
           if (isDataChanged) {
             records = merged;
+            window.gmdcRecords = records;
             localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
             
             const activeEl = document.activeElement;
-            const isUserTyping = activeEl && activeEl.classList && (activeEl.classList.contains('cell-input') || activeEl.classList.contains('event-select'));
+            const isEditingCell = activeEl && activeEl.classList && (activeEl.classList.contains('cell-input') || activeEl.classList.contains('event-select'));
+            const isSearching = activeEl && (activeEl.id === 'searchInput' || activeEl.id === 'eventsSearchInput');
             
-            if (!isUserTyping) {
+            if (!isEditingCell && !isSearching) {
               renderAll();
+            } else if (isSearching) {
+              if (activeEl.id === 'searchInput') renderTable();
+              if (activeEl.id === 'eventsSearchInput') renderEventsTable();
+              updateStats();
+              renderSummaryMatrices();
             } else {
               updateStats();
               renderSummaryMatrices();
@@ -2224,7 +2278,7 @@ function handleUrlRouting() {
   });
 }
 
-// Initialize Notice Modal Popup
+// Initialize Notice Modal Popup (Permanently hidden by default)
 function initNoticeModal() {
   const modal = document.getElementById('noticeModal');
   const btnCloseX = document.getElementById('btnModalCloseX');
@@ -2233,19 +2287,10 @@ function initNoticeModal() {
 
   if (!modal) return;
 
-  const todayStr = new Date().toDateString();
-  const savedDate = localStorage.getItem(MODAL_STORAGE_KEY);
-
-  if (savedDate !== todayStr) {
-    setTimeout(() => {
-      modal.classList.add('show');
-    }, 200);
-  }
+  // Auto-popup disabled: keep modal hidden permanently
+  // (Manual click on badge can still open it if needed)
 
   function closeModal() {
-    if (chkHideToday && chkHideToday.checked) {
-      localStorage.setItem(MODAL_STORAGE_KEY, todayStr);
-    }
     modal.classList.remove('show');
   }
 
@@ -2345,7 +2390,7 @@ function defaultRecordComparator(a, b) {
 
 // Filter and Sort Data for Records View
 function getProcessedRecords() {
-  let list = [...records];
+  let list = showDisabledSwimmers ? [...records] : records.filter(isSwimmerActive);
 
   if (searchQuery.trim()) {
     const q = searchQuery.trim().toLowerCase();
@@ -2424,9 +2469,15 @@ function renderTable() {
   const processed = getProcessedRecords();
   tableBody.innerHTML = '';
 
+  const activeCount = records.filter(isSwimmerActive).length;
+  const disabledShownCount = processed.filter(r => !isSwimmerActive(r)).length;
   const recordsDetailTitle = document.getElementById('recordsDetailTitle');
   if (recordsDetailTitle) {
-    recordsDetailTitle.textContent = `📋 개인 PB 기록 명단 (${processed.length}명 표시 중 / 총 ${records.length}명)`;
+    if (showDisabledSwimmers && disabledShownCount > 0) {
+      recordsDetailTitle.textContent = `📋 개인 PB 기록 명단 (${processed.length}명 표시 중 / 활성 ${activeCount}명 + 비활성 ${disabledShownCount}명)`;
+    } else {
+      recordsDetailTitle.textContent = `📋 개인 PB 기록 명단 (${processed.length}명 표시 중 / 활성 ${activeCount}명)`;
+    }
   }
 
   if (processed.length === 0) {
@@ -2443,6 +2494,10 @@ function renderTable() {
   processed.forEach((item) => {
     const tr = document.createElement('tr');
     tr.dataset.id = item.id;
+    const active = isSwimmerActive(item);
+    if (!active) {
+      tr.classList.add('is-disabled-swimmer');
+    }
 
     // Events summary tags (Individual events only)
     const eventsList = [item.event1, item.event2].filter(Boolean);
@@ -2498,7 +2553,10 @@ function renderTable() {
         </span>
       </td>
       <td class="col-name">
-        <input type="text" class="cell-input name-input" data-id="${item.id}" data-field="name" value="${escapeHtml(item.name || '')}" placeholder="이름" ${readonlyAttr} title="${canEdit ? '클릭하여 이름 수정' : escapeHtml(item.name || '')}" />
+        <div style="display:flex; align-items:center; gap:4px;">
+          <input type="text" class="cell-input name-input swimmer-name-text" data-id="${item.id}" data-field="name" value="${escapeHtml(item.name || '')}" placeholder="이름" ${readonlyAttr} title="${canEdit ? '클릭하여 이름 수정' : escapeHtml(item.name || '')}" />
+          ${!active ? `<span class="badge-disabled" title="출전 취소 / 비활성화된 선수">비활성</span>` : ''}
+        </div>
       </td>
       <td class="col-relay-summary col-pb-detail" style="text-align:center;">
         ${relayTagHtml}
@@ -2582,7 +2640,7 @@ function renderSummaryMatrices() {
 
 function renderSingleGenderMatrix(gender, bodyEl, footEl) {
   bodyEl.innerHTML = '';
-  const filteredList = records.filter(r => r.gender === gender);
+  const filteredList = records.filter(r => r.gender === gender && isSwimmerActive(r));
 
   const colTotalsA = {
     '핀자유형 50': 0,
@@ -2741,7 +2799,7 @@ function renderSingleGenderMatrix(gender, bodyEl, footEl) {
 // EVENTS DETAIL TABLE SECTION (출전 선수별 상세 명단)
 // ============================================================
 function getFilteredEventsList() {
-  let list = [...records];
+  let list = showDisabledSwimmers ? [...records] : records.filter(isSwimmerActive);
 
   // Search filter
   if (eventsSearchQuery.trim()) {
@@ -2786,9 +2844,15 @@ function renderEventsTable() {
 
   const list = getFilteredEventsList();
 
+  const activeCount = records.filter(isSwimmerActive).length;
+  const disabledShownCount = list.filter(r => !isSwimmerActive(r)).length;
   const eventsDetailTitle = document.getElementById('eventsDetailTitle');
   if (eventsDetailTitle) {
-    eventsDetailTitle.textContent = `📋 출전 선수별 명단 (${list.length}명 표시 중 / 총 ${records.length}명)`;
+    if (showDisabledSwimmers && disabledShownCount > 0) {
+      eventsDetailTitle.textContent = `📋 출전 선수별 명단 (${list.length}명 표시 중 / 활성 ${activeCount}명 + 비활성 ${disabledShownCount}명)`;
+    } else {
+      eventsDetailTitle.textContent = `📋 출전 선수별 명단 (${list.length}명 표시 중 / 활성 ${activeCount}명)`;
+    }
   }
 
   if (eventsFilteredCount) {
@@ -2811,6 +2875,10 @@ function renderEventsTable() {
   list.forEach((item, idx) => {
     const tr = document.createElement('tr');
     tr.dataset.id = item.id;
+    const active = isSwimmerActive(item);
+    if (!active) {
+      tr.classList.add('is-disabled-swimmer');
+    }
 
     const relayAssignments = getSwimmerRelayAssignments(item.name);
     const relayTagsHtml = relayAssignments.length > 0
@@ -2840,7 +2908,8 @@ function renderEventsTable() {
         <span class="gender-badge ${item.gender === '남' ? 'male' : 'female'}">${item.gender || '남'}</span>
       </td>
       <td class="col-name" style="font-weight:700;">
-        ${escapeHtml(item.name || '무명')}
+        <span class="swimmer-name-text">${escapeHtml(item.name || '무명')}</span>
+        ${!active ? `<span class="badge-disabled" title="출전 취소 / 비활성화된 선수">비활성</span>` : ''}
       </td>
       <td class="col-relay" style="text-align:center;">
         ${relayTagsHtml}
@@ -3009,7 +3078,7 @@ function getRankTime(swimmer, strokeField) {
 
 // 1. 혼성 핀계영 300m (남3, 여3, 도합 >= 240세)
 function computeFinRelay(team = 'A', records, pinnedList = [], excludeSwimmerNames = new Set()) {
-  const teamRecords = records.filter(r => (r.team || 'A') === team && !excludeSwimmerNames.has(r.name));
+  const teamRecords = records.filter(r => (r.team || 'A') === team && isSwimmerActive(r) && !excludeSwimmerNames.has(r.name));
 
   const pinnedMen = [];
   const pinnedWomen = [];
@@ -3132,7 +3201,7 @@ function computeFinRelay(team = 'A', records, pinnedList = [], excludeSwimmerNam
 
 // 2 & 3. 자유형 계영 200m (4명, 도합 >= 160세)
 function computeFreestyleRelay(gender, team = 'A', records, pinnedList = [], excludeSwimmerNames = new Set()) {
-  const teamRecords = records.filter(r => (r.team || 'A') === team && !excludeSwimmerNames.has(r.name));
+  const teamRecords = records.filter(r => (r.team || 'A') === team && isSwimmerActive(r) && !excludeSwimmerNames.has(r.name));
 
   const pinnedSwimmers = [];
   pinnedList.forEach(name => {
@@ -3223,7 +3292,7 @@ function computeFreestyleRelay(gender, team = 'A', records, pinnedList = [], exc
 
 // 4 & 5. 혼계영 200m (배영, 평영, 접영, 자유형 각 1명, 4명 고유, 도합 >= 160세)
 function computeMedleyRelay(gender, team = 'A', records, pinnedMap = {}, excludeSwimmerNames = new Set()) {
-  const teamRecords = records.filter(r => (r.team || 'A') === team && !excludeSwimmerNames.has(r.name));
+  const teamRecords = records.filter(r => (r.team || 'A') === team && isSwimmerActive(r) && !excludeSwimmerNames.has(r.name));
   const pool = teamRecords.filter(r => r.gender === gender && parseFloat(r.age) > 0);
 
   const strokes = ['back', 'breast', 'fly', 'free'];
@@ -3649,10 +3718,14 @@ function bindEvents() {
   }
 
   // Events Toolbar Filters
+  let eventsSearchRaf = null;
   if (eventsSearchInput) {
     eventsSearchInput.addEventListener('input', (e) => {
       eventsSearchQuery = e.target.value;
-      renderEventsTable();
+      if (eventsSearchRaf) cancelAnimationFrame(eventsSearchRaf);
+      eventsSearchRaf = requestAnimationFrame(() => {
+        renderEventsTable();
+      });
     });
   }
 
@@ -3923,10 +3996,16 @@ function bindEvents() {
   });
 
   // Search input in PB table
-  searchInput.addEventListener('input', (e) => {
-    searchQuery = e.target.value;
-    renderTable();
-  });
+  let searchRaf = null;
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      searchQuery = e.target.value;
+      if (searchRaf) cancelAnimationFrame(searchRaf);
+      searchRaf = requestAnimationFrame(() => {
+        renderTable();
+      });
+    });
+  }
 
   // Add Row Button (If element exists)
   if (btnAddRow) {

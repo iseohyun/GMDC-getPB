@@ -1,25 +1,14 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.0/firebase-app.js";
-import { getFirestore, doc, setDoc, onSnapshot, collection, addDoc, deleteDoc, updateDoc, getDoc, getDocs, query, orderBy, limit, where } from "https://www.gstatic.com/firebasejs/11.3.0/firebase-firestore.js";
+import { firebaseApp } from "./firebase-config.js";
+import { getFirestore, doc, setDoc, onSnapshot, collection, addDoc, deleteDoc, updateDoc, getDoc, getDocs, query, orderBy, limit, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { initAuth, isAdmin, canEditRecords, isDeadlineExpired, loginWithGoogle, logoutUser, getCurrentUser, formatUserDisplayName } from "./auth.js";
 
-// Firebase Configuration (Shared Project)
-const firebaseConfig = {
-  apiKey: "AIzaSyBA0ykFrEfU9YS33Zp_HNf3OnBX39WCEkA",
-  authDomain: "gmdc-swim-records.firebaseapp.com",
-  projectId: "gmdc-swim-records",
-  storageBucket: "gmdc-swim-records.firebasestorage.app",
-  messagingSenderId: "4329922661",
-  appId: "1:4329922661:web:e0799bb08d37fd1e12668c",
-  measurementId: "G-5H98EB7ZSP"
-};
-
-let app, db, DOC_REF;
+// Initialize Firestore (App singleton provided by firebase-config.js)
+let db, DOC_REF;
 const HISTORY_COL_NAME = "gmdc_swim_history_student";
 const SNAPSHOT_COL_NAME = "gmdc_swim_snapshots_student";
 
 try {
-  app = initializeApp(firebaseConfig);
-  db = getFirestore(app);
+  db = getFirestore(firebaseApp);
   DOC_REF = doc(db, "gmdc_swim_club", "records_student_2026_01_01");
 } catch (err) {
   console.error("Firebase 초기화 에러:", err);
@@ -470,17 +459,9 @@ function initNoticeModal() {
 
   if (!modal) return;
 
-  const hideDate = localStorage.getItem(MODAL_STORAGE_KEY);
-  const todayStr = new Date().toISOString().slice(0, 10);
-
-  if (hideDate !== todayStr) {
-    modal.classList.add('show');
-  }
+  // Auto-popup disabled: keep modal hidden permanently
 
   function closeModal() {
-    if (chkHideToday && chkHideToday.checked) {
-      localStorage.setItem(MODAL_STORAGE_KEY, todayStr);
-    }
     modal.classList.remove('show');
   }
 
@@ -1950,10 +1931,16 @@ function initFirebaseSync() {
             }
             
             const activeEl = document.activeElement;
-            const isUserTyping = activeEl && activeEl.classList && (activeEl.classList.contains('cell-input') || activeEl.classList.contains('event-select'));
+            const isEditingCell = activeEl && activeEl.classList && (activeEl.classList.contains('cell-input') || activeEl.classList.contains('event-select'));
+            const isSearching = activeEl && (activeEl.id === 'searchInput' || activeEl.id === 'eventsSearchInput');
             
-            if (!isUserTyping) {
+            if (!isEditingCell && !isSearching) {
               renderAll();
+            } else if (isSearching) {
+              if (activeEl.id === 'searchInput') renderTable();
+              if (activeEl.id === 'eventsSearchInput') renderEventsTable();
+              updateStats();
+              renderSummaryMatrices();
             } else {
               updateStats();
               renderSummaryMatrices();
@@ -3295,10 +3282,14 @@ function bindEvents() {
     });
   });
 
+  let searchRaf = null;
   if (searchInput) {
     searchInput.addEventListener('input', (e) => {
       searchQuery = e.target.value.trim();
-      renderTable();
+      if (searchRaf) cancelAnimationFrame(searchRaf);
+      searchRaf = requestAnimationFrame(() => {
+        renderTable();
+      });
     });
   }
 
@@ -3316,10 +3307,14 @@ function bindEvents() {
     });
   }
 
+  let eventsSearchRaf = null;
   if (eventsSearchInput) {
     eventsSearchInput.addEventListener('input', (e) => {
       eventsSearchQuery = e.target.value.trim();
-      renderEventsTable();
+      if (eventsSearchRaf) cancelAnimationFrame(eventsSearchRaf);
+      eventsSearchRaf = requestAnimationFrame(() => {
+        renderEventsTable();
+      });
     });
   }
 

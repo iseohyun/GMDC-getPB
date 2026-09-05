@@ -2,7 +2,8 @@
 // GMDC Swim Club - Google Authentication & Role-Based Access Control
 // ==================================================================
 
-import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { firebaseApp } from "./firebase-config.js";
+import { ADMIN_EMAILS, DEADLINE_ISO } from "./constants.js";
 import { 
   getAuth, 
   GoogleAuthProvider, 
@@ -11,34 +12,12 @@ import {
   onAuthStateChanged 
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyBA0ykFrEfU9YS33Zp_HNf3OnBX39WCEkA",
-  authDomain: "gmdc-swim-records.firebaseapp.com",
-  projectId: "gmdc-swim-records",
-  storageBucket: "gmdc-swim-records.firebasestorage.app",
-  messagingSenderId: "4329922661",
-  appId: "1:4329922661:web:e0799bb08d37fd1e12668c",
-  measurementId: "G-5H98EB7ZSP"
-};
-
-let app;
-try {
-  if (getApps().length === 0) {
-    app = initializeApp(firebaseConfig);
-  } else {
-    app = getApp();
-  }
-} catch (e) {
-  console.error("Firebase App initialization error in auth.js:", e);
-}
-
-const auth = getAuth(app);
+const auth = getAuth(firebaseApp);
 const googleProvider = new GoogleAuthProvider();
-googleProvider.setCustomParameters({ prompt: 'select_account' });
 
-// Admin & Deadline Configurations
-export const ADMIN_EMAIL = 'iseohyun@hanmail.net';
-export const DEADLINE_ISO = '2026-09-01T18:00:00+09:00';
+// Re-export for backward compatibility (modules that import ADMIN_EMAIL from auth.js)
+export const ADMIN_EMAIL = ADMIN_EMAILS[0];
+export { DEADLINE_ISO };
 
 let currentUser = null;
 let toastHandler = null;
@@ -58,7 +37,7 @@ export function isLoggedIn() {
 
 export function isAdmin() {
   if (!currentUser || !currentUser.email) return false;
-  return currentUser.email.toLowerCase() === ADMIN_EMAIL.toLowerCase();
+  return ADMIN_EMAILS.includes(currentUser.email.toLowerCase());
 }
 
 export function canEditRecords() {
@@ -104,8 +83,17 @@ export async function loginWithGoogle() {
     if (error.code === 'auth/popup-closed-by-user' || error.code === 'auth/cancelled-popup-request') {
       return null;
     }
-    console.error('Google 로그인 에러:', error);
-    if (toastHandler) toastHandler('⚠️ Google 로그인 실패: ' + (error.message || ''));
+    console.error('Google 로그인 상세 에러:', {
+      code: error.code,
+      message: error.message,
+      email: error.customData?.email || error.email,
+      credential: error.credential,
+      errorObj: error
+    });
+
+    if (toastHandler) {
+      toastHandler(`⚠️ Google 로그인 실패 [${error.code || 'ERROR'}]: ${error.message || ''}`);
+    }
     return null;
   }
 }
@@ -148,6 +136,16 @@ export function applyAuthState() {
         : `🏊 ${shortName} (${email}) · 클릭하여 로그아웃`;
       
       authContainer.innerHTML = `
+        ${admin ? `
+          <button type="button" class="btn-excel-download" id="btnAdminExcelDownload" title="2026 거제시장배 공식 대회신청서 엑셀 다운로드 (거제오션)" aria-label="엑셀 신청서 다운로드">
+            <svg class="excel-svg" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span>신청서 엑셀</span>
+          </button>
+        ` : ''}
         <button type="button" class="btn-user-profile ${admin ? 'is-admin-badge' : ''}" id="btnUserProfile" title="${tooltip}" aria-label="사용자 프로필 및 로그아웃">
           <span class="user-role-icon">${admin ? '👑' : '🏊'}</span>
           <span class="user-display-name">${shortName}</span>
@@ -192,8 +190,25 @@ export function initAuth(options = {}) {
   if (options.showToast) toastHandler = options.showToast;
   if (options.onAuthChange) authChangeCallbacks.push(options.onAuthChange);
 
-  // Bind delegated click events for Google Login & Profile Logout
+  // Bind delegated click events for Google Login, Profile Logout & Excel Download
   document.addEventListener('click', (e) => {
+    const excelBtn = e.target.closest('#btnAdminExcelDownload');
+    if (excelBtn) {
+      e.preventDefault();
+      const currentRecords = typeof window.getGmdcRecords === 'function' ? window.getGmdcRecords() : window.gmdcRecords;
+      if (typeof window.downloadApplicationExcel === 'function') {
+        window.downloadApplicationExcel({ showToast: toastHandler, teamName: '거제오션', records: currentRecords });
+      } else {
+        import('./excelExporter.js').then(module => {
+          module.downloadApplicationExcel({ showToast: toastHandler, teamName: '거제오션', records: currentRecords });
+        }).catch(err => {
+          console.error('엑셀 모듈 로드 실패:', err);
+          if (toastHandler) toastHandler('❌ 엑셀 모듈 로드 실패: ' + err.message);
+        });
+      }
+      return;
+    }
+
     const loginBtn = e.target.closest('#btnGoogleLogin');
     if (loginBtn) {
       e.preventDefault();

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-5H98EB7ZSP"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-5H98EB7ZSP');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <title>거제오션 운영기록 관리</title>
+  <meta name="description" content="2026년 제19회 거제시장배 수영대회 GMDC 거제오션 운영진 회의록 및 운영 기록 관리">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📝</text></svg>">
+  <link rel="stylesheet" href="style.css?v=20260906_05">
+  <style>
+    .meeting-container {
+      max-width: 1200px;
+      margin: 16px auto 60px auto;
+      padding: 0 16px;
+    }
+    .btn-pdf-export {
+      display: none;
+      background: #f8fafc;
+      color: #334155;
+      border: 1px solid #cbd5e1;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      align-items: center;
+      gap: 5px;
+      font-size: 12.5px;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+    .btn-pdf-export:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+      border-color: #94a3b8;
+    }
+    body.is-admin .btn-pdf-export {
+      display: inline-flex;
+    }
+    .btn-new-log {
+      display: none;
+      background: #0284c7;
+      color: #ffffff;
+      border: 1px solid #0284c7;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      align-items: center;
+      gap: 5px;
+      font-size: 12.5px;
+      white-space: nowrap;
+    }
+    body.is-admin .btn-new-log {
+      display: inline-flex;
+    }
+    @media print {
+      body { background: #ffffff !important; }
+      .app-header, .toolbar, .no-print, .log-admin-actions, .log-user-lock-tag { display: none !important; }
+      .meeting-container { max-width: 100% !important; margin: 0 !important; padding: 0 !important; }
+      .log-item-card { break-inside: avoid; border: 1px solid #ccc !important; box-shadow: none !important; margin-bottom: 20px; }
+      .log-card-details { display: block !important; }
+      .log-toggle-chevron { display: none !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app-container">
+    <!-- Main Top Header -->
+    <header class="app-header">
+      <div class="header-left">
+        <!-- 1. Google Login / User Profile -->
+        <div class="header-auth-area" id="headerAuthArea">
+          <button type="button" class="btn-google-login" id="btnGoogleLogin" title="Google 계정으로 로그인" aria-label="Google 로그인">
+            <svg class="google-svg" viewBox="0 0 24 24" width="14" height="14">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+            </svg>
+            <span>구글 로그인</span>
+          </button>
+        </div>
+
+        <div class="header-badge">거제오션 운영기록 관리 &nbsp;
+          <button id="btnOpenRulesModal" class="btn-rules-header" title="2026년 제19회 거제시장배 대회 요강 보기">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+            <span>모집요강</span>
+          </button>
+        </div>
+
+        <!-- Navigation Tabs (5 modules) -->
+        <nav class="division-nav" aria-label="메뉴 선택">
+          <a href="index.html" class="division-tab" id="attendanceTab" title="훈련 출석부 (단축키: C 또는 H)">📋 훈련 출석부</a>
+          <a href="training_calendar.html" class="division-tab" id="calendarTab" title="훈련 일정표 (단축키: K)">📅 훈련 일정표</a>
+          <a href="meeting_notes.html" class="division-tab active" id="meetingTab" title="운영기록 (단축키: M)">📝 운영기록</a>
+          <a href="adult-member.html" class="division-tab" id="adultDivisionTab" title="성인부 참가신청 (단축키: G 또는 A)">🏆 성인부</a>
+          <a href="student-member.html" class="division-tab" id="studentDivisionTab" title="학생부 참가신청 (단축키: S)">🧒 학생부</a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="meeting-container">
+      <!-- Filter & Search Toolbar -->
+      <section class="toolbar" style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+        <div class="toolbar-left" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+          <div class="search-box">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="logSearchInput" placeholder="제목, 내용, 날짜 검색..." autocomplete="off">
+          </div>
+
+          <div class="filter-group">
+            <select id="logCategorySelect" class="filter-select">
+              <option value="all" selected>전체 분류</option>
+              <option value="훈련일정">🏊 훈련일정</option>
+              <option value="운영회의">👥 운영회의</option>
+              <option value="대회일정">🏆 대회일정</option>
+              <option value="이벤트">🎉 이벤트</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="toolbar-right no-print" style="display: flex; gap: 8px; align-items: center;">
+          <button type="button" class="btn btn-new-log" id="btnNewLog" title="관리자 전용: 신규 운영기록 등록">
+            <span>➕ 신규 운영기록 작성</span>
+          </button>
+          <button type="button" class="btn btn-primary" id="btnPrintAllSchedule" title="모든 세부 기록을 펼친 모습으로 PDF / 인쇄 형식으로 저장합니다" style="background:#0284c7; border-color:#0284c7; font-weight:700; display:inline-flex; align-items:center; gap:5px; font-size:12.5px; padding:6px 14px; border-radius:6px; color:#ffffff; cursor:pointer; border:1px solid #0284c7;">
+            <span>📄 모든 기록 PDF 출력</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Logs List Container -->
+      <div id="logsListContainer">
+        <!-- Injected via operation-logs.js -->
+      </div>
+    </main>
+
+    <!-- Modal for Create / Edit Operation Log -->
+    <div id="logFormModal" class="modal-overlay">
+      <div class="modal-content log-form-modal">
+        <div class="modal-header">
+          <h3 id="logModalTitle" style="font-size: 16px; color: var(--text-color);">📝 신규 운영기록 작성</h3>
+          <button id="btnLogModalClose" class="modal-close-btn" title="닫기" aria-label="닫기">&times;</button>
+        </div>
+        <div class="modal-body">
+          <form id="logEditForm">
+            <div class="log-form-grid">
+              <div>
+                <label class="form-label" for="logInputDate">📅 일자 (Date)</label>
+                <input type="date" id="logInputDate" class="form-input" required />
+              </div>
+              <div>
+                <label class="form-label" for="logInputCategory">🏷️ 분류 (Category)</label>
+                <select id="logInputCategory" class="form-select">
+                  <option value="훈련일정">훈련일정</option>
+                  <option value="운영회의">운영회의</option>
+                  <option value="대회일정">대회일정</option>
+                  <option value="이벤트">이벤트</option>
+                </select>
+              </div>
+
+              <div class="form-group-full">
+                <label class="form-label" for="logInputTitle">📌 제목 (Title)</label>
+                <input type="text" id="logInputTitle" class="form-input" placeholder="예: 제1회차 집중 훈련 및 타임 트라이얼" required />
+              </div>
+
+              <div>
+                <label class="form-label" for="logInputTime">⏱️ 시간 (Time)</label>
+                <input type="text" id="logInputTime" class="form-input" placeholder="예: 06:30 ~ 09:00" />
+              </div>
+              <div>
+                <label class="form-label" for="logInputLocation">📍 장소 (Location)</label>
+                <input type="text" id="logInputLocation" class="form-input" placeholder="예: 거제 동부학생수영장" />
+              </div>
+
+              <div class="form-group-full">
+                <label class="form-label" for="logInputAttendees">👥 대상 / 참석자 (Attendees)</label>
+                <input type="text" id="logInputAttendees" class="form-input" placeholder="예: 성인부 및 학생부 출전 선수 전원" />
+              </div>
+
+              <div class="form-group-full">
+                <label class="form-label" for="logInputContent">📄 상세 내용 / 안건 (Content)</label>
+                <textarea id="logInputContent" class="form-textarea" placeholder="훈련 세부 프로그램 또는 회의 안건 내용을 작성하세요."></textarea>
+              </div>
+
+              <div class="form-group-full">
+                <label class="form-label" for="logInputDecisions">✅ 결정 및 조치사항 (Decisions)</label>
+                <textarea id="logInputDecisions" class="form-textarea" placeholder="회의 의결 사항 또는 훈련 후 조치사항을 작성하세요."></textarea>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer" style="display: flex; gap: 8px; justify-content: flex-end;">
+          <button type="button" id="btnLogModalCancel" class="btn btn-secondary">취소</button>
+          <button type="button" id="btnLogModalSave" class="btn btn-primary" style="background:#0284c7; border-color:#0284c7;">
+            💾 저장하기
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+  </div>
+
+  <script type="module" src="auth.js?v=20260906_05"></script>
+  <script type="module" src="prospectus.js?v=20260906_05"></script>
+  <script type="module" src="operation-seed.js?v=20260906_05"></script>
+  <script type="module" src="operation-logs.js?v=20260906_05"></script>
+  <script src="shortcut.js?v=20260906_05"></script>
+</body>
+
+</html>
