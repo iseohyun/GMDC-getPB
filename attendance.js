@@ -3,8 +3,8 @@
 // View & Controller logic coordinating UI, Firebase Realtime Sync, and Modals.
 // ==========================================================================
 
-import { firebaseApp } from "./firebase-config.js";
-import { ATTENDANCE_DATES, OFFICIAL_MATCH_SCHEDULE, STORAGE_KEYS } from "./constants.js";
+import { firebaseApp } from "./firebase-config.js?v=20260909_03";
+import { ATTENDANCE_DATES, OFFICIAL_MATCH_SCHEDULE, STORAGE_KEYS } from "./constants.js?v=20260909_03";
 import { 
   formatBirthDisplay, 
   isSwimmerActive, 
@@ -15,7 +15,7 @@ import {
   checkSwimmerMatchParticipation as _checkSwimmerMatchParticipation,
   filterSwimmers,
   loadSwimmerRosterFromStorage
-} from "./swimmerService.js";
+} from "./swimmerService.js?v=20260909_03";
 import { 
   exportRosterAsTxt as _exportRosterAsTxt,
   exportRosterAsExcel as _exportRosterAsExcel,
@@ -23,10 +23,10 @@ import {
   captureTableAsImage,
   exportRosterAsJpg as _exportRosterAsJpg,
   exportRosterAsPng as _exportRosterAsPng
-} from "./exportService.js";
+} from "./exportService.js?v=20260909_03";
 import { getFirestore, doc, onSnapshot, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-import { initAuth, isAdmin, getCurrentUser, isAttendanceEditAllowed } from "./auth.js";
-import { openRulesModal } from "./prospectus.js";
+import { initAuth, isAdmin, getCurrentUser, isAttendanceEditAllowed } from "./auth.js?v=20260909_03";
+import { openRulesModal } from "./prospectus.js?v=20260909_03";
 
 // Re-export for backward compatibility
 export { ATTENDANCE_DATES, OFFICIAL_MATCH_SCHEDULE, formatBirthDisplay, isSwimmerActive, compressIndividualEvents };

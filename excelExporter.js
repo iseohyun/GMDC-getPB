@@ -306,14 +306,12 @@ export async function downloadApplicationExcel(options = {}) {
       zip.file('xl/workbook.xml', wbXml);
     }
 
-    // 5. Update sharedStrings.xml (Replace team names and purge disabled member names)
+    // 5. Update sharedStrings.xml (Replace team names)
     if (zip.file('xl/sharedStrings.xml')) {
       let sstXml = await zip.file('xl/sharedStrings.xml').async('text');
       sstXml = sstXml.replace(/거제야호/g, teamName)
                      .replace(/GMDC야호/g, teamName)
-                     .replace(/GMDC/g, teamName)
-                     .replace(/이동규/g, '')
-                     .replace(/이채율/g, '');
+                     .replace(/GMDC/g, teamName);
       zip.file('xl/sharedStrings.xml', sstXml);
     }
 
@@ -335,12 +333,10 @@ export async function downloadApplicationExcel(options = {}) {
       if (fileName.startsWith('xl/worksheets/') && fileName.endsWith('.xml') && fileName !== 'xl/worksheets/sheet1.xml' && fileName !== 'xl/worksheets/sheet2.xml') {
         let sheetXml = await zip.file(fileName).async('text');
         let modified = false;
-        if (sheetXml.includes('거제야호') || sheetXml.includes('GMDC') || sheetXml.includes('이동규') || sheetXml.includes('이채율')) {
+        if (sheetXml.includes('거제야호') || sheetXml.includes('GMDC')) {
           sheetXml = sheetXml.replace(/거제야호/g, teamName)
                              .replace(/GMDC야호/g, teamName)
-                             .replace(/GMDC/g, teamName)
-                             .replace(/이동규/g, '')
-                             .replace(/이채율/g, '');
+                             .replace(/GMDC/g, teamName);
           modified = true;
         }
         if (modified) {

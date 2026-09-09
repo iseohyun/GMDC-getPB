@@ -3,9 +3,9 @@
  * Firebase Cloud Firestore 실시간 연동, 계영 최적 조합 연산, 출전 종목 현황 매트릭스
  */
 
-import { firebaseApp } from "./firebase-config.js";
+import { firebaseApp } from "./firebase-config.js?v=20260909_03";
 import { getFirestore, doc, setDoc, onSnapshot, getDoc, getDocs, collection, addDoc, deleteDoc, updateDoc, query, orderBy, limit, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-import { initAuth, isAdmin, canEditRecords, isDeadlineExpired, loginWithGoogle, logoutUser, getCurrentUser, formatUserDisplayName } from "./auth.js";
+import { initAuth, isAdmin, canEditRecords, isDeadlineExpired, loginWithGoogle, logoutUser, getCurrentUser, formatUserDisplayName } from "./auth.js?v=20260909_03";
 
 // Initialize Firestore (App singleton provided by firebase-config.js)
 let db = null;
@@ -88,7 +88,7 @@ const DEFAULT_RECORDS = [
   {"id": 16, "age": "41", "group": "4그룹", "gender": "남", "name": "양승진", "birthId": "19840221-1", "team": "B", "phone": "010-4252-4589", "address": "거제시 장평2로19 103동 402호", "club": "거제야르", "depositor": "거제야르", "event1": "자유형 50", "event2": "", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
   {"id": 17, "age": "44", "group": "4그룹", "gender": "남", "name": "이도형", "birthId": "19810823-1", "team": "B", "phone": "010-5155-2728", "address": "거제시 장평1로 86, 삼성S빌리지 B동 202호", "club": "거제야르", "depositor": "거제야르", "event1": "자유형 50", "event2": "핀자유형 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
   {"id": 18, "age": "42", "group": "4그룹", "gender": "남", "name": "정서현", "birthId": "19830903-1", "team": "B", "phone": "010-4266-4766", "address": "거제시 상동5길 117-16, 206동 402호", "club": "거제야르", "depositor": "거제야르", "event1": "배영 50", "event2": "평영 50", "finFly": "", "finFree": "27.92", "free": "33.59", "back": "", "breast": "", "fly": ""},
-  {"id": 19, "age": "47", "group": "4그룹", "gender": "여", "name": "김상희", "birthId": "19780602-2", "team": "B", "phone": "010-6880-5472", "address": "거제시 제산로 2-5 삼성쉐르빌APT 105동 904호", "club": "거제야르", "depositor": "거제야르", "event1": "핀자유형 50", "event2": "자유형 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
+  {"id": 19, "age": "47", "group": "4그룹", "gender": "여", "name": "김상희", "birthId": "19780602-2", "team": "B", "phone": "010-6880-5472", "address": "거제시 제산로 2-5 삼성쉐르빌APT 105동 904호", "club": "거제야르", "depositor": "거제야르", "event1": "핀자유형 50", "event2": "", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
   {"id": 20, "age": "43", "group": "4그룹", "gender": "여", "name": "박다유", "birthId": "19820825-2", "team": "A", "phone": "010-8234-5210", "address": "거제시 장평1로 86, 삼성S빌리지 B동 202호", "club": "거제야호", "depositor": "거제야호", "event1": "자유형 50", "event2": "배영 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
   {"id": 21, "age": "48", "group": "4그룹", "gender": "여", "name": "손혜정", "birthId": "19770415-2", "team": "A", "phone": "010-8603-9827", "address": "거제시 일운면 소동8길 11, 서희 108동 303호", "club": "거제야호", "depositor": "거제야호", "event1": "핀자유형 50", "event2": "핀접영 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
   {"id": 22, "age": "40", "group": "4그룹", "gender": "여", "name": "심민경", "birthId": "19850520-2", "team": "B", "phone": "010-9611-8332", "address": "거제시 거제 중앙로3길 15, 102동 1003호", "club": "거제야르", "depositor": "거제야르", "event1": "자유형 50", "event2": "배영 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
@@ -179,7 +179,7 @@ let saveTimeout = null;
 // ==========================================
 // PINNED RELAY SELECTIONS (개인별 단체전 선발 고정)
 // ==========================================
-const PINNED_RELAYS_STORAGE_KEY = "gmdc_pinned_relays_v2";
+const PINNED_RELAYS_STORAGE_KEY = "gmdc_pinned_relays_v3";
 
 const RELAY_TITLES = {
   combo1: '혼성 핀계영 300m',
@@ -192,16 +192,16 @@ const RELAY_TITLES = {
 const DEFAULT_PINNED_RELAYS = {
   A: {
     combo1: ['이지훈', '서충근', '박재홍', '이지호', '전경미', '박선화'],
-    combo2: ['박슬우', '안상준', '김기용', '박봉권'],
+    combo2: ['박슬우', '안상준', '박봉권', '김기용'],
     combo3: ['이영경', '손혜정', '이미영', '박선화'],
-    combo4: { back: '조성찬', breast: '이경열', fly: '박재홍', free: '안상준' },
-    combo5: { back: '전경미', breast: '이지호', fly: '이미영', free: '손혜정' }
+    combo4: { back: '조성찬', breast: '서정찬', fly: '박재홍', free: '안상준' },
+    combo5: { back: '전경미', breast: '추성비', fly: '이미영', free: '손혜정' }
   },
   B: {
-    combo1: ['윤주권', '정서현', '권순용', '김애란', '이은희', '김상희'],
-    combo2: ['양승진', '정서현', '윤주권', '권순용'],
+    combo1: ['정서현', '권순용', '윤주권', '김애란', '이은희', '김상희'],
+    combo2: ['정서현', '윤주권', '정성민', '권순용'],
     combo3: ['이은희', '김애란', '김상희', '심민경'],
-    combo4: { back: '윤주권', breast: '권순용', fly: '정서현', free: '양승진' },
+    combo4: { back: '정서현', breast: '권순용', fly: '윤주권', free: '정성민' },
     combo5: { back: '심민경', breast: '이은희', fly: '김애란', free: '김상희' }
   }
 };
@@ -2139,6 +2139,17 @@ function initFirebaseSync() {
               updateStats();
               renderSummaryMatrices();
             }
+          }
+        }
+      }
+
+      // Sync pinned relays from Firestore
+      if (data && data.pinnedRelays && typeof data.pinnedRelays === 'object') {
+        if (JSON.stringify(pinnedRelaysState) !== JSON.stringify(data.pinnedRelays)) {
+          pinnedRelaysState = JSON.parse(JSON.stringify(data.pinnedRelays));
+          localStorage.setItem(PINNED_RELAYS_STORAGE_KEY, JSON.stringify(pinnedRelaysState));
+          if (typeof renderRelaySection === 'function') {
+            renderRelaySection();
           }
         }
       }

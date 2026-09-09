@@ -4,9 +4,9 @@
 // Real-time Firestore Sync & LocalStorage Cache-First Architecture
 // ==========================================================================
 
-import { firebaseApp } from "./firebase-config.js";
+import { firebaseApp } from "./firebase-config.js?v=20260909_03";
 import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-import { initAuth } from "./auth.js";
+import { initAuth } from "./auth.js?v=20260909_03";
 import { 
   OFFICIAL_FIXED_MILESTONES,
   DEFAULT_OPERATION_LOGS,
@@ -14,7 +14,7 @@ import {
   buildCalendarEventsMap,
   loadLocalLogsCache,
   saveLocalLogsCache 
-} from "./operation-seed.js";
+} from "./operation-seed.js?v=20260909_03";
 
 // Firestore (App singleton provided by firebase-config.js)
 const db = getFirestore(firebaseApp);

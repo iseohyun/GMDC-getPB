@@ -1,6 +1,6 @@
-import { firebaseApp } from "./firebase-config.js";
+import { firebaseApp } from "./firebase-config.js?v=20260909_03";
 import { getFirestore, doc, setDoc, onSnapshot, collection, addDoc, deleteDoc, updateDoc, getDoc, getDocs, query, orderBy, limit, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-import { initAuth, isAdmin, canEditRecords, isDeadlineExpired, loginWithGoogle, logoutUser, getCurrentUser, formatUserDisplayName } from "./auth.js";
+import { initAuth, isAdmin, canEditRecords, isDeadlineExpired, loginWithGoogle, logoutUser, getCurrentUser, formatUserDisplayName } from "./auth.js?v=20260909_03";
 
 // Initialize Firestore (App singleton provided by firebase-config.js)
 let db, DOC_REF;
@@ -223,7 +223,7 @@ const DEFAULT_STUDENT_RECORDS = [
   {"id": 18, "age": "13", "group": "7그룹", "gender": "여", "name": "안서윤", "birthId": "20130806-4", "event1": "자유형 50", "event2": "배영 50", "phone": "010-4005-7171", "club": "거제야호", "depositor": "거제야호", "address": "거제시 아주2로138 102동 1801호", "free": "35.48", "back": "", "breast": "", "fly": ""},
   {"id": 19, "age": "14", "group": "7그룹", "gender": "여", "name": "정채윤", "birthId": "20120321-4", "event1": "자유형 50", "event2": "평영 50", "phone": "010-8312-5384", "club": "거제야호", "depositor": "거제야호", "address": "거제시 장평1로86 B동 204호", "free": "35.78", "back": "", "breast": "", "fly": ""},
   {"id": 21, "age": "8", "group": "2그룹", "gender": "여", "name": "이설하", "birthId": "20180316-4", "event1": "자유형 50", "event2": "배영 50", "phone": "010-9374-1091", "club": "거제야호", "depositor": "거제야호", "address": "거제시 제산로 51 힐스테이트 106동 102호", "free": "", "back": "", "breast": "", "fly": ""},
-  {"id": 22, "age": "8", "group": "2그룹", "gender": "여", "name": "지상희", "birthId": "20181211-4", "event1": "자유형 50", "event2": "접영 50", "phone": "010-3419-1020", "club": "거제야호", "depositor": "거제야호", "address": "거제시문동1길 42, 109동1501호(센트럴푸르지오)", "free": "", "back": "", "breast": "", "fly": ""},
+  {"id": 22, "age": "8", "group": "2그룹", "gender": "여", "name": "지상희", "birthId": "20181211-4", "event1": "자유형 50", "event2": "평영 50", "phone": "010-3419-1020", "club": "거제야호", "depositor": "거제야호", "address": "거제시문동1길 42, 109동1501호(센트럴푸르지오)", "free": "", "back": "", "breast": "", "fly": ""},
   {"id": 23, "age": "10", "group": "4그룹", "gender": "남", "name": "이승후", "birthId": "20160329-3", "event1": "자유형 50", "event2": "배영 50", "phone": "010-9374-1091", "club": "거제야호", "depositor": "거제야호", "address": "거제시 제산로 51 힐스테이트 106동 102호", "free": "", "back": "", "breast": "", "fly": ""},
   {"id": 24, "age": "8", "group": "2그룹", "gender": "남", "name": "이서빈", "birthId": "20180102-3", "event1": "자유형 50", "event2": "접영 50", "phone": "010-3016-1982", "club": "거제야호", "depositor": "거제야호", "address": "거제시 문동1길42, 110동 2501호", "free": "", "back": "", "breast": "", "fly": ""}
 ];
@@ -231,9 +231,9 @@ const DEFAULT_STUDENT_RECORDS = [
 // Default Student Pinned Relay Members (학생부 단체전 고정 멤버)
 const DEFAULT_PINNED_RELAYS = {
   combo1: ['배건우', '손민재', '양서진', '김루민'],
-  combo2: [],
-  combo3: { back: '김하준', breast: '김예준', fly: '양서진', free: '배건우' },
-  combo4: { back: null, breast: null, fly: null, free: null }
+  combo2: ['지상희', '이유빈', '지혜람', '이은서'],
+  combo3: { back: '김하준', breast: '김예준', fly: '양서진', free: '이서빈' },
+  combo4: { back: '김서윤', breast: '이유빈', fly: '류다윤', free: '이설하' }
 };
 
 const RELAY_TITLES = {

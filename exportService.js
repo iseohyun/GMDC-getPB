@@ -3,8 +3,8 @@
 // Handles formatted export to TXT, Excel (CSV with UTF-8 BOM), PDF, and Images (JPG/PNG).
 // ==========================================================================
 
-import { formatBirthDisplay, getSwimmerKey } from "./swimmerService.js";
-import { ATTENDANCE_DATES } from "./constants.js";
+import { formatBirthDisplay, getSwimmerKey } from "./swimmerService.js?v=20260909_03";
+import { ATTENDANCE_DATES } from "./constants.js?v=20260909_03";
 
 // Image Export Constants
 export const EXPORT_IMAGE_SCALE = 2;       // 2× high-resolution canvas

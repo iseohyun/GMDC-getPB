@@ -4,7 +4,7 @@
 // Admin-Only Detailed View & Lock Enforcement
 // ==========================================================================
 
-import { firebaseApp } from "./firebase-config.js";
+import { firebaseApp } from "./firebase-config.js?v=20260909_03";
 import { 
   getFirestore, 
   collection, 
@@ -15,7 +15,7 @@ import {
   query, 
   orderBy
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-import { initAuth, isAdmin, getCurrentUser, formatUserDisplayName, canViewOperationNotes, canEditOperationNotes } from "./auth.js";
+import { initAuth, isAdmin, getCurrentUser, formatUserDisplayName, canViewOperationNotes, canEditOperationNotes } from "./auth.js?v=20260909_03";
 import { 
   DEFAULT_OPERATION_LOGS, 
   STORAGE_LOGS_CACHE_KEY, 
@@ -24,7 +24,7 @@ import {
   getCategoryBadgeClass,
   loadLocalLogsCache,
   saveLocalLogsCache 
-} from "./operation-seed.js";
+} from "./operation-seed.js?v=20260909_03";
 
 // Firestore (App singleton provided by firebase-config.js)
 const db = getFirestore(firebaseApp);

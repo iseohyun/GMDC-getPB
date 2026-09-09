@@ -2,8 +2,8 @@
 // GMDC Swim Club - Google Authentication & Role-Based Access Control
 // ==================================================================
 
-import { firebaseApp } from "./firebase-config.js";
-import { ADMIN_EMAILS, DEADLINE_ISO } from "./constants.js";
+import { firebaseApp } from "./firebase-config.js?v=20260909_03";
+import { ADMIN_EMAILS, DEADLINE_ISO } from "./constants.js?v=20260909_03";
 import { 
   getAuth, 
   GoogleAuthProvider, 

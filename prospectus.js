@@ -2,7 +2,7 @@
 // GMDC Swim Club - Shared Competition Prospectus Module (모집요강 모듈)
 // ==========================================================================
 
-import { PROSPECTUS_HTML } from './prospectus-content.js';
+import { PROSPECTUS_HTML } from "./prospectus-content.js?v=20260909_03";
 
 export function ensureRulesModal() {
   let modal = document.getElementById('rulesModal');

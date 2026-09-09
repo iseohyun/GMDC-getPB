@@ -1,0 +1,7 @@
+# 대회 신청서 변경이력 엑셀 (개인정보 및 임시 이력)
+excel/(거제야호-변경이력)*.xlsx
+
+# Node & OS
+node_modules/
+.DS_Store
+Thumbs.db
