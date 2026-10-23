@@ -12,22 +12,22 @@ export const SPA_ROUTES = {
   '#/roster-student-relay':   { url: 'student-member.html?view=records', title: '학생 단체', catId: 'cat-roster', itemId: 'student-relay' },
   '#/roster-adult-indiv':     { url: 'adult-member.html?view=events', title: '성인 개인', catId: 'cat-roster', itemId: 'adult-indiv' },
   '#/roster-adult-relay':     { url: 'adult-member.html?view=records', title: '성인 단체', catId: 'cat-roster', itemId: 'adult-relay' },
-  '#/training-attendance':    { url: 'attendance.html?v=20261024_06', title: '출석부', catId: 'cat-training', itemId: 'attendance' },
+  '#/training-attendance':    { url: 'attendance.html?v=20261024_08', title: '출석부', catId: 'cat-training', itemId: 'attendance' },
   '#/training-calendar':      { url: 'training_calendar.html', title: '일정표', catId: 'cat-training', itemId: 'calendar' },
   '#/training-meeting':       { url: 'meeting_notes.html', title: '운영기록', catId: 'cat-training', itemId: 'meeting' },
   '#/competition-prospectus':    { url: 'prospectus.html', title: '모집요강', catId: 'cat-competition', itemId: 'prospectus' },
-  '#/competition-coach-meeting': { url: 'coach-meeting.html?v=20261024_05', title: '감독자회의요강', catId: 'cat-competition', itemId: 'coach-meeting' },
-  '#/competition-live-student': { url: 'live-schedule.html?div=student&v=20261024_04', title: '학생부 (24일)', catId: 'cat-competition', itemId: 'live-student' },
-  '#/competition-live-adult':   { url: 'live-schedule.html?div=adult&v=20261024_07', title: '성인부 (25일)', catId: 'cat-competition', itemId: 'live-adult' },
-  '#/competition-result':       { url: 'competition-result.html?v=20261024_07', title: '대회결과', catId: 'cat-competition', itemId: 'comp-result' },
-  '#/admin-share':              { url: 'share.html?v=20261024_07', title: '페이지 공유', catId: 'cat-admin', itemId: 'admin-share' },
-  '#/admin-settings':         { url: 'admin.html', title: '관리자 설정', catId: 'cat-admin', itemId: 'admin-settings', adminOnly: true }
+  '#/competition-coach-meeting': { url: 'coach-meeting.html?v=20261024_08', title: '감독자회의요강', catId: 'cat-competition', itemId: 'coach-meeting' },
+  '#/competition-live-student':  { url: 'live-schedule.html?div=student&v=20261024_08', title: '학생부 (24일)', catId: 'cat-competition', itemId: 'live-student' },
+  '#/competition-live-adult':    { url: 'live-schedule.html?div=adult&v=20261024_08', title: '성인부 (25일)', catId: 'cat-competition', itemId: 'live-adult' },
+  '#/competition-result':        { url: 'competition-result.html?v=20261024_09', title: '대회결과', catId: 'cat-competition', itemId: 'comp-result' },
+  '#/admin-share':               { url: 'share.html?v=20261024_08', title: '페이지 공유', catId: 'cat-admin', itemId: 'admin-share' },
+  '#/admin-settings':            { url: 'admin.html', title: '관리자 설정', catId: 'cat-admin', itemId: 'admin-settings', adminOnly: true }
 };
 
 const MENU_CATEGORIES = [
   {
     id: "cat-roster",
-    title: "1. 명부",
+    title: "1. 신청서",
     icon: "👥",
     items: [
       { id: "student-indiv", title: "학생 개인", hash: "#/roster-student-indiv", icon: "🧒" },
@@ -438,7 +438,7 @@ function initSpaRouter() {
     return;
   }
 
-  // 초기 해시 판별 (기본: 출석부)
+  // 초기 해시 판별 (2026/10/24: 학생부, 2026/10/25: 성인부, 그 외: 대회결과)
   const now = new Date();
   const y = now.getFullYear();
   const m = now.getMonth() + 1;
@@ -500,17 +500,11 @@ function showFeeModal() {
   overlay.className = 'sidebar-modal-overlay';
   overlay.innerHTML = `
     <div class="sidebar-modal-box">
-      <h3><span>💰</span> GMDC 클럽 회비 및 재정 현황</h3>
+      <h3><span>💰</span> "거제몽꾸 & 야르" 클럽 재정현황</h3>
       <p>
-        <strong>• 대회 참가비 및 특별 훈련 회비</strong>는 총무단 및 운영진을 통해 투명하게 집행되고 있습니다.<br>
-        <strong>• 세부 결산 및 집행 내역</strong>은 <code>운영기록 (회의록)</code> 페이지의 재정 보고서 항목에서 확인하실 수 있습니다.
+        - 세부 결산 및 집행 내역은 추후 공유 예정입니다.
       </p>
-      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; margin-bottom: 16px; font-size: 13px;">
-        <div><strong>입금 계좌:</strong> 카카오뱅크 (총무단)</div>
-        <div style="color: #64748b; margin-top: 4px;">문의: 거제오션 GMDC 총무단 및 운영진</div>
-      </div>
       <div class="sidebar-modal-actions">
-        <button type="button" class="btn-sidebar-modal-close" id="btnGoMeetingNotes" style="background:#f1f5f9; color:#475569; margin-right:auto;">운영기록 보러가기</button>
         <button type="button" class="btn-sidebar-modal-close" id="btnCloseFeeModal">닫기</button>
       </div>
     </div>
@@ -518,10 +512,6 @@ function showFeeModal() {
 
   document.body.appendChild(overlay);
   overlay.querySelector('#btnCloseFeeModal').addEventListener('click', () => overlay.remove());
-  overlay.querySelector('#btnGoMeetingNotes').addEventListener('click', () => {
-    overlay.remove();
-    navigateToRoute('#/training-meeting');
-  });
   overlay.addEventListener('click', (e) => {
     if (e.target === overlay) overlay.remove();
   });
