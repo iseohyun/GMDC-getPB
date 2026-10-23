@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <script>
+    // SPA 단일 주소 리다이렉트 (최상위 창으로 열렸을 때 index.html#/competition-coach-meeting 로 자동 전환)
+    (function() {
+      if (window.self === window.top && !window.location.search.includes('print=1')) {
+        window.location.replace('index.html#/competition-coach-meeting');
+      }
+    })();
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <title>2026 제19회 거제시장배 전국 마스터즈 수영대회 감독자 회의자료</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📋</text></svg>">
+  <link rel="stylesheet" href="style.css?v=20261024_05" />
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-page, #f8fafc);
+    }
+    body.with-sidebar {
+      padding-left: 0 !important;
+    }
+    .gmdc-sidebar, #sidebarBackdrop, .btn-mobile-sidebar-toggle {
+      display: none !important;
+    }
+    .prospectus-page-container {
+      max-width: 960px;
+      margin: 20px auto 60px auto;
+      padding: 32px;
+      background: #ffffff;
+      border: 1px solid var(--border-color, #e2e8f0);
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    }
+    .prospectus-action-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border-light, #e2e8f0);
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .coach-alert-red {
+      color: #dc2626;
+      font-weight: 800;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    .coach-alert-blue {
+      color: #1d4ed8;
+      font-weight: 700;
+    }
+    .coach-alert-blue-underline {
+      color: #1d4ed8;
+      font-weight: 800;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    .dq-table th {
+      background: #f0fdf4 !important;
+      color: #14532d !important;
+      border-color: #bbf7d0 !important;
+    }
+    .dq-table tr:nth-child(odd) td {
+      background: #f0fdf4;
+    }
+    .dq-table td {
+      border-color: #bbf7d0 !important;
+    }
+    .schedule-rest-badge {
+      display: inline-block;
+      background: #dcfce7;
+      color: #15803d;
+      border: 1px solid #86efac;
+      padding: 1px 8px;
+      border-radius: 6px;
+      font-weight: 800;
+      font-size: 12.5px;
+    }
+    @media (max-width: 640px) {
+      .prospectus-page-container {
+        margin: 10px 10px 40px 10px;
+        padding: 18px 16px;
+      }
+    }
+    @media print {
+      body {
+        background: #ffffff !important;
+      }
+      .prospectus-action-bar, .no-print {
+        display: none !important;
+      }
+      .prospectus-page-container {
+        box-shadow: none !important;
+        border: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        max-width: 100% !important;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="sidebar.css?v=20261024_05">
+</head>
+<body>
+  <!-- Main Content Container -->
+  <main class="prospectus-page-container">
+    <div class="prospectus-action-bar no-print">
+      <div style="font-size: 13px; color: var(--text-muted); font-weight: 600;">
+        📋 2026. 10. 24(토) ~ 10. 25(일) · 동부초등학교 수영장 내 회의실 (07:00)
+      </div>
+      <div style="display: flex; gap: 8px;">
+        <button type="button" class="btn btn-secondary" onclick="window.print()" style="font-size: 12.5px;">
+          🖨️ 인쇄 / PDF 저장 (Ctrl+P)
+        </button>
+      </div>
+    </div>
+
+    <div class="rules-modal-body" style="padding: 0;">
+      <h2 class="rules-main-title" id="coachMeetingTitle">
+        📋 2026 제19회 거제시장배 전국 마스터즈 수영대회 감독자 회의자료
+      </h2>
+
+      <!-- 1. 감독자회의 안내 -->
+      <h3 class="rules-section-title">1. 감독자회의 안내</h3>
+      <div class="rules-info-vertical">
+        <div class="rules-info-item"><span class="coach-alert-blue">• 학생부: 2026년 10월 24일(토) 07:00</span></div>
+        <div class="rules-info-item"><span class="coach-alert-blue">• 성인부: 2026년 10월 25일(일) 07:00</span></div>
+        <div class="rules-info-item"><span class="coach-alert-blue">• 장 소: 동부초등학교 수영장 내 회의실</span></div>
+        <div class="rules-info-item" style="margin-top: 6px;">
+          <span class="coach-alert-red">* 각 팀에서 불참자 선수 및 단체전 명단 변경사항 있을 경우 감독자회의에 반드시 전달</span>
+          <div class="rules-info-sub" style="margin-top: 4px; color: #334155; font-weight: 600;">
+            (불참 신청시 대회 책자 뒤편에 있는 불참 신청서를 이용해주시면 됩니다)
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. 워밍업 및 스타트 운영 -->
+      <h3 class="rules-section-title">2. 워밍업 및 스타트 운영 (오후 워밍업은 별도 운영하지 않음)</h3>
+
+      <h4 class="rules-sub-title">① 오전 워밍업</h4>
+      <ul class="rules-list">
+        <li><span class="coach-alert-blue">워밍업 시간: 06:30 ~ 08:00</span></li>
+        <li>학생부(10/24일)·성인부(10/25일) 동일하게 적용합니다.</li>
+        <li>워밍업 시간 내 스타트 훈련은 일괄 진행합니다.</li>
+      </ul>
+
+      <h4 class="rules-sub-title">② 스타트 훈련 레인 운영</h4>
+      <ul class="rules-list">
+        <li><span class="coach-alert-blue">1레인: 배영 스타트</span></li>
+        <li><span class="coach-alert-blue">2·3·4레인: 스타트 훈련</span></li>
+        <li><span class="coach-alert-blue">5레인: 워밍업</span></li>
+      </ul>
+      <div class="rules-card-box" style="margin-top: 8px; margin-bottom: 14px;">
+        <div style="font-size: 13px; font-weight: 600; color: #1e293b;">
+          ※ 원활한 스타트 훈련을 위해 <strong>오토코치(자동 출발 알림 장치)</strong>를 운영할 예정입니다.
+        </div>
+        <div style="margin-top: 6px;">
+          <span class="coach-alert-red">※ 5레인은 수위 조절판이 설치되어 있어 수심이 낮으므로, 5레인에서는 스타트가 절대 불가능 합니다.</span>
+          <div style="font-size: 12.5px; color: #475569; font-weight: 600; margin-top: 2px;">
+            (만약 스타트로 인한 사고 발생할 경우 주최 측 책임 없음)
+          </div>
+        </div>
+        <div style="margin-top: 8px; font-weight: 800; color: #0f172a;">
+          • 경기 시작 시간: <span style="color: #0284c7;">08:30</span>
+        </div>
+      </div>
+
+      <h4 class="rules-sub-title">④ 워밍업 및 안전수칙</h4>
+      <ul class="rules-list">
+        <li>학생부 워밍업 시간에는 지도자가 반드시 현장에서 참관해 주시기 바랍니다.</li>
+        <li>워밍업 및 스타트 시간을 반드시 준수해 주시기 바랍니다.</li>
+        <li>정해진 워밍업 시간 외 스타트는 금지합니다.</li>
+        <li>연맹에서 공지한 워밍업 및 경기 운영 시간을 반드시 준수해 주시기 바랍니다.</li>
+        <li>
+          <span class="coach-alert-blue-underline">안전사고 예방을 위해 10/24일 학생부 워밍업 시 스노클, 오리발 장비 사용을 금지 합니다.</span><br />
+          <span style="font-size: 12.5px; color: #334155; font-weight: 600;">(10/25일 성인부 워밍업 시 오리발은 사용가능)</span>
+        </li>
+      </ul>
+
+      <!-- 3. 경기장 출입 및 단체전 명단 -->
+      <h3 class="rules-section-title">3. 경기장 출입 및 단체전 명단</h3>
+      <h4 class="rules-sub-title">① 경기장 출입</h4>
+      <ul class="rules-list">
+        <li>선수 및 관계자께서는 지정된 경기장 출입 구역을 반드시 준수해 주시기 바랍니다.</li>
+      </ul>
+
+      <h4 class="rules-sub-title">② 단체전 출전 명단</h4>
+      <ul class="rules-list">
+        <li>단체전 출전 명단은 최초 신청 시 제출한 명단과 변경사항이 있을 경우 모두 <strong>감독자회의 종료 전까지</strong> 제출해 주시기 바랍니다.</li>
+        <li>감독자회의 종료 후에는 명단 변경이 어려울 수 있으니 반드시 시간을 준수해 주시기 바랍니다.</li>
+      </ul>
+
+      <!-- 4. 경기 스케줄 -->
+      <h3 class="rules-section-title">4. 경기 스케줄</h3>
+      <table class="rules-table rules-schedule-table">
+        <thead>
+          <tr>
+            <th style="width: 50%; background: #fef3c7; color: #92400e;">■ 학생부 10/24(토)</th>
+            <th style="width: 50%; background: #e0f2fe; color: #0369a1;">■ 성인부 10/25(일)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="vertical-align: top; padding: 14px 18px;">
+              <ol style="margin: 0; padding-left: 20px; line-height: 1.9; font-weight: 700;">
+                <li>계영 200m</li>
+                <li>접영 50m</li>
+                <li>배영 50m</li>
+                <li><span class="schedule-rest-badge">☕ 20분 휴식</span></li>
+                <li>평영 50m</li>
+                <li>자유형 50m</li>
+                <li>혼계영 200m</li>
+              </ol>
+            </td>
+            <td style="vertical-align: top; padding: 14px 18px;">
+              <ol style="margin: 0; padding-left: 20px; line-height: 1.9; font-weight: 700;">
+                <li>핀접영 50m</li>
+                <li>배영 50m</li>
+                <li>계영 200m</li>
+                <li>접영 50m</li>
+                <li><span class="schedule-rest-badge">☕ 20분 휴식</span></li>
+                <li>핀자유형 50m</li>
+                <li>평영 50m</li>
+                <li>혼계영 200m</li>
+                <li>자유형 50m</li>
+                <li><span class="schedule-rest-badge">☕ 10분 휴식</span></li>
+                <li>혼성 핀계영 300m</li>
+              </ol>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- 5. 경기 진행 관련 안내 -->
+      <h3 class="rules-section-title">5. 경기 진행 관련 안내</h3>
+      <div class="rules-card-box" style="border-left: 4px solid #dc2626; background: #fff5f5; margin-bottom: 12px;">
+        <div class="coach-alert-red" style="font-size: 14.5px;">
+          선수 1차 소집시 3회 불응시 자동실격 처리 됩니다.(필히 교육요망)
+        </div>
+      </div>
+      <ul class="rules-list">
+        <li><strong>성인부 선수들은 소집시 신분증 지참 해주세요.</strong></li>
+        <li>이번 대회에는 많은 선수들이 참가해 주셨습니다.</li>
+        <li>원활하고 신속한 경기 진행을 위해 <strong>별도의 점심시간 없이 경기가 계속 진행</strong>될 예정입니다.</li>
+        <li>참가 선수 및 감독자 여러분의 많은 협조와 양해 부탁드립니다.</li>
+        <li>(모든 경기는 별도의 예선 없이 <strong>타임 레이스 방식</strong>으로 진행 됩니다)</li>
+      </ul>
+
+      <!-- 6. 감독자 협조사항 -->
+      <h3 class="rules-section-title">6. 감독자 협조사항</h3>
+      <p style="font-size: 13.5px; color: #334155; font-weight: 600; margin-bottom: 10px;">
+        원활하고 안전한 대회 운영을 위해 각 팀 감독자께서는 다음 사항을 선수들에게 사전에 충분히 안내해 주시기 바랍니다.
+      </p>
+      <ul class="rules-list">
+        <li>워밍업 및 스타트 시간 준수</li>
+        <li>출발 신호는 <strong>‘take your marks’</strong>로 진행</li>
+        <li><strong>5레인 수심 주의 및 스타트 절대 금지</strong></li>
+        <li><strong>10/24일(토) 학생부 워밍업 시 스노클·오리발 사용 금지</strong></li>
+        <li><strong>10/25일(일) 성인부 워밍업 시 오리발만 사용가능(스노클 사용금지)</strong></li>
+        <li>지도자 워밍업 현장 참관</li>
+        <li>경기장 출입 구역 준수</li>
+        <li>단체전 출전 명단 및 변경사항 시간 내 제출</li>
+        <li>
+          경기 진행 및 휴식시간 준수<br />
+          <span style="font-size: 12.5px; color: #475569;">선수들의 안전과 원활한 경기 진행을 위해 감독자 여러분의 적극적인 협조를 부탁드립니다.</span>
+        </li>
+        <li>
+          기존에는 별다른 문제 없이 넘어갔던 부분도 전국대회에서는 실격 판정으로 이어질 수 있는 만큼, 각 팀 감독 선생님들께서는 선수들이 정확한 영법을 숙지하고 경기에 임할 수 있도록 조금 더 세심하게 지도해 주시기 바랍니다.
+        </li>
+      </ul>
+
+      <div class="rules-sub-sub-title" style="margin-top: 14px;">📌 종목별 실격기준</div>
+      <table class="rules-table dq-table">
+        <thead>
+          <tr>
+            <th style="width: 26%; text-align: center;">종 목</th>
+            <th style="text-align: center;">실격기준</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="text-align: center; font-weight: 800;">자유형(핀포함)</td>
+            <td>- 스타트, 턴 잠영 15m 오버시 실격</td>
+          </tr>
+          <tr>
+            <td style="text-align: center; font-weight: 800;">배영</td>
+            <td>- 15m 잠영 오버시 / 등이 90도이상 넘어가서 터치 실격</td>
+          </tr>
+          <tr>
+            <td style="text-align: center; font-weight: 800;">평영</td>
+            <td>- 원 돌핀킥, 원풀, 원킥 횟수 오버시 / 한손터치 / 역영중 돌핀킥 실격</td>
+          </tr>
+          <tr>
+            <td style="text-align: center; font-weight: 800;">접영(핀포함)</td>
+            <td>- 한손터치, 15m 잠영오버시 / 한팔접영 / 평영킥 실격</td>
+          </tr>
+          <tr>
+            <td style="text-align: center; font-weight: 800;">단체전</td>
+            <td>- 역영선수 미 터치시 출발하면 실격</td>
+          </tr>
+          <tr>
+            <td style="text-align: center; font-weight: 800;">공통</td>
+            <td>- 레인 줄을 잡거나 도보 시 실격</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="rules-card-box" style="margin-top: 12px; background: #f8fafc;">
+        <div style="font-weight: 800; text-decoration: underline; text-underline-offset: 3px; color: #0f172a;">
+          * 참가 기념품 및 추첨권은 1인 1매 지급 됩니다. (팀별 일괄 지급)
+        </div>
+        <div style="font-size: 13px; color: #334155; margin-top: 4px; line-height: 1.5;">
+          팀 대표분께서 일괄 수령 부탁 드리겠습니다.<br />
+          미수령시 상장배부처에 수령가능
+        </div>
+      </div>
+
+      <!-- 경기 주의 사항 및 시설 이용 안내 -->
+      <h3 class="rules-section-title" style="margin-top: 28px;">⚠️ 경기 주의 사항 및 시설 이용 안내</h3>
+      <ol class="rules-list" style="padding-left: 22px; line-height: 1.75;">
+        <li>본 경기는 <strong>대한수영연맹 규정</strong>에 의해 진행 한다.</li>
+        <li><strong>평영을 제외한 종목에서는 스타트 시 15M를 넘을 수 없으므로 주의 바랍니다.</strong></li>
+        <li>
+          이의 신청은 해당 선수 출전종목 <strong>경기종료 후 30분 이내</strong>에 선수의 지도자(감독·코치)가 이의 신청서 작성 후 심판장에게 제출 한다.<br />
+          <span style="font-weight: 800; color: #b91c1c;">이의신청 금액: 1차 10만원 / 2차 20만원</span>
+        </li>
+        <li>선수는 경기 중 자신의 속도·부력 또는 지구력을 향상시키는 장비나 장치를 사용 할수 없습니다.</li>
+        <li>경기 진행 시 경기 참가 선수를 제외한 지도자·학부모님들은 <strong>지정된 관람석에서 관람</strong>하여 주시기 바랍니다.</li>
+        <li>선진문화 정착과 참가선수를 보호하기 위한 조치로 <strong>수영장 주변 돗자리 사용을 금지</strong>하오니 적극 협조 부탁드립니다. <strong>(실내체육관 팀별 위치 배정)</strong></li>
+        <li>
+          물품 분실 및 도난 등 발생하지 않도록 개인 장비 등 귀중품은 경기장 내 소지 자제 요청 드립니다.<br />
+          <span style="font-size: 12.5px; color: #64748b;">(*분실 및 도난 등 상기 사항에 대하여 주최 측 책임 없음)</span>
+        </li>
+        <li><strong>수영장 내 취사 절대 금지 및 도시락 등 취식 금지</strong>입니다.</li>
+        <li>수영장 내 샤워실, 화장실, 체육관, 부대시설 등 청결 하게 사용 부탁 드립니다.</li>
+        <li>
+          <strong>주차장 이용 시간은 동부초·동부중 동일 합니다.</strong><br />
+          <span style="font-weight: 800; color: #0284c7;">(허용시간: 24일 토요일 06:00~18:00 / 25일 일요일 06:00~16:00)</span>
+        </li>
+      </ol>
+    </div>
+  </main>
+
+  <script type="module" src="sidebar.js?v=20261024_05"></script>
+</body>
+</html>

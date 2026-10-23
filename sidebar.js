@@ -15,7 +15,8 @@ export const SPA_ROUTES = {
   '#/training-attendance':    { url: 'attendance.html', title: '출석부', catId: 'cat-training', itemId: 'attendance' },
   '#/training-calendar':      { url: 'training_calendar.html', title: '일정표', catId: 'cat-training', itemId: 'calendar' },
   '#/training-meeting':       { url: 'meeting_notes.html', title: '운영기록', catId: 'cat-training', itemId: 'meeting' },
-  '#/competition-prospectus': { url: 'prospectus.html', title: '모집요강', catId: 'cat-competition', itemId: 'prospectus' },
+  '#/competition-prospectus':    { url: 'prospectus.html', title: '모집요강', catId: 'cat-competition', itemId: 'prospectus' },
+  '#/competition-coach-meeting': { url: 'coach-meeting.html?v=20261024_05', title: '감독자회의요강', catId: 'cat-competition', itemId: 'coach-meeting' },
   '#/competition-live-student': { url: 'live-schedule.html?div=student&v=20261024_04', title: '학생부 (24일)', catId: 'cat-competition', itemId: 'live-student' },
   '#/competition-live-adult':   { url: 'live-schedule.html?div=adult&v=20261024_04', title: '성인부 (25일)', catId: 'cat-competition', itemId: 'live-adult' },
   '#/admin-settings':         { url: 'admin.html', title: '관리자 설정', catId: 'cat-admin', itemId: 'admin-settings', adminOnly: true }
@@ -50,7 +51,7 @@ const MENU_CATEGORIES = [
     icon: "🏅",
     items: [
       { id: "prospectus",    title: "모집요강",               hash: "#/competition-prospectus",    icon: "📄" },
-      { id: "coach-meeting", title: "감독자회의요강 (추후)",   hash: "#coach",                       icon: "📋", action: "coachNotice" },
+      { id: "coach-meeting", title: "감독자회의요강",          hash: "#/competition-coach-meeting", icon: "📋" },
       { id: "live-student",  title: "학생부 (24일)",          hash: "#/competition-live-student",  icon: "⏱️" },
       { id: "live-adult",    title: "성인부 (25일)",          hash: "#/competition-live-adult",    icon: "⏱️" }
     ]
