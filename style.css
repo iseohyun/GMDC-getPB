@@ -6424,3 +6424,380 @@ body.is-admin .log-admin-actions {
 .relay-top-bar .team-b-dot {
   background: #059669;
 }
+
+/* ============================================================
+   출전 요약 누적 막대그래프 & 표 전환 UI
+   ============================================================ */
+.events-summary-section {
+  margin-bottom: 18px;
+}
+
+.events-summary-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 10px 16px;
+  margin-bottom: 10px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+}
+
+.events-summary-title-wrap {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.events-summary-main-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.02em;
+}
+
+.summary-chart-legend {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.chart-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.chart-legend-swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  display: inline-block;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12);
+}
+
+.swatch-fin-free,
+.seg-fin-free {
+  background-color: #fdba74; /* 연한 주황색 */
+}
+
+.swatch-fin-fly,
+.seg-fin-fly {
+  background-color: #d8b4fe; /* 연한 보라색 */
+}
+
+.swatch-free,
+.seg-free {
+  background-color: #f97316; /* 주황색 */
+}
+
+.swatch-back,
+.seg-back {
+  background-color: #22c55e; /* 초록색 */
+}
+
+.swatch-breast,
+.seg-breast {
+  background-color: #3b82f6; /* 파란색 */
+}
+
+.swatch-fly,
+.seg-fly {
+  background-color: #7c3aed; /* 보라색 */
+}
+
+.chart-legend-sep {
+  color: #cbd5e1;
+  font-weight: 400;
+}
+
+.chart-legend-note {
+  font-size: 11.5px;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.summary-view-switch {
+  display: inline-flex;
+  align-items: center;
+  background: #f1f5f9;
+  padding: 3px;
+  border-radius: 8px;
+  gap: 4px;
+}
+
+.summary-switch-btn {
+  border: 1px solid transparent;
+  background: transparent;
+  color: #64748b;
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.summary-switch-btn:hover {
+  color: #0f172a;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.summary-switch-btn.active {
+  background: #ffffff;
+  color: #0284c7;
+  border-color: #e2e8f0;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+}
+
+.summary-chart-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 18px 20px 14px 16px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+}
+
+.stacked-chart-layout {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+}
+
+.stacked-chart-yaxis {
+  position: relative;
+  width: 38px;
+  height: 220px;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.yaxis-unit {
+  position: absolute;
+  top: -16px;
+  right: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748b;
+}
+
+.yaxis-tick-label {
+  position: absolute;
+  right: 6px;
+  transform: translateY(50%);
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #64748b;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.stacked-chart-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.stacked-chart-plot {
+  position: relative;
+  height: 220px;
+  border-left: 1px solid #cbd5e1;
+  border-bottom: 1.5px solid #94a3b8;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  padding: 0 8px;
+}
+
+.chart-grid-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px dashed #e2e8f0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.chart-grid-line.is-zero {
+  border-top: none;
+}
+
+.chart-group-col {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 6px;
+}
+
+.chart-bar-wrap {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  width: 38px;
+  max-width: 44%;
+}
+
+.chart-group-col.single-bar .chart-bar-wrap {
+  width: 46px;
+  max-width: 72%;
+}
+
+.stacked-bar-stack {
+  width: 100%;
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-start;
+  position: relative;
+  transition: height 0.25s ease;
+}
+
+.bar-segment {
+  width: 100%;
+  position: relative;
+  cursor: pointer;
+  box-sizing: border-box;
+  border-top: 1px solid rgba(255, 255, 255, 0.35);
+  transition: filter 0.15s ease, transform 0.15s ease;
+}
+
+.bar-segment.is-top-segment {
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+.bar-segment:hover {
+  filter: brightness(1.08);
+  z-index: 20;
+  box-shadow: 0 0 0 1.5px #0f172a;
+}
+
+/* 남성과 여성 사이 심플 구분선 */
+.bar-gender-divider {
+  width: calc(100% + 6px);
+  margin-left: -3px;
+  height: 3px;
+  flex: 0 0 3px;
+  background: #0f172a;
+  box-shadow: 0 -1px 0 #ffffff, 0 1px 0 #ffffff;
+  border-radius: 2px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* 마우스오버 툴팁 */
+.bar-segment .seg-tooltip {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(15, 23, 42, 0.96);
+  color: #ffffff;
+  padding: 8px 11px;
+  border-radius: 8px;
+  font-size: 12px;
+  line-height: 1.45;
+  white-space: nowrap;
+  z-index: 100;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.28);
+  pointer-events: none;
+}
+
+.bar-segment .seg-tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 5px;
+  border-style: solid;
+  border-color: rgba(15, 23, 42, 0.96) transparent transparent transparent;
+}
+
+.bar-segment:hover .seg-tooltip {
+  display: block;
+}
+
+.seg-tooltip-title {
+  font-weight: 800;
+  font-size: 12px;
+  color: #f8fafc;
+  margin-bottom: 3px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  padding-bottom: 3px;
+}
+
+.seg-tooltip-names {
+  font-weight: 600;
+  color: #e2e8f0;
+  white-space: normal;
+  max-width: 230px;
+  word-break: keep-all;
+}
+
+.stacked-chart-xaxis {
+  display: flex;
+  justify-content: space-around;
+  padding: 6px 8px 0 8px;
+  margin-left: 38px;
+}
+
+.xaxis-group-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.xaxis-team-labels {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.xaxis-team-tag {
+  width: 38px;
+  max-width: 44%;
+  text-align: center;
+  font-size: 10.5px;
+  font-weight: 800;
+  border-radius: 4px;
+  padding: 1px 0;
+  line-height: 1.2;
+}
+
+.xaxis-team-tag.team-a {
+  color: #0369a1;
+  background: #e0f2fe;
+}
+
+.xaxis-team-tag.team-b {
+  color: #b45309;
+  background: #fef3c7;
+}
+
+.xaxis-group-name {
+  font-size: 12.5px;
+  font-weight: 800;
+  color: #1e293b;
+}

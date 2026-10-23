@@ -2715,77 +2715,441 @@ function getStudentRecommendedLineup(gender) {
   return `${slot1Str} + ${slot2Str} + ${slot3Str} + ${slot4Str}`;
 }
 
-// Update Top Dashboard Combination Panels
-function updateStats() {
-  const { combo1, combo2, combo3, combo4 } = calculateRelayCombinations();
-  renderComboCard('combo1', combo1, false, '남');
-  renderComboCard('combo2', combo2, false, '여');
-  renderComboCard('combo3', combo3, true, '남');
-  renderComboCard('combo4', combo4, true, '여');
+const STUDENT_RELAY_SLOT_CONFIGS = {
+  combo1: {
+    title: '남학생 계영 (자유형 200m)',
+    slots: [
+      { gender: '남', label: '1번', stroke: null },
+      { gender: '남', label: '2번', stroke: null },
+      { gender: '남', label: '3번', stroke: null },
+      { gender: '남', label: '4번', stroke: null }
+    ]
+  },
+  combo2: {
+    title: '여학생 계영 (자유형 200m)',
+    slots: [
+      { gender: '여', label: '1번', stroke: null },
+      { gender: '여', label: '2번', stroke: null },
+      { gender: '여', label: '3번', stroke: null },
+      { gender: '여', label: '4번', stroke: null }
+    ]
+  },
+  combo3: {
+    title: '남학생 혼계영 (배·평·접·자)',
+    slots: [
+      { gender: '남', label: '배영', stroke: 'back' },
+      { gender: '남', label: '평영', stroke: 'breast' },
+      { gender: '남', label: '접영', stroke: 'fly' },
+      { gender: '남', label: '자유형', stroke: 'free' }
+    ]
+  },
+  combo4: {
+    title: '여학생 혼계영 (배·평·접·자)',
+    slots: [
+      { gender: '여', label: '배영', stroke: 'back' },
+      { gender: '여', label: '평영', stroke: 'breast' },
+      { gender: '여', label: '접영', stroke: 'fly' },
+      { gender: '여', label: '자유형', stroke: 'free' }
+    ]
+  }
+};
+
+function getStudentComboSwimmerName(prefix, slot, slotIdx) {
+  const comboData = pinnedRelaysState?.[prefix];
+  if (!comboData) return '';
+  if (slot.stroke) {
+    return comboData[slot.stroke] || '';
+  }
+  if (Array.isArray(comboData)) {
+    return comboData[slotIdx] || '';
+  }
+  if (typeof comboData === 'object') {
+    return comboData[slotIdx] || comboData[String(slotIdx)] || '';
+  }
+  return '';
 }
 
-function renderComboCard(prefix, result, isMedley = false, gender = '남') {
+const _studentComboSelectWidthCache = new Map();
+
+function measureStudentComboSelectTextWidth(text, isSelected) {
+  const cacheKey = `${isSelected ? '1' : '0'}:${text}`;
+  if (_studentComboSelectWidthCache.has(cacheKey)) {
+    return _studentComboSelectWidthCache.get(cacheKey);
+  }
+  if (typeof document === 'undefined') return 118;
+  let width = 0;
+  try {
+    let dummy = document.getElementById('_studentComboSelectWidthDummy');
+    if (!dummy && document.body) {
+      dummy = document.createElement('select');
+      dummy.id = '_studentComboSelectWidthDummy';
+      dummy.setAttribute('aria-hidden', 'true');
+      dummy.tabIndex = -1;
+      dummy.style.cssText = 'position:fixed;top:-9999px;left:-9999px;visibility:hidden;pointer-events:none;width:auto !important;max-width:none !important;padding:3px 6px;font-size:13px;border:1px solid #cbd5e1;font-family:"Pretendard",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;';
+      document.body.appendChild(dummy);
+    }
+    let domWidth = 0;
+    if (dummy) {
+      dummy.style.fontWeight = isSelected ? '700' : '600';
+      dummy.innerHTML = `<option>${escapeHtml(text)}</option>`;
+      domWidth = Math.ceil(dummy.getBoundingClientRect().width) + 10;
+    }
+
+    const canvas = measureStudentComboSelectTextWidth._canvas || (measureStudentComboSelectTextWidth._canvas = document.createElement('canvas'));
+    const ctx = canvas.getContext('2d');
+    let canvasWidth = 0;
+    if (ctx) {
+      const fontWeight = isSelected ? '700' : '600';
+      ctx.font = `${fontWeight} 13px "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`;
+      const textWidth = Math.ceil(ctx.measureText(text).width);
+      canvasWidth = textWidth + 42;
+    }
+    width = Math.max(domWidth, canvasWidth);
+  } catch (e) {
+    width = 118;
+  }
+  if (!width || width < 86) width = 86;
+  _studentComboSelectWidthCache.set(cacheKey, width);
+  return width;
+}
+
+function adjustStudentComboSelectWidths(rootEl = document) {
+  if (!rootEl || typeof rootEl.querySelectorAll !== 'function') return;
+  const selects = rootEl.querySelectorAll('.combo-member-select');
+  selects.forEach(sel => {
+    const opt = sel.selectedOptions && sel.selectedOptions[0];
+    const cleanText = opt
+      ? (opt.getAttribute('data-clean-text') || opt.textContent || '').trim()
+      : '선수 선택 (공란)';
+    if (opt && opt.value && opt.text !== cleanText) {
+      opt.text = cleanText;
+    }
+    const isSel = Boolean(sel.value);
+    const px = measureStudentComboSelectTextWidth(cleanText, isSel);
+    sel.style.width = `${px}px`;
+  });
+}
+
+if (typeof document !== 'undefined' && document.fonts && document.fonts.ready) {
+  document.fonts.ready.then(() => {
+    _studentComboSelectWidthCache.clear();
+    adjustStudentComboSelectWidths(document);
+  });
+}
+
+// Update Top Dashboard Combination Panels
+function updateStats() {
+  ['combo1', 'combo2', 'combo3', 'combo4'].forEach(prefix => {
+    renderComboCard(prefix);
+  });
+}
+
+function renderComboCard(prefix) {
   const membersEl = document.getElementById(`${prefix}Members`);
   if (!membersEl) return;
 
-  if (!result || result.status !== 'SUCCESS') {
-    const recommendLine = getStudentRecommendedLineup(gender);
-    const failMsg = result ? result.message : '기록 부족';
+  const config = STUDENT_RELAY_SLOT_CONFIGS[prefix];
+  if (!config) return;
 
-    membersEl.innerHTML = `
-      <div class="combo-recommendation-box">
-        <div class="combo-fail-reason">${escapeHtml(failMsg)}</div>
-        <div class="combo-recommend-line">
-          <span class="recommend-badge">추천 라인업</span>
-          <span class="recommend-members">${escapeHtml(recommendLine)}</span>
-        </div>
-      </div>
+  const validGroups = ['1그룹', '2그룹', '3그룹', '4그룹', '5그룹', '6그룹'];
+
+  const slotOccupants = config.slots.map((sl, idx) => {
+    const name = getStudentComboSwimmerName(prefix, sl, idx);
+    const sw = name ? records.find(r => r.name === name) : null;
+    return { idx, label: sl.label, stroke: sl.stroke, name, swimmer: sw };
+  });
+
+  membersEl.innerHTML = config.slots.map((slot, slotIdx) => {
+    const currentName = slotOccupants[slotIdx]?.name || '';
+    const strokeKey = slot.stroke || 'free';
+
+    const candidateSwimmers = records.filter(r => {
+      if (r.gender !== slot.gender) return false;
+      if (!validGroups.includes(r.group) && r.name !== currentName) return false;
+      return true;
+    }).map(s => {
+      const isCurrent = s.name === currentName;
+      const otherOccupant = slotOccupants.find(occ => occ.idx !== slotIdx && occ.name === s.name);
+      const isUsedInThisComboOtherSlot = Boolean(otherOccupant);
+      const occupiedSlotLabel = otherOccupant ? otherOccupant.label : '';
+
+      const pbNum = parseFloat(s[strokeKey]);
+      const hasPB = !isNaN(pbNum) && pbNum > 0 && pbNum < 99;
+      const pbStr = hasPB ? `${pbNum.toFixed(2)}초` : '';
+      const timeVal = hasPB ? pbNum : 999.99;
+      const ageNum = parseFloat(s.age) || 0;
+
+      // 해당 슬롯에 이 후보를 넣었을 때 초등부 학년 안배(1·2그룹, 3·4그룹, 5·6그룹) 충족 여부 계산
+      const projectedSwimmers = slotOccupants.map((occ, idx) => {
+        if (idx === slotIdx) return s;
+        if (otherOccupant && idx === otherOccupant.idx) return slotOccupants[slotIdx]?.swimmer || null;
+        return occ.swimmer;
+      }).filter(Boolean);
+
+      const isRuleUnder = projectedSwimmers.length === 4 && !isValidStudentRelayGroup(projectedSwimmers);
+
+      return {
+        swimmer: s,
+        ageNum,
+        hasPB,
+        pbStr,
+        timeVal,
+        isCurrent,
+        isUsedInThisComboOtherSlot,
+        occupiedSlotLabel,
+        isRuleUnder
+      };
+    }).sort((a, b) => {
+      if (a.isCurrent !== b.isCurrent) return a.isCurrent ? -1 : 1;
+      if (a.isUsedInThisComboOtherSlot !== b.isUsedInThisComboOtherSlot) {
+        return a.isUsedInThisComboOtherSlot ? 1 : -1;
+      }
+      if (a.hasPB !== b.hasPB) return a.hasPB ? -1 : 1;
+      if (a.hasPB && b.hasPB && Math.abs(a.timeVal - b.timeVal) > 0.001) {
+        return a.timeVal - b.timeVal;
+      }
+      const grpCmp = (a.swimmer.group || '').localeCompare(b.swimmer.group || '', 'ko', { numeric: true });
+      if (grpCmp !== 0) return grpCmp;
+      return (a.swimmer.name || '').localeCompare(b.swimmer.name || '', 'ko');
+    });
+
+    const optionsHtml = [
+      '<option value="" data-clean-text="선수 선택 (공란)">선수 선택 (공란)</option>',
+      ...candidateSwimmers.map(({ swimmer: s, hasPB, pbStr, isCurrent, isUsedInThisComboOtherSlot, occupiedSlotLabel, isRuleUnder }) => {
+        const isSelected = isCurrent ? 'selected' : '';
+        const cleanText = `${s.name} (${s.group || (s.age ? s.age + '세' : '')})`;
+
+        const extraParts = [];
+        if (hasPB && pbStr) {
+          extraParts.push(pbStr);
+        }
+        if (isUsedInThisComboOtherSlot && occupiedSlotLabel) {
+          extraParts.push(`[${occupiedSlotLabel}]`);
+        }
+        const tagText = extraParts.length > 0 ? ` ${extraParts.join(' ')}` : '';
+
+        const displayText = isCurrent
+          ? escapeHtml(cleanText)
+          : `${escapeHtml(cleanText)}${escapeHtml(tagText)}`;
+
+        const underAttr = isRuleUnder
+          ? 'class="opt-age-under" style="background-color: #e2e8f0; color: #94a3b8;"'
+          : '';
+
+        return `<option value="${escapeHtml(s.name)}" ${isSelected} ${underAttr} data-clean-text="${escapeHtml(cleanText)}" data-rec-tag="${escapeHtml(tagText.trim())}">${displayText}</option>`;
+      })
+    ].join('');
+
+    const genderClass = slot.gender === '남' ? 'male' : 'female';
+    const isSelectedClass = currentName ? 'is-selected' : '';
+
+    const memberSelectHtml = `
+      <select 
+        class="combo-member-select ${isSelectedClass}" 
+        data-combo="${prefix}" 
+        data-slot-index="${slotIdx}" 
+        data-stroke="${slot.stroke || ''}"
+        title="${slot.label} 선발 선수 선택"
+      >
+        ${optionsHtml}
+      </select>
     `;
-    return;
-  }
 
-  membersEl.innerHTML = result.members.map(m => {
-    const orig = getLastYearRecord(m.id, m.strokeField);
-    const isLastYear = orig !== '' && (parseFloat(orig) === m.time);
-    const timeClass = isLastYear ? 'is-last-year' : 'is-target';
-    const timeDisplay = m.time > 0 ? `${m.time.toFixed(2)}s` : (m.isPinned ? '고정선발' : '-');
-
-    const relayAssignments = getStudentRelayAssignments(m.name);
+    const relayAssignments = currentName ? getStudentRelayAssignments(currentName) : [];
     const relayCount = relayAssignments.length;
     const relayBadgeHtml = relayCount >= 2
-      ? `<span class="member-relay-count-badge" title="${escapeHtml(m.name)} 선수는 단체전 ${relayCount}개 종목(${relayAssignments.map(a => a.label).join(', ')})에 출전합니다">${relayCount}</span>`
+      ? `<span class="member-relay-count-badge" title="${escapeHtml(currentName)} 선수는 단체전 ${relayCount}개 종목 출전">${relayCount}</span>`
       : '';
 
-    const pinBtnHtml = `
-      <button 
-        type="button" 
-        class="btn-pin-member ${m.isPinned ? 'is-pinned' : ''}" 
-        data-combo="${prefix}" 
-        data-name="${escapeHtml(m.name)}" 
-        data-stroke="${m.strokeField || ''}" 
-        title="${m.isPinned ? `${m.name} 선수 고정됨 (클릭 시 고정 해제)` : `${m.name} 선수 고정 (클릭 시 이 선수를 필수로 포함하여 최적 조합 계산)`}"
-      >
-        ${m.isPinned ? '📌' : '📍'}
-      </button>
-    `;
-
     return `
-      <div class="member-pill ${m.isPinned ? 'is-pinned' : ''}">
-        ${isMedley 
-          ? `<span class="stroke-badge ${m.strokeName}">${m.strokeName}</span>` 
-          : `<span class="member-gender ${m.gender === '남' ? 'male' : 'female'}">${m.gender}</span>`
-        }
-        <span>${escapeHtml(m.name || '무명')}</span>
-        <span style="color:var(--text-subtle);font-size:11px;">(${m.group || m.age + '세'})</span>
-        <span class="member-time ${timeClass}">${timeDisplay}</span>
+      <div class="member-pill">
+        <span class="member-slot-label ${genderClass}">${slot.label}</span>
+        ${memberSelectHtml}
         ${relayBadgeHtml}
-        ${pinBtnHtml}
       </div>
     `;
   }).join('');
+
+  adjustStudentComboSelectWidths(membersEl);
+}
+
+const STUDENT_CHART_STROKE_CONFIG = [
+  { key: '핀자유형 50', shortLabel: '핀자유형', cls: 'seg-fin-free', match: (e) => e === '핀자유형 50' || e === '핀자유형' },
+  { key: '핀접영 50', shortLabel: '핀접영', cls: 'seg-fin-fly', match: (e) => e === '핀접영 50' || e === '핀접영' },
+  { key: '자유형 50', shortLabel: '자유형', cls: 'seg-free', match: (e) => e === '자유형 50' || e === '자유형' },
+  { key: '배영 50', shortLabel: '배영', cls: 'seg-back', match: (e) => e === '배영 50' || e === '배영' },
+  { key: '평영 50', shortLabel: '평영', cls: 'seg-breast', match: (e) => e === '평영 50' || e === '평영' },
+  { key: '접영 50', shortLabel: '접영', cls: 'seg-fly', match: (e) => e === '접영 50' || e === '접영' }
+];
+
+let summaryViewMode = 'chart'; // 기본값: 누적 막대그래프 ('chart' | 'table')
+
+function initSummaryViewSwitch() {
+  const switchWrap = document.getElementById('summaryViewSwitch');
+  const chartContainer = document.getElementById('summaryChartContainer');
+  const tablesContainer = document.getElementById('summaryTablesContainer');
+  const chartLegend = document.getElementById('summaryChartLegend');
+  if (!switchWrap || !chartContainer || !tablesContainer) return;
+
+  function applySummaryView(mode) {
+    summaryViewMode = mode === 'table' ? 'table' : 'chart';
+    const isChart = summaryViewMode === 'chart';
+    chartContainer.style.display = isChart ? 'block' : 'none';
+    tablesContainer.style.display = isChart ? 'none' : '';
+    if (chartLegend) chartLegend.style.display = isChart ? 'flex' : 'none';
+    switchWrap.querySelectorAll('.summary-switch-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.summaryView === summaryViewMode);
+    });
+  }
+
+  switchWrap.addEventListener('click', (e) => {
+    const btn = e.target.closest('.summary-switch-btn');
+    if (!btn) return;
+    applySummaryView(btn.dataset.summaryView);
+  });
+
+  applySummaryView('chart');
+}
+
+function renderSummaryChart() {
+  const chartContainer = document.getElementById('summaryChartContainer');
+  if (!chartContainer) return;
+
+  let maxBarTotal = 0;
+
+  const groupBarsData = GROUPS.map(groupName => {
+    const groupSwimmers = records.filter(r => r.group === groupName);
+
+    const buildGenderSegments = (gender, genderLabel) => {
+      const segs = [];
+      STUDENT_CHART_STROKE_CONFIG.forEach(stroke => {
+        const matched = groupSwimmers.filter(
+          r => r.gender === gender && (stroke.match(r.event1) || stroke.match(r.event2))
+        );
+        if (matched.length > 0) {
+          segs.push({
+            gender,
+            genderLabel,
+            stroke,
+            count: matched.length,
+            names: matched.map(s => s.name)
+          });
+        }
+      });
+      return segs;
+    };
+
+    const maleSegments = buildGenderSegments('남', '남성');
+    const femaleSegments = buildGenderSegments('여', '여성');
+    const maleTotal = maleSegments.reduce((sum, s) => sum + s.count, 0);
+    const femaleTotal = femaleSegments.reduce((sum, s) => sum + s.count, 0);
+    const barTotal = maleTotal + femaleTotal;
+    if (barTotal > maxBarTotal) maxBarTotal = barTotal;
+
+    return {
+      groupName,
+      maleSegments,
+      femaleSegments,
+      maleTotal,
+      femaleTotal,
+      barTotal
+    };
+  });
+
+  let step = 2;
+  let yMax = 10;
+  if (maxBarTotal <= 6) {
+    step = 1;
+    yMax = Math.max(4, maxBarTotal + 1);
+  } else if (maxBarTotal <= 14) {
+    step = 2;
+    yMax = Math.ceil((maxBarTotal + 1) / 2) * 2;
+  } else if (maxBarTotal <= 30) {
+    step = 5;
+    yMax = Math.ceil((maxBarTotal + 1) / 5) * 5;
+  } else {
+    step = 10;
+    yMax = Math.ceil((maxBarTotal + 1) / 10) * 10;
+  }
+
+  const ticks = [];
+  for (let v = 0; v <= yMax; v += step) {
+    ticks.push(v);
+  }
+
+  const yAxisTicksHtml = ticks.map(v => {
+    const bottomPct = (v / yMax) * 100;
+    return `<span class="yaxis-tick-label" style="bottom: ${bottomPct}%;">${v}</span>`;
+  }).join('');
+
+  const gridLinesHtml = ticks.map(v => {
+    const bottomPct = (v / yMax) * 100;
+    return `<div class="chart-grid-line ${v === 0 ? 'is-zero' : ''}" style="bottom: ${bottomPct}%;"></div>`;
+  }).join('');
+
+  const groupColsHtml = groupBarsData.map(bar => {
+    const heightPct = bar.barTotal > 0 ? (bar.barTotal / yMax) * 100 : 0;
+    const allSegments = [...bar.maleSegments, ...bar.femaleSegments];
+    const topSeg = allSegments.length > 0 ? allSegments[allSegments.length - 1] : null;
+
+    const renderSeg = (seg) => {
+      const isTop = seg === topSeg ? 'is-top-segment' : '';
+      return `
+        <div class="bar-segment ${seg.stroke.cls} ${isTop}" style="flex: ${seg.count} 0 0;">
+          <div class="seg-tooltip">
+            <div class="seg-tooltip-title">${escapeHtml(bar.groupName)} · ${seg.genderLabel} · ${escapeHtml(seg.stroke.shortLabel)} (${seg.count}명)</div>
+            <div class="seg-tooltip-names">${seg.names.map(n => escapeHtml(n)).join(', ')}</div>
+          </div>
+        </div>
+      `;
+    };
+
+    const maleHtml = bar.maleSegments.map(renderSeg).join('');
+    const dividerHtml = (bar.maleTotal > 0 && bar.femaleTotal > 0)
+      ? `<div class="bar-gender-divider"></div>`
+      : '';
+    const femaleHtml = bar.femaleSegments.map(renderSeg).join('');
+
+    return `
+      <div class="chart-group-col single-bar">
+        <div class="chart-bar-wrap">
+          <div class="stacked-bar-stack" style="height: ${heightPct}%;">
+            ${maleHtml}
+            ${dividerHtml}
+            ${femaleHtml}
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  const xAxisHtml = GROUPS.map(groupName => `
+    <div class="xaxis-group-item">
+      <span class="xaxis-group-name">${escapeHtml(groupName)}</span>
+    </div>
+  `).join('');
+
+  chartContainer.innerHTML = `
+    <div class="stacked-chart-layout">
+      <div class="stacked-chart-yaxis">
+        <span class="yaxis-unit">(명)</span>
+        ${yAxisTicksHtml}
+      </div>
+      <div class="stacked-chart-main">
+        <div class="stacked-chart-plot">
+          ${gridLinesHtml}
+          ${groupColsHtml}
+        </div>
+      </div>
+    </div>
+    <div class="stacked-chart-xaxis">
+      ${xAxisHtml}
+    </div>
+  `;
 }
 
 function initMatrixCompareMode() {
+  initSummaryViewSwitch();
   const chkMale = document.getElementById('chkCompareMaleMatrix');
   const chkFemale = document.getElementById('chkCompareFemaleMatrix');
 
@@ -2807,6 +3171,7 @@ function initMatrixCompareMode() {
 }
 
 function renderSummaryMatrices() {
+  renderSummaryChart();
   const eventTypes = [
     { label: '자유형', match: (e) => e === '자유형 50' || e === '자유형' },
     { label: '배영', match: (e) => e === '배영 50' || e === '배영' },
@@ -3061,9 +3426,11 @@ function renderEventsTable() {
           ${EVENT_OPTIONS.filter(Boolean).map(opt => {
             const optPodium = opt ? getPodiumShort(item.gender, item.group, opt) : '';
             const optLabel = opt ? (optPodium ? `${opt} [${optPodium}]` : opt) : '(미신청)';
+            const isSelected = item.event1 === opt;
+            const displayLabel = isSelected ? opt : optLabel;
             return `
-              <option value="${escapeHtml(opt)}" ${item.event1 === opt ? 'selected' : ''}>
-                ${escapeHtml(optLabel)}
+              <option value="${escapeHtml(opt)}" data-short-label="${escapeHtml(opt)}" data-full-label="${escapeHtml(optLabel)}" ${isSelected ? 'selected' : ''}>
+                ${escapeHtml(displayLabel)}
               </option>
             `;
           }).join('')}
@@ -3081,9 +3448,11 @@ function renderEventsTable() {
           ${EVENT_OPTIONS.filter(Boolean).map(opt => {
             const optPodium = opt ? getPodiumShort(item.gender, item.group, opt) : '';
             const optLabel = opt ? (optPodium ? `${opt} [${optPodium}]` : opt) : '(미신청)';
+            const isSelected = item.event2 === opt;
+            const displayLabel = isSelected ? opt : optLabel;
             return `
-              <option value="${escapeHtml(opt)}" ${item.event2 === opt ? 'selected' : ''}>
-                ${escapeHtml(optLabel)}
+              <option value="${escapeHtml(opt)}" data-short-label="${escapeHtml(opt)}" data-full-label="${escapeHtml(optLabel)}" ${isSelected ? 'selected' : ''}>
+                ${escapeHtml(displayLabel)}
               </option>
             `;
           }).join('')}
@@ -3159,37 +3528,41 @@ function fallbackCopyText(text, count) {
 // Copy Selected Student Combination Members to Clipboard
 // Format: 그룹, 성별, 성명, 생년월일, 나이, 종목, 전화번호
 function copyComboTeamToClipboard(comboKey) {
-  const combos = calculateRelayCombinations();
-  const result = combos[comboKey];
+  const config = STUDENT_RELAY_SLOT_CONFIGS[comboKey];
+  if (!config) return;
 
-  if (!result || result.status !== 'SUCCESS' || !result.members || result.members.length === 0) {
+  const rows = [];
+  config.slots.forEach((slot, sIdx) => {
+    const name = getStudentComboSwimmerName(comboKey, slot, sIdx);
+    if (!name) return;
+    const swimmer = records.find(r => r.name === name) || {};
+    const strokeLabel = slot.stroke ? (STROKE_NAMES[slot.stroke] || slot.label) : '자유형';
+    rows.push([
+      swimmer.group || '',
+      swimmer.gender || slot.gender || '',
+      swimmer.name || name,
+      swimmer.birthId || '',
+      swimmer.age || '',
+      strokeLabel,
+      swimmer.phone || ''
+    ].join('\t'));
+  });
+
+  if (rows.length === 0) {
     showToast('⚠️ 선발된 팀 멤버 명단이 없습니다.');
     return;
   }
-
-  const rows = result.members.map(m => {
-    const swimmer = records.find(r => r.id === m.id) || {};
-    return [
-      swimmer.group || m.group || '',
-      swimmer.gender || m.gender || '',
-      swimmer.name || m.name || '',
-      swimmer.birthId || '',
-      swimmer.age || m.age || '',
-      m.strokeName || (comboKey === 'combo1' || comboKey === 'combo2' ? '자유형' : m.strokeName || ''),
-      swimmer.phone || ''
-    ].join('\t');
-  });
 
   const tsvText = rows.join('\n');
 
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(tsvText).then(() => {
-      showToast(`📋 선발 명단(${result.members.length}명)이 클립보드에 복사되었습니다.`);
+      showToast(`📋 선발 명단(${rows.length}명)이 클립보드에 복사되었습니다.`);
     }).catch(() => {
-      fallbackCopyText(tsvText, result.members.length);
+      fallbackCopyText(tsvText, rows.length);
     });
   } else {
-    fallbackCopyText(tsvText, result.members.length);
+    fallbackCopyText(tsvText, rows.length);
   }
 }
 
@@ -3255,23 +3628,74 @@ function bindEvents() {
     });
   });
 
-  // Individual Member Pin Click (Delegated on comboGrid)
+  // Student Relay Member Selector Change & Focus Handlers (Delegated on comboGrid)
   if (comboGrid) {
-    comboGrid.addEventListener('click', (e) => {
-      const pinBtn = e.target.closest('.btn-pin-member');
-      if (pinBtn) {
-        e.stopPropagation();
-        if (!isAdmin()) {
-          showToast('🔒 관리자 로그인 후 선발 고정을 변경할 수 있습니다.');
-          return;
+    comboGrid.addEventListener('change', (e) => {
+      const selectEl = e.target.closest('.combo-member-select');
+      if (!selectEl) return;
+
+      const combo = selectEl.getAttribute('data-combo');
+      const stroke = selectEl.getAttribute('data-stroke');
+      const slotIdx = parseInt(selectEl.getAttribute('data-slot-index'), 10);
+      const newName = selectEl.value ? selectEl.value.trim() : null;
+
+      const prevName = stroke
+        ? (pinnedRelaysState?.[combo]?.[stroke] || null)
+        : (pinnedRelaysState?.[combo]?.[slotIdx] || null);
+
+      // 동일 종목 내 다른 슬롯에 이미 배치된 선수를 선택하면 맞교체(스왑) 처리
+      if (newName) {
+        if (stroke) {
+          if (pinnedRelaysState[combo] && typeof pinnedRelaysState[combo] === 'object') {
+            ['back', 'breast', 'fly', 'free'].forEach(st => {
+              if (st !== stroke && pinnedRelaysState[combo][st] === newName) {
+                pinnedRelaysState[combo][st] = prevName || null;
+              }
+            });
+          }
+        } else {
+          if (Array.isArray(pinnedRelaysState[combo])) {
+            pinnedRelaysState[combo].forEach((existingName, idx) => {
+              if (idx !== slotIdx && existingName === newName) {
+                pinnedRelaysState[combo][idx] = prevName || null;
+              }
+            });
+          }
         }
-        const comboKey = pinBtn.dataset.combo;
-        const name = pinBtn.dataset.name;
-        const stroke = pinBtn.dataset.stroke;
-        toggleMemberPin(comboKey, name, stroke);
-        return;
       }
+
+      if (stroke) {
+        if (!pinnedRelaysState[combo] || typeof pinnedRelaysState[combo] !== 'object') {
+          pinnedRelaysState[combo] = { ...(DEFAULT_PINNED_RELAYS[combo] || {}) };
+        }
+        pinnedRelaysState[combo][stroke] = newName;
+      } else {
+        if (!Array.isArray(pinnedRelaysState[combo])) {
+          pinnedRelaysState[combo] = [...(DEFAULT_PINNED_RELAYS[combo] || ['', '', '', ''])];
+        }
+        pinnedRelaysState[combo][slotIdx] = newName;
+      }
+
+      savePinnedRelays();
+      updateStats();
+      renderTable();
+      renderEventsTable();
     });
+
+    const keepSelectedCleanText = (e) => {
+      const selectEl = e.target.closest('.combo-member-select');
+      if (!selectEl) return;
+      const opt = selectEl.selectedOptions[0];
+      if (opt && opt.value) {
+        const cleanText = opt.getAttribute('data-clean-text');
+        if (cleanText && opt.text !== cleanText) {
+          opt.text = cleanText;
+        }
+      }
+    };
+
+    comboGrid.addEventListener('focusin', keepSelectedCleanText);
+    comboGrid.addEventListener('focusout', keepSelectedCleanText);
   }
 
   // Combo Team Roster Copy Buttons
@@ -3554,14 +3978,40 @@ function bindEvents() {
 
   // Event dropdown selection handler
   if (eventsTableBody) {
+    const syncEventSelectOptionLabels = (select) => {
+      if (!select) return;
+      Array.from(select.options).forEach(opt => {
+        if (!opt.value) return;
+        const targetText = opt.selected
+          ? (opt.dataset.shortLabel || opt.value)
+          : (opt.dataset.fullLabel || opt.value);
+        if (opt.text !== targetText) {
+          opt.text = targetText;
+        }
+      });
+    };
+
+    eventsTableBody.addEventListener('focusin', (e) => {
+      const select = e.target.closest('.event-select');
+      if (select) syncEventSelectOptionLabels(select);
+    });
+
+    eventsTableBody.addEventListener('focusout', (e) => {
+      const select = e.target.closest('.event-select');
+      if (select) syncEventSelectOptionLabels(select);
+    });
+
     eventsTableBody.addEventListener('change', (e) => {
       const select = e.target.closest('.event-select');
       if (!select) return;
 
       if (!canEditRecords()) {
         showToast('⏳ 수정 가능 기간이 종료되었습니다. (관리자만 수정 가능)');
+        renderEventsTable();
         return;
       }
+
+      syncEventSelectOptionLabels(select);
 
       const id = parseInt(select.dataset.id, 10);
       const eventIdx = select.dataset.eventIdx;

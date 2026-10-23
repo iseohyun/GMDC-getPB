@@ -2735,7 +2735,198 @@ function renderTable() {
   });
 }
 
+const CHART_STROKE_CONFIG = [
+  { key: '핀자유형 50', shortLabel: '핀자유형', cls: 'seg-fin-free' },
+  { key: '핀접영 50', shortLabel: '핀접영', cls: 'seg-fin-fly' },
+  { key: '자유형 50', shortLabel: '자유형', cls: 'seg-free' },
+  { key: '배영 50', shortLabel: '배영', cls: 'seg-back' },
+  { key: '평영 50', shortLabel: '평영', cls: 'seg-breast' },
+  { key: '접영 50', shortLabel: '접영', cls: 'seg-fly' }
+];
+
+let summaryViewMode = 'chart'; // 기본값: 누적 막대그래프 ('chart' | 'table')
+
+function initSummaryViewSwitch() {
+  const switchWrap = document.getElementById('summaryViewSwitch');
+  const chartContainer = document.getElementById('summaryChartContainer');
+  const tablesContainer = document.getElementById('summaryTablesContainer');
+  const chartLegend = document.getElementById('summaryChartLegend');
+  if (!switchWrap || !chartContainer || !tablesContainer) return;
+
+  function applySummaryView(mode) {
+    summaryViewMode = mode === 'table' ? 'table' : 'chart';
+    const isChart = summaryViewMode === 'chart';
+    chartContainer.style.display = isChart ? 'block' : 'none';
+    tablesContainer.style.display = isChart ? 'none' : '';
+    if (chartLegend) chartLegend.style.display = isChart ? 'flex' : 'none';
+    switchWrap.querySelectorAll('.summary-switch-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.summaryView === summaryViewMode);
+    });
+  }
+
+  switchWrap.addEventListener('click', (e) => {
+    const btn = e.target.closest('.summary-switch-btn');
+    if (!btn) return;
+    applySummaryView(btn.dataset.summaryView);
+  });
+
+  applySummaryView('chart');
+}
+
+function renderSummaryChart() {
+  const chartContainer = document.getElementById('summaryChartContainer');
+  if (!chartContainer) return;
+
+  const activeSwimmers = records.filter(isSwimmerActive);
+  const teams = ['A', 'B'];
+  let maxBarTotal = 0;
+
+  const groupBarsData = GROUPS.map(groupName => {
+    const teamBars = teams.map(team => {
+      const groupTeamSwimmers = activeSwimmers.filter(
+        r => r.group === groupName && (r.team || 'A') === team
+      );
+
+      const buildGenderSegments = (gender, genderLabel) => {
+        const segs = [];
+        CHART_STROKE_CONFIG.forEach(stroke => {
+          const matched = groupTeamSwimmers.filter(
+            r => r.gender === gender && (r.event1 === stroke.key || r.event2 === stroke.key)
+          );
+          if (matched.length > 0) {
+            segs.push({
+              gender,
+              genderLabel,
+              stroke,
+              count: matched.length,
+              names: matched.map(s => s.name)
+            });
+          }
+        });
+        return segs;
+      };
+
+      const maleSegments = buildGenderSegments('남', '남성');
+      const femaleSegments = buildGenderSegments('여', '여성');
+      const maleTotal = maleSegments.reduce((sum, s) => sum + s.count, 0);
+      const femaleTotal = femaleSegments.reduce((sum, s) => sum + s.count, 0);
+      const barTotal = maleTotal + femaleTotal;
+      if (barTotal > maxBarTotal) maxBarTotal = barTotal;
+
+      return {
+        groupName,
+        team,
+        maleSegments,
+        femaleSegments,
+        maleTotal,
+        femaleTotal,
+        barTotal
+      };
+    });
+
+    return { groupName, teamBars };
+  });
+
+  let step = 2;
+  let yMax = 10;
+  if (maxBarTotal <= 6) {
+    step = 1;
+    yMax = Math.max(4, maxBarTotal + 1);
+  } else if (maxBarTotal <= 14) {
+    step = 2;
+    yMax = Math.ceil((maxBarTotal + 1) / 2) * 2;
+  } else if (maxBarTotal <= 30) {
+    step = 5;
+    yMax = Math.ceil((maxBarTotal + 1) / 5) * 5;
+  } else {
+    step = 10;
+    yMax = Math.ceil((maxBarTotal + 1) / 10) * 10;
+  }
+
+  const ticks = [];
+  for (let v = 0; v <= yMax; v += step) {
+    ticks.push(v);
+  }
+
+  const yAxisTicksHtml = ticks.map(v => {
+    const bottomPct = (v / yMax) * 100;
+    return `<span class="yaxis-tick-label" style="bottom: ${bottomPct}%;">${v}</span>`;
+  }).join('');
+
+  const gridLinesHtml = ticks.map(v => {
+    const bottomPct = (v / yMax) * 100;
+    return `<div class="chart-grid-line ${v === 0 ? 'is-zero' : ''}" style="bottom: ${bottomPct}%;"></div>`;
+  }).join('');
+
+  const groupColsHtml = groupBarsData.map(({ groupName, teamBars }) => {
+    const barsHtml = teamBars.map(bar => {
+      const heightPct = bar.barTotal > 0 ? (bar.barTotal / yMax) * 100 : 0;
+      const allSegments = [...bar.maleSegments, ...bar.femaleSegments];
+      const topSeg = allSegments.length > 0 ? allSegments[allSegments.length - 1] : null;
+
+      const renderSeg = (seg) => {
+        const isTop = seg === topSeg ? 'is-top-segment' : '';
+        return `
+          <div class="bar-segment ${seg.stroke.cls} ${isTop}" style="flex: ${seg.count} 0 0;">
+            <div class="seg-tooltip">
+              <div class="seg-tooltip-title">${escapeHtml(bar.groupName)} (${bar.team}팀) · ${seg.genderLabel} · ${escapeHtml(seg.stroke.shortLabel)} (${seg.count}명)</div>
+              <div class="seg-tooltip-names">${seg.names.map(n => escapeHtml(n)).join(', ')}</div>
+            </div>
+          </div>
+        `;
+      };
+
+      const maleHtml = bar.maleSegments.map(renderSeg).join('');
+      const dividerHtml = (bar.maleTotal > 0 && bar.femaleTotal > 0)
+        ? `<div class="bar-gender-divider"></div>`
+        : '';
+      const femaleHtml = bar.femaleSegments.map(renderSeg).join('');
+
+      return `
+        <div class="chart-bar-wrap">
+          <div class="stacked-bar-stack" style="height: ${heightPct}%;">
+            ${maleHtml}
+            ${dividerHtml}
+            ${femaleHtml}
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    return `<div class="chart-group-col">${barsHtml}</div>`;
+  }).join('');
+
+  const xAxisHtml = GROUPS.map(groupName => `
+    <div class="xaxis-group-item">
+      <div class="xaxis-team-labels">
+        <span class="xaxis-team-tag team-a">A팀</span>
+        <span class="xaxis-team-tag team-b">B팀</span>
+      </div>
+      <span class="xaxis-group-name">${escapeHtml(groupName)}</span>
+    </div>
+  `).join('');
+
+  chartContainer.innerHTML = `
+    <div class="stacked-chart-layout">
+      <div class="stacked-chart-yaxis">
+        <span class="yaxis-unit">(명)</span>
+        ${yAxisTicksHtml}
+      </div>
+      <div class="stacked-chart-main">
+        <div class="stacked-chart-plot">
+          ${gridLinesHtml}
+          ${groupColsHtml}
+        </div>
+      </div>
+    </div>
+    <div class="stacked-chart-xaxis">
+      ${xAxisHtml}
+    </div>
+  `;
+}
+
 function initMatrixCompareMode() {
+  initSummaryViewSwitch();
   const chkMale = document.getElementById('chkCompareMaleMatrix');
   const chkFemale = document.getElementById('chkCompareFemaleMatrix');
 
@@ -2760,6 +2951,7 @@ function initMatrixCompareMode() {
 // SIDE-BY-SIDE SUMMARY MATRICES (남성 / 여성 각각 좌우 표시, 숫자만 + hover 툴팁)
 // ============================================================
 function renderSummaryMatrices() {
+  renderSummaryChart();
   if (maleMatrixBody && maleMatrixFoot) {
     renderSingleGenderMatrix('남', maleMatrixBody, maleMatrixFoot);
   }

@@ -357,9 +357,38 @@
     <!-- VIEW 2: 출전 경기 보기 (Events View)         -->
     <!-- ========================================== -->
     <div id="viewEvents" class="view-content">
-      <!-- Side-by-Side Summary Matrices (남성 / 여성 좌우 동시 배치) -->
-      <section class="matrices-container">
-        <!-- 👨 Male Matrix Card -->
+      <!-- 출전 요약 섹션 (기본: 누적 막대그래프 / 스위치 전환: 요약 표) -->
+      <section class="events-summary-section">
+        <div class="events-summary-topbar">
+          <div class="events-summary-title-wrap">
+            <h3 class="events-summary-main-title">📊 개인전 출전 요약</h3>
+            <div class="summary-chart-legend" id="summaryChartLegend">
+              <span class="chart-legend-item"><span class="chart-legend-swatch swatch-fin-free"></span>핀자유형</span>
+              <span class="chart-legend-item"><span class="chart-legend-swatch swatch-fin-fly"></span>핀접영</span>
+              <span class="chart-legend-item"><span class="chart-legend-swatch swatch-free"></span>자유형</span>
+              <span class="chart-legend-item"><span class="chart-legend-swatch swatch-back"></span>배영</span>
+              <span class="chart-legend-item"><span class="chart-legend-swatch swatch-breast"></span>평영</span>
+              <span class="chart-legend-item"><span class="chart-legend-swatch swatch-fly"></span>접영</span>
+              <span class="chart-legend-sep">|</span>
+              <span class="chart-legend-note">하단: 남성 · 상단: 여성 (굵은 선 경계)</span>
+            </div>
+          </div>
+          <div class="events-summary-controls">
+            <div class="summary-view-switch" id="summaryViewSwitch" role="group" aria-label="출전 요약 보기 전환">
+              <button type="button" class="summary-switch-btn active" data-summary-view="chart">📊 그래프</button>
+              <button type="button" class="summary-switch-btn" data-summary-view="table">📋 표</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 기본 뷰: 누적 막대그래프 -->
+        <div id="summaryChartContainer" class="summary-chart-card">
+          <!-- Rendered by JS -->
+        </div>
+
+        <!-- 전환 뷰: 남성 / 여성 출전 요약 표 -->
+        <div id="summaryTablesContainer" class="matrices-container" style="display: none;">
+          <!-- 👨 Male Matrix Card -->
         <div class="matrix-card male-card">
           <div class="matrix-card-header">
             <div class="matrix-title-area">
@@ -431,6 +460,7 @@
               </tfoot>
             </table>
           </div>
+        </div>
         </div>
       </section>
 
