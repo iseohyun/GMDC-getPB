@@ -47,19 +47,31 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <title>⏱️ 실시간 대회 대진표 & 경기 순서 추론 - GMDC 거제오션</title>
+  <title>⏱️ 실시간 대회 대진표 & 경기 순서 - GMDC 거제오션</title>
   <meta name="description" content="2026년 제19회 거제시장배 전국마스터즈 수영대회 당일 실시간 경기 순서 및 예상 시작 시각">
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⏱️</text></svg>">
-  <link rel="stylesheet" href="style.css?v=20261023_10">
-  <link rel="stylesheet" href="live-schedule.css?v=20261023_10">
+  <link rel="stylesheet" href="style.css?v=20261024_04">
+  <link rel="stylesheet" href="live-schedule.css?v=20261024_04">
   
   <style>
-    /* Iframe 임베드 최적화 */
-    html, body {
+    /* Iframe 임베드 및 세로 스크롤 최적화 (sticky/fixed 호환) */
+    html {
       margin: 0 !important;
       padding: 0 !important;
+      height: auto !important;
+      min-height: 100% !important;
+      overflow-x: hidden !important;
+      overflow-y: auto !important;
+      background-color: var(--bg-page, #f8fafc) !important;
+    }
+    body {
+      margin: 0 !important;
+      padding: 0 !important;
+      height: auto !important;
+      min-height: 100% !important;
+      overflow: visible !important;
       background-color: var(--bg-page, #f8fafc) !important;
     }
     body.with-sidebar {
@@ -68,178 +80,86 @@
     .gmdc-sidebar, #sidebarBackdrop, .btn-mobile-sidebar-toggle {
       display: none !important;
     }
-    .header-auth-area, #headerAuthArea, #btnGoogleLogin,
-    .header-date, #tableDateBadge,
-    .btn-rules-header, #btnOpenRulesModal,
-    .header-view-toggle, .division-nav {
-      display: none !important;
-    }
     .app-container {
       max-width: 100% !important;
-      padding: 16px 20px !important;
+      padding: 10px 14px !important;
       margin: 0 !important;
       width: 100% !important;
       box-sizing: border-box !important;
     }
-    .combo-condition-help {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 19px;
-      height: 19px;
-      border-radius: 50%;
-      background: #e2e8f0;
-      color: #334155;
-      font-size: 11.5px;
-      font-weight: 800;
-      cursor: help;
-      margin-left: 6px;
-      vertical-align: middle;
-      transition: all 0.2s;
-    }
-    .combo-condition-help:hover {
-      background: #0284c7;
-      color: #ffffff;
-      transform: scale(1.1);
-    }
   </style>
 
-  <link rel="stylesheet" href="sidebar.css?v=20261023_10">
+  <link rel="stylesheet" href="sidebar.css?v=20261024_03">
 </head>
 
 <body>
   <div class="app-container">
-    <!-- Main Top Header -->
-    <!-- Current Race Banner -->
-        <div class="current-race-banner" id="currentRaceBanner">
-          <div class="banner-top-meta">
-            <span class="badge-current-tag" id="bannerTag">현재 진행 순번</span>
-            <span class="banner-pace-info" id="bannerPaceInfo">속도 계수: 1.0x (정상 속도 진행 중)</span>
-          </div>
-          <div class="banner-title-line">
-            <span class="banner-match-no" id="bannerMatchNo">-</span>
-            <h2 class="banner-match-title" id="bannerMatchTitle">대회가 아직 시작되지 않았습니다.</h2>
-          </div>
-          <div class="banner-timer-line">
-            <div class="timer-item">
-              <span class="timer-label">출발 시각</span>
-              <strong class="timer-val" id="bannerStartTime">-</strong>
-            </div>
-            <div class="timer-item">
-              <span class="timer-label">경과 시간</span>
-              <strong class="timer-val highlight" id="bannerElapsedTime">-</strong>
-            </div>
-            <div class="timer-item" id="pauseTimeBox" style="display: none;">
-              <span class="timer-label">휴게 시간</span>
-              <strong class="timer-val pause-highlight" id="bannerPauseTime">00:00</strong>
-            </div>
+    <div class="live-main" id="liveMainContainer">
+      <!-- Compact Realtime Controller Card -->
+      <section class="live-controller-card" id="liveControllerCard">
+        <!-- 1행: [현재순번] [현재 종목] [평균 경기 진행속도] [현재 경기로 이동] [휴게 시작] [자동갱신여부] [갱신대기시간(초)][즉시 새로고침 아이콘] -->
+        <div class="ctrl-row-top">
+          <span class="ctrl-current-no" id="ctrlCurrentNo" title="클릭 시 현재 진행 순번으로 스크롤 이동">대기</span>
+          <span class="ctrl-current-event" id="ctrlCurrentEvent">경기가 아직 시작되지 않았습니다</span>
+          <span class="ctrl-pace-info" id="ctrlPaceInfo" title="완료된 경기 기준 평균 소요시간 (기본: 개인 01:15 / 단체전 03:00)">평균 경기 진행속도:(01:15)(단체전:03:00)</span>
+
+          <div class="ctrl-sync-group">
+            <button type="button" class="ctrl-action-btn ctrl-btn-goto" id="btnScrollCurrentRace" title="현재 진행 중인 경기로 스크롤 이동">📍 현재 경기</button>
+            <button type="button" class="ctrl-action-btn ctrl-btn-break" id="btnStartBreak" title="현재 순서 다음에 녹색 휴게 카드를 추가하고 휴게를 시작합니다">☕ 휴게 시작</button>
+            <button type="button" class="ctrl-icon-btn active" id="btnAutoRefreshToggle" title="자동 갱신 켜기/끄기">
+              <span id="iconAutoRefresh">🔁</span>
+            </button>
+            <span class="ctrl-countdown-badge" id="countdownBadge" title="다음 자동 갱신까지 남은 시간(초)">10s</span>
+            <button type="button" class="ctrl-icon-btn" id="btnManualRefresh" title="즉시 새로고침">🔄</button>
           </div>
         </div>
 
-        <!-- Action Control Buttons (Anyone can operate, with safety protection) -->
-        <div class="controller-action-row">
-          <button type="button" class="btn-action-primary" id="btnNextRace">
-            <span class="btn-icon">⏭</span>
-            <span class="btn-text" id="btnNextRaceText">다음 조 시작 (Next)</span>
-          </button>
-
-          <button type="button" class="btn-action-pause" id="btnTogglePause">
-            <span class="btn-icon">☕</span>
-            <span class="btn-text" id="btnTogglePauseText">휴게 시작</span>
-          </button>
-
-          <button type="button" class="btn-action-undo" id="btnUndoAction" title="실수로 다음을 눌렀을 때 직전 조로 되돌립니다">
-            <span class="btn-icon">↩</span>
-            <span class="btn-text">이전 조로 (Undo)</span>
-          </button>
-
-          <div class="jump-control-group">
-            <select id="selJumpRace" class="sel-jump-race" title="특정 조 번호로 강제 이동">
-              <option value="">조 번호로 이동 ▾</option>
-            </select>
+        <!-- 2행: [검색창] 검색창에 우리 팀(거제몽꾸/거제야르) 및 선수들 이름을 추천해줌 -->
+        <div class="ctrl-row-search">
+          <div class="ctrl-search-box" id="ctrlSearchBox">
+            <span class="ctrl-search-icon">🔍</span>
+            <input type="text" id="inputSearchSwimmer" placeholder="거제몽꾸·거제야르·선수 이름 또는 순번·종목 검색 (클릭 시 추천)" autocomplete="off">
+            <button type="button" class="ctrl-btn-clear" id="btnClearSearch" style="display: none;" title="검색어 지우기">✕</button>
+            <div class="swimmer-suggest-dropdown" id="swimmerSuggestDropdown" style="display: none;"></div>
           </div>
-        </div>
-      </section>
-
-      <!-- Search & Filters Bar (Fast Navigation) -->
-      <section class="live-filter-section">
-        <div class="filter-top-row">
-          <!-- Our Team Toggle -->
-          <button type="button" class="btn-our-team-filter" id="btnOurTeamOnly" data-active="false">
-            <span class="star-icon">⭐</span>
-            <span id="txtOurTeamFilter">우리 팀 경기만 보기</span>
-            <span class="our-team-count-badge" id="ourTeamCountBadge">0</span>
-          </button>
-
-          <!-- Search Input -->
-          <div class="search-input-box">
-            <span class="search-icon">🔍</span>
-            <input type="text" id="inputSearchSwimmer" placeholder="선수명 또는 소속 검색 (예: 이서현, 거제야르)" autocomplete="off">
-            <button type="button" class="btn-clear-search" id="btnClearSearch" style="display: none;">✕</button>
-          </div>
-        </div>
-
-        <!-- Stroke Pills -->
-        <div class="stroke-pills-bar" id="strokePillsBar">
-          <button type="button" class="stroke-pill active" data-stroke="all">전체</button>
-          <button type="button" class="stroke-pill" data-stroke="핀접영">핀접영</button>
-          <button type="button" class="stroke-pill" data-stroke="배영">배영</button>
-          <button type="button" class="stroke-pill" data-stroke="계영">계영</button>
-          <button type="button" class="stroke-pill" data-stroke="접영">접영</button>
-          <button type="button" class="stroke-pill" data-stroke="핀자유형">핀자유형</button>
-          <button type="button" class="stroke-pill" data-stroke="평영">평영</button>
-          <button type="button" class="stroke-pill" data-stroke="혼계영">혼계영</button>
-          <button type="button" class="stroke-pill" data-stroke="자유형">자유형</button>
-          <button type="button" class="stroke-pill" data-stroke="혼성핀계영">혼성핀계영</button>
-        </div>
-
-        <!-- Gender & Group Filters -->
-        <div class="filter-sub-row">
-          <div class="sub-filter-group">
-            <label>성별:</label>
-            <select id="selGenderFilter">
-              <option value="all">전체</option>
-              <option value="남자">남자</option>
-              <option value="여자">여자</option>
-              <option value="혼성">혼성</option>
-            </select>
-          </div>
-
-          <div class="sub-filter-group">
-            <label>그룹:</label>
-            <select id="selGroupFilter">
-              <option value="all">전체 그룹</option>
-            </select>
-          </div>
-
-          <span class="filter-result-count" id="filterResultCount">전체 141개 중 141개 표시</span>
         </div>
       </section>
 
       <!-- Races Timeline List -->
       <section class="live-races-container" id="racesListContainer">
-        <!-- Dynamically rendered by live-schedule.js -->
-        <div class="loading-placeholder">대진표 및 실시간 진행 데이터를 불러오는 중입니다...</div>
+        <div class="loading-placeholder">대진표 데이터를 불러오는 중입니다...</div>
       </section>
-
     </div>
 
-    <!-- Floating Action Button: "최신 진행 위치로 이동" -->
-    <button type="button" class="btn-floating-scroll-current" id="btnScrollToCurrent" style="display: none;" title="현재 진행 중인 조로 스크롤 이동하고 자동 갱신을 다시 켭니다">
-      <span class="fab-icon">⬇️</span>
-      <span class="fab-text" id="fabCurrentRaceText">진행 중인 조로 이동</span>
-    </button>
+    <!-- 학생 정보 모달 팝업 (증명사진 + 전화번호 클립보드 복사) -->
+    <div class="student-modal-overlay" id="studentInfoModal" style="display: none;">
+      <div class="student-modal-card">
+        <button type="button" class="student-modal-close" id="btnCloseStudentModal" aria-label="닫기">✕</button>
+        <div class="student-photo-wrap">
+          <img id="modalStudentPhoto" src="" alt="학생 증명사진">
+        </div>
+        <div class="student-info-body">
+          <div class="student-name-line">
+            <strong id="modalStudentName">-</strong>
+            <span class="student-meta-badge" id="modalStudentMeta">-</span>
+          </div>
+          <button type="button" class="btn-copy-phone" id="btnCopyStudentPhone" title="클릭하여 전화번호 복사">
+            <span class="phone-icon">📞</span>
+            <span class="phone-text" id="modalStudentPhone">010-0000-0000</span>
+            <span class="copy-hint" id="modalCopyHint">📋 복사</span>
+          </button>
+        </div>
+      </div>
+    </div>
 
-    <!-- Toast Notification (Undo Support) -->
+    <!-- Toast Notification -->
     <div class="live-toast-bar" id="liveToastBar" style="display: none;">
-      <span class="toast-message" id="toastMessage">다음 조가 시작되었습니다.</span>
-      <button type="button" class="btn-toast-undo" id="btnToastUndo">↩ 실행 취소</button>
+      <span class="toast-message" id="toastMessage">처리되었습니다.</span>
     </div>
-
   </div>
 
   <!-- Scripts -->
-  <script type="module" src="live-schedule.js?v=20261023_10"></script>
-    <script type="module" src="sidebar.js?v=20261023_10"></script>
+  <script type="module" src="live-schedule.js?v=20261024_04"></script>
+  <script type="module" src="sidebar.js?v=20261024_04"></script>
 </body>
 </html>

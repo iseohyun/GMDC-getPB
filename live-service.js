@@ -1,17 +1,48 @@
 // ==========================================================================
 // GMDC Swim Club - Real-time Competition Live Service & Estimation Engine
-// 누구나 조작 가능한 대회 당일 실시간 경기 순서 및 예상 시작 시간 추론 시스템
+// 대회 당일 실시간 경기 순서, 시간 추론 및 명부(DB) 연동 서비스
 // ==========================================================================
 
-import { firebaseApp } from "./firebase-config.js?v=20261023_03";
+import { firebaseApp } from "./firebase-config.js?v=20261024_02";
 import { 
-  getFirestore, doc, getDoc, setDoc, onSnapshot, serverTimestamp 
+  getFirestore, doc, getDoc, setDoc, onSnapshot 
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-import { ADULT_RACES_DATA, STUDENT_RACES_DATA } from "./races-data.js?v=20261023_03";
+import { ADULT_RACES_DATA, STUDENT_RACES_DATA } from "./races-data.js?v=20261024_02";
 
 const db = getFirestore(firebaseApp);
 
-export const LIVE_COL_NAME = "competition_live_status";
+// 배포된 Firestore 보안 규칙(match /attendance/{docId})과 즉시 호환되도록 attendance 컬렉션 내 전용 문서 사용
+export const LIVE_COL_NAME = "attendance";
+
+function getLiveDocId(division = 'adult') {
+  return `live_status_${division}_2026`;
+}
+
+function getLocalCacheKey(division = 'adult') {
+  return `gmdc_live_status_${division}_2026`;
+}
+
+function readLocalCache(division = 'adult') {
+  try {
+    const raw = localStorage.getItem(getLocalCacheKey(division));
+    if (raw) {
+      return JSON.parse(raw);
+    }
+  } catch (e) {
+    console.warn("[LiveStatus] localStorage read warning:", e);
+  }
+  return null;
+}
+
+function writeLocalCache(division = 'adult', statusObj) {
+  try {
+    if (statusObj) {
+      localStorage.setItem(getLocalCacheKey(division), JSON.stringify(statusObj));
+    }
+  } catch (e) {
+    console.warn("[LiveStatus] localStorage write warning:", e);
+  }
+}
 
 /**
  * 기본 상태 객체 팩토리
@@ -21,15 +52,27 @@ export function getDefaultLiveStatus(division = 'adult') {
     division, // 'adult' | 'student'
     status: 'ready', // 'ready' | 'running' | 'paused' | 'finished'
     current_race_index: 0, // 0: 시작 전, 1: 1조 진행 중...
-    started_at: null, // ISO 문자열 또는 hh:mm:ss
+    started_at: null,
     current_race_started_at: null,
     is_paused: false,
     pause_started_at: null,
     total_paused_sec: 0,
-    history: [], // [{ race_index: 1, started_at: '08:30:15', duration_sec: 72 }, ...]
+    history: [], // [{ race_index: 1, started_at: ISO, finished_at: ISO, duration_sec: 72 }, ...]
+    breaks: [],  // [{ id, after_race_index, started_at, finished_at, duration_sec, state: 'running'|'finished' }]
     updated_at: new Date().toISOString(),
     updated_by: '현장 운영'
   };
+}
+
+/**
+ * 초 단위 숫자를 "mm:ss" 형식으로 포맷
+ */
+export function formatMMSS(sec) {
+  if (!sec || sec < 0) sec = 0;
+  const total = Math.round(sec);
+  const m = Math.floor(total / 60);
+  const s = total % 60;
+  return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
 }
 
 /**
@@ -38,24 +81,6 @@ export function getDefaultLiveStatus(division = 'adult') {
 export function getCurrentTimeStr(date = new Date()) {
   const pad = n => String(n).padStart(2, '0');
   return `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
-}
-
-/**
- * "HH:mm:ss" 또는 ISO 문자열을 Date 객체로 파싱 (오늘 날짜 기준)
- */
-export function parseTimeToDate(timeStr) {
-  if (!timeStr) return null;
-  if (timeStr.includes('T')) {
-    const d = new Date(timeStr);
-    return isNaN(d.getTime()) ? null : d;
-  }
-  const parts = timeStr.split(':').map(Number);
-  if (parts.length >= 2) {
-    const d = new Date();
-    d.setHours(parts[0], parts[1], parts[2] || 0, 0);
-    return d;
-  }
-  return null;
 }
 
 /**
@@ -73,7 +98,7 @@ export function formatTimeHM(date, includeSeconds = false) {
 }
 
 /**
- * 초 단위 숫자를 "M분 S초" 또는 "HH:MM:SS"로 포맷
+ * 초 단위 숫자를 "M분 S초"로 포맷
  */
 export function formatDuration(sec) {
   if (!sec || sec < 0) sec = 0;
@@ -84,123 +109,152 @@ export function formatDuration(sec) {
   return `${m}분 ${s}초`;
 }
 
+function pickNewerStatus(remoteData, localData) {
+  if (!remoteData && !localData) return null;
+  if (!remoteData) return localData;
+  if (!localData) return remoteData;
+
+  const remoteTime = remoteData.updated_at ? new Date(remoteData.updated_at).getTime() : 0;
+  const localTime = localData.updated_at ? new Date(localData.updated_at).getTime() : 0;
+  return localTime > remoteTime ? localData : remoteData;
+}
+
 /**
  * 실시간 상태 리스너 구독
- * @param {string} division 'adult' | 'student'
- * @param {function} callback (status) => void
- * @returns {function} unsubscribe
  */
 export function subscribeLiveStatus(division, callback) {
-  const docRef = doc(db, LIVE_COL_NAME, `${division}_2026`);
+  const docRef = doc(db, LIVE_COL_NAME, getLiveDocId(division));
   return onSnapshot(docRef, (snap) => {
+    const localData = readLocalCache(division);
     if (snap.exists()) {
-      callback(snap.data());
+      const merged = pickNewerStatus(snap.data(), localData);
+      writeLocalCache(division, merged);
+      callback(merged);
     } else {
-      const defaultState = getDefaultLiveStatus(division);
-      callback(defaultState);
+      callback(localData || getDefaultLiveStatus(division));
     }
   }, (err) => {
     console.warn(`[LiveStatus] Snapshot warning (${division}):`, err);
+    callback(readLocalCache(division) || getDefaultLiveStatus(division));
   });
 }
 
 /**
- * Firestore에서 1회 상태 조회 (폴링용)
+ * 명부(DB) 실시간 구독 (성인부: records_2026_01_01, 학생부: records_student_2026_01_01)
+ */
+export function subscribeRosterDoc(division, callback) {
+  const docName = division === 'student' ? 'records_student_2026_01_01' : 'records_2026_01_01';
+  const docRef = doc(db, 'gmdc_swim_club', docName);
+  return onSnapshot(docRef, (snap) => {
+    if (snap.exists()) {
+      callback(snap.data());
+    }
+  }, (err) => {
+    console.warn(`[RosterDoc] Snapshot warning (${division}):`, err);
+  });
+}
+
+/**
+ * Firestore에서 1회 상태 조회 (폴링/수동 새로고침용)
  */
 export async function fetchLiveStatus(division) {
+  const localData = readLocalCache(division);
   try {
-    const docRef = doc(db, LIVE_COL_NAME, `${division}_2026`);
+    const docRef = doc(db, LIVE_COL_NAME, getLiveDocId(division));
     const snap = await getDoc(docRef);
     if (snap.exists()) {
-      return snap.data();
+      const merged = pickNewerStatus(snap.data(), localData);
+      writeLocalCache(division, merged);
+      return merged;
     }
   } catch (err) {
     console.warn("[LiveStatus] fetchLiveStatus error:", err);
   }
-  return getDefaultLiveStatus(division);
+  return localData || getDefaultLiveStatus(division);
 }
 
 /**
- * Firestore에 상태 저장
+ * Firestore 및 로컬 캐시에 상태 저장
  */
 export async function saveLiveStatus(division, newStatus) {
-  const docRef = doc(db, LIVE_COL_NAME, `${division}_2026`);
   const payload = {
     ...newStatus,
     updated_at: new Date().toISOString()
   };
-  await setDoc(docRef, payload, { merge: true });
+  writeLocalCache(division, payload);
+
+  try {
+    const docRef = doc(db, LIVE_COL_NAME, getLiveDocId(division));
+    await setDoc(docRef, payload, { merge: true });
+  } catch (err) {
+    console.warn("[LiveStatus] saveLiveStatus Firestore warning (local cache saved):", err);
+  }
 }
 
 // ──────────────────────────────────────────────────────────────────────────
-// 🚀 대회 현장 조작 함수들 (누구나 조작 가능)
+// 🚀 개별 경기 카드 [시작 아이콘] / [시작 취소 아이콘] 조작 함수
 // ──────────────────────────────────────────────────────────────────────────
 
 /**
- * 대회 시작 (1조 출발)
+ * 특정 경기 카드의 [시작 아이콘] 클릭 시 해당 조 시작 처리
  */
-export async function startCompetition(division) {
+export async function startRaceAt(division, targetRaceIndex, fallbackStatus = null) {
+  const fetched = await fetchLiveStatus(division);
+  const current = pickNewerStatus(fetched, fallbackStatus) || getDefaultLiveStatus(division);
   const races = division === 'adult' ? ADULT_RACES_DATA : STUDENT_RACES_DATA;
+  const validIndex = Math.max(1, Math.min(races.length, Number(targetRaceIndex)));
   const now = new Date();
   const nowStr = now.toISOString();
 
+  let history = Array.isArray(current.history) ? [...current.history] : [];
+
+  // 직전 진행 중이던 조가 있고, 그 다음/이후 조를 시작한 경우 직전 조 소요시간 기록
+  if (current.status === 'running' && current.current_race_index > 0 && current.current_race_index < validIndex) {
+    let prevDuration = 75;
+    if (current.current_race_started_at) {
+      const prevStart = new Date(current.current_race_started_at);
+      prevDuration = Math.max(1, Math.round((now - prevStart) / 1000));
+    }
+    history = history.filter(h => h.race_index !== current.current_race_index);
+    history.push({
+      race_index: current.current_race_index,
+      started_at: current.current_race_started_at || nowStr,
+      finished_at: nowStr,
+      duration_sec: prevDuration
+    });
+  }
+
+  // targetRaceIndex 이후의 기존 히스토리는 정리
+  history = history.filter(h => h.race_index < validIndex);
+
+  // 진행 중이던 휴게가 있으면 종료 처리하고, validIndex 이후의 휴게는 정리
+  let breaks = Array.isArray(current.breaks) ? [...current.breaks] : [];
+  breaks = breaks
+    .filter(b => b.after_race_index < validIndex)
+    .map(b => {
+      if (b.state === 'running') {
+        const bStart = b.started_at ? new Date(b.started_at) : now;
+        return {
+          ...b,
+          state: 'finished',
+          finished_at: nowStr,
+          duration_sec: Math.max(1, Math.round((now - bStart) / 1000))
+        };
+      }
+      return b;
+    });
+
   const newStatus = {
+    ...current,
     division,
     status: 'running',
-    current_race_index: 1,
-    started_at: nowStr,
+    current_race_index: validIndex,
+    started_at: current.started_at || nowStr,
     current_race_started_at: nowStr,
     is_paused: false,
     pause_started_at: null,
-    total_paused_sec: 0,
-    history: [],
-    updated_at: nowStr,
-    updated_by: '현장 운영자'
-  };
-
-  await saveLiveStatus(division, newStatus);
-  return newStatus;
-}
-
-/**
- * 다음 조 시작 (Next Race)
- */
-export async function nextRace(division) {
-  const current = await fetchLiveStatus(division);
-  const races = division === 'adult' ? ADULT_RACES_DATA : STUDENT_RACES_DATA;
-  const now = new Date();
-  const nowStr = now.toISOString();
-
-  // 아직 시작 안 했으면 시작 처리
-  if (current.status === 'ready' || current.current_race_index === 0) {
-    return await startCompetition(division);
-  }
-
-  // 이전 조 소요 시간 계산
-  let prevDuration = 75; // 기본 75초
-  if (current.current_race_started_at) {
-    const prevStart = new Date(current.current_race_started_at);
-    prevDuration = Math.max(15, Math.round((now - prevStart) / 1000));
-  }
-
-  const prevHistoryItem = {
-    race_index: current.current_race_index,
-    started_at: current.current_race_started_at,
-    finished_at: nowStr,
-    duration_sec: prevDuration
-  };
-
-  const nextIndex = current.current_race_index + 1;
-  const isFinished = nextIndex > races.length;
-
-  const newStatus = {
-    ...current,
-    status: isFinished ? 'finished' : 'running',
-    current_race_index: isFinished ? races.length : nextIndex,
-    current_race_started_at: isFinished ? null : nowStr,
-    is_paused: false,
-    pause_started_at: null,
-    history: [...(current.history || []), prevHistoryItem],
+    history,
+    breaks,
     updated_at: nowStr
   };
 
@@ -209,93 +263,43 @@ export async function nextRace(division) {
 }
 
 /**
- * 휴게 시작 / 종료 토글 (Pause Toggle)
+ * 특정 경기 카드의 [시작 취소 아이콘] 클릭 시 해당 조 시작 취소 처리
  */
-export async function togglePause(division) {
-  const current = await fetchLiveStatus(division);
-  const now = new Date();
-  const nowStr = now.toISOString();
-
-  if (!current.is_paused) {
-    // 휴게 시작
-    const newStatus = {
-      ...current,
-      status: 'paused',
-      is_paused: true,
-      pause_started_at: nowStr,
-      updated_at: nowStr
-    };
-    await saveLiveStatus(division, newStatus);
-    return newStatus;
-  } else {
-    // 휴게 종료
-    let pauseDuration = 0;
-    if (current.pause_started_at) {
-      const pStart = new Date(current.pause_started_at);
-      pauseDuration = Math.max(0, Math.round((now - pStart) / 1000));
-    }
-    const newStatus = {
-      ...current,
-      status: 'running',
-      is_paused: false,
-      pause_started_at: null,
-      total_paused_sec: (current.total_paused_sec || 0) + pauseDuration,
-      updated_at: nowStr
-    };
-    await saveLiveStatus(division, newStatus);
-    return newStatus;
-  }
-}
-
-/**
- * 직전 조작 취소 (Undo / 이전 조로 되돌리기)
- */
-export async function undoLastAction(division) {
-  const current = await fetchLiveStatus(division);
-  const history = current.history || [];
-
-  if (history.length === 0) {
-    // 되돌릴 히스토리가 없음 -> 1조 시작 전(ready)으로 초기화
-    const reset = getDefaultLiveStatus(division);
-    await saveLiveStatus(division, reset);
-    return reset;
-  }
-
-  const lastItem = history[history.length - 1];
-  const newHistory = history.slice(0, -1);
-
-  const newStatus = {
-    ...current,
-    status: 'running',
-    current_race_index: lastItem.race_index,
-    current_race_started_at: lastItem.started_at,
-    is_paused: false,
-    pause_started_at: null,
-    history: newHistory,
-    updated_at: new Date().toISOString()
-  };
-
-  await saveLiveStatus(division, newStatus);
-  return newStatus;
-}
-
-/**
- * 특정 조 번호로 강제 점프 (Jump to Race)
- */
-export async function jumpToRace(division, targetRaceIndex) {
-  const current = await fetchLiveStatus(division);
-  const races = division === 'adult' ? ADULT_RACES_DATA : STUDENT_RACES_DATA;
+export async function cancelRaceAt(division, targetRaceIndex, fallbackStatus = null) {
+  const fetched = await fetchLiveStatus(division);
+  const current = pickNewerStatus(fetched, fallbackStatus) || getDefaultLiveStatus(division);
+  const validIndex = Number(targetRaceIndex);
   const nowStr = new Date().toISOString();
 
-  const validIndex = Math.max(1, Math.min(races.length, targetRaceIndex));
+  let history = Array.isArray(current.history) ? [...current.history] : [];
+  let breaks = Array.isArray(current.breaks) ? [...current.breaks] : [];
+
+  // 1조이거나 아직 시작 전이면 전체 대기 상태(ready)로 초기화
+  if (validIndex <= 1 || current.current_race_index <= 1) {
+    const resetState = {
+      ...getDefaultLiveStatus(division),
+      updated_at: nowStr
+    };
+    await saveLiveStatus(division, resetState);
+    return resetState;
+  }
+
+  // 취소한 조 이상은 히스토리에서 제거하고 직전 조(validIndex - 1)로 복귀
+  const prevIndex = validIndex - 1;
+  const prevHistoryItem = history.find(h => h.race_index === prevIndex);
+  history = history.filter(h => h.race_index < prevIndex);
+  breaks = breaks.filter(b => b.after_race_index < prevIndex);
 
   const newStatus = {
     ...current,
+    division,
     status: 'running',
-    current_race_index: validIndex,
-    current_race_started_at: nowStr,
+    current_race_index: prevIndex,
+    current_race_started_at: prevHistoryItem?.started_at || current.current_race_started_at || nowStr,
     is_paused: false,
     pause_started_at: null,
+    history,
+    breaks,
     updated_at: nowStr
   };
 
@@ -304,31 +308,156 @@ export async function jumpToRace(division, targetRaceIndex) {
 }
 
 /**
- * 대회 완전 초기화 (Reset)
+ * [휴게 시작] 버튼 클릭 시: 현재 진행 순서 다음에 녹색 휴게 카드 삽입 및 휴게 시작
  */
-export async function resetCompetition(division) {
-  const def = getDefaultLiveStatus(division);
-  await saveLiveStatus(division, def);
-  return def;
+export async function startBreak(division, fallbackStatus = null) {
+  const fetched = await fetchLiveStatus(division);
+  const current = pickNewerStatus(fetched, fallbackStatus) || getDefaultLiveStatus(division);
+  const now = new Date();
+  const nowStr = now.toISOString();
+
+  let history = Array.isArray(current.history) ? [...current.history] : [];
+  let breaks = Array.isArray(current.breaks) ? [...current.breaks] : [];
+
+  // 이미 진행 중인 휴게가 있으면 그대로 반환
+  if (breaks.some(b => b.state === 'running')) {
+    return current;
+  }
+
+  const afterIndex = current.current_race_index > 0 ? current.current_race_index : 1;
+
+  // 현재 경기가 진행 중이었다면 해당 경기를 완료 처리하여 히스토리에 기록
+  if (current.status === 'running' && current.current_race_index > 0) {
+    let prevDuration = 75;
+    if (current.current_race_started_at) {
+      const prevStart = new Date(current.current_race_started_at);
+      prevDuration = Math.max(1, Math.round((now - prevStart) / 1000));
+    }
+    history = history.filter(h => h.race_index !== current.current_race_index);
+    history.push({
+      race_index: current.current_race_index,
+      started_at: current.current_race_started_at || nowStr,
+      finished_at: nowStr,
+      duration_sec: prevDuration
+    });
+  }
+
+  const breakItem = {
+    id: `brk_${Date.now()}`,
+    after_race_index: afterIndex,
+    started_at: nowStr,
+    finished_at: null,
+    duration_sec: 0,
+    state: 'running'
+  };
+
+  breaks.push(breakItem);
+
+  const newStatus = {
+    ...current,
+    division,
+    status: 'paused',
+    current_race_index: afterIndex,
+    started_at: current.started_at || nowStr,
+    is_paused: true,
+    pause_started_at: nowStr,
+    history,
+    breaks,
+    updated_at: nowStr
+  };
+
+  await saveLiveStatus(division, newStatus);
+  return newStatus;
+}
+
+/**
+ * [휴게 종료] 버튼 클릭 시: 휴게 카드를 완료 기록으로 남기고 바로 다음 순번 경기를 자동 시작
+ */
+export async function endBreak(division, breakId, fallbackStatus = null) {
+  const fetched = await fetchLiveStatus(division);
+  const current = pickNewerStatus(fetched, fallbackStatus) || getDefaultLiveStatus(division);
+  const races = division === 'adult' ? ADULT_RACES_DATA : STUDENT_RACES_DATA;
+  const now = new Date();
+  const nowStr = now.toISOString();
+
+  let breaks = Array.isArray(current.breaks) ? [...current.breaks] : [];
+  let targetAfterIndex = current.current_race_index || 1;
+
+  breaks = breaks.map(b => {
+    if ((breakId && b.id === breakId) || (!breakId && b.state === 'running')) {
+      targetAfterIndex = b.after_race_index || targetAfterIndex;
+      const bStart = b.started_at ? new Date(b.started_at) : now;
+      const dur = Math.max(1, Math.round((now - bStart) / 1000));
+      return {
+        ...b,
+        state: 'finished',
+        finished_at: nowStr,
+        duration_sec: dur
+      };
+    }
+    return b;
+  });
+
+  const nextRaceIndex = Math.min(races.length, targetAfterIndex + 1);
+
+  const newStatus = {
+    ...current,
+    division,
+    status: 'running',
+    current_race_index: nextRaceIndex,
+    started_at: current.started_at || nowStr,
+    current_race_started_at: nowStr,
+    is_paused: false,
+    pause_started_at: null,
+    breaks,
+    updated_at: nowStr
+  };
+
+  await saveLiveStatus(division, newStatus);
+  return newStatus;
+}
+
+/**
+ * [휴게 취소] 버튼 클릭 시: 해당 휴게 카드를 삭제하고 이전 상태로 복귀
+ */
+export async function cancelBreak(division, breakId, fallbackStatus = null) {
+  const fetched = await fetchLiveStatus(division);
+  const current = pickNewerStatus(fetched, fallbackStatus) || getDefaultLiveStatus(division);
+  const nowStr = new Date().toISOString();
+
+  let breaks = Array.isArray(current.breaks) ? [...current.breaks] : [];
+  const targetBreak = breaks.find(b => (breakId && b.id === breakId) || (!breakId && b.state === 'running'));
+  breaks = breaks.filter(b => b !== targetBreak);
+
+  const stillHasRunningBreak = breaks.some(b => b.state === 'running');
+  const nextStatus = stillHasRunningBreak
+    ? 'paused'
+    : (current.current_race_index > 0 ? 'running' : 'ready');
+
+  const newStatus = {
+    ...current,
+    division,
+    status: nextStatus,
+    is_paused: stillHasRunningBreak,
+    pause_started_at: stillHasRunningBreak ? current.pause_started_at : null,
+    breaks,
+    updated_at: nowStr
+  };
+
+  await saveLiveStatus(division, newStatus);
+  return newStatus;
 }
 
 // ──────────────────────────────────────────────────────────────────────────
 // 🧠 실시간 시간 추론 엔진 (Pace-Adaptive Real-time Estimation)
 // ──────────────────────────────────────────────────────────────────────────
 
-/**
- * 대진표 레이스 배열과 현재 진행 상태를 기반으로,
- * 모든 조의 실제 시작 시각 및 미래 예상 시작 시각을 계산하여 반환
- * 
- * @param {Array} races 전체 레이스 배열 (141개 or 232개)
- * @param {Object} status 현재 live_status 객체
- * @param {Date} referenceTime 기준 시간 (기본값: 현재 시간)
- * @returns {Array} 계산된 레이스 상세 배열
- */
 export function calculateScheduleEstimates(races, status, referenceTime = new Date()) {
   const currentIndex = status.current_race_index || 0;
   const isStarted = status.status === 'running' || status.status === 'paused' || status.status === 'finished';
   const history = status.history || [];
+  const breaks = Array.isArray(status.breaks) ? status.breaks : [];
+  const activeBreak = breaks.find(b => b.state === 'running') || null;
 
   // 1. 히스토리 매핑: race_index -> history item
   const historyMap = new Map();
@@ -336,7 +465,27 @@ export function calculateScheduleEstimates(races, status, referenceTime = new Da
     historyMap.set(h.race_index, h);
   }
 
-  // 2. 동적 속도 계수(Pace Factor) 계산 (최근 5개 완료 조 기준)
+  // 2. 개인전 / 단체전 평균 경기 진행속도 계산 (완료 기록 없을 시 기본 예상치: 개인 75초=01:15, 단체 180초=03:00)
+  const indivDurations = [];
+  const relayDurations = [];
+  for (const h of history) {
+    if (!h || typeof h.duration_sec !== 'number' || h.duration_sec <= 0) continue;
+    const r = races[h.race_index - 1];
+    if (r && r.is_relay) {
+      relayDurations.push(h.duration_sec);
+    } else {
+      indivDurations.push(h.duration_sec);
+    }
+  }
+
+  const avgIndivSec = indivDurations.length > 0
+    ? Math.round(indivDurations.reduce((a, b) => a + b, 0) / indivDurations.length)
+    : 75;
+  const avgRelaySec = relayDurations.length > 0
+    ? Math.round(relayDurations.reduce((a, b) => a + b, 0) / relayDurations.length)
+    : 180;
+
+  // 3. 동적 속도 계수(Pace Factor) 계산 (최근 5개 완료 조 기준)
   let paceFactor = 1.0;
   if (history.length > 0) {
     const recentHistory = history.slice(-5);
@@ -351,100 +500,89 @@ export function calculateScheduleEstimates(races, status, referenceTime = new Da
 
     if (baseSum > 0 && actualSum > 0) {
       paceFactor = actualSum / baseSum;
-      // 극단적 이상치 완충 (0.6x ~ 2.0x)
       paceFactor = Math.min(2.0, Math.max(0.6, paceFactor));
     }
   }
 
-  // 3. 현재 휴게 중인지 확인 및 추가 대기 시간
-  let currentPauseSec = 0;
-  if (status.is_paused && status.pause_started_at) {
-    const pStart = new Date(status.pause_started_at);
-    currentPauseSec = Math.max(0, Math.round((referenceTime - pStart) / 1000));
-  }
-
-  // 4. 각 레이스별 상태 및 시각 계산
-  const result = [];
-  let cumulativeTime = referenceTime ? new Date(referenceTime.getTime()) : new Date();
-
-  // 만약 현재 조가 진행 중이면, 현재 조가 시작된 후 경과된 시간 계산
+  // 4. 현재 조 경과 시간 및 남은 예상 시간 계산
   let currentRaceElapsed = 0;
   let currentRaceRemaining = 0;
-  if (isStarted && currentIndex > 0 && currentIndex <= races.length && status.current_race_started_at) {
+  if (!activeBreak && isStarted && currentIndex > 0 && currentIndex <= races.length && status.current_race_started_at) {
     const curStart = new Date(status.current_race_started_at);
     currentRaceElapsed = Math.max(0, Math.round((referenceTime - curStart) / 1000));
-    const currentBase = races[currentIndex - 1].base_duration_sec * paceFactor;
+    const currentBase = (races[currentIndex - 1]?.base_duration_sec || 75) * paceFactor;
     currentRaceRemaining = Math.max(10, Math.round(currentBase - currentRaceElapsed));
   }
 
-  // 미래 예상 누적 시각 초기화
-  let futureAccumDate = new Date(referenceTime.getTime());
-  if (currentRaceRemaining > 0) {
-    futureAccumDate.setSeconds(futureAccumDate.getSeconds() + currentRaceRemaining);
-  }
-  if (status.is_paused) {
-    // 휴게 중이면 휴게 대기시간 가산
-    futureAccumDate.setSeconds(futureAccumDate.getSeconds() + 60); // 최소 1분 대기 추정
+  // 5. 미래 예상 누적 시각 초기화 (대회 시작 전에는 공식 시작 시각 08:30 기준)
+  const officialStartDate = new Date(referenceTime.getTime());
+  officialStartDate.setHours(8, 30, 0, 0);
+
+  let futureAccumDate;
+  if (!isStarted || currentIndex === 0) {
+    futureAccumDate = new Date(officialStartDate.getTime());
+  } else {
+    futureAccumDate = new Date(referenceTime.getTime());
+    if (currentRaceRemaining > 0) {
+      futureAccumDate.setSeconds(futureAccumDate.getSeconds() + currentRaceRemaining);
+    }
   }
 
+  const result = [];
   for (let i = 0; i < races.length; i++) {
     const race = races[i];
-    const raceIdx = race.race_index; // 1-based
+    const raceIdx = race.race_index;
 
     if (!isStarted || currentIndex === 0) {
-      // 대회 시작 전 (대기)
+      const thisEstimatedStart = new Date(futureAccumDate.getTime());
       result.push({
         ...race,
         state: 'waiting',
         actual_started_at: null,
-        estimated_start_time: null,
-        estimated_start_hm: '시작 대기',
-        time_diff_text: '대기 중',
+        estimated_start_time: thisEstimatedStart,
+        display_time: `예상 ${formatTimeHM(thisEstimatedStart)}`,
         is_current: false
       });
-    } else if (raceIdx < currentIndex) {
-      // 이미 완료된 조
+
+      const thisBaseDuration = (race.base_duration_sec || 75) * paceFactor;
+      futureAccumDate.setSeconds(futureAccumDate.getSeconds() + Math.round(thisBaseDuration));
+    } else if (raceIdx < currentIndex || (activeBreak && raceIdx <= activeBreak.after_race_index)) {
       const h = historyMap.get(raceIdx);
       const startD = h && h.started_at ? new Date(h.started_at) : null;
+      const durSec = h && typeof h.duration_sec === 'number' ? h.duration_sec : null;
+      const timeWithDur = startD
+        ? (durSec !== null ? `${formatTimeHM(startD, true)}(${formatMMSS(durSec)})` : formatTimeHM(startD, true))
+        : '완료';
       result.push({
         ...race,
         state: 'finished',
         actual_started_at: h ? h.started_at : null,
         estimated_start_time: startD,
-        estimated_start_hm: startD ? formatTimeHM(startD, true) : '완료',
-        time_diff_text: h ? `${formatDuration(h.duration_sec)} 소요` : '완료',
+        display_time: timeWithDur,
         is_current: false
       });
-    } else if (raceIdx === currentIndex) {
-      // 현재 진행 중인 조
+    } else if (raceIdx === currentIndex && !activeBreak) {
       const startD = status.current_race_started_at ? new Date(status.current_race_started_at) : referenceTime;
       result.push({
         ...race,
         state: status.is_paused ? 'paused' : 'running',
         actual_started_at: status.current_race_started_at,
         estimated_start_time: startD,
-        estimated_start_hm: formatTimeHM(startD, true) + ' 출발',
+        display_time: formatTimeHM(startD, true),
         elapsed_sec: currentRaceElapsed,
-        time_diff_text: status.is_paused ? `☕ 휴게 중 (${formatDuration(currentPauseSec)})` : `🏊 진행 중 (${formatDuration(currentRaceElapsed)} 경과)`,
         is_current: true
       });
     } else {
-      // 미래 대기 중인 조 (추론 계산)
       const thisEstimatedStart = new Date(futureAccumDate.getTime());
-      const diffMin = Math.round((thisEstimatedStart - referenceTime) / 60000);
-      const diffText = diffMin <= 0 ? '곧 시작' : `약 ${diffMin}분 후`;
-
       result.push({
         ...race,
         state: 'waiting',
         actual_started_at: null,
         estimated_start_time: thisEstimatedStart,
-        estimated_start_hm: formatTimeHM(thisEstimatedStart),
-        time_diff_text: diffText,
+        display_time: `예상 ${formatTimeHM(thisEstimatedStart)}`,
         is_current: false
       });
 
-      // 다음 조를 위해 이 조의 예상 소요시간을 누적
       const thisBaseDuration = (race.base_duration_sec || 75) * paceFactor;
       futureAccumDate.setSeconds(futureAccumDate.getSeconds() + Math.round(thisBaseDuration));
     }
@@ -454,8 +592,10 @@ export function calculateScheduleEstimates(races, status, referenceTime = new Da
     races: result,
     currentIndex,
     paceFactor,
-    isPaused: status.is_paused,
-    currentPauseSec,
-    currentRaceElapsed
+    currentRaceElapsed,
+    avgIndivSec,
+    avgRelaySec,
+    breaks,
+    activeBreak
   };
 }

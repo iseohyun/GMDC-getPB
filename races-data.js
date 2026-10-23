@@ -3,6 +3,7 @@
 // 통합조(합침) 규칙 반영 완료: 합친 그룹의 첫 번째 순번만 대표 순번으로 부여
 // 성인부: 총 141개 레이스 (합침 14건 반영)
 // 학생부: 총 232개 레이스 (합침 6건 반영)
+// 우리 팀 구분: 거제몽꾸 (주황색), 거제야르 (파란색)
 // ==========================================================================
 
 export const ADULT_RACES_DATA = [
@@ -220,7 +221,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "4-2",
-        "is_our_team": true
+        "is_our_team": false
       }
     ],
     "division": "성인부",
@@ -230,7 +231,7 @@ export const ADULT_RACES_DATA = [
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 5,
@@ -253,7 +254,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "4-3",
-        "is_our_team": false
+        "is_our_team": true
       },
       {
         "lane": 2,
@@ -293,7 +294,7 @@ export const ADULT_RACES_DATA = [
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 6,
@@ -336,7 +337,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "4-4",
-        "is_our_team": false
+        "is_our_team": true
       },
       {
         "lane": 4,
@@ -379,7 +380,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "5-1",
-        "is_our_team": false
+        "is_our_team": true
       },
       {
         "lane": 2,
@@ -389,7 +390,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "5-1",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 3,
@@ -442,7 +443,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "5-2",
-        "is_our_team": false
+        "is_our_team": true
       },
       {
         "lane": 2,
@@ -452,7 +453,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "5-2",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 3,
@@ -472,7 +473,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "5-2",
-        "is_our_team": false
+        "is_our_team": true
       }
     ],
     "division": "성인부",
@@ -515,7 +516,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "5-3",
-        "is_our_team": false
+        "is_our_team": true
       },
       {
         "lane": 3,
@@ -535,7 +536,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "5-3",
-        "is_our_team": false
+        "is_our_team": true
       }
     ],
     "division": "성인부",
@@ -545,7 +546,7 @@ export const ADULT_RACES_DATA = [
     "group": "5그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 10,
@@ -568,7 +569,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "6",
-        "is_our_team": false
+        "is_our_team": true
       },
       {
         "lane": 4,
@@ -588,7 +589,7 @@ export const ADULT_RACES_DATA = [
     "group": "6그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 11,
@@ -709,7 +710,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "8-3",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 2,
@@ -749,7 +750,7 @@ export const ADULT_RACES_DATA = [
     "group": "3그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 14,
@@ -802,7 +803,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "9-1",
-        "is_our_team": false
+        "is_our_team": true
       }
     ],
     "division": "성인부",
@@ -812,7 +813,7 @@ export const ADULT_RACES_DATA = [
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 15,
@@ -845,7 +846,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "9-2",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 3,
@@ -875,7 +876,7 @@ export const ADULT_RACES_DATA = [
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 16,
@@ -1034,7 +1035,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "9-5",
-        "is_our_team": false
+        "is_our_team": true
       },
       {
         "lane": 3,
@@ -1064,7 +1065,7 @@ export const ADULT_RACES_DATA = [
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 19,
@@ -1087,7 +1088,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "10-1",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 2,
@@ -1127,7 +1128,7 @@ export const ADULT_RACES_DATA = [
     "group": "5그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 20,
@@ -1213,7 +1214,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "11",
-        "is_our_team": false
+        "is_our_team": true
       },
       {
         "lane": 4,
@@ -1233,7 +1234,7 @@ export const ADULT_RACES_DATA = [
     "group": "1그룹",
     "is_relay": false,
     "base_duration_sec": 80,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 22,
@@ -1256,7 +1257,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "12",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 3,
@@ -1276,7 +1277,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "12",
-        "is_our_team": true
+        "is_our_team": false
       }
     ],
     "division": "성인부",
@@ -1286,7 +1287,7 @@ export const ADULT_RACES_DATA = [
     "group": "2그룹",
     "is_relay": false,
     "base_duration_sec": 80,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 23,
@@ -1319,7 +1320,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "13",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 4,
@@ -1339,7 +1340,7 @@ export const ADULT_RACES_DATA = [
     "group": "3그룹",
     "is_relay": false,
     "base_duration_sec": 80,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 24,
@@ -1425,7 +1426,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "14-2",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 3,
@@ -1455,7 +1456,7 @@ export const ADULT_RACES_DATA = [
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 80,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 26,
@@ -1490,7 +1491,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "15",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 3,
@@ -1510,7 +1511,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "16",
-        "is_our_team": false
+        "is_our_team": true
       }
     ],
     "division": "성인부",
@@ -1649,7 +1650,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "18-2",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 3,
@@ -1679,7 +1680,7 @@ export const ADULT_RACES_DATA = [
     "group": "3그룹",
     "is_relay": false,
     "base_duration_sec": 80,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 30,
@@ -1722,7 +1723,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "19-1",
-        "is_our_team": false
+        "is_our_team": true
       },
       {
         "lane": 4,
@@ -2060,7 +2061,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "21-1",
-        "is_our_team": false
+        "is_our_team": true
       },
       {
         "lane": 2,
@@ -2090,7 +2091,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "21-1",
-        "is_our_team": true
+        "is_our_team": false
       }
     ],
     "division": "성인부",
@@ -2196,7 +2197,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "22-1",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 4,
@@ -2249,7 +2250,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "22-2",
-        "is_our_team": false
+        "is_our_team": true
       },
       {
         "lane": 4,
@@ -2269,7 +2270,7 @@ export const ADULT_RACES_DATA = [
     "group": "일반",
     "is_relay": true,
     "base_duration_sec": 180,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 40,
@@ -2292,7 +2293,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "23",
-        "is_our_team": false
+        "is_our_team": true
       },
       {
         "lane": 2,
@@ -2312,7 +2313,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "23",
-        "is_our_team": false
+        "is_our_team": true
       },
       {
         "lane": 4,
@@ -2332,7 +2333,7 @@ export const ADULT_RACES_DATA = [
     "group": "1그룹",
     "is_relay": false,
     "base_duration_sec": 75,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 41,
@@ -2365,7 +2366,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "24-1",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 3,
@@ -2395,7 +2396,7 @@ export const ADULT_RACES_DATA = [
     "group": "2그룹",
     "is_relay": false,
     "base_duration_sec": 75,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 42,
@@ -2438,7 +2439,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "24-2",
-        "is_our_team": true
+        "is_our_team": false
       }
     ],
     "division": "성인부",
@@ -2448,7 +2449,7 @@ export const ADULT_RACES_DATA = [
     "group": "2그룹",
     "is_relay": false,
     "base_duration_sec": 75,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 43,
@@ -2471,7 +2472,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "24-3",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 3,
@@ -2501,7 +2502,7 @@ export const ADULT_RACES_DATA = [
     "group": "2그룹",
     "is_relay": false,
     "base_duration_sec": 75,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 44,
@@ -2544,7 +2545,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "25-1",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 4,
@@ -2564,7 +2565,7 @@ export const ADULT_RACES_DATA = [
     "group": "3그룹",
     "is_relay": false,
     "base_duration_sec": 75,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 45,
@@ -2607,7 +2608,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "25-2",
-        "is_our_team": false
+        "is_our_team": true
       }
     ],
     "division": "성인부",
@@ -2617,7 +2618,7 @@ export const ADULT_RACES_DATA = [
     "group": "3그룹",
     "is_relay": false,
     "base_duration_sec": 75,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 46,
@@ -2766,7 +2767,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "26-2",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 2,
@@ -2786,7 +2787,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "26-2",
-        "is_our_team": false
+        "is_our_team": true
       },
       {
         "lane": 4,
@@ -2849,7 +2850,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "26-3",
-        "is_our_team": true
+        "is_our_team": false
       }
     ],
     "division": "성인부",
@@ -2859,7 +2860,7 @@ export const ADULT_RACES_DATA = [
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 75,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 50,
@@ -2882,7 +2883,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "27-1",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 3,
@@ -2902,7 +2903,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "27-1",
-        "is_our_team": true
+        "is_our_team": false
       }
     ],
     "division": "성인부",
@@ -2912,7 +2913,7 @@ export const ADULT_RACES_DATA = [
     "group": "5그룹",
     "is_relay": false,
     "base_duration_sec": 75,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 51,
@@ -2937,7 +2938,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "27-2",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 2,
@@ -2967,7 +2968,7 @@ export const ADULT_RACES_DATA = [
     "group": "5그룹",
     "is_relay": false,
     "base_duration_sec": 75,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 52,
@@ -2992,7 +2993,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "29",
-        "is_our_team": false
+        "is_our_team": true
       },
       {
         "lane": 3,
@@ -3012,7 +3013,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "30-1",
-        "is_our_team": false
+        "is_our_team": true
       }
     ],
     "division": "성인부",
@@ -3022,7 +3023,7 @@ export const ADULT_RACES_DATA = [
     "group": "1그룹",
     "is_relay": false,
     "base_duration_sec": 75,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 53,
@@ -3045,7 +3046,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "30-2",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 2,
@@ -3065,7 +3066,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "30-2",
-        "is_our_team": false
+        "is_our_team": true
       },
       {
         "lane": 4,
@@ -3138,7 +3139,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "31-1",
-        "is_our_team": false
+        "is_our_team": true
       }
     ],
     "division": "성인부",
@@ -3148,7 +3149,7 @@ export const ADULT_RACES_DATA = [
     "group": "3그룹",
     "is_relay": false,
     "base_duration_sec": 75,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 55,
@@ -3234,7 +3235,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "32-1",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 4,
@@ -3254,7 +3255,7 @@ export const ADULT_RACES_DATA = [
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 75,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 57,
@@ -3277,7 +3278,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "32-2",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 3,
@@ -3297,7 +3298,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "32-2",
-        "is_our_team": true
+        "is_our_team": false
       }
     ],
     "division": "성인부",
@@ -3307,7 +3308,7 @@ export const ADULT_RACES_DATA = [
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 75,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 58,
@@ -3340,7 +3341,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "33-1",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 3,
@@ -3360,7 +3361,7 @@ export const ADULT_RACES_DATA = [
     "group": "5그룹",
     "is_relay": false,
     "base_duration_sec": 75,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 59,
@@ -3428,7 +3429,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "34",
-        "is_our_team": false
+        "is_our_team": true
       },
       {
         "lane": 2,
@@ -3458,7 +3459,7 @@ export const ADULT_RACES_DATA = [
     "group": "1그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 61,
@@ -3597,7 +3598,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "37-1",
-        "is_our_team": false
+        "is_our_team": true
       },
       {
         "lane": 3,
@@ -3627,7 +3628,7 @@ export const ADULT_RACES_DATA = [
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 64,
@@ -3670,7 +3671,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "37-2",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 4,
@@ -3690,7 +3691,7 @@ export const ADULT_RACES_DATA = [
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 65,
@@ -3723,17 +3724,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "37-3",
-        "is_our_team": false
-      },
-      {
-        "lane": 3,
-        "name": "성 명",
-        "team": "소   속",
-        "rank": "순위",
-        "record": "기     록",
-        "note": "비  고",
-        "original_match_no": "37-3",
-        "is_our_team": false
+        "is_our_team": true
       },
       {
         "lane": 3,
@@ -3796,7 +3787,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "37-4",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 4,
@@ -3816,7 +3807,7 @@ export const ADULT_RACES_DATA = [
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 67,
@@ -3882,7 +3873,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "38-1",
-        "is_our_team": false
+        "is_our_team": true
       },
       {
         "lane": 2,
@@ -3902,7 +3893,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "38-1",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 4,
@@ -3965,7 +3956,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "38-2",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 4,
@@ -3975,7 +3966,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "38-2",
-        "is_our_team": false
+        "is_our_team": true
       }
     ],
     "division": "성인부",
@@ -4018,7 +4009,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "38-3",
-        "is_our_team": false
+        "is_our_team": true
       },
       {
         "lane": 3,
@@ -4038,7 +4029,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "38-3",
-        "is_our_team": false
+        "is_our_team": true
       }
     ],
     "division": "성인부",
@@ -4048,7 +4039,7 @@ export const ADULT_RACES_DATA = [
     "group": "5그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 71,
@@ -4073,7 +4064,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "38-4",
-        "is_our_team": false
+        "is_our_team": true
       },
       {
         "lane": 2,
@@ -4093,7 +4084,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "39",
-        "is_our_team": false
+        "is_our_team": true
       },
       {
         "lane": 4,
@@ -4113,7 +4104,7 @@ export const ADULT_RACES_DATA = [
     "group": "5그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 72,
@@ -4138,7 +4129,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "40",
-        "is_our_team": false
+        "is_our_team": true
       },
       {
         "lane": 3,
@@ -4168,7 +4159,7 @@ export const ADULT_RACES_DATA = [
     "group": "1그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 73,
@@ -4201,7 +4192,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "41-2",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 3,
@@ -4231,7 +4222,7 @@ export const ADULT_RACES_DATA = [
     "group": "3그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 74,
@@ -4327,7 +4318,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "42-1",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 4,
@@ -4390,7 +4381,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "42-2",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 4,
@@ -4410,7 +4401,7 @@ export const ADULT_RACES_DATA = [
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 77,
@@ -4526,7 +4517,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "42-4",
-        "is_our_team": false
+        "is_our_team": true
       }
     ],
     "division": "성인부",
@@ -4536,7 +4527,7 @@ export const ADULT_RACES_DATA = [
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 79,
@@ -4675,7 +4666,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "43-1",
-        "is_our_team": false
+        "is_our_team": true
       },
       {
         "lane": 4,
@@ -4695,7 +4686,7 @@ export const ADULT_RACES_DATA = [
     "group": "5그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 82,
@@ -4748,7 +4739,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "43-2",
-        "is_our_team": false
+        "is_our_team": true
       }
     ],
     "division": "성인부",
@@ -4758,7 +4749,7 @@ export const ADULT_RACES_DATA = [
     "group": "5그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 83,
@@ -4803,7 +4794,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "44",
-        "is_our_team": false
+        "is_our_team": true
       }
     ],
     "division": "성인부",
@@ -4813,7 +4804,7 @@ export const ADULT_RACES_DATA = [
     "group": "5그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 84,
@@ -4889,7 +4880,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "46-1",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 2,
@@ -4929,7 +4920,7 @@ export const ADULT_RACES_DATA = [
     "group": "2그룹",
     "is_relay": false,
     "base_duration_sec": 80,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 86,
@@ -4962,7 +4953,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "46-2",
-        "is_our_team": false
+        "is_our_team": true
       },
       {
         "lane": 4,
@@ -4972,7 +4963,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "46-2",
-        "is_our_team": true
+        "is_our_team": false
       }
     ],
     "division": "성인부",
@@ -5015,7 +5006,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "47-1",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 3,
@@ -5035,7 +5026,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "47-1",
-        "is_our_team": true
+        "is_our_team": false
       }
     ],
     "division": "성인부",
@@ -5045,7 +5036,7 @@ export const ADULT_RACES_DATA = [
     "group": "3그룹",
     "is_relay": false,
     "base_duration_sec": 80,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 88,
@@ -5088,7 +5079,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "47-2",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 4,
@@ -5108,7 +5099,7 @@ export const ADULT_RACES_DATA = [
     "group": "3그룹",
     "is_relay": false,
     "base_duration_sec": 80,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 89,
@@ -5131,7 +5122,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "47-3",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 2,
@@ -5171,7 +5162,7 @@ export const ADULT_RACES_DATA = [
     "group": "3그룹",
     "is_relay": false,
     "base_duration_sec": 80,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 90,
@@ -5259,7 +5250,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "48-2",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 4,
@@ -5332,7 +5323,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "48-3",
-        "is_our_team": false
+        "is_our_team": true
       }
     ],
     "division": "성인부",
@@ -5342,7 +5333,7 @@ export const ADULT_RACES_DATA = [
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 80,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 93,
@@ -5438,7 +5429,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "49-1",
-        "is_our_team": false
+        "is_our_team": true
       },
       {
         "lane": 3,
@@ -5458,7 +5449,7 @@ export const ADULT_RACES_DATA = [
     "group": "5그룹",
     "is_relay": false,
     "base_duration_sec": 80,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 95,
@@ -5481,7 +5472,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "49-2",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 3,
@@ -5491,7 +5482,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "49-2",
-        "is_our_team": false
+        "is_our_team": true
       },
       {
         "lane": 4,
@@ -5534,7 +5525,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "50",
-        "is_our_team": false
+        "is_our_team": true
       },
       {
         "lane": 2,
@@ -5630,7 +5621,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "52-1",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 2,
@@ -5660,7 +5651,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "52-1",
-        "is_our_team": false
+        "is_our_team": true
       }
     ],
     "division": "성인부",
@@ -5882,7 +5873,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "53-3",
-        "is_our_team": false
+        "is_our_team": true
       },
       {
         "lane": 3,
@@ -5912,7 +5903,7 @@ export const ADULT_RACES_DATA = [
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 80,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 103,
@@ -5955,7 +5946,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "54-1",
-        "is_our_team": false
+        "is_our_team": true
       },
       {
         "lane": 4,
@@ -5975,7 +5966,7 @@ export const ADULT_RACES_DATA = [
     "group": "5그룹",
     "is_relay": false,
     "base_duration_sec": 80,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 104,
@@ -6073,7 +6064,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "55",
-        "is_our_team": false
+        "is_our_team": true
       }
     ],
     "division": "성인부",
@@ -6083,7 +6074,7 @@ export const ADULT_RACES_DATA = [
     "group": "5그룹",
     "is_relay": false,
     "base_duration_sec": 80,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 106,
@@ -6136,7 +6127,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "56-1",
-        "is_our_team": true
+        "is_our_team": false
       }
     ],
     "division": "성인부",
@@ -6189,7 +6180,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "56-2",
-        "is_our_team": false
+        "is_our_team": true
       }
     ],
     "division": "성인부",
@@ -6199,7 +6190,7 @@ export const ADULT_RACES_DATA = [
     "group": "일반",
     "is_relay": true,
     "base_duration_sec": 190,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 108,
@@ -6232,7 +6223,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "57-1",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 3,
@@ -6295,7 +6286,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "57-2",
-        "is_our_team": false
+        "is_our_team": true
       },
       {
         "lane": 4,
@@ -6315,7 +6306,7 @@ export const ADULT_RACES_DATA = [
     "group": "일반",
     "is_relay": true,
     "base_duration_sec": 190,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 110,
@@ -6348,7 +6339,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "58-1",
-        "is_our_team": false
+        "is_our_team": true
       },
       {
         "lane": 4,
@@ -6368,7 +6359,7 @@ export const ADULT_RACES_DATA = [
     "group": "1그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 111,
@@ -6391,7 +6382,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "58-2",
-        "is_our_team": false
+        "is_our_team": true
       },
       {
         "lane": 2,
@@ -6421,7 +6412,7 @@ export const ADULT_RACES_DATA = [
     "group": "1그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 112,
@@ -6444,7 +6435,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "59-1",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 2,
@@ -6484,7 +6475,7 @@ export const ADULT_RACES_DATA = [
     "group": "2그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 113,
@@ -6507,7 +6498,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "59-2",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 2,
@@ -6517,7 +6508,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "59-2",
-        "is_our_team": false
+        "is_our_team": true
       },
       {
         "lane": 3,
@@ -6537,7 +6528,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "59-2",
-        "is_our_team": true
+        "is_our_team": false
       }
     ],
     "division": "성인부",
@@ -6580,7 +6571,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "59-3",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 3,
@@ -6600,7 +6591,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "59-3",
-        "is_our_team": true
+        "is_our_team": false
       }
     ],
     "division": "성인부",
@@ -6610,7 +6601,7 @@ export const ADULT_RACES_DATA = [
     "group": "2그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 115,
@@ -6633,7 +6624,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "60-1",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 2,
@@ -6673,7 +6664,7 @@ export const ADULT_RACES_DATA = [
     "group": "3그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 116,
@@ -6696,7 +6687,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "60-2",
-        "is_our_team": false
+        "is_our_team": true
       },
       {
         "lane": 2,
@@ -6726,7 +6717,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "60-2",
-        "is_our_team": true
+        "is_our_team": false
       }
     ],
     "division": "성인부",
@@ -6789,7 +6780,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "60-3",
-        "is_our_team": true
+        "is_our_team": false
       }
     ],
     "division": "성인부",
@@ -6799,7 +6790,7 @@ export const ADULT_RACES_DATA = [
     "group": "3그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 118,
@@ -6832,7 +6823,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "60-4",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 4,
@@ -6852,7 +6843,7 @@ export const ADULT_RACES_DATA = [
     "group": "3그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 119,
@@ -6938,7 +6929,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "61-2",
-        "is_our_team": false
+        "is_our_team": true
       },
       {
         "lane": 2,
@@ -6978,7 +6969,7 @@ export const ADULT_RACES_DATA = [
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 121,
@@ -7011,7 +7002,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "61-3",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 3,
@@ -7031,7 +7022,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "61-3",
-        "is_our_team": false
+        "is_our_team": true
       }
     ],
     "division": "성인부",
@@ -7084,7 +7075,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "61-4",
-        "is_our_team": false
+        "is_our_team": true
       }
     ],
     "division": "성인부",
@@ -7094,7 +7085,7 @@ export const ADULT_RACES_DATA = [
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 123,
@@ -7127,7 +7118,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "61-5",
-        "is_our_team": false
+        "is_our_team": true
       },
       {
         "lane": 4,
@@ -7180,7 +7171,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "62-1",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 3,
@@ -7210,7 +7201,7 @@ export const ADULT_RACES_DATA = [
     "group": "5그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 125,
@@ -7243,7 +7234,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "62-2",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 3,
@@ -7273,7 +7264,7 @@ export const ADULT_RACES_DATA = [
     "group": "5그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 126,
@@ -7298,7 +7289,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "62-3",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 3,
@@ -7371,7 +7362,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "64-1",
-        "is_our_team": false
+        "is_our_team": true
       },
       {
         "lane": 4,
@@ -7381,7 +7372,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "64-1",
-        "is_our_team": true
+        "is_our_team": false
       }
     ],
     "division": "성인부",
@@ -7479,7 +7470,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "64-3",
-        "is_our_team": false
+        "is_our_team": true
       },
       {
         "lane": 3,
@@ -7509,7 +7500,7 @@ export const ADULT_RACES_DATA = [
     "group": "2그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 130,
@@ -7542,7 +7533,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "65-2",
-        "is_our_team": false
+        "is_our_team": true
       },
       {
         "lane": 3,
@@ -7572,7 +7563,7 @@ export const ADULT_RACES_DATA = [
     "group": "3그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 131,
@@ -7625,7 +7616,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "65-3",
-        "is_our_team": false
+        "is_our_team": true
       }
     ],
     "division": "성인부",
@@ -7635,7 +7626,7 @@ export const ADULT_RACES_DATA = [
     "group": "3그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 132,
@@ -7688,7 +7679,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "66-1",
-        "is_our_team": false
+        "is_our_team": true
       }
     ],
     "division": "성인부",
@@ -7698,7 +7689,7 @@ export const ADULT_RACES_DATA = [
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 133,
@@ -7721,7 +7712,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "66-2",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 2,
@@ -7877,7 +7868,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "66-4",
-        "is_our_team": true
+        "is_our_team": false
       }
     ],
     "division": "성인부",
@@ -7887,7 +7878,7 @@ export const ADULT_RACES_DATA = [
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 136,
@@ -7910,7 +7901,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "66-5",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 3,
@@ -7930,7 +7921,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "66-5",
-        "is_our_team": true
+        "is_our_team": false
       }
     ],
     "division": "성인부",
@@ -7940,7 +7931,7 @@ export const ADULT_RACES_DATA = [
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 137,
@@ -7973,7 +7964,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "67-1",
-        "is_our_team": false
+        "is_our_team": true
       },
       {
         "lane": 3,
@@ -8003,7 +7994,7 @@ export const ADULT_RACES_DATA = [
     "group": "5그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 138,
@@ -8079,7 +8070,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "68",
-        "is_our_team": false
+        "is_our_team": true
       },
       {
         "lane": 3,
@@ -8089,7 +8080,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "68",
-        "is_our_team": false
+        "is_our_team": true
       }
     ],
     "division": "성인부",
@@ -8099,7 +8090,7 @@ export const ADULT_RACES_DATA = [
     "group": "6그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 140,
@@ -8132,7 +8123,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "69-1",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 4,
@@ -8152,7 +8143,7 @@ export const ADULT_RACES_DATA = [
     "group": "일반",
     "is_relay": true,
     "base_duration_sec": 270,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 141,
@@ -8175,7 +8166,7 @@ export const ADULT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "69-2",
-        "is_our_team": false
+        "is_our_team": true
       },
       {
         "lane": 3,
@@ -8367,7 +8358,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "2",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 3,
@@ -8387,7 +8378,7 @@ export const STUDENT_RACES_DATA = [
     "group": "중등",
     "is_relay": true,
     "base_duration_sec": 180,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 4,
@@ -8410,7 +8401,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "3-1",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 2,
@@ -9055,7 +9046,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "7-1",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 3,
@@ -9085,7 +9076,7 @@ export const STUDENT_RACES_DATA = [
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 75,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 16,
@@ -9761,7 +9752,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "9-3",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 3,
@@ -9781,7 +9772,7 @@ export const STUDENT_RACES_DATA = [
     "group": "6그룹",
     "is_relay": false,
     "base_duration_sec": 75,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 28,
@@ -9824,7 +9815,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "10-1",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 4,
@@ -9940,7 +9931,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "10-3",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 3,
@@ -9960,7 +9951,7 @@ export const STUDENT_RACES_DATA = [
     "group": "7그룹",
     "is_relay": false,
     "base_duration_sec": 75,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 31,
@@ -10129,7 +10120,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "12-2",
-        "is_our_team": true
+        "is_our_team": false
       }
     ],
     "division": "학생부",
@@ -10520,7 +10511,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "15-1",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 2,
@@ -10560,7 +10551,7 @@ export const STUDENT_RACES_DATA = [
     "group": "5그룹",
     "is_relay": false,
     "base_duration_sec": 75,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 41,
@@ -10593,7 +10584,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "15-2",
-        "is_our_team": true
+        "is_our_team": false
       }
     ],
     "division": "학생부",
@@ -10603,7 +10594,7 @@ export const STUDENT_RACES_DATA = [
     "group": "5그룹",
     "is_relay": false,
     "base_duration_sec": 75,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 42,
@@ -10636,7 +10627,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "15-3",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 3,
@@ -10837,7 +10828,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "17-1",
-        "is_our_team": true
+        "is_our_team": false
       }
     ],
     "division": "학생부",
@@ -10847,7 +10838,7 @@ export const STUDENT_RACES_DATA = [
     "group": "6그룹",
     "is_relay": false,
     "base_duration_sec": 75,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 46,
@@ -10880,7 +10871,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "17-2",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 3,
@@ -10910,7 +10901,7 @@ export const STUDENT_RACES_DATA = [
     "group": "7그룹",
     "is_relay": false,
     "base_duration_sec": 75,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 47,
@@ -11616,7 +11607,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "21-3",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 4,
@@ -11636,7 +11627,7 @@ export const STUDENT_RACES_DATA = [
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 80,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 59,
@@ -11944,7 +11935,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "22-3",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 3,
@@ -11974,7 +11965,7 @@ export const STUDENT_RACES_DATA = [
     "group": "5그룹",
     "is_relay": false,
     "base_duration_sec": 80,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 65,
@@ -12070,7 +12061,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "23-1",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 4,
@@ -12090,7 +12081,7 @@ export const STUDENT_RACES_DATA = [
     "group": "6그룹",
     "is_relay": false,
     "base_duration_sec": 80,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 67,
@@ -12133,7 +12124,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "23-2",
-        "is_our_team": true
+        "is_our_team": false
       }
     ],
     "division": "학생부",
@@ -12166,7 +12157,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "23-3",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 3,
@@ -12196,7 +12187,7 @@ export const STUDENT_RACES_DATA = [
     "group": "6그룹",
     "is_relay": false,
     "base_duration_sec": 80,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 69,
@@ -12282,7 +12273,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "24-1",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 4,
@@ -12335,7 +12326,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "24-2",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 4,
@@ -12355,7 +12346,7 @@ export const STUDENT_RACES_DATA = [
     "group": "7그룹",
     "is_relay": false,
     "base_duration_sec": 80,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 72,
@@ -12988,7 +12979,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "28-4",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 3,
@@ -13018,7 +13009,7 @@ export const STUDENT_RACES_DATA = [
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 80,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 83,
@@ -13041,7 +13032,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "28-5",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 2,
@@ -13071,7 +13062,7 @@ export const STUDENT_RACES_DATA = [
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 80,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 84,
@@ -13336,7 +13327,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "29-4",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 3,
@@ -13391,7 +13382,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "29-5",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 2,
@@ -13431,7 +13422,7 @@ export const STUDENT_RACES_DATA = [
     "group": "5그룹",
     "is_relay": false,
     "base_duration_sec": 80,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 90,
@@ -13537,7 +13528,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "30-3",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 4,
@@ -13557,7 +13548,7 @@ export const STUDENT_RACES_DATA = [
     "group": "6그룹",
     "is_relay": false,
     "base_duration_sec": 80,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 92,
@@ -13633,7 +13624,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "31-2",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 2,
@@ -13663,7 +13654,7 @@ export const STUDENT_RACES_DATA = [
     "group": "7그룹",
     "is_relay": false,
     "base_duration_sec": 80,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 94,
@@ -14359,7 +14350,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "35-2",
-        "is_our_team": true
+        "is_our_team": false
       }
     ],
     "division": "학생부",
@@ -14369,7 +14360,7 @@ export const STUDENT_RACES_DATA = [
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 80,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 106,
@@ -14717,7 +14708,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "36-3",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 4,
@@ -14737,7 +14728,7 @@ export const STUDENT_RACES_DATA = [
     "group": "5그룹",
     "is_relay": false,
     "base_duration_sec": 80,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 112,
@@ -14845,7 +14836,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "37-1",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 4,
@@ -14865,7 +14856,7 @@ export const STUDENT_RACES_DATA = [
     "group": "5그룹",
     "is_relay": false,
     "base_duration_sec": 80,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 114,
@@ -14951,7 +14942,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "37-3",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 3,
@@ -14981,7 +14972,7 @@ export const STUDENT_RACES_DATA = [
     "group": "6그룹",
     "is_relay": false,
     "base_duration_sec": 80,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 116,
@@ -15004,7 +14995,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "37-4",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 2,
@@ -15067,7 +15058,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "38-1",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 2,
@@ -15140,7 +15131,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "38-2",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 3,
@@ -15170,7 +15161,7 @@ export const STUDENT_RACES_DATA = [
     "group": "7그룹",
     "is_relay": false,
     "base_duration_sec": 80,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 119,
@@ -15193,7 +15184,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "38-3",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 2,
@@ -15223,7 +15214,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "38-3",
-        "is_our_team": true
+        "is_our_team": false
       }
     ],
     "division": "학생부",
@@ -15233,7 +15224,7 @@ export const STUDENT_RACES_DATA = [
     "group": "7그룹",
     "is_relay": false,
     "base_duration_sec": 80,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 120,
@@ -15266,7 +15257,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "38-4",
-        "is_our_team": true
+        "is_our_team": false
       }
     ],
     "division": "학생부",
@@ -15276,7 +15267,7 @@ export const STUDENT_RACES_DATA = [
     "group": "7그룹",
     "is_relay": false,
     "base_duration_sec": 80,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 121,
@@ -15508,7 +15499,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "40-2",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 4,
@@ -15528,7 +15519,7 @@ export const STUDENT_RACES_DATA = [
     "group": "2그룹",
     "is_relay": false,
     "base_duration_sec": 80,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 125,
@@ -16300,7 +16291,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "42-7",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 2,
@@ -16340,7 +16331,7 @@ export const STUDENT_RACES_DATA = [
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 80,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 139,
@@ -16373,7 +16364,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "43-1",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 4,
@@ -16393,7 +16384,7 @@ export const STUDENT_RACES_DATA = [
     "group": "5그룹",
     "is_relay": false,
     "base_duration_sec": 80,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 140,
@@ -16562,7 +16553,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "43-4",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 4,
@@ -16615,7 +16606,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "44-1",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 4,
@@ -16635,7 +16626,7 @@ export const STUDENT_RACES_DATA = [
     "group": "6그룹",
     "is_relay": false,
     "base_duration_sec": 80,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 144,
@@ -16721,7 +16712,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "44-3",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 2,
@@ -16761,7 +16752,7 @@ export const STUDENT_RACES_DATA = [
     "group": "6그룹",
     "is_relay": false,
     "base_duration_sec": 80,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 146,
@@ -16902,7 +16893,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "45-2",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 2,
@@ -17955,7 +17946,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "49-1",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 4,
@@ -17975,7 +17966,7 @@ export const STUDENT_RACES_DATA = [
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 166,
@@ -18154,7 +18145,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "49-4",
-        "is_our_team": true
+        "is_our_team": false
       }
     ],
     "division": "학생부",
@@ -18164,7 +18155,7 @@ export const STUDENT_RACES_DATA = [
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 169,
@@ -18343,7 +18334,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "49-7",
-        "is_our_team": true
+        "is_our_team": false
       }
     ],
     "division": "학생부",
@@ -18353,7 +18344,7 @@ export const STUDENT_RACES_DATA = [
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 172,
@@ -18502,7 +18493,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "50-1",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 3,
@@ -18532,7 +18523,7 @@ export const STUDENT_RACES_DATA = [
     "group": "5그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 175,
@@ -18764,7 +18755,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "50-5",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 4,
@@ -18784,7 +18775,7 @@ export const STUDENT_RACES_DATA = [
     "group": "5그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 179,
@@ -19016,7 +19007,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "51-3",
-        "is_our_team": true
+        "is_our_team": false
       }
     ],
     "division": "학생부",
@@ -19026,7 +19017,7 @@ export const STUDENT_RACES_DATA = [
     "group": "6그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 183,
@@ -19301,7 +19292,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "52-1",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 2,
@@ -19341,7 +19332,7 @@ export const STUDENT_RACES_DATA = [
     "group": "7그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 188,
@@ -19384,7 +19375,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "52-2",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 4,
@@ -19404,7 +19395,7 @@ export const STUDENT_RACES_DATA = [
     "group": "7그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 189,
@@ -19457,7 +19448,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "52-3",
-        "is_our_team": true
+        "is_our_team": false
       }
     ],
     "division": "학생부",
@@ -19510,7 +19501,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "52-4",
-        "is_our_team": true
+        "is_our_team": false
       }
     ],
     "division": "학생부",
@@ -19520,7 +19511,7 @@ export const STUDENT_RACES_DATA = [
     "group": "7그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 191,
@@ -19543,7 +19534,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "52-5",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 3,
@@ -19563,7 +19554,7 @@ export const STUDENT_RACES_DATA = [
     "group": "7그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 192,
@@ -20491,7 +20482,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "56-2",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 4,
@@ -20511,7 +20502,7 @@ export const STUDENT_RACES_DATA = [
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 208,
@@ -20564,7 +20555,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "56-3",
-        "is_our_team": true
+        "is_our_team": false
       }
     ],
     "division": "학생부",
@@ -20574,7 +20565,7 @@ export const STUDENT_RACES_DATA = [
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 209,
@@ -20607,7 +20598,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "56-4",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 3,
@@ -20637,7 +20628,7 @@ export const STUDENT_RACES_DATA = [
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 210,
@@ -20935,7 +20926,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "57-2",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 2,
@@ -21018,7 +21009,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "57-3",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 4,
@@ -21081,7 +21072,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "57-4",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 4,
@@ -21154,7 +21145,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "57-5",
-        "is_our_team": true
+        "is_our_team": false
       }
     ],
     "division": "학생부",
@@ -21164,7 +21155,7 @@ export const STUDENT_RACES_DATA = [
     "group": "5그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 219,
@@ -21207,7 +21198,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "57-6",
-        "is_our_team": true
+        "is_our_team": false
       }
     ],
     "division": "학생부",
@@ -21366,7 +21357,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "58-3",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 2,
@@ -21406,7 +21397,7 @@ export const STUDENT_RACES_DATA = [
     "group": "6그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 223,
@@ -21512,7 +21503,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "59-1",
-        "is_our_team": true
+        "is_our_team": false
       }
     ],
     "division": "학생부",
@@ -21565,7 +21556,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "59-2",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 4,
@@ -21817,7 +21808,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "61",
-        "is_our_team": true
+        "is_our_team": false
       }
     ],
     "division": "학생부",
@@ -21827,7 +21818,7 @@ export const STUDENT_RACES_DATA = [
     "group": "중등",
     "is_relay": true,
     "base_duration_sec": 190,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 230,
@@ -21903,7 +21894,7 @@ export const STUDENT_RACES_DATA = [
         "record": null,
         "note": null,
         "original_match_no": "62-2",
-        "is_our_team": true
+        "is_our_team": false
       },
       {
         "lane": 3,
@@ -21933,7 +21924,7 @@ export const STUDENT_RACES_DATA = [
     "group": "일반",
     "is_relay": true,
     "base_duration_sec": 190,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 232,

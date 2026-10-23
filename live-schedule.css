@@ -1,824 +1,879 @@
 /* ==========================================================================
-   GMDC Swim Club - Real-time Live Schedule Styles
-   2026 거제시장배 전국마스터즈 수영대회 당일 실시간 경기 순서 및 추론 전용 스타일
+   GMDC Swim Club - Compact Real-time Live Schedule Styles
+   2026 거제시장배 전국마스터즈 수영대회 콤팩트 대진표 & 실시간 진행 스타일
    ========================================================================== */
 
-/* ─── Top Division Switch ─────────────────────────────────────────────── */
-.live-division-switch {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 12px;
+/* ─── Compact Realtime Controller Card (Always Fixed Top) ─────────────── */
+.live-main {
+  padding-top: 98px;
 }
 
-.btn-live-div {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 12px 16px;
-  background: #ffffff;
-  border: 2px solid #e2e8f0;
-  border-radius: 12px;
-  font-size: 15px;
-  font-weight: 700;
-  color: #475569;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.btn-live-div:hover {
-  background: #f8fafc;
-  border-color: #cbd5e1;
-}
-
-.btn-live-div.active {
-  background: #0284c7;
-  border-color: #0284c7;
-  color: #ffffff;
-  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
-}
-
-.btn-live-div .badge-count {
-  font-size: 12px;
-  font-weight: 600;
-  padding: 2px 8px;
-  border-radius: 20px;
-  background: #f1f5f9;
-  color: #64748b;
-}
-
-.btn-live-div.active .badge-count {
-  background: rgba(255, 255, 255, 0.25);
-  color: #ffffff;
-}
-
-/* ─── Realtime Controller Card ────────────────────────────────────────── */
 .live-controller-card {
+  position: fixed;
+  top: 6px;
+  left: 14px;
+  right: 14px;
+  z-index: 500;
   background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-  border-radius: 16px;
-  padding: 18px 20px;
-  color: #ffffff;
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.18);
-  margin-bottom: 16px;
-}
-
-.controller-status-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 12px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-  margin-bottom: 14px;
-}
-
-.status-indicator-group {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.live-pulse-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: #10b981;
-  box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
-  animation: pulse-green 2s infinite;
-}
-
-.live-pulse-dot.paused {
-  background: #f59e0b;
-  box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7);
-  animation: pulse-orange 2s infinite;
-}
-
-@keyframes pulse-green {
-  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-  70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
-  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
-}
-
-@keyframes pulse-orange {
-  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); }
-  70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(245, 158, 11, 0); }
-  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
-}
-
-.live-status-label {
-  font-size: 13.5px;
-  font-weight: 700;
-  color: #e2e8f0;
-}
-
-.live-time-now {
-  font-size: 12px;
-  font-family: monospace;
-  color: #94a3b8;
-  background: rgba(255, 255, 255, 0.08);
-  padding: 2px 6px;
-  border-radius: 4px;
-}
-
-.sync-controls-group {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.auto-refresh-toggle {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-  font-size: 12.5px;
-  font-weight: 600;
-  color: #cbd5e1;
-}
-
-.auto-refresh-toggle input[type="checkbox"] {
-  accent-color: #38bdf8;
-  width: 16px;
-  height: 16px;
-  cursor: pointer;
-}
-
-.countdown-badge {
-  font-size: 11.5px;
-  font-family: monospace;
-  font-weight: 700;
-  background: #0284c7;
-  color: #ffffff;
-  padding: 2px 7px;
   border-radius: 12px;
-}
-
-.btn-manual-refresh {
-  background: rgba(255, 255, 255, 0.12);
-  border: none;
+  padding: 10px 12px;
   color: #ffffff;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 13px;
-  transition: all 0.2s;
-}
-
-.btn-manual-refresh:hover {
-  background: rgba(255, 255, 255, 0.25);
-  transform: rotate(45deg);
-}
-
-/* ─── Current Race Banner ─────────────────────────────────────────────── */
-.current-race-banner {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 12px;
-  padding: 14px 16px;
-  margin-bottom: 14px;
-}
-
-.banner-top-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 6px;
-}
-
-.badge-current-tag {
-  background: #38bdf8;
-  color: #0f172a;
-  font-size: 11px;
-  font-weight: 800;
-  padding: 2px 8px;
-  border-radius: 4px;
-  letter-spacing: 0.5px;
-}
-
-.banner-pace-info {
-  font-size: 12px;
-  color: #94a3b8;
-}
-
-.banner-title-line {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
-}
-
-.banner-match-no {
-  background: #0284c7;
-  color: #ffffff;
-  font-size: 18px;
-  font-weight: 900;
-  padding: 4px 12px;
-  border-radius: 8px;
-}
-
-.banner-match-title {
-  margin: 0;
-  font-size: 18px;
-  font-weight: 800;
-  color: #f8fafc;
-  line-height: 1.3;
-}
-
-.banner-timer-line {
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-
-.timer-item {
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.32);
   display: flex;
   flex-direction: column;
-}
-
-.timer-label {
-  font-size: 11px;
-  color: #94a3b8;
-  margin-bottom: 2px;
-}
-
-.timer-val {
-  font-size: 16px;
-  font-weight: 700;
-  color: #e2e8f0;
-  font-family: monospace;
-}
-
-.timer-val.highlight {
-  color: #38bdf8;
-  font-size: 18px;
-}
-
-.timer-val.pause-highlight {
-  color: #fbbf24;
-  font-size: 18px;
-}
-
-/* ─── Controller Actions ──────────────────────────────────────────────── */
-.controller-action-row {
-  display: flex;
   gap: 8px;
+}
+
+/* 1행: [현재순번] [현재 종목] [평균 경기 진행속도] [현재 경기 이동] [휴게 시작] [자동갱신여부] [갱신대기시간(초)][즉시 새로고침 아이콘] */
+.ctrl-row-top {
+  display: flex;
+  align-items: center;
   flex-wrap: wrap;
-  align-items: center;
-}
-
-.btn-action-primary {
-  flex: 2;
-  min-width: 170px;
-  padding: 13px 18px;
-  background: #0284c7;
-  border: none;
-  border-radius: 10px;
-  color: #ffffff;
-  font-size: 16px;
-  font-weight: 800;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4);
-  transition: all 0.15s ease;
-}
-
-.btn-action-primary:hover {
-  background: #0369a1;
-  transform: translateY(-1px);
-}
-
-.btn-action-primary:active {
-  transform: translateY(1px);
-}
-
-.btn-action-primary:disabled {
-  background: #475569;
-  box-shadow: none;
-  cursor: not-allowed;
-  opacity: 0.6;
-}
-
-.btn-action-pause {
-  flex: 1;
-  min-width: 120px;
-  padding: 13px 14px;
-  background: #f59e0b;
-  border: none;
-  border-radius: 10px;
-  color: #0f172a;
-  font-size: 14.5px;
-  font-weight: 800;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   gap: 6px;
-  transition: all 0.15s ease;
+  min-height: 30px;
 }
 
-.btn-action-pause:hover {
-  background: #d97706;
-}
-
-.btn-action-pause.active {
-  background: #10b981;
+.ctrl-current-no {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 42px;
+  padding: 3px 9px;
+  background: #0284c7;
   color: #ffffff;
-}
-
-.btn-action-undo {
-  padding: 13px 14px;
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 10px;
-  color: #ffffff;
-  font-size: 13.5px;
-  font-weight: 700;
+  font-size: 13px;
+  font-weight: 900;
+  border-radius: 6px;
   cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+
+.ctrl-current-no:hover {
+  background: #0369a1;
+}
+
+.ctrl-current-no.is-waiting {
+  background: #475569;
+  font-weight: 700;
+}
+
+.ctrl-current-no.is-break {
+  background: #10b981;
+}
+
+.ctrl-current-event {
+  flex: 1 1 180px;
+  min-width: 0;
+  font-size: 13px;
+  font-weight: 800;
+  color: #f8fafc;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ctrl-pace-info {
+  font-size: 11.5px;
+  font-weight: 700;
+  font-family: "Pretendard", monospace;
+  color: #bae6fd;
+  background: rgba(15, 23, 42, 0.55);
+  border: 1px solid rgba(125, 211, 252, 0.28);
+  padding: 3px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.ctrl-sync-group {
   display: flex;
   align-items: center;
   gap: 5px;
-  transition: all 0.15s ease;
-}
-
-.btn-action-undo:hover {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-.jump-control-group {
+  flex-shrink: 0;
   margin-left: auto;
 }
 
-.sel-jump-race {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #ffffff;
-  padding: 11px 12px;
-  border-radius: 10px;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.sel-jump-race option {
-  background: #1e293b;
-  color: #ffffff;
-}
-
-/* ─── Search & Filters Bar ────────────────────────────────────────────── */
-.live-filter-section {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 14px;
-  padding: 14px 16px;
-  margin-bottom: 16px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-}
-
-.filter-top-row {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-bottom: 12px;
-}
-
-.btn-our-team-filter {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 9px 14px;
-  background: #fef3c7;
-  border: 1.5px solid #f59e0b;
-  border-radius: 10px;
-  color: #92400e;
-  font-size: 13.5px;
+.ctrl-action-btn {
+  height: 28px;
+  padding: 0 9px;
+  border-radius: 7px;
+  font-size: 11.5px;
   font-weight: 800;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.btn-our-team-filter:hover {
-  background: #fde68a;
-}
-
-.btn-our-team-filter[data-active="true"] {
-  background: #f59e0b;
-  color: #ffffff;
-  box-shadow: 0 3px 10px rgba(245, 158, 11, 0.35);
-}
-
-.btn-our-team-filter .our-team-count-badge {
-  background: #92400e;
-  color: #ffffff;
-  padding: 2px 6px;
-  border-radius: 10px;
-  font-size: 11px;
-}
-
-.btn-our-team-filter[data-active="true"] .our-team-count-badge {
-  background: #ffffff;
-  color: #92400e;
-}
-
-.search-input-box {
-  flex: 1;
-  min-width: 220px;
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  position: relative;
-}
-
-.search-icon {
-  position: absolute;
-  left: 12px;
-  font-size: 14px;
-  color: #94a3b8;
-}
-
-.search-input-box input {
-  width: 100%;
-  padding: 9px 36px 9px 34px;
-  border: 1.5px solid #cbd5e1;
-  border-radius: 10px;
-  font-size: 13.5px;
-  outline: none;
-  transition: border-color 0.2s;
-}
-
-.search-input-box input:focus {
-  border-color: #0284c7;
-  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
-}
-
-.btn-clear-search {
-  position: absolute;
-  right: 10px;
-  background: none;
-  border: none;
-  color: #94a3b8;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-.stroke-pills-bar {
-  display: flex;
-  gap: 6px;
-  overflow-x: auto;
-  padding-bottom: 8px;
-  margin-bottom: 10px;
-  -webkit-overflow-scrolling: touch;
-}
-
-.stroke-pill {
-  padding: 6px 12px;
-  background: #f1f5f9;
-  border: 1px solid #e2e8f0;
-  border-radius: 20px;
-  font-size: 12.5px;
-  font-weight: 600;
-  color: #475569;
+  justify-content: center;
+  gap: 3px;
   cursor: pointer;
   white-space: nowrap;
   transition: all 0.15s;
 }
 
-.stroke-pill:hover {
-  background: #e2e8f0;
+.ctrl-btn-goto {
+  background: rgba(2, 132, 199, 0.28);
+  border: 1px solid rgba(56, 189, 248, 0.5);
+  color: #e0f2fe;
 }
 
-.stroke-pill.active {
-  background: #0f172a;
-  border-color: #0f172a;
+.ctrl-btn-goto:hover {
+  background: #0284c7;
+  border-color: #38bdf8;
   color: #ffffff;
 }
 
-.filter-sub-row {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  flex-wrap: wrap;
+.ctrl-btn-break {
+  background: rgba(16, 185, 129, 0.22);
+  border: 1px solid rgba(52, 211, 153, 0.5);
+  color: #6ee7b7;
+}
+
+.ctrl-btn-break:hover {
+  background: #10b981;
+  border-color: #059669;
+  color: #ffffff;
+}
+
+.ctrl-btn-break.active {
+  background: #10b981;
+  border-color: #059669;
+  color: #ffffff;
+}
+
+.ctrl-icon-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.1);
+  color: #cbd5e1;
   font-size: 13px;
-  color: #64748b;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.15s;
 }
 
-.sub-filter-group {
+.ctrl-icon-btn:hover {
+  background: rgba(255, 255, 255, 0.22);
+  color: #ffffff;
+}
+
+.ctrl-icon-btn.active {
+  background: rgba(16, 185, 129, 0.22);
+  border-color: #10b981;
+  color: #34d399;
+}
+
+.ctrl-countdown-badge {
+  min-width: 34px;
+  text-align: center;
+  font-size: 11.5px;
+  font-family: monospace;
+  font-weight: 800;
+  background: rgba(2, 132, 199, 0.35);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  color: #7dd3fc;
+  padding: 3px 6px;
+  border-radius: 6px;
+}
+
+.ctrl-countdown-badge.off {
+  opacity: 0.45;
+  background: rgba(148, 163, 184, 0.2);
+  border-color: rgba(148, 163, 184, 0.3);
+  color: #94a3b8;
+}
+
+/* 2행: [검색창] + 우리 선수 추천 드롭다운 */
+.ctrl-row-search {
+  position: relative;
+}
+
+.ctrl-search-box {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 6px;
+  width: 100%;
 }
 
-.sub-filter-group select {
-  padding: 5px 10px;
-  border: 1px solid #cbd5e1;
-  border-radius: 6px;
-  font-size: 12.5px;
-  background: #ffffff;
+.ctrl-search-icon {
+  position: absolute;
+  left: 10px;
+  font-size: 13px;
+  color: #94a3b8;
+  pointer-events: none;
 }
 
-.filter-result-count {
-  margin-left: auto;
-  font-weight: 600;
+.ctrl-search-box input {
+  width: 100%;
+  padding: 7px 32px 7px 30px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.95);
   color: #0f172a;
+  font-size: 13px;
+  font-weight: 600;
+  outline: none;
+  transition: all 0.15s;
 }
 
-/* ─── Races Timeline Cards ────────────────────────────────────────────── */
+.ctrl-search-box input:focus {
+  border-color: #38bdf8;
+  background: #ffffff;
+  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.3);
+}
+
+.ctrl-btn-clear {
+  position: absolute;
+  right: 8px;
+  background: none;
+  border: none;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  padding: 2px 5px;
+}
+
+/* 우리 선수 추천 드롭다운 */
+.swimmer-suggest-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.22);
+  padding: 8px 10px;
+  max-height: 220px;
+  overflow-y: auto;
+  z-index: 200;
+}
+
+.suggest-header {
+  font-size: 11px;
+  font-weight: 800;
+  color: #64748b;
+  margin-bottom: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.suggest-chips-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.suggest-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 9px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  color: #334155;
+  transition: all 0.12s;
+}
+
+.suggest-chip.chip-mongkku {
+  background: #fff7ed;
+  border-color: #fdba74;
+  color: #c2410c;
+}
+
+.suggest-chip.chip-mongkku:hover {
+  background: #ffedd5;
+  border-color: #f97316;
+}
+
+.suggest-chip.chip-yareu {
+  background: #eff6ff;
+  border-color: #93c5fd;
+  color: #1d4ed8;
+}
+
+.suggest-chip.chip-yareu:hover {
+  background: #dbeafe;
+  border-color: #3b82f6;
+}
+
+/* ─── Compact Race Cards List ─────────────────────────────────────────── */
 .live-races-container {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  padding-bottom: 80px; /* Space for FAB */
+  gap: 6px;
+  padding-bottom: 40px;
 }
 
 .race-card {
   background: #ffffff;
-  border: 1.5px solid #e2e8f0;
-  border-radius: 14px;
-  padding: 16px;
-  transition: all 0.25s ease;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+  border: 1px solid #e2e8f0;
+  border-radius: 9px;
+  padding: 7px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  scroll-margin-top: 115px;
+  transition: border-color 0.15s, box-shadow 0.15s;
 }
 
-/* Running Race Card (진행 중인 조 - 강렬한 하이라이트) */
-.race-card.state-running,
-.race-card.state-paused {
-  border: 2.5px solid #0284c7;
+.race-card.state-running {
+  border: 2px solid #0284c7;
   background: #f0f9ff;
-  box-shadow: 0 6px 20px rgba(2, 132, 199, 0.22);
-  transform: scale(1.01);
+  box-shadow: 0 3px 12px rgba(2, 132, 199, 0.18);
 }
 
-.race-card.state-paused {
-  border-color: #f59e0b;
-  background: #fffbeb;
-  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.22);
-}
-
-/* Finished Race Card (완료된 조 - 톤다운) */
 .race-card.state-finished {
   background: #f8fafc;
-  border-color: #e2e8f0;
-  opacity: 0.75;
+  opacity: 0.78;
 }
 
 .race-card.state-finished:hover {
   opacity: 1;
 }
 
-.race-card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 10px;
-  margin-bottom: 12px;
+/* 녹색 휴게 race-card */
+.race-card.break-card {
+  background: #ecfdf5;
+  border: 2px solid #10b981;
+  box-shadow: 0 3px 12px rgba(16, 185, 129, 0.2);
 }
 
-.card-title-group {
+.race-card.break-card.state-break-finished {
+  background: #f0fdf4;
+  border: 1.5px solid #6ee7b7;
+  box-shadow: none;
+  opacity: 0.86;
+}
+
+.rc-break-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 8px;
+  border-radius: 5px;
+  background: #10b981;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+
+.race-card.break-card.state-break-finished .rc-break-badge {
+  background: #059669;
+}
+
+.rc-break-title {
+  flex: 1;
+  min-width: 0;
+  font-size: 13px;
+  font-weight: 800;
+  color: #065f46;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rc-btn-break-end {
+  height: 24px;
+  padding: 0 9px;
+  border-radius: 5px;
+  background: #10b981;
+  color: #ffffff;
+  border: 1px solid #059669;
+  font-size: 11.5px;
+  font-weight: 800;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.12s;
+}
+
+.rc-btn-break-end:hover:not(:disabled) {
+  background: #059669;
+}
+
+.rc-btn-break-end:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.rc-btn-break-cancel {
+  height: 24px;
+  padding: 0 9px;
+  border-radius: 5px;
+  background: #ffffff;
+  color: #dc2626;
+  border: 1px solid #fca5a5;
+  font-size: 11.5px;
+  font-weight: 800;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.12s;
+}
+
+.rc-btn-break-cancel:hover {
+  background: #dc2626;
+  color: #ffffff;
+  border-color: #dc2626;
+}
+
+/* 1열: [index] [순번] [남/여] [종목] [시작시간][시작 아이콘][시작 취소 아이콘] */
+.rc-row-1 {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 6px;
+  min-height: 24px;
 }
 
-.card-match-no-badge {
-  font-size: 16px;
-  font-weight: 900;
-  padding: 4px 10px;
-  border-radius: 8px;
-  background: #0f172a;
-  color: #ffffff;
-}
-
-.race-card.state-running .card-match-no-badge {
-  background: #0284c7;
-}
-
-.race-card.state-finished .card-match-no-badge {
-  background: #94a3b8;
-}
-
-.card-title-text {
-  margin: 0;
-  font-size: 16px;
-  font-weight: 800;
-  color: #0f172a;
-  line-height: 1.3;
-}
-
-.card-meta-tags {
-  display: flex;
-  gap: 5px;
-  margin-top: 4px;
-}
-
-.tag-badge {
-  font-size: 11px;
-  font-weight: 700;
+.rc-index {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 30px;
   padding: 2px 6px;
-  border-radius: 4px;
+  border-radius: 5px;
   background: #e2e8f0;
-  color: #475569;
-}
-
-.tag-badge.our-team {
-  background: #fef3c7;
-  color: #b45309;
-  border: 1px solid #fde68a;
-}
-
-/* Right Status Badge */
-.card-status-badge {
-  text-align: right;
-  min-width: 110px;
-}
-
-.badge-time-primary {
-  display: block;
-  font-size: 15px;
+  color: #334155;
+  font-size: 11.5px;
   font-weight: 800;
   font-family: monospace;
-  color: #0284c7;
+  flex-shrink: 0;
 }
 
-.race-card.state-running .badge-time-primary {
+.race-card.state-running .rc-index {
+  background: #bae6fd;
   color: #0369a1;
-  font-size: 16px;
 }
 
-.race-card.state-finished .badge-time-primary {
-  color: #64748b;
-  font-size: 13.5px;
-}
-
-.badge-time-sub {
-  display: block;
-  font-size: 11.5px;
-  font-weight: 600;
-  color: #64748b;
-  margin-top: 2px;
-}
-
-.race-card.state-running .badge-time-sub {
-  color: #0284c7;
-  font-weight: 700;
-}
-
-/* ─── Lanes Table ─────────────────────────────────────────────────────── */
-.lanes-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 8px;
-  font-size: 13.5px;
-}
-
-.lanes-table th {
-  background: #f8fafc;
-  color: #64748b;
-  font-size: 11.5px;
-  font-weight: 700;
-  padding: 6px 10px;
-  text-align: left;
-  border-bottom: 1.5px solid #e2e8f0;
-}
-
-.lanes-table td {
-  padding: 8px 10px;
-  border-bottom: 1px solid #f1f5f9;
-  color: #334155;
-}
-
-.lanes-table tr.lane-row-our-team {
-  background: #fffbeb;
-  font-weight: 700;
-}
-
-.lanes-table tr.lane-row-our-team td.lane-name {
-  color: #b45309;
-}
-
-.lanes-table td.lane-no {
-  font-weight: 800;
-  width: 50px;
+.race-card.state-finished .rc-index {
+  background: #f1f5f9;
   color: #64748b;
 }
 
-.lanes-table td.lane-name {
-  font-weight: 700;
-  width: 120px;
-}
-
-.lanes-table td.lane-team {
-  color: #64748b;
-}
-
-.badge-our-swimmer {
-  display: inline-block;
-  background: #f59e0b;
+.rc-no {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 34px;
+  padding: 2px 7px;
+  border-radius: 5px;
+  background: #0f172a;
   color: #ffffff;
-  font-size: 10px;
-  font-weight: 800;
-  padding: 1px 5px;
-  border-radius: 4px;
-  margin-left: 4px;
+  font-size: 12.5px;
+  font-weight: 900;
+  flex-shrink: 0;
 }
 
-/* ─── Floating Action Button (FAB) ────────────────────────────────────── */
-.btn-floating-scroll-current {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
+.race-card.state-running .rc-no {
   background: #0284c7;
-  color: #ffffff;
-  border: none;
-  border-radius: 30px;
-  padding: 14px 22px;
-  font-size: 14.5px;
+}
+
+.race-card.state-finished .rc-no {
+  background: #64748b;
+}
+
+.rc-gender {
+  font-size: 11.5px;
   font-weight: 800;
+  padding: 1px 6px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.rc-gender-male {
+  background: #eff6ff;
+  color: #2563eb;
+  border: 1px solid #bfdbfe;
+}
+
+.rc-gender-female {
+  background: #fff1f2;
+  color: #e11d48;
+  border: 1px solid #fecdd3;
+}
+
+.rc-gender-mixed {
+  background: #f3e8ff;
+  color: #7c3aed;
+  border: 1px solid #ddd6fe;
+}
+
+.rc-event {
+  flex: 1;
+  min-width: 0;
+  font-size: 13px;
+  font-weight: 800;
+  color: #1e293b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rc-right-controls {
   display: flex;
   align-items: center;
-  gap: 8px;
-  box-shadow: 0 6px 20px rgba(2, 132, 199, 0.4);
+  gap: 4px;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.rc-time {
+  font-size: 12px;
+  font-weight: 700;
+  font-family: monospace;
+  color: #0284c7;
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: #f1f5f9;
+  white-space: nowrap;
+}
+
+.race-card.state-running .rc-time {
+  background: #0284c7;
+  color: #ffffff;
+}
+
+.race-card.state-finished .rc-time {
+  color: #64748b;
+}
+
+.rc-btn-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 5px;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #334155;
+  font-size: 11.5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  z-index: 999;
-  transition: all 0.2s ease;
-  animation: bounce-subtle 3s infinite;
+  padding: 0;
+  transition: all 0.12s;
 }
 
-.btn-floating-scroll-current:hover {
-  background: #0369a1;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(2, 132, 199, 0.5);
+.rc-btn-icon:hover:not(:disabled) {
+  background: #f1f5f9;
+  border-color: #94a3b8;
 }
 
-@keyframes bounce-subtle {
-  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-  40% { transform: translateY(-6px); }
-  60% { transform: translateY(-3px); }
+.rc-btn-icon:disabled {
+  opacity: 0.32;
+  cursor: not-allowed;
 }
 
-/* ─── Toast Bar ───────────────────────────────────────────────────────── */
+.rc-btn-start {
+  color: #0284c7;
+  border-color: #bae6fd;
+  background: #f0f9ff;
+}
+
+.rc-btn-start:hover:not(:disabled) {
+  background: #0284c7;
+  color: #ffffff;
+  border-color: #0284c7;
+}
+
+.rc-btn-start.active {
+  background: #0284c7;
+  color: #ffffff;
+  border-color: #0284c7;
+}
+
+.rc-btn-cancel {
+  color: #dc2626;
+  border-color: #fecaca;
+  background: #fef2f2;
+}
+
+.rc-btn-cancel:hover:not(:disabled) {
+  background: #dc2626;
+  color: #ffffff;
+  border-color: #dc2626;
+}
+
+/* 2열: [1레인선수(들)] [2레인선수(들)] [3레인선수(들)] [4레인선수(들)] */
+.rc-row-2 {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 5px;
+}
+
+.rc-lane-cell {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 7px;
+  border-radius: 6px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #334155;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.rc-lane-cell.is-empty {
+  color: #cbd5e1;
+  background: #fcfcfd;
+  border-color: #f1f5f9;
+}
+
+.rc-lane-num {
+  font-size: 10.5px;
+  font-weight: 800;
+  color: #94a3b8;
+  flex-shrink: 0;
+}
+
+.rc-lane-names {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 단체전 영자 여러 명일 때 줄바꿈 허용 */
+.rc-lane-cell.is-relay-cell .rc-lane-names {
+  white-space: normal;
+  line-height: 1.25;
+  font-size: 11.5px;
+}
+
+/* 우리팀 하이라이트: 거제몽꾸 = 주황색, 거제야르 = 파란색 */
+.rc-lane-cell.team-mongkku {
+  background: #ffedd5;
+  border: 1.5px solid #f97316;
+  color: #9a3412;
+  font-weight: 800;
+}
+
+.rc-lane-cell.team-mongkku .rc-lane-num {
+  color: #ea580c;
+}
+
+.rc-lane-cell.team-yareu {
+  background: #dbeafe;
+  border: 1.5px solid #3b82f6;
+  color: #1e40af;
+  font-weight: 800;
+}
+
+.rc-lane-cell.team-yareu .rc-lane-num {
+  color: #2563eb;
+}
+
+/* 학생 이름 클릭 인터랙션 */
+.student-clickable {
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 2px;
+  border-radius: 3px;
+  padding: 0 2px;
+  transition: background 0.12s;
+}
+
+.student-clickable:hover {
+  background: rgba(37, 99, 235, 0.15);
+}
+
+/* ─── 학생 증명사진 & 전화번호 모달 팝업 ──────────────────────────────── */
+.student-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 16px;
+}
+
+.student-modal-card {
+  position: relative;
+  background: #ffffff;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 280px;
+  padding: 20px 18px 18px;
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.32);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  animation: modal-pop 0.18s ease-out;
+}
+
+@keyframes modal-pop {
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.student-modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: #f1f5f9;
+  color: #475569;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.student-modal-close:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.student-photo-wrap {
+  width: 140px;
+  height: 180px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2px solid #bfdbfe;
+  background: #f8fafc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);
+}
+
+.student-photo-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.student-info-body {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.student-name-line {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.student-name-line strong {
+  font-size: 18px;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.student-meta-badge {
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 12px;
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.btn-copy-phone {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1.5px solid #cbd5e1;
+  background: #f8fafc;
+  color: #0f172a;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-copy-phone:hover {
+  background: #eff6ff;
+  border-color: #3b82f6;
+  color: #1d4ed8;
+}
+
+.btn-copy-phone.copied {
+  background: #ecfdf5;
+  border-color: #10b981;
+  color: #047857;
+}
+
+.btn-copy-phone .copy-hint {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #64748b;
+  background: #e2e8f0;
+  padding: 2px 6px;
+  border-radius: 5px;
+}
+
+.btn-copy-phone.copied .copy-hint {
+  background: #a7f3d0;
+  color: #065f46;
+}
+
+/* ─── Toast Bar & Loading ─────────────────────────────────────────────── */
+.loading-placeholder {
+  text-align: center;
+  padding: 32px 16px;
+  color: #64748b;
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
 .live-toast-bar {
   position: fixed;
-  bottom: 24px;
+  bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
   background: #0f172a;
   color: #ffffff;
-  padding: 12px 20px;
-  border-radius: 30px;
-  font-size: 13.5px;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-  z-index: 1000;
-  animation: slide-up 0.3s ease;
+  padding: 9px 18px;
+  border-radius: 24px;
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+  z-index: 2100;
 }
 
-.btn-toast-undo {
-  background: #f59e0b;
-  border: none;
-  color: #0f172a;
-  font-size: 12.5px;
-  font-weight: 800;
-  padding: 5px 12px;
-  border-radius: 20px;
-  cursor: pointer;
-}
-
-@keyframes slide-up {
-  from { opacity: 0; transform: translate(-50%, 20px); }
-  to { opacity: 1; transform: translate(-50%, 0); }
-}
-
-/* ─── Responsive Adjustments ─────────────────────────────────────────── */
-@media (max-width: 640px) {
-  .controller-action-row {
-    flex-direction: column;
+/* ─── Mobile Adjustments ──────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .race-card {
+    padding: 6px 8px;
   }
-  .btn-action-primary, .btn-action-pause, .btn-action-undo, .sel-jump-race {
-    width: 100%;
+  .rc-event {
+    font-size: 12px;
   }
-  .jump-control-group {
-    width: 100%;
-    margin-left: 0;
+  .rc-lane-cell {
+    padding: 3px 5px;
+    font-size: 11.5px;
   }
-  .banner-title-line {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 6px;
-  }
-  .btn-floating-scroll-current {
-    bottom: 16px;
-    right: 16px;
-    padding: 12px 18px;
-    font-size: 13px;
+  .rc-lane-cell.is-relay-cell .rc-lane-names {
+    font-size: 10.5px;
   }
 }

@@ -16,8 +16,8 @@ export const SPA_ROUTES = {
   '#/training-calendar':      { url: 'training_calendar.html', title: '일정표', catId: 'cat-training', itemId: 'calendar' },
   '#/training-meeting':       { url: 'meeting_notes.html', title: '운영기록', catId: 'cat-training', itemId: 'meeting' },
   '#/competition-prospectus': { url: 'prospectus.html', title: '모집요강', catId: 'cat-competition', itemId: 'prospectus' },
-  '#/competition-live-student': { url: 'live-schedule.html?div=student', title: '학생부 (24일)', catId: 'cat-competition', itemId: 'live-student' },
-  '#/competition-live-adult':   { url: 'live-schedule.html?div=adult', title: '성인부 (25일)', catId: 'cat-competition', itemId: 'live-adult' },
+  '#/competition-live-student': { url: 'live-schedule.html?div=student&v=20261024_04', title: '학생부 (24일)', catId: 'cat-competition', itemId: 'live-student' },
+  '#/competition-live-adult':   { url: 'live-schedule.html?div=adult&v=20261024_04', title: '성인부 (25일)', catId: 'cat-competition', itemId: 'live-adult' },
   '#/admin-settings':         { url: 'admin.html', title: '관리자 설정', catId: 'cat-admin', itemId: 'admin-settings', adminOnly: true }
 };
 
