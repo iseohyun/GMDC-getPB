@@ -11,227 +11,110 @@
     gtag('config', 'G-5H98EB7ZSP');
   </script>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <title>거제오션 훈련 프로그램 출석 체크 시스템</title>
-  <meta name="description" content="GMDC 거제오션 수영대회 대비 훈련 프로그램 출석 체크 및 관리 시스템">
+  <title>거제시장배 2026 - GMDC 거제오션 수영클럽</title>
+  <meta name="description" content="2026년 제19회 거제시장배 전국마스터즈 수영대회 통합 포털">
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📋</text></svg>">
-  <link rel="stylesheet" href="style.css?v=20260909_03">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏊</text></svg>">
+  <link rel="stylesheet" href="style.css?v=20261023_14">
+  <link rel="stylesheet" href="sidebar.css?v=20261023_14">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      background: #f8fafc;
+    }
+    .spa-shell-container {
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    .spa-embedded-frame {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+      background: #f8fafc;
+    }
+    /* Mobile Top App Bar for Hamburger */
+    .spa-mobile-header {
+      display: none;
+      height: 52px;
+      background: #0f172a;
+      color: #ffffff;
+      align-items: center;
+      padding: 0 16px;
+      gap: 12px;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      z-index: 100;
+    }
+    .spa-mobile-header .btn-mobile-menu-trigger {
+      background: none;
+      border: none;
+      color: #ffffff;
+      font-size: 22px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      padding: 4px;
+    }
+    .spa-mobile-header .mobile-app-title {
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+    @media (max-width: 900px) {
+      .spa-mobile-header {
+        display: flex;
+      }
+      .spa-embedded-frame {
+        height: calc(100vh - 52px);
+      }
+    }
+  </style>
 </head>
 
-<body>
-  <div class="app-container">
-    <!-- Main Top Header -->
-    <header class="app-header">
-      <div class="header-left">
-        <!-- 1. Google Login / User Profile -->
-        <div class="header-auth-area" id="headerAuthArea">
-          <button type="button" class="btn-google-login" id="btnGoogleLogin" title="Google 계정으로 로그인" aria-label="Google 로그인">
-            <svg class="google-svg" viewBox="0 0 24 24" width="14" height="14">
-              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
-            </svg>
-            <span>구글 로그인</span>
-          </button>
-        </div>
-
-        <div class="header-badge">거제오션 2026 대회대비 훈련 출석부 &nbsp;
-          <button id="btnOpenRulesModal" class="btn-rules-header" title="2026년 제19회 거제시장배 대회 요강 보기">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-              <polyline points="14 2 14 8 20 8"></polyline>
-              <line x1="16" y1="13" x2="8" y2="13"></line>
-              <line x1="16" y1="17" x2="8" y2="17"></line>
-              <polyline points="10 9 9 9 8 9"></polyline>
-            </svg>
-            <span>모집요강</span>
-          </button>
-        </div>
-
-        <!-- Navigation Tabs (5 modules) -->
-        <nav class="division-nav" aria-label="메뉴 선택">
-          <a href="index.html" class="division-tab active" id="attendanceTab" title="훈련 출석부 (단축키: C 또는 H)">📋 훈련 출석부</a>
-          <a href="training_calendar.html" class="division-tab" id="calendarTab" title="훈련 일정표 (단축키: K)">📅 훈련 일정표</a>
-          <a href="meeting_notes.html" class="division-tab" id="meetingTab" title="운영기록 (단축키: M)">📝 운영기록</a>
-          <a href="adult-member.html" class="division-tab" id="adultDivisionTab" title="성인부 참가신청 (단축키: G 또는 A)">🏆 성인부</a>
-          <a href="student-member.html" class="division-tab" id="studentDivisionTab" title="학생부 참가신청 (단축키: S)">🧒 학생부</a>
-        </nav>
-      </div>
+<body class="with-sidebar">
+  <div class="spa-shell-container">
+    <!-- Mobile Hamburger Bar -->
+    <header class="spa-mobile-header">
+      <button type="button" class="btn-mobile-menu-trigger" id="btnMobileMenuTrigger" aria-label="메뉴 열기">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+      <span class="mobile-app-title">🏊 거제시장배 2026</span>
     </header>
 
-    <!-- Main Content Area -->
-    <div class="view-content active" style="padding-top: 16px;">
-      
-      <!-- Attendance Table Card -->
-      <section class="events-detail-section">
-        <div class="events-detail-header">
-          <div class="events-detail-title-group">
-            <h3 id="attendanceTotalCount">📋 훈련 출석 명단 로딩 중...</h3>
-          </div>
-          <div class="events-detail-actions">
-            <div class="save-status" id="attendanceSyncStatus">
-              <span class="status-dot"></span>
-              <span>데이터 불러오는 중...</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Control Toolbar -->
-        <section class="toolbar">
-          <div class="toolbar-left">
-            <div class="search-box">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="11" cy="11" r="8"></circle>
-                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-              </svg>
-              <input type="text" id="attendanceSearchInput" placeholder="선수 이름 검색..." autocomplete="off">
-            </div>
-
-            <div class="filter-group">
-              <select id="attendanceDivisionSelect" class="filter-select">
-                <option value="all" selected>전체 구분</option>
-                <option value="adult">성인부만</option>
-                <option value="student">학생부만</option>
-              </select>
-            </div>
-
-            <div class="filter-group">
-              <select id="attendanceTeamSelect" class="filter-select">
-                <option value="all" selected>팀 전체</option>
-                <option value="A">A팀 (거제오션)</option>
-                <option value="B">B팀 (거제야르)</option>
-              </select>
-            </div>
-
-            <!-- View Mode Toggle Button (간단히 / 자세히) -->
-            <button type="button" id="btnToggleViewMode" class="btn-toggle-events active" title="보기 모드 전환 (간단히 / 자세히)" aria-label="보기 모드 전환">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                <line x1="9" y1="3" x2="9" y2="21"></line>
-              </svg>
-              <span id="btnToggleViewModeText">간단히</span>
-            </button>
-
-            <!-- Export Roster Button (명단 출력) -->
-            <button type="button" id="btnExportRosterModal" class="btn-export-roster" title="현재 표시 중인 출석 명단 출력 및 다운로드 (TXT, PDF, Excel, JPG, PNG)" aria-label="출석 명단 출력">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                <polyline points="7 10 12 15 17 10"></polyline>
-                <line x1="12" y1="15" x2="12" y2="3"></line>
-              </svg>
-              <span>📤 명단 출력</span>
-            </button>
-          </div>
-        </section>
-
-        <!-- Attendance Table -->
-        <main class="table-card" style="margin-top: 12px;">
-          <div class="table-responsive">
-            <table class="record-table attendance-table" id="attendanceTable">
-              <thead id="attendanceTableHead">
-                <!-- Dynamically rendered via attendance.js based on simple / detailed mode -->
-              </thead>
-              <tbody id="attendanceTableBody">
-                <!-- Swimmers injected via attendance.js -->
-              </tbody>
-            </table>
-          </div>
-        </main>
-      </section>
-
-    </div>
-
-    <!-- Time Picker Modal (입장 및 퇴장 시간 지원) -->
-    <div id="timePickerModal" class="modal-overlay">
-      <div class="modal-content time-picker-modal-content">
-        <div class="modal-header">
-          <h3 id="timePickerTitle" style="font-size: 16px; font-weight: 800; color: #0f172a; margin: 0;">⏰ 훈련 출석 체크</h3>
-          <button id="btnTimePickerClose" class="modal-close-btn" title="닫기" aria-label="닫기">&times;</button>
-        </div>
-        <div class="modal-body" style="text-align: center; padding: 16px 20px 14px 20px;">
-          <!-- 2-Slot Selector: 입장 시간 vs 퇴장 시간 -->
-          <div class="attendance-time-slots" id="attendanceTimeSlots">
-            <button type="button" class="time-slot-card active" id="slotInBtn" data-slot="in">
-              <span class="slot-icon">🚪</span>
-              <div class="slot-text">
-                <span class="slot-name">입장 시간</span>
-                <span class="slot-val" id="slotInValText">08:30</span>
-              </div>
-            </button>
-            <button type="button" class="time-slot-card" id="slotOutBtn" data-slot="out">
-              <span class="slot-icon">🏃</span>
-              <div class="slot-text">
-                <span class="slot-name">퇴장 시간</span>
-                <span class="slot-val" id="slotOutValText">미입력</span>
-              </div>
-            </button>
-          </div>
-
-          <!-- Current Editing Target Notice -->
-          <div class="slot-editing-indicator" id="slotEditingIndicator">
-            🚪 <strong>입장 시간</strong>을 조절하고 있습니다
-          </div>
-
-          <div class="time-picker-display-box">
-            <!-- Hour Spinner -->
-            <div class="time-digit-spinner">
-              <button type="button" class="btn-spin-arrow" id="btnHourUp" title="1시간 증가">▲</button>
-              <input type="text" class="time-input-value" id="timePickerHour" value="08" maxlength="2" inputmode="numeric" />
-              <button type="button" class="btn-spin-arrow" id="btnHourDown" title="1시간 감소">▼</button>
-            </div>
-
-            <div class="time-colon">:</div>
-
-            <!-- Minute Spinner -->
-            <div class="time-digit-spinner">
-              <button type="button" class="btn-spin-arrow" id="btnMinUp" title="1분 증가">▲</button>
-              <input type="text" class="time-input-value" id="timePickerMin" value="30" maxlength="2" inputmode="numeric" />
-              <button type="button" class="btn-spin-arrow" id="btnMinDown" title="1분 감소">▼</button>
-            </div>
-          </div>
-
-          <!-- Quick Action Buttons -->
-          <div class="time-quick-actions" style="margin: 8px 0 4px 0; display: flex; gap: 8px; justify-content: center;">
-            <button type="button" class="btn-set-now" id="btnSetNowTime" title="현재 시각으로 자동 설정">
-              ⏰ 현재 시간 적용
-            </button>
-            <button type="button" class="btn-clear-slot" id="btnClearOutTime" style="display: none;" title="퇴장 시간을 비우고 입장만 유지">
-              ✕ 퇴장 비우기
-            </button>
-          </div>
-        </div>
-
-        <div class="modal-footer" style="display: flex; gap: 8px; justify-content: space-between; align-items: center; padding: 14px 20px; border-top: 1px solid #e2e8f0; background: #f8fafc;">
-          <button type="button" id="btnTimePickerDelete" class="btn-modal-delete" title="해당 선수의 이번 훈련 출석 기록 전체를 삭제합니다">
-            🗑️ 출석 전체 삭제
-          </button>
-          <div style="display: flex; gap: 8px;">
-            <button type="button" id="btnTimePickerCancel" class="btn-modal-cancel">취소</button>
-            <button type="button" id="btnTimePickerSave" class="btn-modal-save">
-              💾 저장하기
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Toast Notification -->
-    <div id="toast" class="toast"></div>
+    <!-- Embedded View Frame -->
+    <iframe id="spaFrame" class="spa-embedded-frame" title="GMDC 메인 콘텐츠" src="attendance.html"></iframe>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-  <script type="module" src="auth.js?v=20260909_03"></script>
-  <script type="module" src="prospectus.js?v=20260909_03"></script>
-  <script type="module" src="excelExporter.js?v=20260909_03"></script>
-  <script type="module" src="attendance.js?v=20260909_03"></script>
-  <script src="shortcut.js?v=20260909_03"></script>
+  <script type="module" src="sidebar.js?v=20261023_14"></script>
+  <script>
+    // 모바일 헤더 햄버거 메뉴 연결
+    document.addEventListener('DOMContentLoaded', () => {
+      const trigger = document.getElementById('btnMobileMenuTrigger');
+      trigger?.addEventListener('click', () => {
+        const toggle = document.getElementById('btnMobileSidebarToggle');
+        if (toggle) toggle.click();
+        else {
+          document.getElementById('gmdcSidebar')?.classList.add('mobile-open');
+          document.getElementById('sidebarBackdrop')?.classList.add('active');
+        }
+      });
+    });
+  </script>
 </body>
-
 </html>

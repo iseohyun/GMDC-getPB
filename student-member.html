@@ -16,51 +16,13 @@
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏊</text></svg>">
-  <link rel="stylesheet" href="style.css?v=20260909_03">
+  <link rel="stylesheet" href="style.css?v=20261023_14">
+  <link rel="stylesheet" href="sidebar.css?v=20261023_14">
 </head>
 <body class="theme-student">
   <div class="app-container">
     <!-- Main Top Header with View Toggle -->
-    <header class="app-header">
-      <div class="header-left">
-        <!-- 1. Google Login / User Profile (app-header 제일 왼쪽) -->
-        <div class="header-auth-area" id="headerAuthArea">
-          <button type="button" class="btn-google-login" id="btnGoogleLogin" title="Google 계정으로 로그인" aria-label="Google 로그인">
-            <svg class="google-svg" viewBox="0 0 24 24" width="14" height="14">
-              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
-            </svg>
-            <span>구글 로그인</span>
-          </button>
-        </div>
-
-        <div class="header-badge">거제야호 2026 거제시장배</div>
-        <span class="header-date" id="tableDateBadge">기준일: 2026-01-01</span>
-        <nav class="division-nav" aria-label="메뉴 선택">
-          <a href="index.html" class="division-tab" id="attendanceTab" title="훈련 출석부 (단축키: C 또는 H)">📋 훈련 출석부</a>
-          <a href="training_calendar.html" class="division-tab" id="calendarTab" title="훈련 일정표 (단축키: K)">📅 훈련 일정표</a>
-          <a href="meeting_notes.html" class="division-tab" id="meetingTab" title="운영기록 (단축키: M)">📝 운영기록</a>
-          <a href="adult-member.html" class="division-tab" id="adultDivisionTab" title="성인부 참가신청 (단축키: G 또는 A)">🏆 성인부</a>
-          <a href="student-member.html" class="division-tab active" id="studentDivisionTab" title="학생부 참가신청 (단축키: S)">🧒 학생부</a>
-        </nav>
-        <div class="header-view-toggle">
-          <button class="view-toggle-btn active" id="btnToggleRecords" data-view="records" title="단체전 보기 (단축키: T)">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
-            <span>단체전</span>
-          </button>
-          <button class="view-toggle-btn" id="btnToggleEvents" data-view="events" title="개인전 보기 (단축키: I)">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="M9 12h6"></path><path d="M9 16h6"></path></svg>
-            <span>개인전</span>
-          </button>
-        </div>
-        <button id="btnOpenRulesModal" class="btn-rules-header" title="2026년 제19회 거제시장배 대회 요강 보기">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-          <span>모집요강</span>
-        </button>
-      </div>
-    </header>
+    
 
     <!-- ========================================== -->
     <!-- VIEW 1: 개인 PB 기록표 (Records View)        -->
@@ -72,15 +34,12 @@
         <div class="combo-card" id="combo1Card">
           <div class="combo-header">
             <div class="combo-title-area">
-              <span class="combo-badge badge-male">조합 1</span>
               <h2 class="combo-title">남학생 계영 (자유형 200m)</h2>
+              
             </div>
             <button class="btn-panel-pin" title="상단 조합 패널 고정 (클릭 시 상단 고정)" aria-label="조합 패널 고정 토글">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="17" x2="12" y2="22"></line><path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V6h1a1 1 0 0 0 0-2H8a1 1 0 0 0 0 2h1v4.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24Z"></path></svg>
             </button>
-          </div>
-          <div class="combo-sub-header">
-            <span class="combo-condition">조건: 1·2학년 1명 + 3·4학년 1명 + 5·6학년 1명 + 1명</span>
           </div>
           <div class="combo-members-section">
             <div class="members-title">
@@ -99,15 +58,12 @@
         <div class="combo-card" id="combo2Card">
           <div class="combo-header">
             <div class="combo-title-area">
-              <span class="combo-badge badge-female">조합 2</span>
               <h2 class="combo-title">여학생 계영 (자유형 200m)</h2>
+              
             </div>
             <button class="btn-panel-pin" title="상단 조합 패널 고정 (클릭 시 상단 고정)" aria-label="조합 패널 고정 토글">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="17" x2="12" y2="22"></line><path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V6h1a1 1 0 0 0 0-2H8a1 1 0 0 0 0 2h1v4.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24Z"></path></svg>
             </button>
-          </div>
-          <div class="combo-sub-header">
-            <span class="combo-condition">조건: 1·2학년 1명 + 3·4학년 1명 + 5·6학년 1명 + 1명</span>
           </div>
           <div class="combo-members-section">
             <div class="members-title">
@@ -126,15 +82,12 @@
         <div class="combo-card" id="combo3Card">
           <div class="combo-header">
             <div class="combo-title-area">
-              <span class="combo-badge badge-male">조합 3</span>
               <h2 class="combo-title">남학생 혼계영 (배·평·접·자)</h2>
+              
             </div>
             <button class="btn-panel-pin" title="상단 조합 패널 고정 (클릭 시 상단 고정)" aria-label="조합 패널 고정 토글">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="17" x2="12" y2="22"></line><path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V6h1a1 1 0 0 0 0-2H8a1 1 0 0 0 0 2h1v4.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24Z"></path></svg>
             </button>
-          </div>
-          <div class="combo-sub-header">
-            <span class="combo-condition">조건: 1·2 / 3·4 / 5·6학년 각 1명 (배·평·접·자)</span>
           </div>
           <div class="combo-members-section">
             <div class="members-title">
@@ -153,15 +106,12 @@
         <div class="combo-card" id="combo4Card">
           <div class="combo-header">
             <div class="combo-title-area">
-              <span class="combo-badge badge-female">조합 4</span>
               <h2 class="combo-title">여학생 혼계영 (배·평·접·자)</h2>
+              
             </div>
             <button class="btn-panel-pin" title="상단 조합 패널 고정 (클릭 시 상단 고정)" aria-label="조합 패널 고정 토글">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="17" x2="12" y2="22"></line><path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V6h1a1 1 0 0 0 0-2H8a1 1 0 0 0 0 2h1v4.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24Z"></path></svg>
             </button>
-          </div>
-          <div class="combo-sub-header">
-            <span class="combo-condition">조건: 1·2 / 3·4 / 5·6학년 각 1명 (배·평·접·자)</span>
           </div>
           <div class="combo-members-section">
             <div class="members-title">
@@ -183,28 +133,24 @@
           <div class="events-detail-title-group">
             <h3 id="recordsDetailTitle">📋 개인 PB 기록 명단 (20명 표시 중 / 총 20명)</h3>
           </div>
-          <div class="events-detail-actions">
-            <button id="btnExportCsv" class="btn-icon-header admin-only" title="CSV 파일로 저장 (다운로드)">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
-            </button>
-            <button id="btnCopyTsv" class="btn-icon-header admin-only" title="클립보드로 복사">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-            </button>
-            <button id="btnAuditHistory" class="btn-audit admin-only" title="히스토리 기반 데이터 정합성 검증">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-              <span>히스토리 검증</span>
-            </button>
-            <button id="btnOpenSnapshotModal" class="btn-snapshot admin-only" title="DB 스냅샷 저장 및 관리 (백업/복원)">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
-                <circle cx="12" cy="13" r="4"></circle>
-              </svg>
-              <span>DB 스냅샷</span>
-            </button>
+          <div class="events-detail-actions" style="margin-left: auto;">
             <div class="save-status admin-only" id="saveStatus">
               <span class="status-dot"></span>
               <span id="saveStatusText">자동 저장 활성화</span>
             </div>
+            <button id="btnExportCsv" class="btn-icon-header" title="CSV 파일로 저장 (다운로드)" aria-label="CSV 파일로 저장">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                <polyline points="7 3 7 8 15 8"></polyline>
+              </svg>
+            </button>
+            <button id="btnCopyTsv" class="btn-icon-header" title="클립보드로 복사" aria-label="클립보드로 복사">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+            </button>
           </div>
         </div>
 
@@ -241,36 +187,9 @@
             </div>
 
             <div class="filter-group">
-              <label for="recordsModeSelect" class="filter-label">보기</label>
               <select id="recordsModeSelect" class="filter-select">
                 <option value="simple" selected>간단히</option>
               </select>
-            </div>
-
-            <label class="scenario-checkbox-label" title="시나리오 테스트 모드 (서버 저장 없이 가상 테스트)">
-              <input type="checkbox" id="chkScenarioMode" class="scenario-checkbox" />
-              <span>시나리오 모드</span>
-            </label>
-
-            <div class="header-view-toggle">
-              <button class="view-toggle-btn active" data-view="records" title="단체전 보기 (단축키: T)">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                  <polyline points="14 2 14 8 20 8"></polyline>
-                  <line x1="16" y1="13" x2="8" y2="13"></line>
-                  <line x1="16" y1="17" x2="8" y2="17"></line>
-                </svg>
-                <span>단체전</span>
-              </button>
-              <button class="view-toggle-btn" data-view="events" title="개인전 보기 (단축키: I)">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
-                  <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
-                  <path d="M9 12h6"></path>
-                  <path d="M9 16h6"></path>
-                </svg>
-                <span>개인전</span>
-              </button>
             </div>
           </div>
         </section>
@@ -443,31 +362,9 @@
             </div>
 
             <div class="filter-group">
-              <label for="eventsModeSelect" class="filter-label">보기</label>
               <select id="eventsModeSelect" class="filter-select">
                 <option value="simple" selected>간단히</option>
               </select>
-            </div>
-
-            <div class="header-view-toggle">
-              <button class="view-toggle-btn" data-view="records" title="단체전 보기 (단축키: T)">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                  <polyline points="14 2 14 8 20 8"></polyline>
-                  <line x1="16" y1="13" x2="8" y2="13"></line>
-                  <line x1="16" y1="17" x2="8" y2="17"></line>
-                </svg>
-                <span>단체전</span>
-              </button>
-              <button class="view-toggle-btn active" data-view="events" title="개인전 보기 (단축키: I)">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
-                  <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
-                  <path d="M9 12h6"></path>
-                  <path d="M9 16h6"></path>
-                </svg>
-                <span>개인전</span>
-              </button>
             </div>
           </div>
         </section>
@@ -532,84 +429,6 @@
           <span>오늘하루 보이지 않기</span>
         </label>
         <button id="btnModalConfirm" class="btn btn-primary">확인</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- History Audit Modal Popup -->
-  <div id="auditModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="auditModalTitle">
-    <div class="modal-card" style="max-width: 780px; max-height: 90vh;">
-      <div class="modal-header">
-        <div class="modal-badge" style="background:#e0f2fe; color:#0284c7; border: 1px solid #bae6fd;">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-          최후 스냅샷 기준 히스토리 검증 및 정합성 관리 (학생부)
-        </div>
-        <button id="btnAuditModalCloseX" class="modal-close-btn" title="닫기" aria-label="닫기">&times;</button>
-      </div>
-      <div class="modal-body" id="auditModalBody" style="overflow-y: auto; max-height: 70vh; padding: 20px 24px;">
-        <div style="text-align: center; padding: 30px; color: var(--text-muted);">
-          <span>⏳ Firebase 최후 스냅샷 및 히스토리 로그 조회 중...</span>
-        </div>
-      </div>
-      <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center;">
-        <span style="font-size: 12px; color: var(--text-muted);" id="auditModalTimestamp"></span>
-        <button id="btnAuditModalConfirm" class="btn btn-primary">확인</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Firestore DB Snapshot Modal Popup (Student) -->
-  <div id="snapshotModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="snapshotModalTitle">
-    <div class="modal-card" style="max-width: 680px; max-height: 90vh;">
-      <div class="modal-header">
-        <div class="modal-badge" style="background:#fff7ed; color:#c2410c; border: 1px solid #fed7aa;">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
-            <circle cx="12" cy="13" r="4"></circle>
-          </svg>
-          학생부 DB 스냅샷 관리
-        </div>
-        <button id="btnSnapshotModalCloseX" class="modal-close-btn" title="닫기" aria-label="닫기">&times;</button>
-      </div>
-      <div class="modal-body" style="overflow-y: auto; max-height: 65vh; padding: 20px 24px;">
-        <!-- Create Snapshot Card -->
-        <div class="snapshot-card-create">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px;">
-            <div style="font-weight: 800; font-size: 14px; color: var(--secondary);">📸 현재 학생부 DB 상태를 새 스냅샷으로 저장</div>
-            <span id="snapshotCurrentCountBadge" style="font-size: 11.5px; font-weight: 700; color: #ea580c; background: #ffedd5; padding: 2px 8px; border-radius: 4px;"></span>
-          </div>
-          <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px; line-height: 1.4;">
-            현재 작성/수정된 모든 학생 선수 명단과 PB 기록 전체를 클라우드 DB에 독립적인 스냅샷으로 보관합니다.
-          </p>
-          <div class="snapshot-create-row">
-            <input type="text" id="snapshotTitleInput" class="snapshot-input" placeholder="스냅샷 이름 입력 (예: 학생부 명단 확정본)" />
-            <input type="text" id="snapshotMemoInput" class="snapshot-input" placeholder="메모 (선택사항)" style="flex: 0.8;" />
-            <button type="button" id="btnCreateSnapshot" class="btn btn-primary" style="background:#ea580c; border-color:#ea580c; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; font-weight: 700; padding: 8px 16px;">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
-                <circle cx="12" cy="13" r="4"></circle>
-              </svg>
-              <span>스냅샷 저장</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Snapshots List Section -->
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-          <div style="font-weight: 800; font-size: 13.5px; color: var(--secondary); display: flex; align-items: center; gap: 6px;">
-            <span>💾 저장된 학생부 DB 스냅샷 목록</span>
-          </div>
-          <button type="button" id="btnRefreshSnapshots" class="btn-audit" style="font-size: 11.5px; padding: 2px 8px;">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
-            <span>새로고침</span>
-          </button>
-        </div>
-        <div id="snapshotListContainer" class="snapshot-list-container">
-          <!-- Rendered dynamically -->
-        </div>
-      </div>
-      <div class="modal-footer" style="display: flex; justify-content: flex-end; align-items: center;">
-        <button id="btnSnapshotModalClose" class="btn btn-secondary">닫기</button>
       </div>
     </div>
   </div>
@@ -915,9 +734,10 @@
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-  <script src="shortcut.js?v=20260909_03"></script>
-  <script type="module" src="prospectus.js?v=20260909_03"></script>
-  <script type="module" src="excelExporter.js?v=20260909_03"></script>
-  <script type="module" src="student.js?v=20260909_03"></script>
+  <script src="shortcut.js?v=20261023_14"></script>
+  <script type="module" src="prospectus.js?v=20261023_14"></script>
+  <script type="module" src="excelExporter.js?v=20261023_14"></script>
+  <script type="module" src="student.js?v=20261023_14"></script>
+    <script type="module" src="sidebar.js?v=20261023_14"></script>
 </body>
 </html>

@@ -2024,14 +2024,19 @@ async function syncToFirestore(dataList) {
 }
 
 function handleUrlRouting() {
+  const params = new URLSearchParams(window.location.search);
+  const queryView = (params.get('view') || '').toLowerCase();
   const hash = window.location.hash.toLowerCase();
-  if (hash === '#events' || hash === '#viewevents') {
+  if (queryView === 'events' || (!queryView && (hash === '#events' || hash === '#viewevents'))) {
     switchView('events');
   } else {
     switchView('records');
   }
 
   window.addEventListener('hashchange', () => {
+    const newParams = new URLSearchParams(window.location.search);
+    const qView = (newParams.get('view') || '').toLowerCase();
+    if (qView === 'events' || qView === 'records') return;
     const currentHash = window.location.hash.toLowerCase();
     if (currentHash === '#events' || currentHash === '#viewevents') {
       switchView('events');
@@ -2066,6 +2071,16 @@ function switchView(viewName) {
   if (currentScroll > 0) {
     window.scrollTo({ top: currentScroll, behavior: 'instant' });
   }
+
+  // Synchronize parent SPA sidebar active highlight if running inside iframe
+  try {
+    if (window.parent && window.parent !== window && typeof window.parent.navigateToRoute === 'function') {
+      const parentHash = viewName === 'events' ? '#/roster-student-indiv' : '#/roster-student-relay';
+      if (window.parent.location.hash !== parentHash) {
+        window.parent.navigateToRoute(parentHash);
+      }
+    }
+  } catch (e) {}
 }
 window.switchView = switchView;
 

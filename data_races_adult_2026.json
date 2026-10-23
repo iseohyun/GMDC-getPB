@@ -1,0 +1,8203 @@
+[
+  {
+    "race_index": 1,
+    "primary_match_no": "1",
+    "merged_match_nos": [
+      "1",
+      "2"
+    ],
+    "is_merged": true,
+    "merge_note": "(1번,2번 합침)",
+    "title": "성인부 남자 1그룹 핀접영 50m 결승 (1번,2번 합침)",
+    "original_headers": [
+      "1. 성인부 남자 1그룹 핀접영 50m 결승",
+      "2. 성인부 남자 2그룹 핀접영 50m 결승(1번,2번 합침)"
+    ],
+    "lanes": [
+      {
+        "lane": 2,
+        "name": "이우진",
+        "team": "DGIST",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "1",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "정재용",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "2",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "핀접영",
+    "distance": "50m",
+    "group": "1그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 2,
+    "primary_match_no": "3-1",
+    "merged_match_nos": [
+      "3-1"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 3그룹 핀접영 50m 결승",
+    "original_headers": [
+      "3-1. 성인부 남자 3그룹 핀접영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 2,
+        "name": "곽성훈",
+        "team": "DGIST",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "3-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "강태운",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "3-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "한상윤",
+        "team": "개인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "3-1",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "핀접영",
+    "distance": "50m",
+    "group": "3그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 3,
+    "primary_match_no": "3-2",
+    "merged_match_nos": [
+      "3-2",
+      "4-1"
+    ],
+    "is_merged": true,
+    "merge_note": "(3-2번,4-1번 합침)",
+    "title": "성인부 남자 3그룹 핀접영 50m 결승 (3-2번,4-1번 합침)",
+    "original_headers": [
+      "3-2. 성인부 남자 3그룹 핀접영 50m 결승",
+      "4-1. 성인부 남자 4그룹 핀접영 50m 결승(3-2번,4-1번 합침)"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "박민정",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "3-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "김형준",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "3-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "조민우",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "3-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "조강영",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "4-1",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "핀접영",
+    "distance": "50m",
+    "group": "3그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 4,
+    "primary_match_no": "4-2",
+    "merged_match_nos": [
+      "4-2"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 4그룹 핀접영 50m 결승",
+    "original_headers": [
+      "4-2. 성인부 남자 4그룹 핀접영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "이재곤",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "4-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "김성준",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "4-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "허   성",
+        "team": "DGIST",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "4-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "이재현",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "4-2",
+        "is_our_team": true
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "핀접영",
+    "distance": "50m",
+    "group": "4그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 5,
+    "primary_match_no": "4-3",
+    "merged_match_nos": [
+      "4-3"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 4그룹 핀접영 50m 결승",
+    "original_headers": [
+      "4-3. 성인부 남자 4그룹 핀접영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "김기용",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "4-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "민병철",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "4-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "배장효",
+        "team": "DGIST",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "4-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "심지수",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "4-3",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "핀접영",
+    "distance": "50m",
+    "group": "4그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 6,
+    "primary_match_no": "4-4",
+    "merged_match_nos": [
+      "4-4"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 4그룹 핀접영 50m 결승",
+    "original_headers": [
+      "4-4. 성인부 남자 4그룹 핀접영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "윤주권",
+        "team": "거제야르",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "4-4",
+        "is_our_team": true
+      },
+      {
+        "lane": 2,
+        "name": "안태균",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "4-4",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "고석보",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "4-4",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "최민석",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "4-4",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "핀접영",
+    "distance": "50m",
+    "group": "4그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 7,
+    "primary_match_no": "5-1",
+    "merged_match_nos": [
+      "5-1"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 5그룹 핀접영 50m 결승",
+    "original_headers": [
+      "5-1. 성인부 남자 5그룹 핀접영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "박재홍",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "5-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "예성민",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "5-1",
+        "is_our_team": true
+      },
+      {
+        "lane": 3,
+        "name": "정의길",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "5-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "윤득환",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "5-1",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "핀접영",
+    "distance": "50m",
+    "group": "5그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 8,
+    "primary_match_no": "5-2",
+    "merged_match_nos": [
+      "5-2"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 5그룹 핀접영 50m 결승",
+    "original_headers": [
+      "5-2. 성인부 남자 5그룹 핀접영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "서충근",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "5-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "한성주",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "5-2",
+        "is_our_team": true
+      },
+      {
+        "lane": 3,
+        "name": "유보승",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "5-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "박진홍",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "5-2",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "핀접영",
+    "distance": "50m",
+    "group": "5그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 9,
+    "primary_match_no": "5-3",
+    "merged_match_nos": [
+      "5-3"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 5그룹 핀접영 50m 결승",
+    "original_headers": [
+      "5-3. 성인부 남자 5그룹 핀접영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "장상준",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "5-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "서정찬",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "5-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "이문희",
+        "team": "개인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "5-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "성지경",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "5-3",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "핀접영",
+    "distance": "50m",
+    "group": "5그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 10,
+    "primary_match_no": "6",
+    "merged_match_nos": [
+      "6"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 6그룹 핀접영 50m 결승",
+    "original_headers": [
+      "6. 성인부 남자 6그룹 핀접영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 3,
+        "name": "성환용",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "6",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "진양호",
+        "team": "팀shi",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "6",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "핀접영",
+    "distance": "50m",
+    "group": "6그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 11,
+    "primary_match_no": "7",
+    "merged_match_nos": [
+      "7",
+      "8-1"
+    ],
+    "is_merged": true,
+    "merge_note": "(7번,8-1번 합침)",
+    "title": "성인부 여자 2그룹 핀접영 50m 결승 (7번,8-1번 합침)",
+    "original_headers": [
+      "7. 성인부 여자 2그룹 핀접영 50m 결승",
+      "8-1. 성인부 여자 3그룹 핀접영 50m 결승(7번,8-1번 합침)"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "김주희",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "7",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "최주희",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "8-1",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "핀접영",
+    "distance": "50m",
+    "group": "2그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 12,
+    "primary_match_no": "8-2",
+    "merged_match_nos": [
+      "8-2"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 3그룹 핀접영 50m 결승",
+    "original_headers": [
+      "8-2. 성인부 여자 3그룹 핀접영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 2,
+        "name": "김지해",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "8-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "신효정",
+        "team": "Team JOS",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "8-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "김장미",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "8-2",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "핀접영",
+    "distance": "50m",
+    "group": "3그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 13,
+    "primary_match_no": "8-3",
+    "merged_match_nos": [
+      "8-3"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 3그룹 핀접영 50m 결승",
+    "original_headers": [
+      "8-3. 성인부 여자 3그룹 핀접영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "황다은",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "8-3",
+        "is_our_team": true
+      },
+      {
+        "lane": 2,
+        "name": "한지민",
+        "team": "DGIST",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "8-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "최예슬",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "8-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "정다운",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "8-3",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "핀접영",
+    "distance": "50m",
+    "group": "3그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 14,
+    "primary_match_no": "9-1",
+    "merged_match_nos": [
+      "9-1"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 4그룹 핀접영 50m 결승",
+    "original_headers": [
+      "9-1. 성인부 여자 4그룹 핀접영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "서윤정",
+        "team": "DGIST",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "9-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "김선영",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "9-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "이수은",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "9-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "이미영",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "9-1",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "핀접영",
+    "distance": "50m",
+    "group": "4그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 15,
+    "primary_match_no": "9-2",
+    "merged_match_nos": [
+      "9-2"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 4그룹 핀접영 50m 결승",
+    "original_headers": [
+      "9-2. 성인부 여자 4그룹 핀접영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "한솜이",
+        "team": "팀shi",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "9-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "주민정",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "9-2",
+        "is_our_team": true
+      },
+      {
+        "lane": 3,
+        "name": "조유진",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "9-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "한지혜",
+        "team": "개인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "9-2",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "핀접영",
+    "distance": "50m",
+    "group": "4그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 16,
+    "primary_match_no": "9-3",
+    "merged_match_nos": [
+      "9-3"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 4그룹 핀접영 50m 결승",
+    "original_headers": [
+      "9-3. 성인부 여자 4그룹 핀접영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "유경화",
+        "team": "Team JOS",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "9-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "김순영",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "9-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "차진영",
+        "team": "DGIST",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "9-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "엄지선",
+        "team": "개인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "9-3",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "핀접영",
+    "distance": "50m",
+    "group": "4그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 17,
+    "primary_match_no": "9-4",
+    "merged_match_nos": [
+      "9-4"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 4그룹 핀접영 50m 결승",
+    "original_headers": [
+      "9-4. 성인부 여자 4그룹 핀접영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "한윤희",
+        "team": "개인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "9-4",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "이주영",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "9-4",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "김현순",
+        "team": "Team JOS",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "9-4",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "황은경",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "9-4",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "핀접영",
+    "distance": "50m",
+    "group": "4그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 18,
+    "primary_match_no": "9-5",
+    "merged_match_nos": [
+      "9-5"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 4그룹 핀접영 50m 결승",
+    "original_headers": [
+      "9-5. 성인부 여자 4그룹 핀접영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "조경진",
+        "team": "개인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "9-5",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "손혜정",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "9-5",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "정희경",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "9-5",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "최효선",
+        "team": "DGIST",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "9-5",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "핀접영",
+    "distance": "50m",
+    "group": "4그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 19,
+    "primary_match_no": "10-1",
+    "merged_match_nos": [
+      "10-1"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 5그룹 핀접영 50m 결승",
+    "original_headers": [
+      "10-1. 성인부 여자 5그룹 핀접영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "황세린",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "10-1",
+        "is_our_team": true
+      },
+      {
+        "lane": 2,
+        "name": "윤현희",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "10-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "김부연",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "10-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "김진옥",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "10-1",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "핀접영",
+    "distance": "50m",
+    "group": "5그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 20,
+    "primary_match_no": "10-2",
+    "merged_match_nos": [
+      "10-2"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 5그룹 핀접영 50m 결승",
+    "original_headers": [
+      "10-2. 성인부 여자 5그룹 핀접영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "최미영",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "10-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "허수진",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "10-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "정명혜",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "10-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "박명혜",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "10-2",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "핀접영",
+    "distance": "50m",
+    "group": "5그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 21,
+    "primary_match_no": "11",
+    "merged_match_nos": [
+      "11"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 1그룹 배영 50m 결승",
+    "original_headers": [
+      "11. 성인부 남자 1그룹 배영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 3,
+        "name": "조성찬",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "11",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "강민성",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "11",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "배영",
+    "distance": "50m",
+    "group": "1그룹",
+    "is_relay": false,
+    "base_duration_sec": 80,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 22,
+    "primary_match_no": "12",
+    "merged_match_nos": [
+      "12"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 2그룹 배영 50m 결승",
+    "original_headers": [
+      "12. 성인부 남자 2그룹 배영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 2,
+        "name": "조재광",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "12",
+        "is_our_team": true
+      },
+      {
+        "lane": 3,
+        "name": "김준우",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "12",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "이정환",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "12",
+        "is_our_team": true
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "배영",
+    "distance": "50m",
+    "group": "2그룹",
+    "is_relay": false,
+    "base_duration_sec": 80,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 23,
+    "primary_match_no": "13",
+    "merged_match_nos": [
+      "13"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 3그룹 배영 50m 결승",
+    "original_headers": [
+      "13. 성인부 남자 3그룹 배영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 2,
+        "name": "박재희",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "13",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "김형준",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "13",
+        "is_our_team": true
+      },
+      {
+        "lane": 4,
+        "name": "양철민",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "13",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "배영",
+    "distance": "50m",
+    "group": "3그룹",
+    "is_relay": false,
+    "base_duration_sec": 80,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 24,
+    "primary_match_no": "14-1",
+    "merged_match_nos": [
+      "14-1"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 4그룹 배영 50m 결승",
+    "original_headers": [
+      "14-1. 성인부 남자 4그룹 배영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "정서현",
+        "team": "거제야르",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "14-1",
+        "is_our_team": true
+      },
+      {
+        "lane": 2,
+        "name": "윤상열",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "14-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "김재환",
+        "team": "DGIST",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "14-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "제선호",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "14-1",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "배영",
+    "distance": "50m",
+    "group": "4그룹",
+    "is_relay": false,
+    "base_duration_sec": 80,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 25,
+    "primary_match_no": "14-2",
+    "merged_match_nos": [
+      "14-2"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 4그룹 배영 50m 결승",
+    "original_headers": [
+      "14-2. 성인부 남자 4그룹 배영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 2,
+        "name": "한지훈",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "14-2",
+        "is_our_team": true
+      },
+      {
+        "lane": 3,
+        "name": "파브지오롤로",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "14-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "이수영",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "14-2",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "배영",
+    "distance": "50m",
+    "group": "4그룹",
+    "is_relay": false,
+    "base_duration_sec": 80,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 26,
+    "primary_match_no": "15",
+    "merged_match_nos": [
+      "15",
+      "16"
+    ],
+    "is_merged": true,
+    "merge_note": "(15번,16번 합침)",
+    "title": "성인부 남자 5그룹 배영 50m 결승 (15번,16번 합침)",
+    "original_headers": [
+      "15. 성인부 남자 5그룹 배영 50m 결승",
+      "16. 성인부 남자 6그룹 배영 50m 결승(15번,16번 합침)"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "김남곤",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "15",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "배종필",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "15",
+        "is_our_team": true
+      },
+      {
+        "lane": 3,
+        "name": "노용진",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "15",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "박봉권",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "16",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "배영",
+    "distance": "50m",
+    "group": "5그룹",
+    "is_relay": false,
+    "base_duration_sec": 80,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 27,
+    "primary_match_no": "17",
+    "merged_match_nos": [
+      "17"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 2그룹 배영 50m 결승",
+    "original_headers": [
+      "17. 성인부 여자 2그룹 배영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 2,
+        "name": "정혜선",
+        "team": "개인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "17",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "윤규미",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "17",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "배영",
+    "distance": "50m",
+    "group": "2그룹",
+    "is_relay": false,
+    "base_duration_sec": 80,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 28,
+    "primary_match_no": "18-1",
+    "merged_match_nos": [
+      "18-1"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 3그룹 배영 50m 결승",
+    "original_headers": [
+      "18-1. 성인부 여자 3그룹 배영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "박혜진",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "18-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "노안나",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "18-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "한은지",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "18-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "박승아",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "18-1",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "배영",
+    "distance": "50m",
+    "group": "3그룹",
+    "is_relay": false,
+    "base_duration_sec": 80,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 29,
+    "primary_match_no": "18-2",
+    "merged_match_nos": [
+      "18-2"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 3그룹 배영 50m 결승",
+    "original_headers": [
+      "18-2. 성인부 여자 3그룹 배영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 2,
+        "name": "황다은",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "18-2",
+        "is_our_team": true
+      },
+      {
+        "lane": 3,
+        "name": "박양재",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "18-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "박신애",
+        "team": "개인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "18-2",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "배영",
+    "distance": "50m",
+    "group": "3그룹",
+    "is_relay": false,
+    "base_duration_sec": 80,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 30,
+    "primary_match_no": "19-1",
+    "merged_match_nos": [
+      "19-1"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 4그룹 배영 50m 결승",
+    "original_headers": [
+      "19-1. 성인부 여자 4그룹 배영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "조화정",
+        "team": "개인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "19-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "장현숙",
+        "team": "Team JOS",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "19-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "박다유",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "19-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "심민경",
+        "team": "거제야르",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "19-1",
+        "is_our_team": true
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "배영",
+    "distance": "50m",
+    "group": "4그룹",
+    "is_relay": false,
+    "base_duration_sec": 80,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 31,
+    "primary_match_no": "19-2",
+    "merged_match_nos": [
+      "19-2"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 4그룹 배영 50m 결승",
+    "original_headers": [
+      "19-2. 성인부 여자 4그룹 배영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 2,
+        "name": "박선혜",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "19-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "이현경",
+        "team": "개인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "19-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "홍효주",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "19-2",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "배영",
+    "distance": "50m",
+    "group": "4그룹",
+    "is_relay": false,
+    "base_duration_sec": 80,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 32,
+    "primary_match_no": "19-3",
+    "merged_match_nos": [
+      "19-3"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 4그룹 배영 50m 결승",
+    "original_headers": [
+      "19-3. 성인부 여자 4그룹 배영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "윤나영",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "19-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "조유진",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "19-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "정희경",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "19-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "이은희",
+        "team": "거제야르",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "19-3",
+        "is_our_team": true
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "배영",
+    "distance": "50m",
+    "group": "4그룹",
+    "is_relay": false,
+    "base_duration_sec": 80,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 33,
+    "primary_match_no": "20-1",
+    "merged_match_nos": [
+      "20-1"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 5그룹 배영 50m 결승",
+    "original_headers": [
+      "20-1. 성인부 여자 5그룹 배영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "강영숙",
+        "team": "팀shi",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "20-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "김희정",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "20-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "최미영",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "20-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "허수진",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "20-1",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "배영",
+    "distance": "50m",
+    "group": "5그룹",
+    "is_relay": false,
+    "base_duration_sec": 80,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 34,
+    "primary_match_no": "20-2",
+    "merged_match_nos": [
+      "20-2"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 5그룹 배영 50m 결승",
+    "original_headers": [
+      "20-2. 성인부 여자 5그룹 배영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "김애란",
+        "team": "거제야르",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "20-2",
+        "is_our_team": true
+      },
+      {
+        "lane": 2,
+        "name": "정근혜",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "20-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "김희숙",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "20-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "이경순",
+        "team": "개인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "20-2",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "배영",
+    "distance": "50m",
+    "group": "5그룹",
+    "is_relay": false,
+    "base_duration_sec": 80,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 35,
+    "primary_match_no": "20-3",
+    "merged_match_nos": [
+      "20-3"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 5그룹 배영 50m 결승",
+    "original_headers": [
+      "20-3. 성인부 여자 5그룹 배영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 2,
+        "name": "김미진",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "20-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "김혜진",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "20-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "박현애",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "20-3",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "배영",
+    "distance": "50m",
+    "group": "5그룹",
+    "is_relay": false,
+    "base_duration_sec": 80,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 36,
+    "primary_match_no": "21-1",
+    "merged_match_nos": [
+      "21-1"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 계영 200m 결승",
+    "original_headers": [
+      "21-1. 성인부 남자 계영 200m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "21-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "21-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "21-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "21-1",
+        "is_our_team": true
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "계영",
+    "distance": "200m",
+    "group": "일반",
+    "is_relay": true,
+    "base_duration_sec": 180,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 37,
+    "primary_match_no": "21-2",
+    "merged_match_nos": [
+      "21-2"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 계영 200m 결승",
+    "original_headers": [
+      "21-2. 성인부 남자 계영 200m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 2,
+        "name": "",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "21-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "21-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "",
+        "team": "거제야르",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "21-2",
+        "is_our_team": true
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "계영",
+    "distance": "200m",
+    "group": "일반",
+    "is_relay": true,
+    "base_duration_sec": 180,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 38,
+    "primary_match_no": "22-1",
+    "merged_match_nos": [
+      "22-1"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 계영 200m 결승",
+    "original_headers": [
+      "22-1. 성인부 여자 계영 200m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "22-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "",
+        "team": "거제야르",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "22-1",
+        "is_our_team": true
+      },
+      {
+        "lane": 3,
+        "name": "",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "22-1",
+        "is_our_team": true
+      },
+      {
+        "lane": 4,
+        "name": "",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "22-1",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "계영",
+    "distance": "200m",
+    "group": "일반",
+    "is_relay": true,
+    "base_duration_sec": 180,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 39,
+    "primary_match_no": "22-2",
+    "merged_match_nos": [
+      "22-2"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 계영 200m 결승",
+    "original_headers": [
+      "22-2. 성인부 여자 계영 200m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 2,
+        "name": "",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "22-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "22-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "22-2",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "계영",
+    "distance": "200m",
+    "group": "일반",
+    "is_relay": true,
+    "base_duration_sec": 180,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 40,
+    "primary_match_no": "23",
+    "merged_match_nos": [
+      "23"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 1그룹 접영 50m 결승",
+    "original_headers": [
+      "23. 성인부 남자 1그룹 접영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "이지훈",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "23",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "김한주",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "23",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "박슬우",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "23",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "강민성",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "23",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "접영",
+    "distance": "50m",
+    "group": "1그룹",
+    "is_relay": false,
+    "base_duration_sec": 75,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 41,
+    "primary_match_no": "24-1",
+    "merged_match_nos": [
+      "24-1"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 2그룹 접영 50m 결승",
+    "original_headers": [
+      "24-1. 성인부 남자 2그룹 접영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "박정현",
+        "team": "팀shi",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "24-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "김경모",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "24-1",
+        "is_our_team": true
+      },
+      {
+        "lane": 3,
+        "name": "위지승",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "24-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "최윤호",
+        "team": "개인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "24-1",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "접영",
+    "distance": "50m",
+    "group": "2그룹",
+    "is_relay": false,
+    "base_duration_sec": 75,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 42,
+    "primary_match_no": "24-2",
+    "merged_match_nos": [
+      "24-2"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 2그룹 접영 50m 결승",
+    "original_headers": [
+      "24-2. 성인부 남자 2그룹 접영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "김재훈",
+        "team": "Team JOS",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "24-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "정재용",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "24-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "박대욱",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "24-2",
+        "is_our_team": true
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "접영",
+    "distance": "50m",
+    "group": "2그룹",
+    "is_relay": false,
+    "base_duration_sec": 75,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 43,
+    "primary_match_no": "24-3",
+    "merged_match_nos": [
+      "24-3"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 2그룹 접영 50m 결승",
+    "original_headers": [
+      "24-3. 성인부 남자 2그룹 접영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 2,
+        "name": "박예한",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "24-3",
+        "is_our_team": true
+      },
+      {
+        "lane": 3,
+        "name": "정광원",
+        "team": "개인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "24-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "황규태",
+        "team": "개인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "24-3",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "접영",
+    "distance": "50m",
+    "group": "2그룹",
+    "is_relay": false,
+    "base_duration_sec": 75,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 44,
+    "primary_match_no": "25-1",
+    "merged_match_nos": [
+      "25-1"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 3그룹 접영 50m 결승",
+    "original_headers": [
+      "25-1. 성인부 남자 3그룹 접영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "강태운",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "25-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "김우람",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "25-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "이태헌",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "25-1",
+        "is_our_team": true
+      },
+      {
+        "lane": 4,
+        "name": "이소열",
+        "team": "개인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "25-1",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "접영",
+    "distance": "50m",
+    "group": "3그룹",
+    "is_relay": false,
+    "base_duration_sec": 75,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 45,
+    "primary_match_no": "25-2",
+    "merged_match_nos": [
+      "25-2"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 3그룹 접영 50m 결승",
+    "original_headers": [
+      "25-2. 성인부 남자 3그룹 접영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 2,
+        "name": "정민수",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "25-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "박민정",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "25-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "안재홍",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "25-2",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "접영",
+    "distance": "50m",
+    "group": "3그룹",
+    "is_relay": false,
+    "base_duration_sec": 75,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 46,
+    "primary_match_no": "25-3",
+    "merged_match_nos": [
+      "25-3"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 3그룹 접영 50m 결승",
+    "original_headers": [
+      "25-3. 성인부 남자 3그룹 접영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "이태현",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "25-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "강준현",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "25-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "김덕규",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "25-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "이경후",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "25-3",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "접영",
+    "distance": "50m",
+    "group": "3그룹",
+    "is_relay": false,
+    "base_duration_sec": 75,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 47,
+    "primary_match_no": "26-1",
+    "merged_match_nos": [
+      "26-1"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 4그룹 접영 50m 결승",
+    "original_headers": [
+      "26-1. 성인부 남자 4그룹 접영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "김병주",
+        "team": "Team JOS",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "26-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "윤상열",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "26-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "손규식",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "26-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "김민재",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "26-1",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "접영",
+    "distance": "50m",
+    "group": "4그룹",
+    "is_relay": false,
+    "base_duration_sec": 75,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 48,
+    "primary_match_no": "26-2",
+    "merged_match_nos": [
+      "26-2"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 4그룹 접영 50m 결승",
+    "original_headers": [
+      "26-2. 성인부 남자 4그룹 접영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "엄정웅",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "26-2",
+        "is_our_team": true
+      },
+      {
+        "lane": 2,
+        "name": "송창현",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "26-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "안상준",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "26-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "임건형",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "26-2",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "접영",
+    "distance": "50m",
+    "group": "4그룹",
+    "is_relay": false,
+    "base_duration_sec": 75,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 49,
+    "primary_match_no": "26-3",
+    "merged_match_nos": [
+      "26-3"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 4그룹 접영 50m 결승",
+    "original_headers": [
+      "26-3. 성인부 남자 4그룹 접영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 2,
+        "name": "이준욱",
+        "team": "Team JOS",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "26-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "김양훈",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "26-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "정민철",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "26-3",
+        "is_our_team": true
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "접영",
+    "distance": "50m",
+    "group": "4그룹",
+    "is_relay": false,
+    "base_duration_sec": 75,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 50,
+    "primary_match_no": "27-1",
+    "merged_match_nos": [
+      "27-1"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 5그룹 접영 50m 결승",
+    "original_headers": [
+      "27-1. 성인부 남자 5그룹 접영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 2,
+        "name": "전용균",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "27-1",
+        "is_our_team": true
+      },
+      {
+        "lane": 3,
+        "name": "조영재",
+        "team": "DGIST",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "27-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "엄영길",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "27-1",
+        "is_our_team": true
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "접영",
+    "distance": "50m",
+    "group": "5그룹",
+    "is_relay": false,
+    "base_duration_sec": 75,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 51,
+    "primary_match_no": "27-2",
+    "merged_match_nos": [
+      "27-2",
+      "28"
+    ],
+    "is_merged": true,
+    "merge_note": "(27-2번,28번 합침)",
+    "title": "성인부 남자 5그룹 접영 50m 결승 (27-2번,28번 합침)",
+    "original_headers": [
+      "27-2. 성인부 남자 5그룹 접영 50m 결승",
+      "28. 성인부 남자 6그룹 접영 50m 결승(27-2번,28번 합침)"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "박찬헌",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "27-2",
+        "is_our_team": true
+      },
+      {
+        "lane": 2,
+        "name": "조충남",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "27-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "김득수",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "28",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "접영",
+    "distance": "50m",
+    "group": "5그룹",
+    "is_relay": false,
+    "base_duration_sec": 75,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 52,
+    "primary_match_no": "29",
+    "merged_match_nos": [
+      "29",
+      "30-1"
+    ],
+    "is_merged": true,
+    "merge_note": "(29번,30-1번 합침)",
+    "title": "성인부 여자 1그룹 접영 50m 결승 (29번,30-1번 합침)",
+    "original_headers": [
+      "29. 성인부 여자 1그룹 접영 50m 결승",
+      "30-1. 성인부 여자 2그룹 접영 50m 결승(29번,30-1번 합침)"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "이지호",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "29",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "송주미",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "30-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "추성비",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "30-1",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "접영",
+    "distance": "50m",
+    "group": "1그룹",
+    "is_relay": false,
+    "base_duration_sec": 75,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 53,
+    "primary_match_no": "30-2",
+    "merged_match_nos": [
+      "30-2"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 2그룹 접영 50m 결승",
+    "original_headers": [
+      "30-2. 성인부 여자 2그룹 접영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "김지민",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "30-2",
+        "is_our_team": true
+      },
+      {
+        "lane": 2,
+        "name": "이해린",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "30-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "이영경",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "30-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "김민주",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "30-2",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "접영",
+    "distance": "50m",
+    "group": "2그룹",
+    "is_relay": false,
+    "base_duration_sec": 75,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 54,
+    "primary_match_no": "31-1",
+    "merged_match_nos": [
+      "31-1"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 3그룹 접영 50m 결승",
+    "original_headers": [
+      "31-1. 성인부 여자 3그룹 접영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "장경화",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "31-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "한은지",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "31-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "이하선",
+        "team": "개인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "31-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "최이슬",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "31-1",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "접영",
+    "distance": "50m",
+    "group": "3그룹",
+    "is_relay": false,
+    "base_duration_sec": 75,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 55,
+    "primary_match_no": "31-2",
+    "merged_match_nos": [
+      "31-2"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 3그룹 접영 50m 결승",
+    "original_headers": [
+      "31-2. 성인부 여자 3그룹 접영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "박신애",
+        "team": "개인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "31-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "김나람",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "31-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "김슬기",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "31-2",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "접영",
+    "distance": "50m",
+    "group": "3그룹",
+    "is_relay": false,
+    "base_duration_sec": 75,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 56,
+    "primary_match_no": "32-1",
+    "merged_match_nos": [
+      "32-1"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 4그룹 접영 50m 결승",
+    "original_headers": [
+      "32-1. 성인부 여자 4그룹 접영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 2,
+        "name": "정영희",
+        "team": "개인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "32-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "김보람",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "32-1",
+        "is_our_team": true
+      },
+      {
+        "lane": 4,
+        "name": "하미연",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "32-1",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "접영",
+    "distance": "50m",
+    "group": "4그룹",
+    "is_relay": false,
+    "base_duration_sec": 75,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 57,
+    "primary_match_no": "32-2",
+    "merged_match_nos": [
+      "32-2"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 4그룹 접영 50m 결승",
+    "original_headers": [
+      "32-2. 성인부 여자 4그룹 접영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 2,
+        "name": "조신애",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "32-2",
+        "is_our_team": true
+      },
+      {
+        "lane": 3,
+        "name": "한윤희",
+        "team": "개인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "32-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "조현정",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "32-2",
+        "is_our_team": true
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "접영",
+    "distance": "50m",
+    "group": "4그룹",
+    "is_relay": false,
+    "base_duration_sec": 75,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 58,
+    "primary_match_no": "33-1",
+    "merged_match_nos": [
+      "33-1"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 5그룹 접영 50m 결승",
+    "original_headers": [
+      "33-1. 성인부 여자 5그룹 접영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "정명혜",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "33-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "황세린",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "33-1",
+        "is_our_team": true
+      },
+      {
+        "lane": 3,
+        "name": "김혜진",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "33-1",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "접영",
+    "distance": "50m",
+    "group": "5그룹",
+    "is_relay": false,
+    "base_duration_sec": 75,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 59,
+    "primary_match_no": "33-2",
+    "merged_match_nos": [
+      "33-2"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 5그룹 접영 50m 결승",
+    "original_headers": [
+      "33-2. 성인부 여자 5그룹 접영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 2,
+        "name": "오수양",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "33-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "박현정",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "33-2",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "접영",
+    "distance": "50m",
+    "group": "5그룹",
+    "is_relay": false,
+    "base_duration_sec": 75,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 60,
+    "primary_match_no": "34",
+    "merged_match_nos": [
+      "34",
+      "35"
+    ],
+    "is_merged": true,
+    "merge_note": "(34번,35번 합침)",
+    "title": "성인부 남자 1그룹 핀자유형 50m 결승 (34번,35번 합침)",
+    "original_headers": [
+      "34. 성인부 남자 1그룹 핀자유형 50m 결승",
+      "35. 성인부 남자 2그룹 핀자유형 50m 결승(34번,35번 합침)"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "이지훈",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "34",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "이우진",
+        "team": "DGIST",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "34",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "김문정",
+        "team": "DGIST",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "35",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "핀자유형",
+    "distance": "50m",
+    "group": "1그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 61,
+    "primary_match_no": "36-1",
+    "merged_match_nos": [
+      "36-1"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 3그룹 핀자유형 50m 결승",
+    "original_headers": [
+      "36-1. 성인부 남자 3그룹 핀자유형 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "정성문",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "36-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "김건",
+        "team": "개인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "36-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "김익희",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "36-1",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "핀자유형",
+    "distance": "50m",
+    "group": "3그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 62,
+    "primary_match_no": "36-2",
+    "merged_match_nos": [
+      "36-2"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 3그룹 핀자유형 50m 결승",
+    "original_headers": [
+      "36-2. 성인부 남자 3그룹 핀자유형 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "박재희",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "36-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "김형준",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "36-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "조민우",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "36-2",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "핀자유형",
+    "distance": "50m",
+    "group": "3그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 63,
+    "primary_match_no": "37-1",
+    "merged_match_nos": [
+      "37-1"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 4그룹 핀자유형 50m 결승",
+    "original_headers": [
+      "37-1. 성인부 남자 4그룹 핀자유형 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "조강영",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "37-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "김기용",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "37-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "안태균",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "37-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "배장효",
+        "team": "DGIST",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "37-1",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "핀자유형",
+    "distance": "50m",
+    "group": "4그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 64,
+    "primary_match_no": "37-2",
+    "merged_match_nos": [
+      "37-2"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 4그룹 핀자유형 50m 결승",
+    "original_headers": [
+      "37-2. 성인부 남자 4그룹 핀자유형 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "김성준",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "37-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "한주한",
+        "team": "DGIST",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "37-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "이재현",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "37-2",
+        "is_our_team": true
+      },
+      {
+        "lane": 4,
+        "name": "이원주",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "37-2",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "핀자유형",
+    "distance": "50m",
+    "group": "4그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 65,
+    "primary_match_no": "37-3",
+    "merged_match_nos": [
+      "37-3"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 4그룹 핀자유형 50m 결승",
+    "original_headers": [
+      "37-3. 성인부 남자 4그룹 핀자유형 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "김세종",
+        "team": "팀shi",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "37-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "손철수",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "37-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "성 명",
+        "team": "소   속",
+        "rank": "순위",
+        "record": "기     록",
+        "note": "비  고",
+        "original_match_no": "37-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "이도형",
+        "team": "거제야르",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "37-3",
+        "is_our_team": true
+      },
+      {
+        "lane": 4,
+        "name": "심지수",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "37-3",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "핀자유형",
+    "distance": "50m",
+    "group": "4그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 66,
+    "primary_match_no": "37-4",
+    "merged_match_nos": [
+      "37-4"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 4그룹 핀자유형 50m 결승",
+    "original_headers": [
+      "37-4. 성인부 남자 4그룹 핀자유형 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 2,
+        "name": "변정현",
+        "team": "개인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "37-4",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "한지훈",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "37-4",
+        "is_our_team": true
+      },
+      {
+        "lane": 4,
+        "name": "허   성",
+        "team": "DGIST",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "37-4",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "핀자유형",
+    "distance": "50m",
+    "group": "4그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 67,
+    "primary_match_no": "37-5",
+    "merged_match_nos": [
+      "37-5"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 4그룹 핀자유형 50m 결승",
+    "original_headers": [
+      "37-5. 성인부 남자 4그룹 핀자유형 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 2,
+        "name": "윤주권",
+        "team": "거제야르",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "37-5",
+        "is_our_team": true
+      },
+      {
+        "lane": 3,
+        "name": "이재곤",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "37-5",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "핀자유형",
+    "distance": "50m",
+    "group": "4그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 68,
+    "primary_match_no": "38-1",
+    "merged_match_nos": [
+      "38-1"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 5그룹 핀자유형 50m 결승",
+    "original_headers": [
+      "38-1. 성인부 남자 5그룹 핀자유형 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "박재홍",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "38-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "김상오",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "38-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "배종필",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "38-1",
+        "is_our_team": true
+      },
+      {
+        "lane": 4,
+        "name": "박영수",
+        "team": "DGIST",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "38-1",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "핀자유형",
+    "distance": "50m",
+    "group": "5그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 69,
+    "primary_match_no": "38-2",
+    "merged_match_nos": [
+      "38-2"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 5그룹 핀자유형 50m 결승",
+    "original_headers": [
+      "38-2. 성인부 남자 5그룹 핀자유형 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "문준호",
+        "team": "DGIST",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "38-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "정의길",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "38-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "예성민",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "38-2",
+        "is_our_team": true
+      },
+      {
+        "lane": 4,
+        "name": "이경열",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "38-2",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "핀자유형",
+    "distance": "50m",
+    "group": "5그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 70,
+    "primary_match_no": "38-3",
+    "merged_match_nos": [
+      "38-3"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 5그룹 핀자유형 50m 결승",
+    "original_headers": [
+      "38-3. 성인부 남자 5그룹 핀자유형 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "장상준",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "38-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "서충근",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "38-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "이문희",
+        "team": "개인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "38-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "박진홍",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "38-3",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "핀자유형",
+    "distance": "50m",
+    "group": "5그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 71,
+    "primary_match_no": "38-4",
+    "merged_match_nos": [
+      "38-4",
+      "39"
+    ],
+    "is_merged": true,
+    "merge_note": "(38-4번,39번 합침)",
+    "title": "성인부 남자 5그룹 핀자유형 50m 결승 (38-4번,39번 합침)",
+    "original_headers": [
+      "38-4. 성인부 남자 5그룹 핀자유형 50m 결승",
+      "39. 성인부 남자 6그룹 핀자유형 50m 결승(38-4번,39번 합침)"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "성지경",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "38-4",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "진양호",
+        "team": "팀shi",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "39",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "성환용",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "39",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "최호균",
+        "team": "DGIST",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "39",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "핀자유형",
+    "distance": "50m",
+    "group": "5그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 72,
+    "primary_match_no": "40",
+    "merged_match_nos": [
+      "40",
+      "41-1"
+    ],
+    "is_merged": true,
+    "merge_note": "(40번,41-1번 합침)",
+    "title": "성인부 여자 1그룹 핀자유형 50m 결승 (40번,41-1번 합침)",
+    "original_headers": [
+      "40. 성인부 여자 1그룹 핀자유형 50m 결승",
+      "41-1. 성인부 여자 3그룹 핀자유형 50m 결승(40번,41-1번 합침)"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "이지호",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "40",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "신효정",
+        "team": "Team JOS",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "41-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "김지해",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "41-1",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "핀자유형",
+    "distance": "50m",
+    "group": "1그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 73,
+    "primary_match_no": "41-2",
+    "merged_match_nos": [
+      "41-2"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 3그룹 핀자유형 50m 결승",
+    "original_headers": [
+      "41-2. 성인부 여자 3그룹 핀자유형 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "김나라",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "41-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "고민지",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "41-2",
+        "is_our_team": true
+      },
+      {
+        "lane": 3,
+        "name": "최예슬",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "41-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "정다운",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "41-2",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "핀자유형",
+    "distance": "50m",
+    "group": "3그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 74,
+    "primary_match_no": "41-3",
+    "merged_match_nos": [
+      "41-3"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 3그룹 핀자유형 50m 결승",
+    "original_headers": [
+      "41-3. 성인부 여자 3그룹 핀자유형 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 2,
+        "name": "김서연",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "41-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "공채영",
+        "team": "개인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "41-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "한지민",
+        "team": "DGIST",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "41-3",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "핀자유형",
+    "distance": "50m",
+    "group": "3그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 75,
+    "primary_match_no": "42-1",
+    "merged_match_nos": [
+      "42-1"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 4그룹 핀자유형 50m 결승",
+    "original_headers": [
+      "42-1. 성인부 여자 4그룹 핀자유형 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "김순영",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "42-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "박지숙",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "42-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "조세비",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "42-1",
+        "is_our_team": true
+      },
+      {
+        "lane": 4,
+        "name": "여수연",
+        "team": "거제야르",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "42-1",
+        "is_our_team": true
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "핀자유형",
+    "distance": "50m",
+    "group": "4그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 76,
+    "primary_match_no": "42-2",
+    "merged_match_nos": [
+      "42-2"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 4그룹 핀자유형 50m 결승",
+    "original_headers": [
+      "42-2. 성인부 여자 4그룹 핀자유형 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "유혜진",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "42-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "한솜이",
+        "team": "팀shi",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "42-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "주민정",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "42-2",
+        "is_our_team": true
+      },
+      {
+        "lane": 4,
+        "name": "서윤정",
+        "team": "DGIST",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "42-2",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "핀자유형",
+    "distance": "50m",
+    "group": "4그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 77,
+    "primary_match_no": "42-3",
+    "merged_match_nos": [
+      "42-3"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 4그룹 핀자유형 50m 결승",
+    "original_headers": [
+      "42-3. 성인부 여자 4그룹 핀자유형 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "유경화",
+        "team": "Team JOS",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "42-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "이주영",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "42-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "김민희",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "42-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "조화정",
+        "team": "개인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "42-3",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "핀자유형",
+    "distance": "50m",
+    "group": "4그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 78,
+    "primary_match_no": "42-4",
+    "merged_match_nos": [
+      "42-4"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 4그룹 핀자유형 50m 결승",
+    "original_headers": [
+      "42-4. 성인부 여자 4그룹 핀자유형 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "한지혜",
+        "team": "개인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "42-4",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "차진영",
+        "team": "DGIST",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "42-4",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "조경진",
+        "team": "개인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "42-4",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "이미영",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "42-4",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "핀자유형",
+    "distance": "50m",
+    "group": "4그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 79,
+    "primary_match_no": "42-5",
+    "merged_match_nos": [
+      "42-5"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 4그룹 핀자유형 50m 결승",
+    "original_headers": [
+      "42-5. 성인부 여자 4그룹 핀자유형 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 2,
+        "name": "김현순",
+        "team": "Team JOS",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "42-5",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "황은경",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "42-5",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "김상희",
+        "team": "거제야르",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "42-5",
+        "is_our_team": true
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "핀자유형",
+    "distance": "50m",
+    "group": "4그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 80,
+    "primary_match_no": "42-6",
+    "merged_match_nos": [
+      "42-6"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 4그룹 핀자유형 50m 결승",
+    "original_headers": [
+      "42-6. 성인부 여자 4그룹 핀자유형 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 2,
+        "name": "엄지선",
+        "team": "개인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "42-6",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "윤나영",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "42-6",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "핀자유형",
+    "distance": "50m",
+    "group": "4그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 81,
+    "primary_match_no": "43-1",
+    "merged_match_nos": [
+      "43-1"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 5그룹 핀자유형 50m 결승",
+    "original_headers": [
+      "43-1. 성인부 여자 5그룹 핀자유형 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "박명혜",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "43-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "정근혜",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "43-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "박선화",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "43-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "김희숙",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "43-1",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "핀자유형",
+    "distance": "50m",
+    "group": "5그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 82,
+    "primary_match_no": "43-2",
+    "merged_match_nos": [
+      "43-2"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 5그룹 핀자유형 50m 결승",
+    "original_headers": [
+      "43-2. 성인부 여자 5그룹 핀자유형 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "강영숙",
+        "team": "팀shi",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "43-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "김희정",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "43-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "김은주",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "43-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "전경미",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "43-2",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "핀자유형",
+    "distance": "50m",
+    "group": "5그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 83,
+    "primary_match_no": "43-3",
+    "merged_match_nos": [
+      "43-3",
+      "44"
+    ],
+    "is_merged": true,
+    "merge_note": "(43-3번,44번 합침)",
+    "title": "성인부 여자 5그룹 핀자유형 50m 결승 (43-3번,44번 합침)",
+    "original_headers": [
+      "43-3. 성인부 여자 5그룹 핀자유형 50m 결승",
+      "44. 성인부 여자 6그룹 핀자유형 50m 결승(43-3번,44번 합침)"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "박현애",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "43-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "김부연",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "43-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "최지희",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "44",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "핀자유형",
+    "distance": "50m",
+    "group": "5그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 84,
+    "primary_match_no": "45",
+    "merged_match_nos": [
+      "45"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 1그룹 평영 50m 결승",
+    "original_headers": [
+      "45. 성인부 남자 1그룹 평영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "김지환",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "45",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "김영준",
+        "team": "개인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "45",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "이동규",
+        "team": "개인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "45",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "평영",
+    "distance": "50m",
+    "group": "1그룹",
+    "is_relay": false,
+    "base_duration_sec": 80,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 85,
+    "primary_match_no": "46-1",
+    "merged_match_nos": [
+      "46-1"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 2그룹 평영 50m 결승",
+    "original_headers": [
+      "46-1. 성인부 남자 2그룹 평영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "이정환",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "46-1",
+        "is_our_team": true
+      },
+      {
+        "lane": 2,
+        "name": "김문정",
+        "team": "DGIST",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "46-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "김준우",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "46-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "최호택",
+        "team": "팀shi",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "46-1",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "평영",
+    "distance": "50m",
+    "group": "2그룹",
+    "is_relay": false,
+    "base_duration_sec": 80,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 86,
+    "primary_match_no": "46-2",
+    "merged_match_nos": [
+      "46-2"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 2그룹 평영 50m 결승",
+    "original_headers": [
+      "46-2. 성인부 남자 2그룹 평영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 2,
+        "name": "최윤호",
+        "team": "개인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "46-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "정성민",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "46-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "박형서",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "46-2",
+        "is_our_team": true
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "평영",
+    "distance": "50m",
+    "group": "2그룹",
+    "is_relay": false,
+    "base_duration_sec": 80,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 87,
+    "primary_match_no": "47-1",
+    "merged_match_nos": [
+      "47-1"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 3그룹 평영 50m 결승",
+    "original_headers": [
+      "47-1. 성인부 남자 3그룹 평영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "최치완",
+        "team": "Team JOS",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "47-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "이태헌",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "47-1",
+        "is_our_team": true
+      },
+      {
+        "lane": 3,
+        "name": "이현우",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "47-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "박우식",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "47-1",
+        "is_our_team": true
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "평영",
+    "distance": "50m",
+    "group": "3그룹",
+    "is_relay": false,
+    "base_duration_sec": 80,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 88,
+    "primary_match_no": "47-2",
+    "merged_match_nos": [
+      "47-2"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 3그룹 평영 50m 결승",
+    "original_headers": [
+      "47-2. 성인부 남자 3그룹 평영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "이태현",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "47-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "조건희",
+        "team": "개인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "47-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "임은호",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "47-2",
+        "is_our_team": true
+      },
+      {
+        "lane": 4,
+        "name": "양기정",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "47-2",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "평영",
+    "distance": "50m",
+    "group": "3그룹",
+    "is_relay": false,
+    "base_duration_sec": 80,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 89,
+    "primary_match_no": "47-3",
+    "merged_match_nos": [
+      "47-3"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 3그룹 평영 50m 결승",
+    "original_headers": [
+      "47-3. 성인부 남자 3그룹 평영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "정성훈",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "47-3",
+        "is_our_team": true
+      },
+      {
+        "lane": 2,
+        "name": "김익희",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "47-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "정민수",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "47-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "이소열",
+        "team": "개인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "47-3",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "평영",
+    "distance": "50m",
+    "group": "3그룹",
+    "is_relay": false,
+    "base_duration_sec": 80,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 90,
+    "primary_match_no": "47-4",
+    "merged_match_nos": [
+      "47-4",
+      "48-1"
+    ],
+    "is_merged": true,
+    "merge_note": "(47-4번,48-1번 합침)",
+    "title": "성인부 남자 3그룹 평영 50m 결승 (47-4번,48-1번 합침)",
+    "original_headers": [
+      "47-4. 성인부 남자 3그룹 평영 50m 결승",
+      "48-1. 성인부 남자 4그룹 평영 50m 결승(47-4번,48-1번 합침)"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "양철민",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "47-4",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "김양훈",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "48-1",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "평영",
+    "distance": "50m",
+    "group": "3그룹",
+    "is_relay": false,
+    "base_duration_sec": 80,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 91,
+    "primary_match_no": "48-2",
+    "merged_match_nos": [
+      "48-2"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 4그룹 평영 50m 결승",
+    "original_headers": [
+      "48-2. 성인부 남자 4그룹 평영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "최민석",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "48-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "김재환",
+        "team": "DGIST",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "48-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "정민철",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "48-2",
+        "is_our_team": true
+      },
+      {
+        "lane": 4,
+        "name": "정서현",
+        "team": "거제야르",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "48-2",
+        "is_our_team": true
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "평영",
+    "distance": "50m",
+    "group": "4그룹",
+    "is_relay": false,
+    "base_duration_sec": 80,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 92,
+    "primary_match_no": "48-3",
+    "merged_match_nos": [
+      "48-3"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 4그룹 평영 50m 결승",
+    "original_headers": [
+      "48-3. 성인부 남자 4그룹 평영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "서종혜",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "48-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "제선호",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "48-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "이원주",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "48-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "김준영",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "48-3",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "평영",
+    "distance": "50m",
+    "group": "4그룹",
+    "is_relay": false,
+    "base_duration_sec": 80,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 93,
+    "primary_match_no": "48-4",
+    "merged_match_nos": [
+      "48-4"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 4그룹 평영 50m 결승",
+    "original_headers": [
+      "48-4. 성인부 남자 4그룹 평영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "한주한",
+        "team": "DGIST",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "48-4",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "송창현",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "48-4",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "손규식",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "48-4",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "안창환",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "48-4",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "평영",
+    "distance": "50m",
+    "group": "4그룹",
+    "is_relay": false,
+    "base_duration_sec": 80,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 94,
+    "primary_match_no": "49-1",
+    "merged_match_nos": [
+      "49-1"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 5그룹 평영 50m 결승",
+    "original_headers": [
+      "49-1. 성인부 남자 5그룹 평영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "노용진",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "49-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "서정찬",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "49-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "유보승",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "49-1",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "평영",
+    "distance": "50m",
+    "group": "5그룹",
+    "is_relay": false,
+    "base_duration_sec": 80,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 95,
+    "primary_match_no": "49-2",
+    "merged_match_nos": [
+      "49-2"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 5그룹 평영 50m 결승",
+    "original_headers": [
+      "49-2. 성인부 남자 5그룹 평영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 2,
+        "name": "한성주",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "49-2",
+        "is_our_team": true
+      },
+      {
+        "lane": 3,
+        "name": "이경열",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "49-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "김상오",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "49-2",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "평영",
+    "distance": "50m",
+    "group": "5그룹",
+    "is_relay": false,
+    "base_duration_sec": 80,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 96,
+    "primary_match_no": "50",
+    "merged_match_nos": [
+      "50"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 6그룹 평영 50m 결승",
+    "original_headers": [
+      "50. 성인부 남자 6그룹 평영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "박봉권",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "50",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "권순용",
+        "team": "거제야르",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "50",
+        "is_our_team": true
+      },
+      {
+        "lane": 3,
+        "name": "김득수",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "50",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "평영",
+    "distance": "50m",
+    "group": "6그룹",
+    "is_relay": false,
+    "base_duration_sec": 80,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 97,
+    "primary_match_no": "51",
+    "merged_match_nos": [
+      "51"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 2그룹 평영 50m 결승",
+    "original_headers": [
+      "51. 성인부 여자 2그룹 평영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 2,
+        "name": "이해린",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "51",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "김지원",
+        "team": "개인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "51",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "평영",
+    "distance": "50m",
+    "group": "2그룹",
+    "is_relay": false,
+    "base_duration_sec": 80,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 98,
+    "primary_match_no": "52-1",
+    "merged_match_nos": [
+      "52-1"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 3그룹 평영 50m 결승",
+    "original_headers": [
+      "52-1. 성인부 여자 3그룹 평영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "고민지",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "52-1",
+        "is_our_team": true
+      },
+      {
+        "lane": 2,
+        "name": "최주희",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "52-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "김슬기",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "52-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "노언영",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "52-1",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "평영",
+    "distance": "50m",
+    "group": "3그룹",
+    "is_relay": false,
+    "base_duration_sec": 80,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 99,
+    "primary_match_no": "52-2",
+    "merged_match_nos": [
+      "52-2"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 3그룹 평영 50m 결승",
+    "original_headers": [
+      "52-2. 성인부 여자 3그룹 평영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "김장미",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "52-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "김서연",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "52-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "노안나",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "52-2",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "평영",
+    "distance": "50m",
+    "group": "3그룹",
+    "is_relay": false,
+    "base_duration_sec": 80,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 100,
+    "primary_match_no": "53-1",
+    "merged_match_nos": [
+      "53-1"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 4그룹 평영 50m 결승",
+    "original_headers": [
+      "53-1. 성인부 여자 4그룹 평영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "전소영",
+        "team": "팀shi",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "53-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "이은희",
+        "team": "거제야르",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "53-1",
+        "is_our_team": true
+      },
+      {
+        "lane": 3,
+        "name": "박지숙",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "53-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "윤아림",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "53-1",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "평영",
+    "distance": "50m",
+    "group": "4그룹",
+    "is_relay": false,
+    "base_duration_sec": 80,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 101,
+    "primary_match_no": "53-2",
+    "merged_match_nos": [
+      "53-2"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 4그룹 평영 50m 결승",
+    "original_headers": [
+      "53-2. 성인부 여자 4그룹 평영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "박선진",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "53-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "전현주",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "53-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "이연정",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "53-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "임영란",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "53-2",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "평영",
+    "distance": "50m",
+    "group": "4그룹",
+    "is_relay": false,
+    "base_duration_sec": 80,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 102,
+    "primary_match_no": "53-3",
+    "merged_match_nos": [
+      "53-3"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 4그룹 평영 50m 결승",
+    "original_headers": [
+      "53-3. 성인부 여자 4그룹 평영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "유혜진",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "53-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "손혜정",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "53-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "장현숙",
+        "team": "Team JOS",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "53-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "서우선",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "53-3",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "평영",
+    "distance": "50m",
+    "group": "4그룹",
+    "is_relay": false,
+    "base_duration_sec": 80,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 103,
+    "primary_match_no": "54-1",
+    "merged_match_nos": [
+      "54-1"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 5그룹 평영 50m 결승",
+    "original_headers": [
+      "54-1. 성인부 여자 5그룹 평영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "박현정",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "54-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "이성미",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "54-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "박선화",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "54-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "김진옥",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "54-1",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "평영",
+    "distance": "50m",
+    "group": "5그룹",
+    "is_relay": false,
+    "base_duration_sec": 80,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 104,
+    "primary_match_no": "54-2",
+    "merged_match_nos": [
+      "54-2"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 5그룹 평영 50m 결승",
+    "original_headers": [
+      "54-2. 성인부 여자 5그룹 평영 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "이경순",
+        "team": "개인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "54-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "정남정",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "54-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "허희경",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "54-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "오수양",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "54-2",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "평영",
+    "distance": "50m",
+    "group": "5그룹",
+    "is_relay": false,
+    "base_duration_sec": 80,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 105,
+    "primary_match_no": "54-3",
+    "merged_match_nos": [
+      "54-3",
+      "55"
+    ],
+    "is_merged": true,
+    "merge_note": "(54-3번,55번 합침)",
+    "title": "성인부 여자 5그룹 평영 50m 결승 (54-3번,55번 합침)",
+    "original_headers": [
+      "54-3. 성인부 여자 5그룹 평영 50m 결승",
+      "55. 성인부 여자 6그룹 평영 50m 결승(54-3번,55번 합침)"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "윤현희",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "54-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "송원자",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "55",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "평영",
+    "distance": "50m",
+    "group": "5그룹",
+    "is_relay": false,
+    "base_duration_sec": 80,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 106,
+    "primary_match_no": "56-1",
+    "merged_match_nos": [
+      "56-1"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 혼계영 200m 결승",
+    "original_headers": [
+      "56-1. 성인부 남자 혼계영 200m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "56-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "",
+        "team": "거제야르",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "56-1",
+        "is_our_team": true
+      },
+      {
+        "lane": 3,
+        "name": "",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "56-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "56-1",
+        "is_our_team": true
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "혼계영",
+    "distance": "200m",
+    "group": "일반",
+    "is_relay": true,
+    "base_duration_sec": 190,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 107,
+    "primary_match_no": "56-2",
+    "merged_match_nos": [
+      "56-2"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 혼계영 200m 결승",
+    "original_headers": [
+      "56-2. 성인부 남자 혼계영 200m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 2,
+        "name": "",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "56-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "56-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "56-2",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "혼계영",
+    "distance": "200m",
+    "group": "일반",
+    "is_relay": true,
+    "base_duration_sec": 190,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 108,
+    "primary_match_no": "57-1",
+    "merged_match_nos": [
+      "57-1"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 혼계영 200m 결승",
+    "original_headers": [
+      "57-1. 성인부 여자 혼계영 200m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "",
+        "team": "거제야르",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "57-1",
+        "is_our_team": true
+      },
+      {
+        "lane": 2,
+        "name": "",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "57-1",
+        "is_our_team": true
+      },
+      {
+        "lane": 3,
+        "name": "",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "57-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "57-1",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "혼계영",
+    "distance": "200m",
+    "group": "일반",
+    "is_relay": true,
+    "base_duration_sec": 190,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 109,
+    "primary_match_no": "57-2",
+    "merged_match_nos": [
+      "57-2"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 혼계영 200m 결승",
+    "original_headers": [
+      "57-2. 성인부 여자 혼계영 200m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 2,
+        "name": "",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "57-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "57-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "57-2",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "혼계영",
+    "distance": "200m",
+    "group": "일반",
+    "is_relay": true,
+    "base_duration_sec": 190,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 110,
+    "primary_match_no": "58-1",
+    "merged_match_nos": [
+      "58-1"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 1그룹 자유형 50m 결승",
+    "original_headers": [
+      "58-1. 성인부 남자 1그룹 자유형 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 2,
+        "name": "김영준",
+        "team": "개인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "58-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "박슬우",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "58-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "김한주",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "58-1",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "자유형",
+    "distance": "50m",
+    "group": "1그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 111,
+    "primary_match_no": "58-2",
+    "merged_match_nos": [
+      "58-2"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 1그룹 자유형 50m 결승",
+    "original_headers": [
+      "58-2. 성인부 남자 1그룹 자유형 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "조성찬",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "58-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "김지환",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "58-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "이동규",
+        "team": "개인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "58-2",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "자유형",
+    "distance": "50m",
+    "group": "1그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 112,
+    "primary_match_no": "59-1",
+    "merged_match_nos": [
+      "59-1"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 2그룹 자유형 50m 결승",
+    "original_headers": [
+      "59-1. 성인부 남자 2그룹 자유형 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "조재광",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "59-1",
+        "is_our_team": true
+      },
+      {
+        "lane": 2,
+        "name": "김재훈",
+        "team": "Team JOS",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "59-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "정광원",
+        "team": "개인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "59-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "박정현",
+        "team": "팀shi",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "59-1",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "자유형",
+    "distance": "50m",
+    "group": "2그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 113,
+    "primary_match_no": "59-2",
+    "merged_match_nos": [
+      "59-2"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 2그룹 자유형 50m 결승",
+    "original_headers": [
+      "59-2. 성인부 남자 2그룹 자유형 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "김경모",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "59-2",
+        "is_our_team": true
+      },
+      {
+        "lane": 2,
+        "name": "정성민",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "59-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "위지승",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "59-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "박예한",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "59-2",
+        "is_our_team": true
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "자유형",
+    "distance": "50m",
+    "group": "2그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 114,
+    "primary_match_no": "59-3",
+    "merged_match_nos": [
+      "59-3"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 2그룹 자유형 50m 결승",
+    "original_headers": [
+      "59-3. 성인부 남자 2그룹 자유형 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "황규태",
+        "team": "개인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "59-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "박대욱",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "59-3",
+        "is_our_team": true
+      },
+      {
+        "lane": 3,
+        "name": "최호택",
+        "team": "팀shi",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "59-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "박형서",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "59-3",
+        "is_our_team": true
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "자유형",
+    "distance": "50m",
+    "group": "2그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 115,
+    "primary_match_no": "60-1",
+    "merged_match_nos": [
+      "60-1"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 3그룹 자유형 50m 결승",
+    "original_headers": [
+      "60-1. 성인부 남자 3그룹 자유형 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "임은호",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "60-1",
+        "is_our_team": true
+      },
+      {
+        "lane": 2,
+        "name": "김덕규",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "60-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "이경후",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "60-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "곽성훈",
+        "team": "DGIST",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "60-1",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "자유형",
+    "distance": "50m",
+    "group": "3그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 116,
+    "primary_match_no": "60-2",
+    "merged_match_nos": [
+      "60-2"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 3그룹 자유형 50m 결승",
+    "original_headers": [
+      "60-2. 성인부 남자 3그룹 자유형 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "안재홍",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "60-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "양기정",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "60-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "강준현",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "60-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "정성훈",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "60-2",
+        "is_our_team": true
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "자유형",
+    "distance": "50m",
+    "group": "3그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 117,
+    "primary_match_no": "60-3",
+    "merged_match_nos": [
+      "60-3"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 3그룹 자유형 50m 결승",
+    "original_headers": [
+      "60-3. 성인부 남자 3그룹 자유형 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "정성문",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "60-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "김건",
+        "team": "개인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "60-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "최치완",
+        "team": "Team JOS",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "60-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "김형준",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "60-3",
+        "is_our_team": true
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "자유형",
+    "distance": "50m",
+    "group": "3그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 118,
+    "primary_match_no": "60-4",
+    "merged_match_nos": [
+      "60-4"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 3그룹 자유형 50m 결승",
+    "original_headers": [
+      "60-4. 성인부 남자 3그룹 자유형 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 2,
+        "name": "조건희",
+        "team": "개인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "60-4",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "박우식",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "60-4",
+        "is_our_team": true
+      },
+      {
+        "lane": 4,
+        "name": "김우람",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "60-4",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "자유형",
+    "distance": "50m",
+    "group": "3그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 119,
+    "primary_match_no": "61-1",
+    "merged_match_nos": [
+      "61-1"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 4그룹 자유형 50m 결승",
+    "original_headers": [
+      "61-1. 성인부 남자 4그룹 자유형 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "임건형",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "61-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "김민재",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "61-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "이수영",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "61-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "김세종",
+        "team": "팀shi",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "61-1",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "자유형",
+    "distance": "50m",
+    "group": "4그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 120,
+    "primary_match_no": "61-2",
+    "merged_match_nos": [
+      "61-2"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 4그룹 자유형 50m 결승",
+    "original_headers": [
+      "61-2. 성인부 남자 4그룹 자유형 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "손철수",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "61-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "김병주",
+        "team": "Team JOS",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "61-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "파브지오롤로",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "61-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "변정현",
+        "team": "개인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "61-2",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "자유형",
+    "distance": "50m",
+    "group": "4그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 121,
+    "primary_match_no": "61-3",
+    "merged_match_nos": [
+      "61-3"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 4그룹 자유형 50m 결승",
+    "original_headers": [
+      "61-3. 성인부 남자 4그룹 자유형 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "양승진",
+        "team": "거제야르",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "61-3",
+        "is_our_team": true
+      },
+      {
+        "lane": 2,
+        "name": "엄정웅",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "61-3",
+        "is_our_team": true
+      },
+      {
+        "lane": 3,
+        "name": "민병철",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "61-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "안상준",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "61-3",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "자유형",
+    "distance": "50m",
+    "group": "4그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 122,
+    "primary_match_no": "61-4",
+    "merged_match_nos": [
+      "61-4"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 4그룹 자유형 50m 결승",
+    "original_headers": [
+      "61-4. 성인부 남자 4그룹 자유형 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "안창환",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "61-4",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "서종혜",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "61-4",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "고석보",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "61-4",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "자유형",
+    "distance": "50m",
+    "group": "4그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 123,
+    "primary_match_no": "61-5",
+    "merged_match_nos": [
+      "61-5"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 4그룹 자유형 50m 결승",
+    "original_headers": [
+      "61-5. 성인부 남자 4그룹 자유형 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 2,
+        "name": "이준욱",
+        "team": "Team JOS",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "61-5",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "김준영",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "61-5",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "이도형",
+        "team": "거제야르",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "61-5",
+        "is_our_team": true
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "자유형",
+    "distance": "50m",
+    "group": "4그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 124,
+    "primary_match_no": "62-1",
+    "merged_match_nos": [
+      "62-1"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 5그룹 자유형 50m 결승",
+    "original_headers": [
+      "62-1. 성인부 남자 5그룹 자유형 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "조영재",
+        "team": "DGIST",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "62-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "엄영길",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "62-1",
+        "is_our_team": true
+      },
+      {
+        "lane": 3,
+        "name": "김남곤",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "62-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "박영수",
+        "team": "DGIST",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "62-1",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "자유형",
+    "distance": "50m",
+    "group": "5그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 125,
+    "primary_match_no": "62-2",
+    "merged_match_nos": [
+      "62-2"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 남자 5그룹 자유형 50m 결승",
+    "original_headers": [
+      "62-2. 성인부 남자 5그룹 자유형 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "조충남",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "62-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "전용균",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "62-2",
+        "is_our_team": true
+      },
+      {
+        "lane": 3,
+        "name": "윤득환",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "62-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "문준호",
+        "team": "DGIST",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "62-2",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "자유형",
+    "distance": "50m",
+    "group": "5그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 126,
+    "primary_match_no": "62-3",
+    "merged_match_nos": [
+      "62-3",
+      "63"
+    ],
+    "is_merged": true,
+    "merge_note": "(62-3번,63번 합침)",
+    "title": "성인부 남자 5그룹 자유형 50m 결승 (62-3번,63번 합침)",
+    "original_headers": [
+      "62-3. 성인부 남자 5그룹 자유형 50m 결승",
+      "63. 성인부 남자 6그룹 자유형 50m 결승(62-3번,63번 합침)"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "박찬헌",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "62-3",
+        "is_our_team": true
+      },
+      {
+        "lane": 3,
+        "name": "권순용",
+        "team": "거제야르",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "63",
+        "is_our_team": true
+      },
+      {
+        "lane": 4,
+        "name": "최호균",
+        "team": "DGIST",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "63",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "남자",
+    "stroke": "자유형",
+    "distance": "50m",
+    "group": "5그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 127,
+    "primary_match_no": "64-1",
+    "merged_match_nos": [
+      "64-1"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 2그룹 자유형 50m 결승",
+    "original_headers": [
+      "64-1. 성인부 여자 2그룹 자유형 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "정혜선",
+        "team": "개인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "64-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "윤규미",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "64-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "추성비",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "64-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "김지민",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "64-1",
+        "is_our_team": true
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "자유형",
+    "distance": "50m",
+    "group": "2그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 128,
+    "primary_match_no": "64-2",
+    "merged_match_nos": [
+      "64-2"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 2그룹 자유형 50m 결승",
+    "original_headers": [
+      "64-2. 성인부 여자 2그룹 자유형 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "김지원",
+        "team": "개인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "64-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "김주희",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "64-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "김민주",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "64-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "송주미",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "64-2",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "자유형",
+    "distance": "50m",
+    "group": "2그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 129,
+    "primary_match_no": "64-3",
+    "merged_match_nos": [
+      "64-3",
+      "65-1"
+    ],
+    "is_merged": true,
+    "merge_note": "(64-3번,65-1번 합침)",
+    "title": "성인부 여자 2그룹 자유형 50m 결승 (64-3번,65-1번 합침)",
+    "original_headers": [
+      "64-3. 성인부 여자 2그룹 자유형 50m 결승",
+      "65-1. 성인부 여자 3그룹 자유형 50m 결승(64-3번,65-1번 합침)"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "이영경",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "64-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "장경화",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "65-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "박승아",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "65-1",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "자유형",
+    "distance": "50m",
+    "group": "2그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 130,
+    "primary_match_no": "65-2",
+    "merged_match_nos": [
+      "65-2"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 3그룹 자유형 50m 결승",
+    "original_headers": [
+      "65-2. 성인부 여자 3그룹 자유형 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "공채영",
+        "team": "개인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "65-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "노언영",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "65-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "김나람",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "65-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "이하선",
+        "team": "개인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "65-2",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "자유형",
+    "distance": "50m",
+    "group": "3그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 131,
+    "primary_match_no": "65-3",
+    "merged_match_nos": [
+      "65-3"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 3그룹 자유형 50m 결승",
+    "original_headers": [
+      "65-3. 성인부 여자 3그룹 자유형 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "박양재",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "65-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "박혜진",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "65-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "김나라",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "65-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "최이슬",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "65-3",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "자유형",
+    "distance": "50m",
+    "group": "3그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 132,
+    "primary_match_no": "66-1",
+    "merged_match_nos": [
+      "66-1"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 4그룹 자유형 50m 결승",
+    "original_headers": [
+      "66-1. 성인부 여자 4그룹 자유형 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "박선혜",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "66-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "홍효주",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "66-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "임영란",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "66-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "박다유",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "66-1",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "자유형",
+    "distance": "50m",
+    "group": "4그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 133,
+    "primary_match_no": "66-2",
+    "merged_match_nos": [
+      "66-2"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 4그룹 자유형 50m 결승",
+    "original_headers": [
+      "66-2. 성인부 여자 4그룹 자유형 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "김보람",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "66-2",
+        "is_our_team": true
+      },
+      {
+        "lane": 2,
+        "name": "심민경",
+        "team": "거제야르",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "66-2",
+        "is_our_team": true
+      },
+      {
+        "lane": 3,
+        "name": "하미연",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "66-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "김민희",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "66-2",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "자유형",
+    "distance": "50m",
+    "group": "4그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 134,
+    "primary_match_no": "66-3",
+    "merged_match_nos": [
+      "66-3"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 4그룹 자유형 50m 결승",
+    "original_headers": [
+      "66-3. 성인부 여자 4그룹 자유형 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "이수은",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "66-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "이연정",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "66-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "윤아림",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "66-3",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "이현경",
+        "team": "개인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "66-3",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "자유형",
+    "distance": "50m",
+    "group": "4그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 135,
+    "primary_match_no": "66-4",
+    "merged_match_nos": [
+      "66-4"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 4그룹 자유형 50m 결승",
+    "original_headers": [
+      "66-4. 성인부 여자 4그룹 자유형 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "전소영",
+        "team": "팀shi",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "66-4",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "전현주",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "66-4",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "서우선",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "66-4",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "조현정",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "66-4",
+        "is_our_team": true
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "자유형",
+    "distance": "50m",
+    "group": "4그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 136,
+    "primary_match_no": "66-5",
+    "merged_match_nos": [
+      "66-5"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 4그룹 자유형 50m 결승",
+    "original_headers": [
+      "66-5. 성인부 여자 4그룹 자유형 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 2,
+        "name": "조세비",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "66-5",
+        "is_our_team": true
+      },
+      {
+        "lane": 3,
+        "name": "김선영",
+        "team": "팀애옹",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "66-5",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "조신애",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "66-5",
+        "is_our_team": true
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "자유형",
+    "distance": "50m",
+    "group": "4그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 137,
+    "primary_match_no": "67-1",
+    "merged_match_nos": [
+      "67-1"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 5그룹 자유형 50m 결승",
+    "original_headers": [
+      "67-1. 성인부 여자 5그룹 자유형 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 1,
+        "name": "김미진",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "67-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 2,
+        "name": "전경미",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "67-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "김은주",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "67-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "이성미",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "67-1",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "자유형",
+    "distance": "50m",
+    "group": "5그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 138,
+    "primary_match_no": "67-2",
+    "merged_match_nos": [
+      "67-2"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 5그룹 자유형 50m 결승",
+    "original_headers": [
+      "67-2. 성인부 여자 5그룹 자유형 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 2,
+        "name": "김애란",
+        "team": "거제야르",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "67-2",
+        "is_our_team": true
+      },
+      {
+        "lane": 3,
+        "name": "정남정",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "67-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "허희경",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "67-2",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "자유형",
+    "distance": "50m",
+    "group": "5그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 139,
+    "primary_match_no": "68",
+    "merged_match_nos": [
+      "68"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 여자 6그룹 자유형 50m 결승",
+    "original_headers": [
+      "68. 성인부 여자 6그룹 자유형 50m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 2,
+        "name": "송원자",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "68",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "최지희",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "68",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "여자",
+    "stroke": "자유형",
+    "distance": "50m",
+    "group": "6그룹",
+    "is_relay": false,
+    "base_duration_sec": 70,
+    "has_our_swimmer": false
+  },
+  {
+    "race_index": 140,
+    "primary_match_no": "69-1",
+    "merged_match_nos": [
+      "69-1"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 혼성 핀계영 300m 결승",
+    "original_headers": [
+      "69-1. 성인부 혼성 핀계영 300m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 2,
+        "name": "",
+        "team": "TEAM해수",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "69-1",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "",
+        "team": "삼성중공업",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "69-1",
+        "is_our_team": true
+      },
+      {
+        "lane": 4,
+        "name": "",
+        "team": "TYU",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "69-1",
+        "is_our_team": false
+      }
+    ],
+    "division": "성인부",
+    "gender": "혼성",
+    "stroke": "혼성핀계영",
+    "distance": "300m",
+    "group": "일반",
+    "is_relay": true,
+    "base_duration_sec": 270,
+    "has_our_swimmer": true
+  },
+  {
+    "race_index": 141,
+    "primary_match_no": "69-2",
+    "merged_match_nos": [
+      "69-2"
+    ],
+    "is_merged": false,
+    "merge_note": null,
+    "title": "성인부 혼성 핀계영 300m 결승",
+    "original_headers": [
+      "69-2. 성인부 혼성 핀계영 300m 결승"
+    ],
+    "lanes": [
+      {
+        "lane": 2,
+        "name": "",
+        "team": "거제몽꾸",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "69-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 3,
+        "name": "",
+        "team": "해수의달인",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "69-2",
+        "is_our_team": false
+      },
+      {
+        "lane": 4,
+        "name": "",
+        "team": "거제야르",
+        "rank": null,
+        "record": null,
+        "note": null,
+        "original_match_no": "69-2",
+        "is_our_team": true
+      }
+    ],
+    "division": "성인부",
+    "gender": "혼성",
+    "stroke": "혼성핀계영",
+    "distance": "300m",
+    "group": "일반",
+    "is_relay": true,
+    "base_duration_sec": 270,
+    "has_our_swimmer": true
+  }
+]

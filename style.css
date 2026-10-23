@@ -418,6 +418,7 @@ body {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 14px;
+  align-items: start;
   transition: all 0.2s ease;
 }
 
@@ -6047,4 +6048,379 @@ body.is-admin .log-admin-actions {
 .autocomplete-item.is-already-admin {
   background: #fafafa;
   opacity: 0.75;
+}
+
+
+/* ============================================================ */
+/* Compact Adult Relay Card Enhancements                       */
+/* ============================================================ */
+.relay-team-toggle-container {
+  margin-bottom: 12px !important;
+  padding: 6px 14px !important;
+  border-radius: 10px !important;
+}
+
+.relay-team-toggle-bar {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 10px !important;
+}
+
+.relay-team-toggle-desc .relay-desc-text {
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  color: #334155 !important;
+}
+
+.btn-team-toggle {
+  padding: 5px 14px !important;
+  font-size: 12.5px !important;
+  border-radius: 7px !important;
+}
+
+.combo-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.combo-title-area {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: nowrap;
+  min-width: 0;
+}
+
+.combo-title-area .combo-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.combo-title-age {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.combo-title-age.ok {
+  background: #dcfce7;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
+}
+
+.combo-title-age.warn {
+  background: #fef3c7;
+  color: #b45309;
+  border: 1px solid #fde68a;
+}
+
+.combo-title-age.partial {
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+}
+
+.combo-title-age.empty {
+  background: #f8fafc;
+  color: #94a3b8;
+  border: 1px solid #e2e8f0;
+}
+
+.combo-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.btn-copy-card-roster {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 5px 7px;
+  color: #64748b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.btn-copy-card-roster:hover {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+  color: #1d4ed8;
+}
+
+.combo-grid {
+  grid-template-columns: repeat(auto-fill, minmax(235px, 1fr)) !important;
+}
+
+.combo-card {
+  padding: 12px 14px !important;
+  height: fit-content !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+}
+
+.combo-members-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.combo-members-list .member-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  transition: border-color 0.2s ease, background 0.2s ease;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.combo-members-list .member-pill:hover {
+  border-color: #cbd5e1;
+  background: #f1f5f9;
+}
+
+.combo-members-list .member-slot-label {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #475569;
+  min-width: 50px;
+  white-space: nowrap;
+  word-break: keep-all;
+  flex-shrink: 0;
+  text-align: center;
+  padding: 2px 5px;
+  border-radius: 4px;
+  background: #e2e8f0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.combo-members-list .member-slot-label.male {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.combo-members-list .member-slot-label.female {
+  background: #fce7f3;
+  color: #be185d;
+}
+
+.combo-members-list .combo-member-select {
+  flex: 0 0 auto;
+  width: auto;
+  max-width: calc(100% - 56px);
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 3px 6px;
+  font-size: 13px;
+  font-weight: 600;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #1e293b;
+  cursor: pointer;
+  outline: none;
+  white-space: nowrap;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.combo-members-list .combo-member-select:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
+}
+
+.combo-members-list .combo-member-select.is-selected {
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.combo-members-list .combo-member-select option {
+  background-color: #ffffff;
+  color: #0f172a;
+  font-weight: 600;
+}
+
+.combo-members-list .combo-member-select option.opt-age-under {
+  background-color: #e2e8f0;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+
+/* ============================================================ */
+/* Combo Cards Team Display (A팀 / B팀 단일 노출 & 부드러운 전환) */
+/* ============================================================ */
+.combo-teams-wrapper {
+  position: relative !important;
+  width: 100% !important;
+  display: block !important;
+}
+
+.combo-team-block {
+  width: 100% !important;
+  box-sizing: border-box !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+/* 기본값 A팀 활성화 모드 - A팀만 완전 노출, B팀은 완전히 숨김 */
+.combo-grid:not(.show-team-b) .combo-team-block[id$="ABlock"] {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  animation: relayTeamFadeSlideA 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.combo-grid:not(.show-team-b) .combo-team-block[id$="BBlock"] {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* B팀 활성화 모드 - B팀만 완전 노출, A팀은 완전히 숨김 */
+.combo-grid.show-team-b .combo-team-block[id$="ABlock"] {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+.combo-grid.show-team-b .combo-team-block[id$="BBlock"] {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  animation: relayTeamFadeSlideB 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes relayTeamFadeSlideB {
+  from {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes relayTeamFadeSlideA {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+
+/* ──────────────────────────────────────────────────────────── */
+/* Relay Top Bar (A팀(거제몽꾸) / B팀(거제야르) 최상단 토글 바)   */
+/* ──────────────────────────────────────────────────────────── */
+.relay-top-bar {
+  margin: 10px 0 16px 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 8px 14px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.relay-top-bar .relay-team-toggle-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.relay-top-bar .team-toggle-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f1f5f9;
+  padding: 4px;
+  border-radius: 10px;
+}
+
+.relay-top-bar .btn-team-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 18px !important;
+  font-size: 13.5px !important;
+  font-weight: 700 !important;
+  border: 1px solid transparent !important;
+  border-radius: 8px !important;
+  background: transparent !important;
+  color: #64748b !important;
+  cursor: pointer;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.relay-top-bar .btn-team-toggle:hover {
+  color: #1e293b !important;
+  background: rgba(255, 255, 255, 0.6) !important;
+}
+
+.relay-top-bar .btn-team-toggle.active {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08) !important;
+  border-color: #e2e8f0 !important;
+}
+
+.relay-top-bar .btn-team-toggle.active[data-team="A"] {
+  color: #0284c7 !important;
+}
+
+.relay-top-bar .btn-team-toggle.active[data-team="B"] {
+  color: #059669 !important;
+}
+
+.relay-top-bar .team-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.relay-top-bar .team-a-dot {
+  background: #0284c7;
+}
+
+.relay-top-bar .team-b-dot {
+  background: #059669;
 }

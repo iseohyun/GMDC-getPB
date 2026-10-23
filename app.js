@@ -20,7 +20,7 @@ try {
   console.error("Firebase 초기화 에러:", err);
 }
 
-const APP_VERSION = 'v2026.09.06.08';
+const APP_VERSION = 'v2026.10.23.10';
 let isScenarioMode = false;
 let isInitialSyncCompleted = false;
 let serverRecordsCache = null;
@@ -70,47 +70,47 @@ let isMatrixCompareMode = localStorage.getItem('gmdc_matrix_compare_mode') === '
 
 // Initial 40 Swimmer Records (A팀: 30명, B팀: 10명)
 const DEFAULT_RECORDS = [
-  {"id": 1, "age": "15", "group": "1그룹", "gender": "남", "name": "박슬우", "birthId": "20100223-3", "team": "A", "phone": "010-2558-7116", "address": "거제시 문동 1길, 42, 문동푸르지오 104동 2104호", "club": "거제야호", "depositor": "거제야호", "event1": "자유형 50", "event2": "접영 50", "finFly": "", "finFree": "", "free": "25.13", "back": "31", "breast": "34", "fly": "28.28"},
-  {"id": 2, "age": "15", "group": "1그룹", "gender": "남", "name": "이지훈", "birthId": "20100908-3", "team": "A", "phone": "010-4176-0239", "address": "거제시 옥포동 308 거제엘크루랜드마크 아파트 104동 2302호", "club": "거제야호", "depositor": "거제야호", "event1": "핀자유형 50", "event2": "접영 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
+  {"id": 1, "age": "15", "group": "1그룹", "gender": "남", "name": "박슬우", "birthId": "20100223-3", "team": "A", "phone": "010-2558-7116", "address": "거제시 문동 1길, 42, 문동푸르지오 104동 2104호", "club": "거제몽꾸", "depositor": "거제몽꾸", "event1": "자유형 50", "event2": "접영 50", "finFly": "", "finFree": "", "free": "25.13", "back": "31", "breast": "34", "fly": "28.28"},
+  {"id": 2, "age": "15", "group": "1그룹", "gender": "남", "name": "이지훈", "birthId": "20100908-3", "team": "A", "phone": "010-4176-0239", "address": "거제시 옥포동 308 거제엘크루랜드마크 아파트 104동 2302호", "club": "거제몽꾸", "depositor": "거제몽꾸", "event1": "핀자유형 50", "event2": "접영 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
   {"id": 3, "age": "16", "group": "1그룹", "gender": "남", "name": "이채율", "disabled": true, "birthId": "20090814-3", "team": "B", "phone": "010-7637-9313", "address": "거제시 연초면 거제북로57 연초일성유수안 104동 2302호", "club": "거제야르", "depositor": "거제야르", "event1": "핀자유형 50", "event2": "배영 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
-  {"id": 4, "age": "17", "group": "1그룹", "gender": "남", "name": "조성찬", "birthId": "20080718-3", "team": "A", "phone": "010-6681-9874", "address": "거제시 소동8길 11 스타힐스오션시티 105동 703호", "club": "거제야호", "depositor": "거제야호", "event1": "자유형 50", "event2": "배영 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
-  {"id": 5, "age": "17", "group": "1그룹", "gender": "여", "name": "이지호", "birthId": "20080506-4", "team": "A", "phone": "010-6451-0229", "address": "거제시 옥포동 308 거제엘크루랜드마크 아파트 104동 2302호", "club": "거제야호", "depositor": "거제야호", "event1": "핀자유형 50", "event2": "접영 50", "finFly": "", "finFree": "31.07", "free": "36.78", "back": "", "breast": "", "fly": ""},
-  {"id": 6, "age": "24", "group": "2그룹", "gender": "여", "name": "추성비", "birthId": "20010521-4", "team": "A", "phone": "010-2818-2055", "address": "거제시 능포로 4길5 동헌하이츠 802호", "club": "거제야호", "depositor": "거제야호", "event1": "자유형 50", "event2": "접영 50", "finFly": "", "finFree": "", "free": "40.48", "back": "", "breast": "", "fly": "47.99"},
-  {"id": 7, "age": "24", "group": "2그룹", "gender": "여", "name": "이영경", "birthId": "20011204-4", "team": "A", "phone": "010-6327-7828", "address": "거제시 장평1로 86, 삼성S빌리지 B동 1005호", "club": "거제야호", "depositor": "거제야호", "event1": "자유형 50", "event2": "접영 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
-  {"id": 8, "age": "33", "group": "3그룹", "gender": "남", "name": "안재홍", "birthId": "19920211-1", "team": "A", "phone": "010-7199-7719", "address": "거제시 아주로 100-10 111동 501호", "club": "거제야호", "depositor": "거제야호", "event1": "자유형 50", "event2": "접영 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
-  {"id": 9, "age": "38", "group": "3그룹", "gender": "여", "name": "노언영", "birthId": "19870712-2", "team": "A", "phone": "010-3833-3074", "address": "거제시 제산로86, 더샵 101동 406호", "club": "거제야호", "depositor": "거제야호", "event1": "자유형 50", "event2": "평영 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
-  {"id": 10, "age": "37", "group": "3그룹", "gender": "여", "name": "최이슬", "birthId": "19881213-2", "team": "A", "phone": "010-2398-6484", "address": "거제시 아주로73 석호해와루아파트 106동 403호", "club": "거제야호", "depositor": "거제야호", "event1": "자유형 50", "event2": "접영 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
-  {"id": 11, "age": "43", "group": "4그룹", "gender": "남", "name": "고석보", "birthId": "19821227-1", "team": "A", "phone": "010-4040-6987", "address": "거제시 능포로 218 나동 503호", "club": "거제야호", "depositor": "거제야호", "event1": "핀접영 50", "event2": "자유형 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
-  {"id": 12, "age": "44", "group": "4그룹", "gender": "남", "name": "김기용", "birthId": "19810929-1", "team": "A", "phone": "010-4018-3188", "address": "거제시 아주로 63 미진이지비아 103동 704호", "club": "거제야호", "depositor": "거제야호", "event1": "핀자유형 50", "event2": "핀접영 50", "finFly": "", "finFree": "", "free": "35.69", "back": "", "breast": "41.65", "fly": ""},
-  {"id": 13, "age": "42", "group": "4그룹", "gender": "남", "name": "김준영", "birthId": "19830201-1", "team": "A", "phone": "010-4572-7285", "address": "거제시 고현항2로 51, 202동 1804호", "club": "거제야호", "depositor": "거제야호", "event1": "자유형 50", "event2": "평영 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
-  {"id": 14, "age": "44", "group": "4그룹", "gender": "남", "name": "손철수", "birthId": "19810217-1", "team": "A", "phone": "010-7142-8269", "address": "거제시 고현항2로51 207동 3002호", "club": "거제야호", "depositor": "거제야호", "event1": "핀자유형 50", "event2": "자유형 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
-  {"id": 15, "age": "44", "group": "4그룹", "gender": "남", "name": "안상준", "birthId": "19811115-1", "team": "A", "phone": "010-4005-7171", "address": "거제시 아주2로 138, 102동 1801호", "club": "거제야호", "depositor": "거제야호", "event1": "자유형 50", "event2": "접영 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
+  {"id": 4, "age": "17", "group": "1그룹", "gender": "남", "name": "조성찬", "birthId": "20080718-3", "team": "A", "phone": "010-6681-9874", "address": "거제시 소동8길 11 스타힐스오션시티 105동 703호", "club": "거제몽꾸", "depositor": "거제몽꾸", "event1": "자유형 50", "event2": "배영 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
+  {"id": 5, "age": "17", "group": "1그룹", "gender": "여", "name": "이지호", "birthId": "20080506-4", "team": "A", "phone": "010-6451-0229", "address": "거제시 옥포동 308 거제엘크루랜드마크 아파트 104동 2302호", "club": "거제몽꾸", "depositor": "거제몽꾸", "event1": "핀자유형 50", "event2": "접영 50", "finFly": "", "finFree": "31.07", "free": "36.78", "back": "", "breast": "", "fly": ""},
+  {"id": 6, "age": "24", "group": "2그룹", "gender": "여", "name": "추성비", "birthId": "20010521-4", "team": "A", "phone": "010-2818-2055", "address": "거제시 능포로 4길5 동헌하이츠 802호", "club": "거제몽꾸", "depositor": "거제몽꾸", "event1": "자유형 50", "event2": "접영 50", "finFly": "", "finFree": "", "free": "40.48", "back": "", "breast": "", "fly": "47.99"},
+  {"id": 7, "age": "24", "group": "2그룹", "gender": "여", "name": "이영경", "birthId": "20011204-4", "team": "A", "phone": "010-6327-7828", "address": "거제시 장평1로 86, 삼성S빌리지 B동 1005호", "club": "거제몽꾸", "depositor": "거제몽꾸", "event1": "자유형 50", "event2": "접영 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
+  {"id": 8, "age": "33", "group": "3그룹", "gender": "남", "name": "안재홍", "birthId": "19920211-1", "team": "A", "phone": "010-7199-7719", "address": "거제시 아주로 100-10 111동 501호", "club": "거제몽꾸", "depositor": "거제몽꾸", "event1": "자유형 50", "event2": "접영 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
+  {"id": 9, "age": "38", "group": "3그룹", "gender": "여", "name": "노언영", "birthId": "19870712-2", "team": "A", "phone": "010-3833-3074", "address": "거제시 제산로86, 더샵 101동 406호", "club": "거제몽꾸", "depositor": "거제몽꾸", "event1": "자유형 50", "event2": "평영 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
+  {"id": 10, "age": "37", "group": "3그룹", "gender": "여", "name": "최이슬", "birthId": "19881213-2", "team": "A", "phone": "010-2398-6484", "address": "거제시 아주로73 석호해와루아파트 106동 403호", "club": "거제몽꾸", "depositor": "거제몽꾸", "event1": "자유형 50", "event2": "접영 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
+  {"id": 11, "age": "43", "group": "4그룹", "gender": "남", "name": "고석보", "birthId": "19821227-1", "team": "A", "phone": "010-4040-6987", "address": "거제시 능포로 218 나동 503호", "club": "거제몽꾸", "depositor": "거제몽꾸", "event1": "핀접영 50", "event2": "자유형 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
+  {"id": 12, "age": "44", "group": "4그룹", "gender": "남", "name": "김기용", "birthId": "19810929-1", "team": "A", "phone": "010-4018-3188", "address": "거제시 아주로 63 미진이지비아 103동 704호", "club": "거제몽꾸", "depositor": "거제몽꾸", "event1": "핀자유형 50", "event2": "핀접영 50", "finFly": "", "finFree": "", "free": "35.69", "back": "", "breast": "41.65", "fly": ""},
+  {"id": 13, "age": "42", "group": "4그룹", "gender": "남", "name": "김준영", "birthId": "19830201-1", "team": "A", "phone": "010-4572-7285", "address": "거제시 고현항2로 51, 202동 1804호", "club": "거제몽꾸", "depositor": "거제몽꾸", "event1": "자유형 50", "event2": "평영 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
+  {"id": 14, "age": "44", "group": "4그룹", "gender": "남", "name": "손철수", "birthId": "19810217-1", "team": "A", "phone": "010-7142-8269", "address": "거제시 고현항2로51 207동 3002호", "club": "거제몽꾸", "depositor": "거제몽꾸", "event1": "핀자유형 50", "event2": "자유형 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
+  {"id": 15, "age": "44", "group": "4그룹", "gender": "남", "name": "안상준", "birthId": "19811115-1", "team": "A", "phone": "010-4005-7171", "address": "거제시 아주2로 138, 102동 1801호", "club": "거제몽꾸", "depositor": "거제몽꾸", "event1": "자유형 50", "event2": "접영 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
   {"id": 16, "age": "41", "group": "4그룹", "gender": "남", "name": "양승진", "birthId": "19840221-1", "team": "B", "phone": "010-4252-4589", "address": "거제시 장평2로19 103동 402호", "club": "거제야르", "depositor": "거제야르", "event1": "자유형 50", "event2": "", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
   {"id": 17, "age": "44", "group": "4그룹", "gender": "남", "name": "이도형", "birthId": "19810823-1", "team": "B", "phone": "010-5155-2728", "address": "거제시 장평1로 86, 삼성S빌리지 B동 202호", "club": "거제야르", "depositor": "거제야르", "event1": "자유형 50", "event2": "핀자유형 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
   {"id": 18, "age": "42", "group": "4그룹", "gender": "남", "name": "정서현", "birthId": "19830903-1", "team": "B", "phone": "010-4266-4766", "address": "거제시 상동5길 117-16, 206동 402호", "club": "거제야르", "depositor": "거제야르", "event1": "배영 50", "event2": "평영 50", "finFly": "", "finFree": "27.92", "free": "33.59", "back": "", "breast": "", "fly": ""},
   {"id": 19, "age": "47", "group": "4그룹", "gender": "여", "name": "김상희", "birthId": "19780602-2", "team": "B", "phone": "010-6880-5472", "address": "거제시 제산로 2-5 삼성쉐르빌APT 105동 904호", "club": "거제야르", "depositor": "거제야르", "event1": "핀자유형 50", "event2": "", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
-  {"id": 20, "age": "43", "group": "4그룹", "gender": "여", "name": "박다유", "birthId": "19820825-2", "team": "A", "phone": "010-8234-5210", "address": "거제시 장평1로 86, 삼성S빌리지 B동 202호", "club": "거제야호", "depositor": "거제야호", "event1": "자유형 50", "event2": "배영 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
-  {"id": 21, "age": "48", "group": "4그룹", "gender": "여", "name": "손혜정", "birthId": "19770415-2", "team": "A", "phone": "010-8603-9827", "address": "거제시 일운면 소동8길 11, 서희 108동 303호", "club": "거제야호", "depositor": "거제야호", "event1": "핀자유형 50", "event2": "핀접영 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
+  {"id": 20, "age": "43", "group": "4그룹", "gender": "여", "name": "박다유", "birthId": "19820825-2", "team": "A", "phone": "010-8234-5210", "address": "거제시 장평1로 86, 삼성S빌리지 B동 202호", "club": "거제몽꾸", "depositor": "거제몽꾸", "event1": "자유형 50", "event2": "배영 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
+  {"id": 21, "age": "48", "group": "4그룹", "gender": "여", "name": "손혜정", "birthId": "19770415-2", "team": "A", "phone": "010-8603-9827", "address": "거제시 일운면 소동8길 11, 서희 108동 303호", "club": "거제몽꾸", "depositor": "거제몽꾸", "event1": "평영 50", "event2": "핀접영 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
   {"id": 22, "age": "40", "group": "4그룹", "gender": "여", "name": "심민경", "birthId": "19850520-2", "team": "B", "phone": "010-9611-8332", "address": "거제시 거제 중앙로3길 15, 102동 1003호", "club": "거제야르", "depositor": "거제야르", "event1": "자유형 50", "event2": "배영 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
   {"id": 23, "age": "42", "group": "4그룹", "gender": "여", "name": "여수연", "birthId": "19830209-2", "team": "B", "phone": "010-3723-8453", "address": "거제시 용소1길 17-17, 푸르지오 108동 203호", "club": "거제야르", "depositor": "거제야르", "event1": "핀자유형 50", "event2": "", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
-  {"id": 24, "age": "44", "group": "4그룹", "gender": "여", "name": "이미영", "birthId": "19811014-2", "team": "A", "phone": "010-9688-1754", "address": "거제시 아주로 63 미진이지비아 103동 704호", "club": "거제야호", "depositor": "거제야호", "event1": "핀자유형 50", "event2": "핀접영 50", "finFly": "", "finFree": "30.42", "free": "", "back": "", "breast": "", "fly": "57.17"},
+  {"id": 24, "age": "44", "group": "4그룹", "gender": "여", "name": "이미영", "birthId": "19811014-2", "team": "A", "phone": "010-9688-1754", "address": "거제시 아주로 63 미진이지비아 103동 704호", "club": "거제몽꾸", "depositor": "거제몽꾸", "event1": "핀자유형 50", "event2": "핀접영 50", "finFly": "", "finFree": "30.42", "free": "", "back": "", "breast": "", "fly": "57.17"},
   {"id": 25, "age": "41", "group": "4그룹", "gender": "여", "name": "이은희", "birthId": "19840528-2", "team": "B", "phone": "010-7456-1512", "address": "거제시 상동1길 15-9, 302동 104호", "club": "거제야르", "depositor": "거제야르", "event1": "배영 50", "event2": "평영 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "50", "fly": ""},
-  {"id": 26, "age": "50", "group": "5그룹", "gender": "남", "name": "박재홍", "birthId": "19750715-1", "team": "A", "phone": "010-8707-5940", "address": "거제시 아주로 100-11 204동 602호", "club": "거제야호", "depositor": "거제야호", "event1": "핀자유형 50", "event2": "핀접영 50", "finFly": "30.29", "finFree": "28.08", "free": "", "back": "", "breast": "", "fly": ""},
-  {"id": 27, "age": "57", "group": "5그룹", "gender": "남", "name": "박진홍", "birthId": "19681220-1", "team": "A", "phone": "010-2517-9826", "address": "거제시 일운면 소동8길 11, 서희 108동 303호", "club": "거제야호", "depositor": "거제야호", "event1": "핀자유형 50", "event2": "핀접영 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
-  {"id": 28, "age": "50", "group": "5그룹", "gender": "남", "name": "서충근", "birthId": "19750724-1", "team": "A", "phone": "010-5566-3542", "address": "거제시 성산로42 옥포이편한세상", "club": "거제야호", "depositor": "거제야호", "event1": "핀자유형 50", "event2": "핀접영 50", "finFly": "", "finFree": "27.43", "free": "", "back": "", "breast": "", "fly": "99.99"},
-  {"id": 29, "age": "50", "group": "5그룹", "gender": "남", "name": "성지경", "birthId": "19750223-1", "team": "A", "phone": "010-2587-7399", "address": "거제시 상동5길 117-50, 303동 204호", "club": "거제야호", "depositor": "거제야호", "event1": "핀자유형 50", "event2": "핀접영 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
-  {"id": 30, "age": "51", "group": "5그룹", "gender": "남", "name": "이경열", "birthId": "19740501-1", "team": "A", "phone": "010-5065-8643", "address": "거제시 아주로 73, 석호해와루아파트 103동 603호", "club": "거제야호", "depositor": "거제야호", "event1": "핀자유형 50", "event2": "평영 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "43.51", "fly": ""},
+  {"id": 26, "age": "50", "group": "5그룹", "gender": "남", "name": "박재홍", "birthId": "19750715-1", "team": "A", "phone": "010-8707-5940", "address": "거제시 아주로 100-11 204동 602호", "club": "거제몽꾸", "depositor": "거제몽꾸", "event1": "핀자유형 50", "event2": "핀접영 50", "finFly": "30.29", "finFree": "28.08", "free": "", "back": "", "breast": "", "fly": ""},
+  {"id": 27, "age": "57", "group": "5그룹", "gender": "남", "name": "박진홍", "birthId": "19681220-1", "team": "A", "phone": "010-2517-9826", "address": "거제시 일운면 소동8길 11, 서희 108동 303호", "club": "거제몽꾸", "depositor": "거제몽꾸", "event1": "핀자유형 50", "event2": "핀접영 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
+  {"id": 28, "age": "50", "group": "5그룹", "gender": "남", "name": "서충근", "birthId": "19750724-1", "team": "A", "phone": "010-5566-3542", "address": "거제시 성산로42 옥포이편한세상", "club": "거제몽꾸", "depositor": "거제몽꾸", "event1": "핀자유형 50", "event2": "핀접영 50", "finFly": "", "finFree": "27.43", "free": "", "back": "", "breast": "", "fly": "99.99"},
+  {"id": 29, "age": "50", "group": "5그룹", "gender": "남", "name": "성지경", "birthId": "19750223-1", "team": "A", "phone": "010-2587-7399", "address": "거제시 상동5길 117-50, 303동 204호", "club": "거제몽꾸", "depositor": "거제몽꾸", "event1": "핀자유형 50", "event2": "핀접영 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
+  {"id": 30, "age": "51", "group": "5그룹", "gender": "남", "name": "이경열", "birthId": "19740501-1", "team": "A", "phone": "010-5065-8643", "address": "거제시 아주로 73, 석호해와루아파트 103동 603호", "club": "거제몽꾸", "depositor": "거제몽꾸", "event1": "핀자유형 50", "event2": "평영 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "43.51", "fly": ""},
   {"id": 31, "age": "53", "group": "5그룹", "gender": "여", "name": "김애란", "birthId": "19720727-2", "team": "B", "phone": "010-5146-9873", "address": "거제시 소동8길 11 스타힐스오션시티 105동 703호", "club": "거제야르", "depositor": "거제야르", "event1": "자유형 50", "event2": "배영 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
-  {"id": 32, "age": "58", "group": "5그룹", "gender": "여", "name": "박선화", "birthId": "19671212-2", "team": "A", "phone": "010-2599-6441", "address": "거제시 옥수로6길160 조각공원빌 501호", "club": "거제야호", "depositor": "거제야호", "event1": "핀자유형 50", "event2": "평영 50", "finFly": "", "finFree": "33.64", "free": "46.66", "back": "", "breast": "", "fly": ""},
-  {"id": 33, "age": "56", "group": "5그룹", "gender": "여", "name": "전경미", "birthId": "19690201-2", "team": "A", "phone": "010-6332-4009", "address": "거제시 아주2로 2길 10 코오롱하늘채 102동 302호", "club": "거제야호", "depositor": "거제야호", "event1": "핀자유형 50", "event2": "핀접영 50", "finFly": "", "finFree": "32.42", "free": "", "back": "55.88", "breast": "", "fly": ""},
-  {"id": 34, "age": "62", "group": "6그룹", "gender": "남", "name": "박봉권", "birthId": "19630807-1", "team": "A", "phone": "010-9669-5629", "address": "거제시 장승포로 16번 1호", "club": "거제야호", "depositor": "거제야호", "event1": "배영 50", "event2": "평영 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
-  {"id": 35, "age": "63", "group": "6그룹", "gender": "남", "name": "성환용", "birthId": "19620713-1", "team": "A", "phone": "010-9689-2830", "address": "거제시 능포로2길 38, 옥명대우아파트 105동 1203호", "club": "거제야호", "depositor": "거제야호", "event1": "핀자유형 50", "event2": "핀접영 50", "finFly": "", "finFree": "99.99", "free": "", "back": "", "breast": "", "fly": ""},
-  {"id": 36, "age": "59", "group": "6그룹", "gender": "여", "name": "송원자", "birthId": "19660325-2", "team": "A", "phone": "010-2854-3715", "address": "거제시 능포로2길62 롯데캐슬 302동 801호", "club": "거제야호", "depositor": "거제야호", "event1": "자유형 50", "event2": "평영 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
-  {"id": 37, "age": "62", "group": "6그룹", "gender": "여", "name": "최지희", "birthId": "19630705-2", "team": "A", "phone": "010-3560-6375", "address": "거제시 상동7길30, 대동다숲 124동 1406호", "club": "거제야호", "depositor": "거제야호", "event1": "자유형 50", "event2": "핀자유형 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
+  {"id": 32, "age": "58", "group": "5그룹", "gender": "여", "name": "박선화", "birthId": "19671212-2", "team": "A", "phone": "010-2599-6441", "address": "거제시 옥수로6길160 조각공원빌 501호", "club": "거제몽꾸", "depositor": "거제몽꾸", "event1": "핀자유형 50", "event2": "평영 50", "finFly": "", "finFree": "33.64", "free": "46.66", "back": "", "breast": "", "fly": ""},
+  {"id": 33, "age": "56", "group": "5그룹", "gender": "여", "name": "전경미", "birthId": "19690201-2", "team": "A", "phone": "010-6332-4009", "address": "거제시 아주2로 2길 10 코오롱하늘채 102동 302호", "club": "거제몽꾸", "depositor": "거제몽꾸", "event1": "핀자유형 50", "event2": "자유형 50", "finFly": "", "finFree": "32.42", "free": "", "back": "55.88", "breast": "", "fly": ""},
+  {"id": 34, "age": "62", "group": "6그룹", "gender": "남", "name": "박봉권", "birthId": "19630807-1", "team": "A", "phone": "010-9669-5629", "address": "거제시 장승포로 16번 1호", "club": "거제몽꾸", "depositor": "거제몽꾸", "event1": "배영 50", "event2": "평영 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
+  {"id": 35, "age": "63", "group": "6그룹", "gender": "남", "name": "성환용", "birthId": "19620713-1", "team": "A", "phone": "010-9689-2830", "address": "거제시 능포로2길 38, 옥명대우아파트 105동 1203호", "club": "거제몽꾸", "depositor": "거제몽꾸", "event1": "핀자유형 50", "event2": "핀접영 50", "finFly": "", "finFree": "99.99", "free": "", "back": "", "breast": "", "fly": ""},
+  {"id": 36, "age": "59", "group": "6그룹", "gender": "여", "name": "송원자", "birthId": "19660325-2", "team": "A", "phone": "010-2854-3715", "address": "거제시 능포로2길62 롯데캐슬 302동 801호", "club": "거제몽꾸", "depositor": "거제몽꾸", "event1": "자유형 50", "event2": "평영 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
+  {"id": 37, "age": "62", "group": "6그룹", "gender": "여", "name": "최지희", "birthId": "19630705-2", "team": "A", "phone": "010-3560-6375", "address": "거제시 상동7길30, 대동다숲 124동 1406호", "club": "거제몽꾸", "depositor": "거제몽꾸", "event1": "자유형 50", "event2": "핀자유형 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
   {"id": 38, "age": "61", "group": "6그룹", "gender": "남", "name": "권순용", "birthId": "19650101-1", "team": "B", "phone": "010-5890-7052", "address": "거제시 동부면 거제남서로 3136", "club": "거제야르", "depositor": "거제야르", "event1": "자유형 50", "event2": "평영 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
   {"id": 39, "age": "27", "group": "2그룹", "gender": "남", "name": "정성민", "birthId": "19990101-1", "team": "B", "phone": "010-9989-7218", "address": "거제시 동부면 산양리 671-1", "club": "거제야르", "depositor": "거제야르", "event1": "자유형 50", "event2": "평영 50", "finFly": "", "finFree": "", "free": "33", "back": "", "breast": "", "fly": ""},
-  {"id": 41, "age": "17", "group": "1그룹", "gender": "남", "name": "이동규", "disabled": true, "birthId": "20080508-3", "team": "A", "phone": "010-8301-1709", "address": "거제시 문동1길 42, 110동 1202호", "club": "거제야호", "depositor": "거제야호", "event1": "자유형 50", "event2": "평영 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
-  {"id": 42, "age": "56", "group": "5그룹", "gender": "남", "name": "서정찬", "birthId": "19700310-1", "team": "A", "phone": "010-8501-0605", "address": "옥포대첩로 115 영진자이온 104동1101호", "club": "거제야호", "depositor": "거제야호", "event1": "핀접영 50", "event2": "평영 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
+  {"id": 41, "age": "17", "group": "1그룹", "gender": "남", "name": "이동규", "disabled": true, "birthId": "20080508-3", "team": "A", "phone": "010-8301-1709", "address": "거제시 문동1길 42, 110동 1202호", "club": "거제몽꾸", "depositor": "거제몽꾸", "event1": "자유형 50", "event2": "평영 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
+  {"id": 42, "age": "56", "group": "5그룹", "gender": "남", "name": "서정찬", "birthId": "19700310-1", "team": "A", "phone": "010-8501-0605", "address": "옥포대첩로 115 영진자이온 104동1101호", "club": "거제몽꾸", "depositor": "거제몽꾸", "event1": "핀접영 50", "event2": "평영 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""},
   {"id": 43, "age": "47", "group": "4그룹", "gender": "남", "name": "윤주권", "birthId": "19790522-1", "team": "B", "phone": "010-6606-7048", "address": "거제 용소7길20, 104동 501호", "club": "거제야르", "depositor": "거제야르", "event1": "핀자유형 50", "event2": "핀접영 50", "finFly": "", "finFree": "", "free": "", "back": "", "breast": "", "fly": ""}
 ];
 
@@ -181,6 +181,34 @@ let saveTimeout = null;
 // ==========================================
 const PINNED_RELAYS_STORAGE_KEY = "gmdc_pinned_relays_v3";
 
+// ─── Tournament Age Helper (성인부 대회당일: 2026-10-25 기준 생일 경과 만 나이) ───
+const TOURNAMENT_DATE_ADULT = { year: 2026, month: 10, day: 25 };
+
+function getTournamentAge(swimmer) {
+  if (!swimmer) return 0;
+  const birthId = typeof swimmer === 'string' ? swimmer : swimmer.birthId;
+  if (!birthId || typeof birthId !== 'string') {
+    return parseFloat(swimmer.age) || 0;
+  }
+
+  const clean = birthId.split('-')[0].trim();
+  if (clean.length >= 8) {
+    const y = parseInt(clean.substring(0, 4), 10);
+    const m = parseInt(clean.substring(4, 6), 10);
+    const d = parseInt(clean.substring(6, 8), 10);
+
+    let age = TOURNAMENT_DATE_ADULT.year - y;
+    // 대회당일(2026-10-25) 기준 생일이 아직 지나지 않았으면 -1
+    if (m > TOURNAMENT_DATE_ADULT.month || (m === TOURNAMENT_DATE_ADULT.month && d > TOURNAMENT_DATE_ADULT.day)) {
+      age -= 1;
+    }
+    return age;
+  }
+
+  return parseFloat(swimmer.age) || 0;
+}
+
+
 const RELAY_TITLES = {
   combo1: '혼성 핀계영 300m',
   combo2: '남자 계영 200m',
@@ -208,28 +236,54 @@ const DEFAULT_PINNED_RELAYS = {
 
 let pinnedRelaysState = JSON.parse(JSON.stringify(DEFAULT_PINNED_RELAYS));
 
+
+function normalizePinnedRelaysState(data) {
+  if (!data || typeof data !== 'object') {
+    return JSON.parse(JSON.stringify(DEFAULT_PINNED_RELAYS));
+  }
+  const result = {
+    A: { ...DEFAULT_PINNED_RELAYS.A },
+    B: { ...DEFAULT_PINNED_RELAYS.B }
+  };
+
+  ['A', 'B'].forEach(team => {
+    const teamData = data[team] || {};
+    ['combo1', 'combo2', 'combo3'].forEach(key => {
+      const val = teamData[key];
+      if (Array.isArray(val) && val.length > 0) {
+        result[team][key] = [...val];
+      } else if (val && typeof val === 'object' && Object.keys(val).length > 0) {
+        result[team][key] = Object.values(val);
+      } else {
+        result[team][key] = [...DEFAULT_PINNED_RELAYS[team][key]];
+      }
+    });
+
+    ['combo4', 'combo5'].forEach(key => {
+      const val = teamData[key];
+      if (val && typeof val === 'object' && Object.keys(val).length > 0) {
+        result[team][key] = {
+          back: val.back || null,
+          breast: val.breast || null,
+          fly: val.fly || null,
+          free: val.free || null
+        };
+      } else {
+        result[team][key] = { ...DEFAULT_PINNED_RELAYS[team][key] };
+      }
+    });
+  });
+
+  return result;
+}
+
 function loadPinnedRelays() {
   try {
     const saved = localStorage.getItem(PINNED_RELAYS_STORAGE_KEY);
     if (saved) {
       const parsed = JSON.parse(saved);
-      if (parsed && parsed.A && parsed.B) {
-        pinnedRelaysState = {
-          A: { ...DEFAULT_PINNED_RELAYS.A, ...parsed.A },
-          B: { ...DEFAULT_PINNED_RELAYS.B, ...parsed.B }
-        };
-        ['combo1', 'combo2', 'combo3'].forEach(key => {
-          if (!pinnedRelaysState.B[key] || pinnedRelaysState.B[key].length === 0) {
-            pinnedRelaysState.B[key] = [...DEFAULT_PINNED_RELAYS.B[key]];
-          }
-        });
-        ['combo4', 'combo5'].forEach(key => {
-          if (!pinnedRelaysState.B[key] || Object.values(pinnedRelaysState.B[key]).filter(Boolean).length === 0) {
-            pinnedRelaysState.B[key] = { ...DEFAULT_PINNED_RELAYS.B[key] };
-          }
-        });
-        return;
-      }
+      pinnedRelaysState = normalizePinnedRelaysState(parsed);
+      return;
     }
   } catch (e) {
     console.warn("Failed to load pinned relays:", e);
@@ -480,8 +534,54 @@ function initDisabledToggle() {
 }
 
 // Init application
+
+// ============================================================
+// Adult Relay Team Toggle (A팀(거제몽꾸) vs B팀(거제야르) 전체 전환 & 슬라이드)
+// ============================================================
+function initAdultRelayTeamToggle() {
+  const btnA = document.getElementById('btnRelayTeamA');
+  const btnB = document.getElementById('btnRelayTeamB');
+  const comboGrid = document.getElementById('comboGrid');
+
+  if (!btnA || !btnB || !comboGrid) return;
+
+  function setActiveTeam(team) {
+    const isTeamB = team === 'B';
+    comboGrid.classList.toggle('show-team-b', isTeamB);
+    
+    btnA.classList.toggle('active', !isTeamB);
+    btnA.setAttribute('aria-selected', String(!isTeamB));
+    
+    btnB.classList.toggle('active', isTeamB);
+    btnB.setAttribute('aria-selected', String(isTeamB));
+
+    try {
+      localStorage.setItem('gmdc_adult_active_team', team);
+    } catch (e) {}
+
+    if (typeof updateRelayTitleAges === 'function') {
+      updateRelayTitleAges();
+    }
+  }
+
+  btnA.addEventListener('click', () => setActiveTeam('A'));
+  btnB.addEventListener('click', () => setActiveTeam('B'));
+
+  // Default to A team or saved preference
+  const savedTeam = localStorage.getItem('gmdc_adult_active_team') || 'A';
+  setActiveTeam(savedTeam);
+}
+
 function init() {
   window.__GMDC_VERSION__ = APP_VERSION;
+  // 성인부 선수 나이를 대회당일(2026-10-25) 기준 만 나이로 일괄 동기화
+  if (Array.isArray(records)) {
+    records.forEach(r => {
+      if (r && r.birthId) {
+        r.age = String(getTournamentAge(r));
+      }
+    });
+  }
   console.log(`%c[GMDC Swim] App Version: ${APP_VERSION}`, 'color: #0284c7; font-weight: bold; font-size: 12px;');
   initAuth({
     showToast: showToast,
@@ -493,6 +593,7 @@ function init() {
     }
   });
   loadPinnedRelays();
+  initAdultRelayTeamToggle();
   initStickyPreference();
   initNoticeModal();
   initAuditModal();
@@ -2060,7 +2161,7 @@ function mergeWithDefaultData(remoteList) {
   const list = validRemote.map(item => {
     const def = DEFAULT_RECORDS.find(d => d.id === item.id || d.name === item.name) || {};
     const team = item.team !== undefined ? item.team : (def.team || 'A');
-    const depositor = team === 'B' ? '거제야르' : '거제야호';
+    const depositor = team === 'B' ? '거제야르' : '거제몽꾸';
     return {
       id: item.id || def.id || 0,
       age: item.age !== undefined ? item.age : (def.age || ''),
@@ -2071,7 +2172,7 @@ function mergeWithDefaultData(remoteList) {
       team: team,
       phone: (item.phone && String(item.phone).trim() !== '') ? item.phone : (def.phone || ''),
       address: cleanAddress((item.address && String(item.address).trim() !== '') ? item.address : (def.address || '')),
-      club: (item.club && !['GMDC', 'GMDC야호'].includes(item.club)) ? item.club : (team === 'B' ? '거제야르' : '거제야호'),
+      club: (item.club && !['GMDC', 'GMDC야호'].includes(item.club)) ? item.club : (team === 'B' ? '거제야르' : '거제몽꾸'),
       disabled: item.disabled !== undefined ? item.disabled : (def.disabled || (item.name === '이동규' || item.name === '이채율' ? true : false)),
       depositor: depositor,
       event1: item.event1 !== undefined ? item.event1 : (def.event1 || ''),
@@ -2269,18 +2370,36 @@ function switchView(viewName) {
   if (currentScroll > 0) {
     window.scrollTo({ top: currentScroll, behavior: 'instant' });
   }
+
+  // Synchronize parent SPA sidebar active highlight if running inside iframe
+  try {
+    if (window.parent && window.parent !== window && typeof window.parent.navigateToRoute === 'function') {
+      const parentHash = viewName === 'events' ? '#/roster-adult-indiv' : '#/roster-adult-relay';
+      if (window.parent.location.hash !== parentHash) {
+        window.parent.navigateToRoute(parentHash);
+      }
+    }
+  } catch (e) {}
 }
 
+// Expose switchView for SPA shell integration
+window.switchView = switchView;
+
 function handleUrlRouting() {
-  const hash = window.location.hash.replace('#', '');
-  if (hash === 'events') {
+  const params = new URLSearchParams(window.location.search);
+  const queryView = (params.get('view') || '').toLowerCase();
+  const hash = window.location.hash.replace('#', '').toLowerCase();
+  if (queryView === 'events' || (!queryView && hash === 'events')) {
     switchView('events');
   } else {
     switchView('records');
   }
 
   window.addEventListener('hashchange', () => {
-    const newHash = window.location.hash.replace('#', '');
+    const newParams = new URLSearchParams(window.location.search);
+    const qView = (newParams.get('view') || '').toLowerCase();
+    if (qView === 'events' || qView === 'records') return;
+    const newHash = window.location.hash.replace('#', '').toLowerCase();
     if (newHash === 'events' && currentView !== 'events') {
       switchView('events');
     } else if (newHash !== 'events' && currentView !== 'records') {
@@ -2951,7 +3070,7 @@ function renderEventsTable() {
         ${escapeHtml(item.phone || '-')}
       </td>
       <td class="col-detail" style="text-align:center; font-size:12px; font-weight:600; color:var(--text-main);">
-        ${escapeHtml(item.depositor || (item.team === 'B' ? '거제야르' : '거제야호'))}
+        ${escapeHtml(item.depositor || (item.team === 'B' ? '거제야르' : '거제몽꾸'))}
       </td>
       <td class="col-detail" style="text-align:left; font-size:12px; color:var(--text-muted); max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${escapeHtml(item.address || '')}">
         ${escapeHtml(item.address || '-')}
@@ -2980,7 +3099,7 @@ function copyEventsToClipboard() {
       item.event1 || '',
       item.event2 || '',
       item.phone || '',
-      item.depositor || (item.team === 'B' ? '거제야르' : '거제야호'),
+      item.depositor || (item.team === 'B' ? '거제야르' : '거제몽꾸'),
       item.address || ''
     ].join('\t');
   });
@@ -3038,8 +3157,8 @@ function copyComboTeamToClipboard(comboKey, team) {
       relayTitle,
       m.strokeName ? `${m.strokeName} 50` : '',
       swimmer.phone || '',
-      swimmer.club || (team === 'B' ? '거제야르' : '거제야호'),
-      swimmer.depositor || (team === 'B' ? '거제야르' : '거제야호')
+      swimmer.club || (team === 'B' ? '거제야르' : '거제몽꾸'),
+      swimmer.depositor || (team === 'B' ? '거제야르' : '거제몽꾸')
     ].join('\t');
   });
 
@@ -3111,8 +3230,8 @@ function computeFinRelay(team = 'A', records, pinnedList = [], excludeSwimmerNam
   const pinnedMenNames = new Set(pinnedMen.map(s => s.name));
   const pinnedWomenNames = new Set(pinnedWomen.map(s => s.name));
 
-  const availableMen = teamRecords.filter(r => r.gender === '남' && parseFloat(r.age) > 0 && !pinnedMenNames.has(r.name));
-  const availableWomen = teamRecords.filter(r => r.gender === '여' && parseFloat(r.age) > 0 && !pinnedWomenNames.has(r.name));
+  const availableMen = teamRecords.filter(r => r.gender === '남' && getTournamentAge(r) > 0 && !pinnedMenNames.has(r.name));
+  const availableWomen = teamRecords.filter(r => r.gender === '여' && getTournamentAge(r) > 0 && !pinnedWomenNames.has(r.name));
 
   if (availableMen.length < neededMen || availableWomen.length < neededWomen) {
     return { status: 'NOT_ENOUGH', message: `핀자유 후보 인원 부족 (남 필요: ${neededMen}, 여 필요: ${neededWomen})` };
@@ -3121,9 +3240,9 @@ function computeFinRelay(team = 'A', records, pinnedList = [], excludeSwimmerNam
   const menCombos = neededMen === 0 ? [[]] : getCombinations(availableMen, neededMen);
   const womenCombos = neededWomen === 0 ? [[]] : getCombinations(availableWomen, neededWomen);
 
-  const pinnedMenAge = pinnedMen.reduce((sum, r) => sum + (parseFloat(r.age) || 0), 0);
+  const pinnedMenAge = pinnedMen.reduce((sum, r) => sum + (getTournamentAge(r) || 0), 0);
   const pinnedMenScore = pinnedMen.reduce((sum, r) => sum + getRankTime(r, 'finFree'), 0);
-  const pinnedWomenAge = pinnedWomen.reduce((sum, r) => sum + (parseFloat(r.age) || 0), 0);
+  const pinnedWomenAge = pinnedWomen.reduce((sum, r) => sum + (getTournamentAge(r) || 0), 0);
   const pinnedWomenScore = pinnedWomen.reduce((sum, r) => sum + getRankTime(r, 'finFree'), 0);
 
   let bestScore = Infinity;
@@ -3133,11 +3252,11 @@ function computeFinRelay(team = 'A', records, pinnedList = [], excludeSwimmerNam
   let maxAgeFound = 0;
 
   for (const mSub of menCombos) {
-    const mAge = pinnedMenAge + mSub.reduce((sum, r) => sum + parseFloat(r.age), 0);
+    const mAge = pinnedMenAge + mSub.reduce((sum, r) => sum + getTournamentAge(r), 0);
     const mScore = pinnedMenScore + mSub.reduce((sum, r) => sum + getRankTime(r, 'finFree'), 0);
 
     for (const wSub of womenCombos) {
-      const wAge = pinnedWomenAge + wSub.reduce((sum, r) => sum + parseFloat(r.age), 0);
+      const wAge = pinnedWomenAge + wSub.reduce((sum, r) => sum + getTournamentAge(r), 0);
       const totalAge = mAge + wAge;
       if (totalAge > maxAgeFound) maxAgeFound = totalAge;
 
@@ -3145,7 +3264,7 @@ function computeFinRelay(team = 'A', records, pinnedList = [], excludeSwimmerNam
         const wScore = pinnedWomenScore + wSub.reduce((sum, r) => sum + getRankTime(r, 'finFree'), 0);
         const totalScore = mScore + wScore;
 
-        if (totalScore < bestScore) {
+        if (totalScore < bestScore || (Math.abs(totalScore - bestScore) < 0.001 && totalAge < bestAge)) {
           bestScore = totalScore;
           bestAge = totalAge;
           bestMenGroup = mSub;
@@ -3224,14 +3343,14 @@ function computeFreestyleRelay(gender, team = 'A', records, pinnedList = [], exc
   if (needed < 0) return { status: 'ERROR', message: '고정 인원이 4명을 초과했습니다.' };
 
   const pinnedNames = new Set(pinnedSwimmers.map(s => s.name));
-  const available = teamRecords.filter(r => r.gender === gender && parseFloat(r.age) > 0 && !pinnedNames.has(r.name));
+  const available = teamRecords.filter(r => r.gender === gender && getTournamentAge(r) > 0 && !pinnedNames.has(r.name));
 
   if (available.length < needed) {
     return { status: 'NOT_ENOUGH', message: `자유형 인원 부족 (${gender} 필요: ${needed}, 후보: ${available.length})` };
   }
 
   const combos = needed === 0 ? [[]] : getCombinations(available, needed);
-  const pinnedAge = pinnedSwimmers.reduce((sum, r) => sum + (parseFloat(r.age) || 0), 0);
+  const pinnedAge = pinnedSwimmers.reduce((sum, r) => sum + (getTournamentAge(r) || 0), 0);
   const pinnedScore = pinnedSwimmers.reduce((sum, r) => sum + getRankTime(r, 'free'), 0);
 
   let bestScore = Infinity;
@@ -3240,7 +3359,7 @@ function computeFreestyleRelay(gender, team = 'A', records, pinnedList = [], exc
   let maxAgeFound = 0;
 
   for (const sub of combos) {
-    const subAge = sub.reduce((sum, r) => sum + parseFloat(r.age), 0);
+    const subAge = sub.reduce((sum, r) => sum + getTournamentAge(r), 0);
     const totalAge = pinnedAge + subAge;
     if (totalAge > maxAgeFound) maxAgeFound = totalAge;
 
@@ -3248,7 +3367,7 @@ function computeFreestyleRelay(gender, team = 'A', records, pinnedList = [], exc
       const subScore = sub.reduce((sum, r) => sum + getRankTime(r, 'free'), 0);
       const totalScore = pinnedScore + subScore;
 
-      if (totalScore < bestScore) {
+      if (totalScore < bestScore || (Math.abs(totalScore - bestScore) < 0.001 && totalAge < bestAge)) {
         bestScore = totalScore;
         bestAge = totalAge;
         bestAutoGroup = sub;
@@ -3304,7 +3423,7 @@ function computeFreestyleRelay(gender, team = 'A', records, pinnedList = [], exc
 // 4 & 5. 혼계영 200m (배영, 평영, 접영, 자유형 각 1명, 4명 고유, 도합 >= 160세)
 function computeMedleyRelay(gender, team = 'A', records, pinnedMap = {}, excludeSwimmerNames = new Set()) {
   const teamRecords = records.filter(r => (r.team || 'A') === team && isSwimmerActive(r) && !excludeSwimmerNames.has(r.name));
-  const pool = teamRecords.filter(r => r.gender === gender && parseFloat(r.age) > 0);
+  const pool = teamRecords.filter(r => r.gender === gender && getTournamentAge(r) > 0);
 
   const strokes = ['back', 'breast', 'fly', 'free'];
 
@@ -3338,22 +3457,22 @@ function computeMedleyRelay(gender, team = 'A', records, pinnedMap = {}, exclude
   let maxAgeFound = 0;
 
   for (const sBack of candidates.back) {
-    const ageBack = parseFloat(sBack.age) || 0;
+    const ageBack = getTournamentAge(sBack);
     const scoreBack = getRankTime(sBack, 'back');
 
     for (const sBreast of candidates.breast) {
       if (sBreast.name === sBack.name) continue;
-      const ageBreast = parseFloat(sBreast.age) || 0;
+      const ageBreast = getTournamentAge(sBreast);
       const scoreBreast = getRankTime(sBreast, 'breast');
 
       for (const sFly of candidates.fly) {
         if (sFly.name === sBack.name || sFly.name === sBreast.name) continue;
-        const ageFly = parseFloat(sFly.age) || 0;
+        const ageFly = getTournamentAge(sFly);
         const scoreFly = getRankTime(sFly, 'fly');
 
         for (const sFree of candidates.free) {
           if (sFree.name === sBack.name || sFree.name === sBreast.name || sFree.name === sFly.name) continue;
-          const ageFree = parseFloat(sFree.age) || 0;
+          const ageFree = getTournamentAge(sFree);
           const scoreFree = getRankTime(sFree, 'free');
 
           const totalAge = ageBack + ageBreast + ageFly + ageFree;
@@ -3361,7 +3480,7 @@ function computeMedleyRelay(gender, team = 'A', records, pinnedMap = {}, exclude
 
           if (totalAge >= 160) {
             const totalScore = scoreBack + scoreBreast + scoreFly + scoreFree;
-            if (totalScore < bestScore) {
+            if (totalScore < bestScore || (Math.abs(totalScore - bestScore) < 0.001 && totalAge < bestAge)) {
               bestScore = totalScore;
               bestAge = totalAge;
               bestAssignment = [
@@ -3451,122 +3570,636 @@ function formatRelayTime(seconds) {
   return `${mins}분 ${formattedSecs}초 (${seconds.toFixed(2)}s)`;
 }
 
-// Update Top Dashboard Combination Panels for both A and B teams
-function updateStats() {
-  const combosA = calculateRelayCombinations('A');
-  const combosB = calculateRelayCombinations('B');
 
-  ['combo1', 'combo2', 'combo3', 'combo4', 'combo5'].forEach((prefix, idx) => {
-    const isMedley = idx >= 3;
-    renderComboCardTeam(prefix, 'A', combosA[prefix], isMedley);
-    renderComboCardTeam(prefix, 'B', combosB[prefix], isMedley);
+// ============================================================
+// ADULT RELAY SLOT CONFIGURATIONS & COMPACT DYNAMIC SELECTORS
+// ============================================================
+const RELAY_SLOT_CONFIGS = {
+  combo1: {
+    title: '혼성핀계영',
+    minAge: 240,
+    slots: [
+      { gender: '남', label: '1번(남)', stroke: null },
+      { gender: '남', label: '2번(남)', stroke: null },
+      { gender: '남', label: '3번(남)', stroke: null },
+      { gender: '여', label: '4번(여)', stroke: null },
+      { gender: '여', label: '5번(여)', stroke: null },
+      { gender: '여', label: '6번(여)', stroke: null }
+    ]
+  },
+  combo2: {
+    title: '남자계영',
+    minAge: 160,
+    slots: [
+      { gender: '남', label: '1번', stroke: null },
+      { gender: '남', label: '2번', stroke: null },
+      { gender: '남', label: '3번', stroke: null },
+      { gender: '남', label: '4번', stroke: null }
+    ]
+  },
+  combo3: {
+    title: '여자계영',
+    minAge: 160,
+    slots: [
+      { gender: '여', label: '1번', stroke: null },
+      { gender: '여', label: '2번', stroke: null },
+      { gender: '여', label: '3번', stroke: null },
+      { gender: '여', label: '4번', stroke: null }
+    ]
+  },
+  combo4: {
+    title: '남자 혼계영',
+    minAge: 160,
+    slots: [
+      { gender: '남', label: '배영', stroke: 'back' },
+      { gender: '남', label: '평영', stroke: 'breast' },
+      { gender: '남', label: '접영', stroke: 'fly' },
+      { gender: '남', label: '자유형', stroke: 'free' }
+    ]
+  },
+  combo5: {
+    title: '여자 혼계영',
+    minAge: 160,
+    slots: [
+      { gender: '여', label: '배영', stroke: 'back' },
+      { gender: '여', label: '평영', stroke: 'breast' },
+      { gender: '여', label: '접영', stroke: 'fly' },
+      { gender: '여', label: '자유형', stroke: 'free' }
+    ]
+  }
+};
+
+
+// ─── Relay Helper Functions for Safe Name Extraction & Selection ───
+function getComboSwimmerName(team, prefix, slot, slotIdx) {
+  const teamData = pinnedRelaysState?.[team]?.[prefix];
+  if (!teamData) return '';
+  if (slot.stroke) {
+    return teamData[slot.stroke] || '';
+  }
+  if (Array.isArray(teamData)) {
+    return teamData[slotIdx] || '';
+  }
+  if (typeof teamData === 'object') {
+    return teamData[slotIdx] || teamData[String(slotIdx)] || '';
+  }
+  return '';
+}
+
+function getComboSelectedNamesSet(team, prefix) {
+  const set = new Set();
+  const teamData = pinnedRelaysState?.[team]?.[prefix];
+  if (!teamData) return set;
+  const values = Array.isArray(teamData) ? teamData : Object.values(teamData);
+  values.forEach(name => {
+    if (name && typeof name === 'string' && name.trim()) {
+      set.add(name.trim());
+    }
+  });
+  return set;
+}
+
+// 종목명 옆 나이 총합 실시간 업데이트 (현재 활성 팀 기준)
+function updateRelayTitleAges() {
+  const activeTeam = localStorage.getItem('gmdc_adult_active_team') || 'A';
+
+  ['combo1', 'combo2', 'combo3', 'combo4', 'combo5'].forEach(prefix => {
+    const ageTitleEl = document.getElementById(`${prefix}TitleAge`);
+    if (!ageTitleEl) return;
+
+    const config = RELAY_SLOT_CONFIGS[prefix];
+    if (!config) return;
+
+    let totalAge = 0;
+    let selectedCount = 0;
+    const totalSlots = config.slots.length;
+
+    config.slots.forEach((slot, idx) => {
+      const name = getComboSwimmerName(activeTeam, prefix, slot, idx);
+      if (name) {
+        const swimmer = records.find(r => r.name === name);
+        if (swimmer) {
+        const swimmerAge = getTournamentAge(swimmer);
+        if (swimmerAge > 0) {
+          totalAge += swimmerAge;
+          selectedCount++;
+        }
+      }
+      }
+    });
+
+    if (selectedCount === 0) {
+      ageTitleEl.className = 'combo-title-age empty';
+      ageTitleEl.textContent = '-세';
+      ageTitleEl.title = `최소 기준: ${config.minAge}세 이상`;
+    } else if (selectedCount < totalSlots) {
+      ageTitleEl.className = 'combo-title-age partial';
+      ageTitleEl.textContent = `${totalAge}세 (${selectedCount}/${totalSlots}명)`;
+      ageTitleEl.title = `현재 ${selectedCount}명 선발 (도합 ${totalAge}세 / 기준 ${config.minAge}세)`;
+    } else {
+      if (totalAge >= config.minAge) {
+        ageTitleEl.className = 'combo-title-age ok';
+        ageTitleEl.textContent = `${totalAge}세 ✅`;
+        ageTitleEl.title = `기준 ${config.minAge}세 충족 (현재: ${totalAge}세)`;
+      } else {
+        const diff = config.minAge - totalAge;
+        ageTitleEl.className = 'combo-title-age warn';
+        ageTitleEl.textContent = `${totalAge}세 ⚠️ (-${diff}세)`;
+        ageTitleEl.title = `기준 ${config.minAge}세 미달 (${diff}세 부족 / 현재 ${totalAge}세)`;
+      }
+    }
   });
 }
 
-function renderComboCardTeam(prefix, team, result, isMedley = false) {
-  const timeEl = document.getElementById(`${prefix}${team}Time`);
-  const ageEl = document.getElementById(`${prefix}${team}Age`);
+// Update Top Dashboard Combination Panels for both A and B teams
+
+// ─── Pure Optimal Recommendation Cache & Helper ───
+let _pureRecommendedCache = { A: null, B: null };
+
+function invalidateRecommendedCache() {
+  _pureRecommendedCache = { A: null, B: null };
+}
+
+function getPureRecommendedRoster(team = 'A') {
+  if (_pureRecommendedCache[team]) {
+    return _pureRecommendedCache[team];
+  }
+
+  const rec = {
+    combo1: new Set(),
+    combo2: new Set(),
+    combo3: new Set(),
+    combo4: {},
+    combo5: {}
+  };
+
+  try {
+    // 1. 혼성 핀계영 300m
+    const fin = computeFinRelay(team, records, []);
+    if (fin && fin.status === 'SUCCESS' && Array.isArray(fin.members)) {
+      fin.members.forEach(m => rec.combo1.add(m.name));
+    }
+
+    // 2. 남자계영 200m
+    const maleFree = computeFreestyleRelay('남', team, records, []);
+    if (maleFree && maleFree.status === 'SUCCESS' && Array.isArray(maleFree.members)) {
+      maleFree.members.forEach(m => rec.combo2.add(m.name));
+    }
+
+    // 3. 여자계영 200m
+    const femaleFree = computeFreestyleRelay('여', team, records, []);
+    if (femaleFree && femaleFree.status === 'SUCCESS' && Array.isArray(femaleFree.members)) {
+      femaleFree.members.forEach(m => rec.combo3.add(m.name));
+    }
+
+    // 4. 남자 혼계영 200m
+    const maleMedley = computeMedleyRelay('남', team, records, {});
+    if (maleMedley && maleMedley.status === 'SUCCESS' && Array.isArray(maleMedley.members)) {
+      maleMedley.members.forEach(m => {
+        if (m.strokeField) rec.combo4[m.strokeField] = m.name;
+      });
+    }
+
+    // 5. 여자 혼계영 200m
+    const femaleMedley = computeMedleyRelay('여', team, records, {});
+    if (femaleMedley && femaleMedley.status === 'SUCCESS' && Array.isArray(femaleMedley.members)) {
+      femaleMedley.members.forEach(m => {
+        if (m.strokeField) rec.combo5[m.strokeField] = m.name;
+      });
+    }
+  } catch (e) {
+    console.warn('[GMDC] 추천 조합 계산 중 오류:', e);
+  }
+
+  _pureRecommendedCache[team] = rec;
+  return rec;
+}
+
+function isSwimmerRecommendedForSlot(recMap, prefix, slot, name) {
+  if (!name || !recMap) return false;
+  if (prefix === 'combo1' || prefix === 'combo2' || prefix === 'combo3') {
+    return recMap[prefix]?.has(name) || false;
+  }
+  if (prefix === 'combo4' || prefix === 'combo5') {
+    if (slot && slot.stroke) {
+      return recMap[prefix]?.[slot.stroke] === name;
+    }
+  }
+  return false;
+}
+
+function getTeamRelayOccupancy(team) {
+  const occupancy = new Map();
+  const teamPins = pinnedRelaysState?.[team] || {};
+
+  ['combo1', 'combo2', 'combo3'].forEach(combo => {
+    const list = teamPins[combo];
+    if (Array.isArray(list)) {
+      list.forEach((name, idx) => {
+        if (name && typeof name === 'string' && name.trim()) {
+          const n = name.trim();
+          if (!occupancy.has(n)) occupancy.set(n, []);
+          occupancy.get(n).push({ combo, slotIdx: idx, stroke: null });
+        }
+      });
+    } else if (list && typeof list === 'object') {
+      Object.entries(list).forEach(([idxStr, name]) => {
+        if (name && typeof name === 'string' && name.trim()) {
+          const n = name.trim();
+          if (!occupancy.has(n)) occupancy.set(n, []);
+          occupancy.get(n).push({ combo, slotIdx: parseInt(idxStr, 10), stroke: null });
+        }
+      });
+    }
+  });
+
+  ['combo4', 'combo5'].forEach(combo => {
+    const map = teamPins[combo];
+    if (map && typeof map === 'object') {
+      ['back', 'breast', 'fly', 'free'].forEach(st => {
+        const name = map[st];
+        if (name && typeof name === 'string' && name.trim()) {
+          const n = name.trim();
+          if (!occupancy.has(n)) occupancy.set(n, []);
+          occupancy.get(n).push({ combo, slotIdx: null, stroke: st });
+        }
+      });
+    }
+  });
+
+  return occupancy;
+}
+
+const _comboSelectWidthCache = new Map();
+
+function measureComboSelectTextWidth(text, isSelected) {
+  const cacheKey = `${isSelected ? '1' : '0'}:${text}`;
+  if (_comboSelectWidthCache.has(cacheKey)) {
+    return _comboSelectWidthCache.get(cacheKey);
+  }
+  if (typeof document === 'undefined') return 118;
+  let width = 0;
+  try {
+    // 1. 실제 DOM 단일 옵션 <select> 기반 네이티브 너비 측정 (OS 드롭다운 화살표 폭 정확 반영)
+    let dummy = document.getElementById('_comboSelectWidthDummy');
+    if (!dummy && document.body) {
+      dummy = document.createElement('select');
+      dummy.id = '_comboSelectWidthDummy';
+      dummy.setAttribute('aria-hidden', 'true');
+      dummy.tabIndex = -1;
+      dummy.style.cssText = 'position:fixed;top:-9999px;left:-9999px;visibility:hidden;pointer-events:none;width:auto !important;max-width:none !important;padding:3px 6px;font-size:13px;border:1px solid #cbd5e1;font-family:"Pretendard",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;';
+      document.body.appendChild(dummy);
+    }
+    let domWidth = 0;
+    if (dummy) {
+      dummy.style.fontWeight = isSelected ? '700' : '600';
+      dummy.innerHTML = `<option>${escapeHtml(text)}</option>`;
+      domWidth = Math.ceil(dummy.getBoundingClientRect().width) + 10; // 여유 폭 10px 추가하여 말줄임(...) 원천 방지
+    }
+
+    // 2. Canvas 텍스트 측정 기반 최소 보장 너비 계산
+    const canvas = measureComboSelectTextWidth._canvas || (measureComboSelectTextWidth._canvas = document.createElement('canvas'));
+    const ctx = canvas.getContext('2d');
+    let canvasWidth = 0;
+    if (ctx) {
+      const fontWeight = isSelected ? '700' : '600';
+      ctx.font = `${fontWeight} 13px "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`;
+      const textWidth = Math.ceil(ctx.measureText(text).width);
+      canvasWidth = textWidth + 42;
+    }
+    width = Math.max(domWidth, canvasWidth);
+  } catch (e) {
+    width = 118;
+  }
+  if (!width || width < 86) width = 86;
+  _comboSelectWidthCache.set(cacheKey, width);
+  return width;
+}
+
+function adjustComboSelectWidths(rootEl = document) {
+  if (!rootEl || typeof rootEl.querySelectorAll !== 'function') return;
+  const selects = rootEl.querySelectorAll('.combo-member-select');
+  selects.forEach(sel => {
+    const opt = sel.selectedOptions && sel.selectedOptions[0];
+    const cleanText = opt
+      ? (opt.getAttribute('data-clean-text') || opt.textContent || '').trim()
+      : '선수 선택 (공란)';
+    if (opt && opt.value && opt.text !== cleanText) {
+      opt.text = cleanText;
+    }
+    const isSel = Boolean(sel.value);
+    const px = measureComboSelectTextWidth(cleanText, isSel);
+    sel.style.width = `${px}px`;
+  });
+}
+
+if (typeof document !== 'undefined' && document.fonts && document.fonts.ready) {
+  document.fonts.ready.then(() => {
+    _comboSelectWidthCache.clear();
+    adjustComboSelectWidths(document);
+  });
+}
+
+function updateStats() {
+  ['combo1', 'combo2', 'combo3', 'combo4', 'combo5'].forEach(prefix => {
+    renderComboCardTeam(prefix, 'A');
+    renderComboCardTeam(prefix, 'B');
+  });
+  updateRelayTitleAges();
+}
+
+function renderComboCardTeam(prefix, team) {
   const membersEl = document.getElementById(`${prefix}${team}Members`);
-  const blockEl = document.getElementById(`${prefix}${team}Block`);
-  const lockBtn = document.querySelector(`.btn-lock-combo-team[data-combo="${prefix}"][data-team="${team}"]`);
+  if (!membersEl) return;
 
-  if (!timeEl || !ageEl || !membersEl) return;
+  const config = RELAY_SLOT_CONFIGS[prefix];
+  if (!config) return;
 
-  const pinnedCount = result ? (result.pinnedCount || 0) : 0;
-  const isAnyPinned = pinnedCount > 0;
+  // 1. 현재 각 슬롯에 배치된 선수 및 만나이 사전 계산 (교체 주자 라벨 및 기준나이 미달 계산용)
+  const slotOccupants = config.slots.map((sl, idx) => {
+    const name = getComboSwimmerName(team, prefix, sl, idx);
+    const sw = name ? records.find(r => r.name === name) : null;
+    const age = sw ? (getTournamentAge(sw) || 0) : 0;
+    return { idx, label: sl.label, stroke: sl.stroke, name, age };
+  });
+  const currentTotalAge = slotOccupants.reduce((sum, item) => sum + item.age, 0);
 
-  if (blockEl) {
-    blockEl.classList.toggle('is-fixed-block', isAnyPinned);
-  }
+  // 2. 참여 인원만큼의 슬롯별 선택창(드롭다운) 렌더링
+  membersEl.innerHTML = config.slots.map((slot, slotIdx) => {
+    const currentName = slotOccupants[slotIdx]?.name || '';
+    const currentSlotAge = slotOccupants[slotIdx]?.age || 0;
 
-  if (lockBtn) {
-    if (isAnyPinned) {
-      lockBtn.classList.add('is-fixed');
-      lockBtn.innerHTML = `<span class="lock-icon">📌</span><span class="lock-label">${pinnedCount}명 고정</span>`;
-      lockBtn.title = `${team}팀 ${pinnedCount}명 고정됨 (클릭 시 모든 고정 해제)`;
-    } else {
-      lockBtn.classList.remove('is-fixed');
-      lockBtn.innerHTML = '<span class="lock-icon">⚡</span><span class="lock-label">자동 추천</span>';
-      lockBtn.title = `${team}팀 자동 추천 모드 (클릭 시 현재 선발 전체 고정)`;
+    // 해당 슬롯에 대응되는 영법 키 결정
+    let strokeKey = 'free';
+    if (slot.stroke) {
+      strokeKey = slot.stroke; // 'back', 'breast', 'fly', 'free'
+    } else if (prefix === 'combo1') {
+      strokeKey = 'finFree'; // 핀계영: 핀자유
     }
-  }
 
-  if (!result || result.status !== 'SUCCESS') {
-    timeEl.textContent = '-';
-    timeEl.classList.remove('time-highlight');
-    ageEl.textContent = '-';
-    membersEl.innerHTML = `<span class="combo-empty-msg">${result ? result.message : '기록 부족'}</span>`;
-    return;
-  }
+    // 후보 선수 선별:
+    // 1) 활성 상태, 2) 해당 팀 일치, 3) 해당 슬롯 성별 일치, 4) 대회당일 기준 만 나이 유효
+    const candidateSwimmers = records.filter(r => {
+      if (!isSwimmerActive(r)) return false;
+      if ((r.team || 'A') !== team) return false;
+      if (r.gender !== slot.gender) return false;
+      const age = getTournamentAge(r);
+      if (isNaN(age) || age <= 0) return false;
+      return true;
+    }).map(s => {
+      const isCurrent = s.name === currentName;
 
-  // Time display
-  if (result.hasMissingTime) {
-    if (result.validCount > 0) {
-      timeEl.textContent = `${formatRelayTime(result.totalTime)} (${result.validCount}/${result.totalMembers}명)`;
-      timeEl.classList.add('time-highlight');
-    } else {
-      timeEl.textContent = '기록 미입력';
-      timeEl.classList.remove('time-highlight');
-    }
-  } else {
-    timeEl.textContent = formatRelayTime(result.totalTime);
-    timeEl.classList.add('time-highlight');
-  }
+      // 같은 계영팀(해당 종목) 내 다른 슬롯에 이미 선택되어 있는 경우 해당 주자 라벨(예: 1번(남), 2번, 배영) 확인
+      const otherOccupant = slotOccupants.find(occ => occ.idx !== slotIdx && occ.name === s.name);
+      const isUsedInThisComboOtherSlot = Boolean(otherOccupant);
+      const occupiedSlotLabel = otherOccupant ? otherOccupant.label : '';
 
-  const ageOk = result.totalAge >= (result.minAge || 160);
-  ageEl.textContent = `${result.totalAge}세 ${ageOk ? '✅' : '⚠️'}`;
-  ageEl.title = `최소 기준: ${result.minAge || 160}세 이상 (현재: ${result.totalAge}세)`;
+      // 해당 슬롯 영법의 유효 개인 PB 확인 (더미값 99.99 제외)
+      const pbNum = parseFloat(s[strokeKey]);
+      const hasPB = !isNaN(pbNum) && pbNum > 0 && pbNum < 99;
+      const pbStr = hasPB ? `${pbNum.toFixed(2)}초` : '';
 
-  if (!result.members || result.members.length === 0) {
-    membersEl.innerHTML = `<span class="combo-empty-msg">선발 인원 없음</span>`;
-    return;
-  }
+      // 추천 알고리즘 1조건 & 2조건 정렬용 시간 측정
+      let sortTime = pbNum;
+      let hasSortTime = hasPB;
+      if (!hasSortTime && strokeKey === 'finFree') {
+        const freeFallback = parseFloat(s.free);
+        if (!isNaN(freeFallback) && freeFallback > 0 && freeFallback < 99) {
+          sortTime = freeFallback + 10; // 핀자유 PB 보유자 우선, 없을 때만 일반 자유형 참고
+          hasSortTime = true;
+        }
+      }
+      const timeVal = hasSortTime ? sortTime : 999.99;
+      const age = getTournamentAge(s);
 
-  membersEl.innerHTML = result.members.map(m => {
-    const orig = getLastYearRecord(m.id, m.strokeField);
-    const isLastYear = orig !== '' && (parseFloat(orig) === m.time);
-    const timeClass = isLastYear ? 'is-last-year' : 'is-target';
-    const hasTime = m.hasTime !== undefined ? m.hasTime : (m.time > 0);
+      // 해당 슬롯의 기존 인원 대신 이 후보를 넣었을 때의 예상 총 나이 계산
+      const projectedTotalAge = isUsedInThisComboOtherSlot
+        ? currentTotalAge
+        : (currentTotalAge - currentSlotAge + age);
+      const isUnderMinAge = projectedTotalAge < config.minAge;
 
-    const timeDisplayHtml = hasTime
-      ? `<span class="member-time ${timeClass}">${m.time.toFixed(2)}s</span>`
-      : `<span class="member-time is-empty" title="PB 기록 미입력">-</span>`;
+      return {
+        swimmer: s,
+        age,
+        hasPB,
+        pbStr,
+        hasSortTime,
+        timeVal,
+        isCurrent,
+        isUsedInThisComboOtherSlot,
+        occupiedSlotLabel,
+        projectedTotalAge,
+        isUnderMinAge
+      };
+    }).sort((a, b) => {
+      // 1. 현재 선택된 선수 최상단
+      if (a.isCurrent !== b.isCurrent) return a.isCurrent ? -1 : 1;
 
-    const relayAssignments = getSwimmerRelayAssignments(m.name);
-    const relayCount = relayAssignments.length;
-    const relayBadgeHtml = relayCount >= 2
-      ? `<span class="member-relay-count-badge" title="${escapeHtml(m.name)} 선수는 단체전 ${relayCount}개 종목(${relayAssignments.map(a => `${a.team}팀 ${a.label}`).join(', ')})에 출전합니다">${relayCount}</span>`
-      : '';
+      // 2. 같은 종목 다른 슬롯에 이미 배치된 주자는 미배치 후보 뒤쪽으로
+      if (a.isUsedInThisComboOtherSlot !== b.isUsedInThisComboOtherSlot) {
+        return a.isUsedInThisComboOtherSlot ? 1 : -1;
+      }
 
-    const pinBtnHtml = `
-      <button 
-        type="button" 
-        class="btn-pin-member ${m.isPinned ? 'is-pinned' : ''}" 
+      // 3. 1조건: 해당 영법 PB 보유 및 기록이 가장 빠른 사람 우선
+      if (a.hasPB !== b.hasPB) return a.hasPB ? -1 : 1;
+      if (a.hasSortTime !== b.hasSortTime) return a.hasSortTime ? -1 : 1;
+      if (a.hasSortTime && b.hasSortTime && Math.abs(a.timeVal - b.timeVal) > 0.001) {
+        return a.timeVal - b.timeVal; // 기록 빠른 순
+      }
+
+      // 4. 2조건: 같은 속도라면 (또는 데이터가 아무도 없다면) 나이가 어린 사람 우선 (나이 오름차순)
+      if (a.age !== b.age) {
+        return a.age - b.age;
+      }
+
+      // 5. 3조건: 가나다 이름순
+      return (a.swimmer.name || '').localeCompare(b.swimmer.name || '');
+    });
+
+    const optionsHtml = [
+      '<option value="" data-clean-text="선수 선택 (공란)">선수 선택 (공란)</option>',
+      ...candidateSwimmers.map(({ swimmer: s, age, hasPB, pbStr, isCurrent, isUsedInThisComboOtherSlot, occupiedSlotLabel, isUnderMinAge }) => {
+        const isSelected = isCurrent ? 'selected' : '';
+        const cleanText = `${s.name} (${age}세)`;
+
+        // 선택창 옵션 부가 정보: [추천] 대신 개인 PB 표시, [교체] 대신 현재 주자 번호(예: [1번(남)]) 표시
+        const extraParts = [];
+        if (hasPB && pbStr) {
+          extraParts.push(pbStr);
+        }
+        if (isUsedInThisComboOtherSlot && occupiedSlotLabel) {
+          extraParts.push(`[${occupiedSlotLabel}]`);
+        }
+        const tagText = extraParts.length > 0 ? ` ${extraParts.join(' ')}` : '';
+
+        // 닫혀 있는 최종 출력(겉면)에서는 '이름 (XX세)'만 표시하여 선택창 너비를 최소화
+        const displayText = isCurrent
+          ? escapeHtml(cleanText)
+          : `${escapeHtml(cleanText)}${escapeHtml(tagText)}`;
+
+        // 해당 인원으로 교체 시 기준나이 미달이면 음영 표시 (선택은 가능)
+        const underAgeAttr = isUnderMinAge
+          ? 'class="opt-age-under" style="background-color: #e2e8f0; color: #94a3b8;"'
+          : '';
+
+        return `<option value="${escapeHtml(s.name)}" ${isSelected} ${underAgeAttr} data-clean-text="${escapeHtml(cleanText)}" data-rec-tag="${escapeHtml(tagText.trim())}">${displayText}</option>`;
+      })
+    ].join('');
+
+    const genderClass = slot.gender === '남' ? 'male' : 'female';
+    const isSelectedClass = currentName ? 'is-selected' : '';
+
+    const memberSelectHtml = `
+      <select 
+        class="combo-member-select ${isSelectedClass}" 
         data-combo="${prefix}" 
-        data-team="${team}" 
-        data-name="${escapeHtml(m.name)}" 
-        data-stroke="${m.strokeField || ''}" 
-        title="${m.isPinned ? `${m.name} 선수 고정됨 (클릭 시 고정 해제)` : `${m.name} 선수 고정 (클릭 시 이 선수를 필수로 포함하여 최적 조합 계산)`}"
+        data-team="${team}"
+        data-slot-index="${slotIdx}" 
+        data-stroke="${slot.stroke || ''}"
+        title="${slot.label} 선발 선수 선택"
       >
-        ${m.isPinned ? '📌' : '📍'}
-      </button>
+        ${optionsHtml}
+      </select>
     `;
 
+    // 출전 종목 배지
+    const relayAssignments = currentName ? getSwimmerRelayAssignments(currentName) : [];
+    const relayCount = relayAssignments.length;
+    const relayBadgeHtml = relayCount >= 2
+      ? `<span class="member-relay-count-badge" title="${escapeHtml(currentName)} 선수는 단체전 ${relayCount}개 종목 출전">${relayCount}</span>`
+      : '';
+
     return `
-      <div class="member-pill ${m.isPinned ? 'is-pinned' : ''}">
-        ${isMedley 
-          ? `<span class="stroke-badge ${m.strokeName}">${m.strokeName}</span>` 
-          : `<span class="member-gender ${m.gender === '남' ? 'male' : 'female'}">${m.gender}</span>`
-        }
-        <span>${escapeHtml(m.name || '무명')}</span>
-        <span style="color:var(--text-subtle);font-size:11px;">(${m.age}세)</span>
-        ${timeDisplayHtml}
+      <div class="member-pill">
+        <span class="member-slot-label ${genderClass}">${slot.label}</span>
+        ${memberSelectHtml}
         ${relayBadgeHtml}
-        ${pinBtnHtml}
       </div>
     `;
   }).join('');
+
+  adjustComboSelectWidths(membersEl);
 }
+
+
+
+// ─── Relay Member Selector Event Listener for Adult (단체전 선발멤버 즉시 변경 & 스왑) ───
+document.addEventListener('change', (e) => {
+  const selectEl = e.target.closest('.combo-member-select');
+  if (!selectEl) return;
+
+  const combo = selectEl.getAttribute('data-combo');
+  const team = selectEl.getAttribute('data-team') || 'A';
+  const stroke = selectEl.getAttribute('data-stroke');
+  const slotIdx = parseInt(selectEl.getAttribute('data-slot-index'), 10);
+  const newName = selectEl.value ? selectEl.value.trim() : null;
+
+  if (!pinnedRelaysState[team]) pinnedRelaysState[team] = {};
+
+  // 이전 선택 선수 확인
+  const prevName = stroke 
+    ? (pinnedRelaysState[team]?.[combo]?.[stroke] || null)
+    : (pinnedRelaysState[team]?.[combo]?.[slotIdx] || null);
+
+  // 만약 선택된 선수가 동일 종목(combo) 내 다른 슬롯에 이미 있었다면 스왑(맞교체) 또는 비우기 처리
+  if (newName) {
+    if (stroke) {
+      if (pinnedRelaysState[team][combo] && typeof pinnedRelaysState[team][combo] === 'object') {
+        ['back', 'breast', 'fly', 'free'].forEach(st => {
+          if (st !== stroke && pinnedRelaysState[team][combo][st] === newName) {
+            pinnedRelaysState[team][combo][st] = prevName || null;
+          }
+        });
+      }
+    } else {
+      if (Array.isArray(pinnedRelaysState[team][combo])) {
+        pinnedRelaysState[team][combo].forEach((existingName, idx) => {
+          if (idx !== slotIdx && existingName === newName) {
+            pinnedRelaysState[team][combo][idx] = prevName || null;
+          }
+        });
+      }
+    }
+  }
+
+  // 현재 슬롯 업데이트
+  if (stroke) {
+    if (!pinnedRelaysState[team][combo] || typeof pinnedRelaysState[team][combo] !== 'object') {
+      pinnedRelaysState[team][combo] = { ...DEFAULT_PINNED_RELAYS[team][combo] };
+    }
+    pinnedRelaysState[team][combo][stroke] = newName;
+  } else {
+    if (!Array.isArray(pinnedRelaysState[team][combo])) {
+      pinnedRelaysState[team][combo] = [...DEFAULT_PINNED_RELAYS[team][combo]];
+    }
+    pinnedRelaysState[team][combo][slotIdx] = newName;
+  }
+
+  savePinnedRelays();
+  updateStats();
+
+  // Firestore 동기화
+  if (typeof syncRelaySelectionToFirebase === 'function') {
+    syncRelaySelectionToFirebase();
+  }
+});
+
+// 선택된 항목은 포커스/닫힘 상태와 무관하게 항상 '이름 (XX세)' 전체가 잘림 없이 표시되도록 유지
+document.addEventListener('focusin', (e) => {
+  const selectEl = e.target.closest('.combo-member-select');
+  if (!selectEl) return;
+  const opt = selectEl.selectedOptions[0];
+  if (opt && opt.value) {
+    const cleanText = opt.getAttribute('data-clean-text');
+    if (cleanText && opt.text !== cleanText) {
+      opt.text = cleanText;
+    }
+  }
+});
+
+document.addEventListener('focusout', (e) => {
+  const selectEl = e.target.closest('.combo-member-select');
+  if (!selectEl) return;
+  const opt = selectEl.selectedOptions[0];
+  if (opt && opt.value) {
+    const cleanText = opt.getAttribute('data-clean-text');
+    if (cleanText && opt.text !== cleanText) {
+      opt.text = cleanText;
+    }
+  }
+});
+
+// Bind Card Roster Copy Buttons (엑셀 붙여넣기용)
+document.addEventListener('click', (e) => {
+  const btn = e.target.closest('.btn-copy-card-roster');
+  if (!btn) return;
+
+  e.preventDefault();
+  e.stopPropagation();
+  const combo = btn.getAttribute('data-combo');
+  const activeTeam = localStorage.getItem('gmdc_adult_active_team') || 'A';
+  const config = RELAY_SLOT_CONFIGS[combo];
+  if (!config) return;
+
+  const lines = [];
+  config.slots.forEach((slot, sIdx) => {
+    const name = getComboSwimmerName(activeTeam, combo, slot, sIdx);
+    const role = slot.label;
+    const swimmer = name ? records.find(r => r.name === name) : null;
+    const ageStr = swimmer ? `(${getTournamentAge(swimmer)}세)` : '';
+    const cleanName = (name || '미정').trim();
+    lines.push(`${role}\t${cleanName}\t${ageStr}`);
+  });
+
+  const fullText = `[${config.title} - ${activeTeam}팀 선발 명단]\n` + lines.join('\n');
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(fullText).then(() => {
+      showToast(`📋 ${activeTeam}팀 ${config.title} 선발 명단이 복사되었습니다.`);
+    }).catch(() => {
+      showToast('선발 명단 복사에 실패했습니다.');
+    });
+  }
+});
 
 // Input filter: strict number and decimal point validation
 function sanitizeNumericInput(val) {
@@ -3709,7 +4342,7 @@ function bindEvents() {
 
         const prevTeam = currentTeam;
         record.team = targetTeam;
-        record.depositor = targetTeam === 'B' ? '거제야르' : '거제야호';
+        record.depositor = targetTeam === 'B' ? '거제야르' : '거제몽꾸';
 
         // Log to server history
         logChangeHistory('INFO', record.name, 'team', '소속팀', `${prevTeam}팀`, `${targetTeam}팀`);
@@ -3935,7 +4568,7 @@ function bindEvents() {
 
       const prevTeam = currentTeam;
       record.team = targetTeam;
-      record.depositor = targetTeam === 'B' ? '거제야르' : '거제야호';
+      record.depositor = targetTeam === 'B' ? '거제야르' : '거제몽꾸';
 
       // Log to server history
       logChangeHistory('INFO', record.name, 'team', '소속팀', `${prevTeam}팀`, `${targetTeam}팀`);
@@ -4282,7 +4915,7 @@ function copyToClipboardTsv() {
       r.event1 || '',
       r.event2 || '',
       r.phone || '',
-      r.depositor || ((r.team || 'A') === 'B' ? '거제야르' : '거제야호'),
+      r.depositor || ((r.team || 'A') === 'B' ? '거제야르' : '거제몽꾸'),
       r.address || ''
     ]);
   } else {
@@ -4383,3 +5016,4 @@ if (document.readyState === 'loading') {
 } else {
   init();
 }
+
