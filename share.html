@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-5H98EB7ZSP"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-5H98EB7ZSP');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>페이지 공유 (QR코드) - 거제시장배 2026 GMDC</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📱</text></svg>">
+  <link rel="stylesheet" href="style.css?v=20261024_07">
+  <link rel="stylesheet" href="sidebar.css?v=20261024_07">
+  <style>
+    body {
+      background: #f8fafc;
+      color: #0f172a;
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .share-container {
+      max-width: 540px;
+      margin: 36px auto 60px;
+      padding: 0 16px;
+      box-sizing: border-box;
+    }
+
+    .share-card {
+      background: #ffffff;
+      border-radius: 24px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 12px 32px rgba(15, 23, 42, 0.07);
+      padding: 36px 28px 32px;
+      text-align: center;
+    }
+
+    .share-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #e0f2fe;
+      color: #0369a1;
+      border: 1px solid #bae6fd;
+      padding: 5px 14px;
+      border-radius: 999px;
+      font-size: 12.5px;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .share-title {
+      font-size: 22px;
+      font-weight: 900;
+      color: #0f172a;
+      margin: 0 0 8px;
+      letter-spacing: -0.02em;
+    }
+
+    .share-subtitle {
+      font-size: 14px;
+      color: #64748b;
+      margin: 0 0 24px;
+      line-height: 1.55;
+      word-break: keep-all;
+    }
+
+    .qr-frame {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #ffffff;
+      border: 2.5px solid #0284c7;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 8px 24px rgba(2, 132, 199, 0.12);
+      margin-bottom: 20px;
+    }
+
+    .qr-canvas-wrap {
+      width: 240px;
+      height: 240px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .qr-canvas-wrap canvas,
+    .qr-canvas-wrap img,
+    .qr-canvas-wrap svg {
+      width: 240px;
+      height: 240px;
+      display: block;
+      border-radius: 8px;
+    }
+
+    .qr-scan-hint {
+      margin-top: 12px;
+      font-size: 12.5px;
+      font-weight: 800;
+      color: #0284c7;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .url-display-box {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .url-text {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #1e293b;
+      word-break: break-all;
+      text-align: left;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    .share-actions {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .btn-share-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: #1e293b;
+    }
+
+    .btn-share-action.primary {
+      background: #0284c7;
+      color: #ffffff;
+      border-color: #0284c7;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+    }
+
+    .btn-share-action:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-share-action.full-width {
+      grid-column: 1 / -1;
+    }
+
+    .share-toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: rgba(15, 23, 42, 0.92);
+      color: #ffffff;
+      padding: 10px 20px;
+      border-radius: 999px;
+      font-size: 13.5px;
+      font-weight: 700;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.22s ease;
+      z-index: 9999;
+    }
+
+    .share-toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @media (max-width: 480px) {
+      .share-container {
+        margin: 20px auto 40px;
+      }
+      .share-card {
+        padding: 28px 18px 24px;
+      }
+      .qr-canvas-wrap,
+      .qr-canvas-wrap canvas,
+      .qr-canvas-wrap img,
+      .qr-canvas-wrap svg {
+        width: 210px;
+        height: 210px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="share-container">
+    <div class="share-card">
+      <div class="share-badge">📱 QR코드 바로 접속</div>
+      <h1 class="share-title">거제시장배 2026 통합 포털 공유</h1>
+      <p class="share-subtitle">
+        스마트폰 기본 카메라로 아래 QR코드를 스캔하면<br>
+        <strong>실시간 경기 진행표 및 클럽 명단</strong> 페이지로 즉시 연결됩니다.
+      </p>
+
+      <div class="qr-frame">
+        <div class="qr-canvas-wrap" id="qrMount">
+          <img
+            id="qrFallbackImg"
+            src="https://api.qrserver.com/v1/create-qr-code/?size=480x480&margin=10&data=https%3A%2F%2Fiseohyun.github.io%2FGMDC-getPB%2F"
+            alt="https://iseohyun.github.io/GMDC-getPB/ 접속 QR코드"
+            crossorigin="anonymous"
+          />
+        </div>
+        <div class="qr-scan-hint">📷 카메라로 스캔하여 바로 접속</div>
+      </div>
+
+      <div class="url-display-box">
+        <span class="url-text" id="shareTargetUrl">https://iseohyun.github.io/GMDC-getPB/</span>
+      </div>
+
+      <div class="share-actions">
+        <button type="button" class="btn-share-action primary" id="btnCopyShareUrl">
+          📋 링크 주소 복사
+        </button>
+        <button type="button" class="btn-share-action" id="btnNativeShare">
+          📤 다른 앱으로 공유
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="share-toast" id="shareToast">링크가 클립보드에 복사되었습니다.</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+  <script type="module" src="sidebar.js?v=20261024_07"></script>
+  <script>
+    const TARGET_URL = 'https://iseohyun.github.io/GMDC-getPB/';
+
+    function showShareToast(msg) {
+      const toast = document.getElementById('shareToast');
+      if (!toast) return;
+      toast.textContent = msg;
+      toast.classList.add('show');
+      clearTimeout(toast._timer);
+      toast._timer = setTimeout(() => toast.classList.remove('show'), 2400);
+    }
+
+    // 클라이언트 사이드 선명한 SVG QR코드 렌더링 (오프라인/빠른 로딩 지원)
+    try {
+      if (typeof qrcode === 'function') {
+        const qr = qrcode(0, 'M');
+        qr.addData(TARGET_URL);
+        qr.make();
+        const mount = document.getElementById('qrMount');
+        if (mount) {
+          mount.innerHTML = qr.createSvgTag({ cellSize: 6, margin: 2, scalable: true });
+        }
+      }
+    } catch (e) {
+      console.warn('SVG QR fallback to image:', e);
+    }
+
+    document.getElementById('btnCopyShareUrl')?.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(TARGET_URL);
+        showShareToast('📋 주소가 클립보드에 복사되었습니다!');
+      } catch (err) {
+        const temp = document.createElement('textarea');
+        temp.value = TARGET_URL;
+        document.body.appendChild(temp);
+        temp.select();
+        document.execCommand('copy');
+        temp.remove();
+        showShareToast('📋 주소가 클립보드에 복사되었습니다!');
+      }
+    });
+
+    document.getElementById('btnNativeShare')?.addEventListener('click', async () => {
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: '거제시장배 2026 - GMDC 거제오션 수영클럽',
+            text: '2026년 제19회 거제시장배 전국마스터즈 수영대회 실시간 진행표 및 통합 포털',
+            url: TARGET_URL
+          });
+        } catch (err) {
+          // 사용자 취소 시 무시
+        }
+      } else {
+        document.getElementById('btnCopyShareUrl')?.click();
+      }
+    });
+  </script>
+</body>
+
+</html>

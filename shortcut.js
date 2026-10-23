@@ -54,14 +54,14 @@
         // 훈련 출석부 페이지로 이동
         e.preventDefault();
         const currentPath = window.location.pathname;
-        const isAttendancePage = currentPath.endsWith('index.html') || currentPath === '/' || currentPath.endsWith('/');
+        const isAttendancePage = currentPath.endsWith('attendance.html');
         if (isAttendancePage) {
           if (typeof window.showToast === 'function') {
             window.showToast('📋 현재 훈련 출석부 페이지입니다.');
           }
         } else {
           sessionStorage.setItem(SCROLL_POS_KEY, window.scrollY.toString());
-          window.location.href = 'index.html' + (window.location.hash || '');
+          window.location.href = 'attendance.html';
         }
         break;
       }

@@ -12,13 +12,15 @@ export const SPA_ROUTES = {
   '#/roster-student-relay':   { url: 'student-member.html?view=records', title: '학생 단체', catId: 'cat-roster', itemId: 'student-relay' },
   '#/roster-adult-indiv':     { url: 'adult-member.html?view=events', title: '성인 개인', catId: 'cat-roster', itemId: 'adult-indiv' },
   '#/roster-adult-relay':     { url: 'adult-member.html?view=records', title: '성인 단체', catId: 'cat-roster', itemId: 'adult-relay' },
-  '#/training-attendance':    { url: 'attendance.html', title: '출석부', catId: 'cat-training', itemId: 'attendance' },
+  '#/training-attendance':    { url: 'attendance.html?v=20261024_06', title: '출석부', catId: 'cat-training', itemId: 'attendance' },
   '#/training-calendar':      { url: 'training_calendar.html', title: '일정표', catId: 'cat-training', itemId: 'calendar' },
   '#/training-meeting':       { url: 'meeting_notes.html', title: '운영기록', catId: 'cat-training', itemId: 'meeting' },
   '#/competition-prospectus':    { url: 'prospectus.html', title: '모집요강', catId: 'cat-competition', itemId: 'prospectus' },
   '#/competition-coach-meeting': { url: 'coach-meeting.html?v=20261024_05', title: '감독자회의요강', catId: 'cat-competition', itemId: 'coach-meeting' },
   '#/competition-live-student': { url: 'live-schedule.html?div=student&v=20261024_04', title: '학생부 (24일)', catId: 'cat-competition', itemId: 'live-student' },
-  '#/competition-live-adult':   { url: 'live-schedule.html?div=adult&v=20261024_04', title: '성인부 (25일)', catId: 'cat-competition', itemId: 'live-adult' },
+  '#/competition-live-adult':   { url: 'live-schedule.html?div=adult&v=20261024_07', title: '성인부 (25일)', catId: 'cat-competition', itemId: 'live-adult' },
+  '#/competition-result':       { url: 'competition-result.html?v=20261024_07', title: '대회결과', catId: 'cat-competition', itemId: 'comp-result' },
+  '#/admin-share':              { url: 'share.html?v=20261024_07', title: '페이지 공유', catId: 'cat-admin', itemId: 'admin-share' },
   '#/admin-settings':         { url: 'admin.html', title: '관리자 설정', catId: 'cat-admin', itemId: 'admin-settings', adminOnly: true }
 };
 
@@ -53,7 +55,8 @@ const MENU_CATEGORIES = [
       { id: "prospectus",    title: "모집요강",               hash: "#/competition-prospectus",    icon: "📄" },
       { id: "coach-meeting", title: "감독자회의요강",          hash: "#/competition-coach-meeting", icon: "📋" },
       { id: "live-student",  title: "학생부 (24일)",          hash: "#/competition-live-student",  icon: "⏱️" },
-      { id: "live-adult",    title: "성인부 (25일)",          hash: "#/competition-live-adult",    icon: "⏱️" }
+      { id: "live-adult",    title: "성인부 (25일)",          hash: "#/competition-live-adult",    icon: "⏱️" },
+      { id: "comp-result",   title: "대회결과",               hash: "#/competition-result",        icon: "🏆" }
     ]
   },
   {
@@ -62,6 +65,7 @@ const MENU_CATEGORIES = [
     icon: "⚙️",
     adminOnly: false, // 기본으로 항상 노출됨
     items: [
+      { id: "admin-share",    title: "페이지 공유", hash: "#/admin-share",    icon: "📱" },
       { id: "admin-settings", title: "관리자 설정", hash: "#/admin-settings", icon: "🔒", action: "adminCheck" }
     ]
   }
@@ -435,9 +439,18 @@ function initSpaRouter() {
   }
 
   // 초기 해시 판별 (기본: 출석부)
-  let currentHash = window.location.hash || '#/training-attendance';
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = now.getMonth() + 1;
+  const d = now.getDate();
+  const defaultHash = (y === 2026 && m === 10 && d === 24)
+    ? '#/competition-live-student'
+    : (y === 2026 && m === 10 && d === 25)
+      ? '#/competition-live-adult'
+      : '#/competition-result';
+  let currentHash = window.location.hash || defaultHash;
   if (!SPA_ROUTES[currentHash]) {
-    currentHash = '#/training-attendance';
+    currentHash = defaultHash;
   }
 
   navigateToRoute(currentHash);
