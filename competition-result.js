@@ -106,6 +106,7 @@ function parseDivisionData(races, divisionKey) {
         indivEntries: 0,
         relayEntries: 0,
         relayEvents: [],
+        expectedPoints: 0,
         groupSwimmerKeys: new Map(groups.map(g => [g, new Set()])),
         groupCounts,
         strokeCounts
@@ -191,6 +192,35 @@ function parseDivisionData(races, divisionKey) {
     }
   }
 
+  // 종목별(성별·그룹·영법) 참가자 수 집계 및 기대 점수 계산
+  // 채점 기준: 1~6위 = [7, 5, 4, 3, 2, 1]점
+  // 참가자 N명일 때 기대 점수 = sum(상위 min(N,6)개 점수) / N
+  const INDIV_POINT_POOL = [7, 5, 4, 3, 2, 1];
+  const eventParticipantCounts = new Map();
+  for (const sw of swimmerMap.values()) {
+    for (const ev of sw.events) {
+      const evKey = `${sw.gender}|${sw.group}|${ev.stroke}`;
+      eventParticipantCounts.set(evKey, (eventParticipantCounts.get(evKey) || 0) + 1);
+    }
+  }
+
+  for (const sw of swimmerMap.values()) {
+    const tStat = teamStatsMap.get(sw.team);
+    for (const ev of sw.events) {
+      const evKey = `${sw.gender}|${sw.group}|${ev.stroke}`;
+      const n = eventParticipantCounts.get(evKey) || 1;
+      let poolSum = 0;
+      for (let i = 0; i < Math.min(n, INDIV_POINT_POOL.length); i++) {
+        poolSum += INDIV_POINT_POOL[i];
+      }
+      const expPt = poolSum / n;
+      ev.expectedPoint = expPt;
+      if (tStat) {
+        tStat.expectedPoints += expPt;
+      }
+    }
+  }
+
   for (const tStat of teamStatsMap.values()) {
     groups.forEach(g => {
       tStat.groupCounts[g] = tStat.groupSwimmerKeys.get(g)?.size || 0;
@@ -198,6 +228,8 @@ function parseDivisionData(races, divisionKey) {
   }
 
   const swimmers = [...swimmerMap.values()].sort((a, b) => {
+    const teamExpDiff = (teamStatsMap.get(b.team)?.expectedPoints || 0) - (teamStatsMap.get(a.team)?.expectedPoints || 0);
+    if (Math.abs(teamExpDiff) > 1e-6) return teamExpDiff;
     const teamCountDiff = (teamStatsMap.get(b.team)?.swimmerKeys.size || 0) - (teamStatsMap.get(a.team)?.swimmerKeys.size || 0);
     if (teamCountDiff !== 0) return teamCountDiff;
     if (a.team !== b.team) return a.team.localeCompare(b.team, "ko");
@@ -208,6 +240,9 @@ function parseDivisionData(races, divisionKey) {
   });
 
   const teams = [...teamStatsMap.values()].sort((a, b) => {
+    if (Math.abs(b.expectedPoints - a.expectedPoints) > 1e-6) {
+      return b.expectedPoints - a.expectedPoints;
+    }
     if (b.swimmerKeys.size !== a.swimmerKeys.size) {
       return b.swimmerKeys.size - a.swimmerKeys.size;
     }
@@ -631,46 +666,47 @@ function renderTeamPowerComparisonTable() {
 
   headEl.innerHTML = `
     <tr>
-      <th style="width: 52px;">순위</th>
-      <th style="min-width: 130px; text-align: left;">소속팀 (클릭 시 필터)</th>
-      <th style="width: 110px;">출전 선수 (남/여)</th>
-      ${data.groups.map(g => `<th style="width: 62px;">${escapeHtml(g)}</th>`).join("")}
-      <th style="width: 90px;">개인전 출전</th>
-      <th style="min-width: 150px;">단체전 참가</th>
+      <th style="width: 56px; text-align: center;">순위</th>
+      <th style="min-width: 120px; text-align: left;">소속팀</th>
+      <th style="width: 96px; text-align: center;">기대 점수</th>
+      <th style="width: 105px; text-align: center; line-height: 1.3;">출전 선수<br><span style="font-size:11px; font-weight:700; color:#64748b;">(남/여)</span></th>
+      <th style="width: 90px; text-align: center;">개인전 출전</th>
+      <th style="width: 90px; text-align: center;">단체전 참가</th>
+      <th style="min-width: 155px; text-align: center;">그룹분포</th>
     </tr>
   `;
 
   bodyEl.innerHTML = data.teams.map((t, idx) => {
     const isSelected = selectedTeamFilter === t.team ? "is-selected-team-row" : "";
-    const ourBadge = t.team === "거제몽꾸"
-      ? `<span class="team-tag-pill mongkku">우리팀 A</span>`
+    const ourRowClass = t.team === "거제몽꾸"
+      ? "row-team-mongkku"
       : t.team === "거제야르"
-        ? `<span class="team-tag-pill yareu">우리팀 B</span>`
+        ? "row-team-yareu"
         : "";
+    const teamTextColor = t.team === "거제몽꾸"
+      ? "#c2410c"
+      : t.team === "거제야르"
+        ? "#0369a1"
+        : "#0f172a";
 
-    const relayHtml = t.relayEvents.length > 0
-      ? `<span class="relay-count-pill">${t.relayEntries}팀</span> <span class="relay-events-sub">(${t.relayEvents.map(e => escapeHtml(e)).join(", ")})</span>`
-      : `<span style="color:#94a3b8;">-</span>`;
+    const groupDistStr = data.groups.map(g => t.groupCounts[g] || 0).join("/ ");
 
     return `
-      <tr class="team-power-row ${isSelected}" data-team-row="${escapeHtml(t.team)}" title="클릭하면 [${escapeHtml(t.team)}] 전력 그래프 및 선수 명단만 필터링합니다">
-        <td style="text-align:center; font-weight:800; color:#64748b;">${idx + 1}</td>
-        <td style="text-align:left; font-weight:800; color:#0f172a;">
-          <div style="display:flex; align-items:center; gap:6px;">
-            <span>${escapeHtml(t.team)}</span>
-            ${ourBadge}
-          </div>
+      <tr class="team-power-row ${ourRowClass} ${isSelected}" data-team-row="${escapeHtml(t.team)}" title="클릭하면 [${escapeHtml(t.team)}] 전력 그래프 및 선수 명단만 필터링합니다">
+        <td style="text-align:center; font-weight:800; color:#64748b; font-variant-numeric:tabular-nums;">${idx + 1}</td>
+        <td style="text-align:left; font-weight:${t.isOurTeam ? "900" : "800"}; color:${teamTextColor};">
+          ${escapeHtml(t.team)}
         </td>
-        <td style="text-align:center; font-weight:800;">
-          <span style="color:#0f172a;">${t.swimmerKeys.size}명</span>
-          <span style="font-size:11.5px; color:#64748b; font-weight:600;">(남${t.maleSwimmerKeys.size}·여${t.femaleSwimmerKeys.size})</span>
+        <td style="text-align:center; font-weight:900; color:#0284c7; font-variant-numeric:tabular-nums;" title="기대 점수 정밀 합계: ${t.expectedPoints.toFixed(2)}점">
+          ${t.expectedPoints.toFixed(1)}
         </td>
-        ${data.groups.map(g => {
-          const c = t.groupCounts[g] || 0;
-          return `<td style="text-align:center; font-weight:${c > 0 ? "700" : "400"}; color:${c > 0 ? "#1e293b" : "#cbd5e1"};">${c > 0 ? `${c}명` : "-"}</td>`;
-        }).join("")}
-        <td style="text-align:center; font-weight:800; color:#0284c7;">${t.indivEntries}건</td>
-        <td style="text-align:left; font-size:12px;">${relayHtml}</td>
+        <td style="text-align:center; font-weight:800; line-height:1.35;">
+          <div style="color:#0f172a;">${t.swimmerKeys.size}명</div>
+          <div style="font-size:11.5px; color:#64748b; font-weight:600;">(남${t.maleSwimmerKeys.size}·여${t.femaleSwimmerKeys.size})</div>
+        </td>
+        <td style="text-align:center; font-weight:800; color:#0284c7; font-variant-numeric:tabular-nums;">${t.indivEntries}건</td>
+        <td style="text-align:center; font-weight:800; color:${t.relayEntries > 0 ? "#0f172a" : "#94a3b8"}; font-variant-numeric:tabular-nums;">${t.relayEntries}</td>
+        <td style="text-align:center; font-weight:700; color:#334155; font-variant-numeric:tabular-nums; white-space:nowrap;">${escapeHtml(groupDistStr)}</td>
       </tr>
     `;
   }).join("");
