@@ -887,25 +887,34 @@ async function downloadScheduleImage(onlyOurTeam = true) {
     return;
   }
 
+  // 현재 보이는 화면 넓이를 반영하되, 불필요한 가로 여백이 생기지 않도록 최적 폭(380~480px)으로 설정
+  const visibleW = elRacesContainer?.clientWidth || window.innerWidth || 460;
+  const canvasW = Math.max(380, Math.min(visibleW, 480));
   const fontStack = '"Pretendard", -apple-system, BlinkMacSystemFont, "Malgun Gothic", sans-serif';
-  const canvasW = 940;
-  const padX = 20;
-  const headerH = 114;
-  const footerH = 40;
-  const gapY = 7;
+  const padX = 6;
+  const headerH = 62;
+  const footerH = 24;
+  const gapY = 4;
 
   const itemHeights = renderItems.map(item => {
-    if (item.type === 'break') return 38;
-    return item.race.is_relay ? 66 : 58;
+    if (item.type === 'break') return 34;
+    if (item.race.is_relay) {
+      const hasMultiSwimmers = (item.race.lanes || []).some(l => {
+        const sw = getOurRelaySwimmers(item.race, l.team);
+        return Array.isArray(sw) && sw.length > 2;
+      });
+      return hasMultiSwimmers ? 68 : 56;
+    }
+    return 56;
   });
 
   const contentH = itemHeights.reduce((sum, h) => sum + h, 0) + Math.max(0, renderItems.length - 1) * gapY;
   const canvasH = headerH + contentH + footerH;
 
-  // 모바일/데스크톱 최대 캔버스 높이(16,384px) 및 면적(1,600만px) 한계 안에서 최적 고해상도 배율 결정
-  const maxByHeight = Math.floor((15800 / canvasH) * 10) / 10;
-  const maxByArea = Math.floor(Math.sqrt(16000000 / (canvasW * canvasH)) * 10) / 10;
-  const scale = Math.max(0.8, Math.min(2, maxByHeight, maxByArea));
+  // 모바일/데스크톱 최대 캔버스 높이(16,384px) 및 면적(1,600만px) 한계 안에서 고해상도 배율 결정
+  const maxByHeight = Math.floor((16000 / canvasH) * 100) / 100;
+  const maxByArea = Math.floor(Math.sqrt(16000000 / (canvasW * canvasH)) * 100) / 100;
+  const scale = Math.max(1, Math.min(2.5, maxByHeight, maxByArea));
   const canvas = document.createElement('canvas');
   canvas.width = Math.round(canvasW * scale);
   canvas.height = Math.round(canvasH * scale);
@@ -917,54 +926,47 @@ async function downloadScheduleImage(onlyOurTeam = true) {
   ctx.fillStyle = '#f1f5f9';
   ctx.fillRect(0, 0, canvasW, canvasH);
 
-  // 2. 상단 헤더 배너
-  drawRoundedRect(ctx, padX, 14, canvasW - padX * 2, 86, 12);
+  // 2. 상단 콤팩트 헤더 배너
+  const cardW = canvasW - padX * 2;
+  drawRoundedRect(ctx, padX, 6, cardW, 50, 9);
   ctx.fillStyle = '#0f172a';
   ctx.fill();
 
-  const divTitle = currentDivision === 'student' ? '학생부 (10월 24일 토)' : '성인부 (10월 25일 일)';
+  const divTitle = currentDivision === 'student' ? '학생부(10/24 토)' : '성인부(10/25 일)';
   ctx.fillStyle = '#ffffff';
-  ctx.font = `900 19px ${fontStack}`;
+  ctx.font = `900 15.5px ${fontStack}`;
   ctx.textBaseline = 'middle';
-  ctx.fillText(`🏊 2026 제19회 거제시장배 — ${divTitle} ${modeLabel}`, padX + 18, 41);
+  ctx.fillText(`🏊 2026 거제시장배 ${divTitle} ${modeLabel} (${targetRaceCount}경기)`, padX + 10, 22);
 
-  ctx.fillStyle = '#94a3b8';
-  ctx.font = `700 12.5px ${fontStack}`;
-  const subSummaryText = onlyOurTeam
-    ? `우리팀(거제몽꾸·거제야르) 출전 총 ${targetRaceCount}경기 (전체 ${allRaces.length}경기 중) · 공식 시작 08:30 · 예정 휴식 시간 반영`
-    : `전체 출전 총 ${targetRaceCount}경기 · 공식 시작 08:30 · 우리팀(거제몽꾸·거제야르) 레인 하이라이트 및 예정 휴식 시간 반영`;
-  ctx.fillText(
-    subSummaryText,
-    padX + 18,
-    72
-  );
+  // 2행: 시작 시각 안내 + 우측 컬러 범례 배지
+  ctx.fillStyle = '#cbd5e1';
+  ctx.font = `700 11.5px ${fontStack}`;
+  ctx.fillText('08:30 시작 · 예정휴식 반영', padX + 10, 42);
 
-  // 우측 상단 범례 배지
   const legendItems = [
     { label: '거제몽꾸', bg: '#ffedd5', border: '#f97316', text: '#9a3412' },
     { label: '거제야르', bg: '#dbeafe', border: '#3b82f6', text: '#1e40af' },
-    { label: '예정/완료 휴식', bg: '#dcfce7', border: '#10b981', text: '#065f46' }
+    { label: '휴식', bg: '#dcfce7', border: '#10b981', text: '#065f46' }
   ];
-  let legX = canvasW - padX - 16;
+  let legX = padX + cardW - 8;
   for (let i = legendItems.length - 1; i >= 0; i--) {
     const lg = legendItems[i];
-    ctx.font = `800 11.5px ${fontStack}`;
-    const tw = ctx.measureText(lg.label).width + 18;
+    ctx.font = `800 11px ${fontStack}`;
+    const tw = ctx.measureText(lg.label).width + 12;
     legX -= tw;
-    drawRoundedRect(ctx, legX, 30, tw, 22, 6);
+    drawRoundedRect(ctx, legX, 33, tw, 18, 4);
     ctx.fillStyle = lg.bg;
     ctx.fill();
-    ctx.lineWidth = 1.5;
+    ctx.lineWidth = 1.2;
     ctx.strokeStyle = lg.border;
     ctx.stroke();
     ctx.fillStyle = lg.text;
-    ctx.fillText(lg.label, legX + 9, 41);
-    legX -= 8;
+    ctx.fillText(lg.label, legX + 6, 42);
+    legX -= 5;
   }
 
-  // 3. 각 경기 카드 및 휴식 카드 렌더링
+  // 3. 각 경기 카드 및 휴식 카드 렌더링 (여백 최소화 & 글자 크기 확대)
   let curY = headerH;
-  const cardW = canvasW - padX * 2;
 
   for (let idx = 0; idx < renderItems.length; idx++) {
     const item = renderItems[idx];
@@ -973,7 +975,7 @@ async function downloadScheduleImage(onlyOurTeam = true) {
     if (item.type === 'break') {
       const brk = item.brk;
       const afterRace = item.afterRace;
-      drawRoundedRect(ctx, padX, curY, cardW, cardH, 8);
+      drawRoundedRect(ctx, padX, curY, cardW, cardH, 7);
       ctx.fillStyle = '#ecfdf5';
       ctx.fill();
       ctx.lineWidth = 1.5;
@@ -983,47 +985,50 @@ async function downloadScheduleImage(onlyOurTeam = true) {
       const schedSec = brk.duration_sec || brk.scheduled_duration_sec || 600;
       const schedMin = Math.round(schedSec / 60);
       const badgeText = brk.state === 'scheduled'
-        ? `☕ 예정 휴식 (${schedMin}분)`
-        : (brk.state === 'running' ? '☕ 휴게 진행 중' : `☕ 휴게 완료 (${formatMMSS(schedSec)})`);
+        ? `☕ 휴식 ${schedMin}분`
+        : (brk.state === 'running' ? '☕ 휴게 중' : `☕ 휴게 ${formatMMSS(schedSec)}`);
 
+      const midY = curY + cardH / 2;
       ctx.font = `900 12px ${fontStack}`;
-      const bdgW = ctx.measureText(badgeText).width + 16;
-      drawRoundedRect(ctx, padX + 10, curY + 7, bdgW, 24, 5);
+      const bdgW = ctx.measureText(badgeText).width + 12;
+      drawRoundedRect(ctx, padX + 6, curY + 5, bdgW, cardH - 10, 5);
       ctx.fillStyle = '#0d9488';
       ctx.fill();
       ctx.fillStyle = '#ffffff';
-      ctx.fillText(badgeText, padX + 18, curY + 19);
-
-      const titleStr = `#${afterRace.race_index} (${afterRace.primary_match_no}번 ${afterRace.stroke} ${afterRace.distance}) 다음 · ${brk.label || `휴식 ${schedMin}분`}`;
-      ctx.fillStyle = '#065f46';
-      ctx.font = `800 12.5px ${fontStack}`;
-      ctx.fillText(titleStr, padX + 18 + bdgW, curY + 19);
+      ctx.fillText(badgeText, padX + 12, midY);
 
       let timeRightStr = '';
       if (brk.state === 'scheduled') {
         const estS = brk.estimated_started_at ? new Date(brk.estimated_started_at) : null;
         const estE = brk.estimated_finished_at ? new Date(brk.estimated_finished_at) : null;
-        timeRightStr = estS ? (estE ? `예상 ${formatTimeHM(estS)}~${formatTimeHM(estE)}` : `예상 ${formatTimeHM(estS)}`) : `예정 ${schedMin}분`;
+        timeRightStr = estS ? (estE ? `${formatTimeHM(estS)}~${formatTimeHM(estE)}` : formatTimeHM(estS)) : `${schedMin}분`;
       } else if (brk.started_at) {
-        timeRightStr = `${formatTimeHM(new Date(brk.started_at), true)} (${formatMMSS(schedSec)})`;
+        timeRightStr = formatTimeHM(new Date(brk.started_at), true);
       }
 
+      let trW = 0;
       if (timeRightStr) {
-        ctx.font = `800 12px ${fontStack}`;
-        const trW = ctx.measureText(timeRightStr).width + 14;
-        drawRoundedRect(ctx, padX + cardW - trW - 10, curY + 7, trW, 24, 5);
+        ctx.font = `800 12px monospace`;
+        trW = ctx.measureText(timeRightStr).width + 10;
+        drawRoundedRect(ctx, padX + cardW - trW - 6, curY + 5, trW, cardH - 10, 4);
         ctx.fillStyle = '#d1fae5';
         ctx.fill();
         ctx.fillStyle = '#047857';
-        ctx.fillText(timeRightStr, padX + cardW - trW - 3, curY + 19);
+        ctx.fillText(timeRightStr, padX + cardW - trW - 1, midY);
       }
+
+      const titleStr = `#${afterRace.race_index}(${afterRace.primary_match_no}번) 다음 · ${brk.label || `휴식 ${schedMin}분`}`;
+      ctx.fillStyle = '#065f46';
+      ctx.font = `800 12.5px ${fontStack}`;
+      const maxBreakTitleW = cardW - bdgW - trW - 26;
+      ctx.fillText(truncateCanvasText(ctx, titleStr, maxBreakTitleW), padX + 12 + bdgW, midY);
 
       curY += cardH + gapY;
       continue;
     }
 
     const race = item.race;
-    drawRoundedRect(ctx, padX, curY, cardW, cardH, 8);
+    drawRoundedRect(ctx, padX, curY, cardW, cardH, 7);
     ctx.fillStyle = '#ffffff';
     ctx.fill();
     ctx.lineWidth = 1;
@@ -1031,36 +1036,36 @@ async function downloadScheduleImage(onlyOurTeam = true) {
     ctx.stroke();
 
     // 1열: [#순번] [경기번호] [성별] [종목명] ... [예상/실제 시간]
-    const row1Y = curY + 16;
-    let cursorX = padX + 10;
+    const row1Y = curY + 14;
+    let cursorX = padX + 6;
 
     // #순번
     const idxText = `#${race.race_index}`;
-    ctx.font = `800 11.5px monospace`;
-    const idxW = Math.max(36, ctx.measureText(idxText).width + 12);
-    drawRoundedRect(ctx, cursorX, curY + 6, idxW, 20, 4);
+    ctx.font = `800 12px monospace`;
+    const idxW = Math.max(30, ctx.measureText(idxText).width + 8);
+    drawRoundedRect(ctx, cursorX, curY + 4, idxW, 20, 4);
     ctx.fillStyle = '#e2e8f0';
     ctx.fill();
     ctx.fillStyle = '#334155';
-    ctx.fillText(idxText, cursorX + 6, row1Y);
-    cursorX += idxW + 6;
+    ctx.fillText(idxText, cursorX + 4, row1Y);
+    cursorX += idxW + 4;
 
     // 경기번호
-    const noText = `${race.primary_match_no}번`;
-    ctx.font = `900 12px ${fontStack}`;
-    const noW = Math.max(40, ctx.measureText(noText).width + 12);
-    drawRoundedRect(ctx, cursorX, curY + 6, noW, 20, 4);
+    const noText = String(race.primary_match_no || '');
+    ctx.font = `900 12.5px ${fontStack}`;
+    const noW = Math.max(28, ctx.measureText(noText).width + 10);
+    drawRoundedRect(ctx, cursorX, curY + 4, noW, 20, 4);
     ctx.fillStyle = '#0f172a';
     ctx.fill();
     ctx.fillStyle = '#ffffff';
-    ctx.fillText(noText, cursorX + 6, row1Y);
-    cursorX += noW + 6;
+    ctx.fillText(noText, cursorX + 5, row1Y);
+    cursorX += noW + 4;
 
     // 성별 배지
     const genText = race.gender || '-';
-    ctx.font = `800 11.5px ${fontStack}`;
-    const genW = ctx.measureText(genText).width + 12;
-    drawRoundedRect(ctx, cursorX, curY + 6, genW, 20, 4);
+    ctx.font = `800 12px ${fontStack}`;
+    const genW = ctx.measureText(genText).width + 10;
+    drawRoundedRect(ctx, cursorX, curY + 4, genW, 20, 4);
     if (genText === '남자') {
       ctx.fillStyle = '#eff6ff';
       ctx.fill();
@@ -1074,28 +1079,30 @@ async function downloadScheduleImage(onlyOurTeam = true) {
       ctx.fill();
       ctx.fillStyle = '#7c3aed';
     }
-    ctx.fillText(genText, cursorX + 6, row1Y);
-    cursorX += genW + 8;
+    ctx.fillText(genText, cursorX + 5, row1Y);
+    cursorX += genW + 5;
 
-    // 종목명
-    const compactEvent = formatCompactEventTitle(race);
-    ctx.fillStyle = '#0f172a';
-    ctx.font = `800 13px ${fontStack}`;
-    ctx.fillText(compactEvent, cursorX, row1Y);
-
-    // 우측 예상/실제 시작 시각
+    // 우측 예상/실제 시작 시각 먼저 계산하여 종목명 최대 폭 확보
     const timeStr = race.display_time || '';
+    let timeW = 0;
     if (timeStr) {
       ctx.font = `800 12px monospace`;
-      const timeW = ctx.measureText(timeStr).width + 14;
-      drawRoundedRect(ctx, padX + cardW - timeW - 10, curY + 6, timeW, 20, 4);
+      timeW = ctx.measureText(timeStr).width + 10;
+      drawRoundedRect(ctx, padX + cardW - timeW - 6, curY + 4, timeW, 20, 4);
       ctx.fillStyle = '#f1f5f9';
       ctx.fill();
       ctx.fillStyle = '#0284c7';
-      ctx.fillText(timeStr, padX + cardW - timeW - 3, row1Y);
+      ctx.fillText(timeStr, padX + cardW - timeW - 1, row1Y);
     }
 
-    // 2열: 1~4레인 셀
+    // 종목명 (큰 글씨 + 여백 없이 꽉 차게 표시)
+    const compactEvent = formatCompactEventTitle(race);
+    ctx.fillStyle = '#0f172a';
+    ctx.font = `800 13.5px ${fontStack}`;
+    const maxEventW = Math.max(60, (padX + cardW - timeW - 10) - cursorX);
+    ctx.fillText(truncateCanvasText(ctx, compactEvent, maxEventW), cursorX, row1Y);
+
+    // 2열: 1~4레인 셀 (팀명 생략, 선수명 크게 표시, 단체전 영자 2줄 자동 줄바꿈)
     const laneDataByNo = { 1: [], 2: [], 3: [], 4: [] };
     (race.lanes || []).forEach(l => {
       const ln = Number(l.lane);
@@ -1107,14 +1114,14 @@ async function downloadScheduleImage(onlyOurTeam = true) {
       }
     });
 
-    const laneGap = 6;
-    const totalLaneW = cardW - 20;
+    const laneGap = 4;
+    const totalLaneW = cardW - 12;
     const singleLaneW = (totalLaneW - laneGap * 3) / 4;
-    const laneY = curY + 30;
-    const laneH = cardH - 35;
+    const laneY = curY + 27;
+    const laneH = cardH - 31;
 
     for (let laneNo = 1; laneNo <= 4; laneNo++) {
-      const lx = padX + 10 + (laneNo - 1) * (singleLaneW + laneGap);
+      const lx = padX + 6 + (laneNo - 1) * (singleLaneW + laneGap);
       const entries = laneDataByNo[laneNo];
       const hasMongkku = entries.some(e => e.team === '거제몽꾸');
       const hasYareu = entries.some(e => e.team === '거제야르');
@@ -1141,34 +1148,42 @@ async function downloadScheduleImage(onlyOurTeam = true) {
       }
 
       // 레인 번호
-      ctx.font = `800 10.5px ${fontStack}`;
+      ctx.font = `800 11.5px ${fontStack}`;
       ctx.fillStyle = hasMongkku ? '#ea580c' : (hasYareu ? '#2563eb' : '#94a3b8');
-      ctx.fillText(String(laneNo), lx + 7, laneY + laneH / 2);
+      ctx.fillText(String(laneNo), lx + 4, laneY + laneH / 2);
 
-      // 선수명 표시
-      let displayNames = '-';
-      if (entries.length > 0) {
-        displayNames = entries.map(e => {
-          if (race.is_relay) {
-            if (Array.isArray(e.relaySwimmers) && e.relaySwimmers.length > 0) {
-              return `[${e.team}] ${e.relaySwimmers.join(' ')}`;
-            }
-            return e.team || '-';
-          }
-          const swName = e.name || '-';
-          if (e.team === '거제몽꾸' || e.team === '거제야르') {
-            return `${swName} (${e.team})`;
-          }
-          return swName;
-        }).join(' / ');
+      const textStartX = lx + 14;
+      const maxTextW = singleLaneW - 17;
+      ctx.fillStyle = hasMongkku ? '#9a3412' : (hasYareu ? '#1e40af' : (entries.length > 0 ? '#334155' : '#cbd5e1'));
+
+      // 단체전이고 우리팀 영자 명단이 있는 경우 2줄로 나누어 또렷하게 표시 (팀명 제외)
+      const relayEntryWithSwimmers = race.is_relay
+        ? entries.find(e => Array.isArray(e.relaySwimmers) && e.relaySwimmers.length > 0)
+        : null;
+
+      if (relayEntryWithSwimmers) {
+        const swList = relayEntryWithSwimmers.relaySwimmers;
+        const half = Math.ceil(swList.length / 2);
+        const line1 = swList.slice(0, half).join(' ');
+        const line2 = swList.slice(half).join(' ');
+        ctx.font = `800 12px ${fontStack}`;
+        if (line2) {
+          ctx.fillText(truncateCanvasText(ctx, line1, maxTextW), textStartX, laneY + laneH * 0.32);
+          ctx.fillText(truncateCanvasText(ctx, line2, maxTextW), textStartX, laneY + laneH * 0.72);
+        } else {
+          ctx.fillText(truncateCanvasText(ctx, line1, maxTextW), textStartX, laneY + laneH / 2);
+        }
+      } else {
+        // 개인전은 선수 이름만 표시하고, 타팀 단체전은 화면과 동일하게 '-' 표시
+        let displayNames = '-';
+        if (entries.length > 0 && !race.is_relay) {
+          displayNames = entries.map(e => e.name || '-').join('/');
+        }
+        ctx.font = (hasMongkku || hasYareu)
+          ? `800 14px ${fontStack}`
+          : `700 13.5px ${fontStack}`;
+        ctx.fillText(truncateCanvasText(ctx, displayNames, maxTextW), textStartX, laneY + laneH / 2);
       }
-
-      ctx.font = (hasMongkku || hasYareu)
-        ? `800 ${race.is_relay ? '11px' : '12px'} ${fontStack}`
-        : `600 11.5px ${fontStack}`;
-      ctx.fillStyle = hasMongkku ? '#9a3412' : (hasYareu ? '#1e40af' : (entries.length > 0 ? '#475569' : '#cbd5e1'));
-      const clipped = truncateCanvasText(ctx, displayNames, singleLaneW - 24);
-      ctx.fillText(clipped, lx + 19, laneY + laneH / 2);
     }
 
     curY += cardH + gapY;
@@ -1176,11 +1191,11 @@ async function downloadScheduleImage(onlyOurTeam = true) {
 
   // 4. 하단 푸터
   ctx.fillStyle = '#64748b';
-  ctx.font = `700 11.5px ${fontStack}`;
+  ctx.font = `700 10.5px ${fontStack}`;
   ctx.fillText(
-    `생성 시각: ${new Date().toLocaleString('ko-KR')} · 거제몽꾸 & 거제야르 통합 포털 (https://iseohyun.github.io/GMDC-getPB/)`,
-    padX + 4,
-    canvasH - 18
+    `저장: ${new Date().toLocaleString('ko-KR')} · 거제몽꾸 & 거제야르`,
+    padX + 2,
+    canvasH - 11
   );
 
   // 5. PNG 파일 다운로드 실행
