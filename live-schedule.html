@@ -52,8 +52,8 @@
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⏱️</text></svg>">
-  <link rel="stylesheet" href="style.css?v=20261024_04">
-  <link rel="stylesheet" href="live-schedule.css?v=20261024_04">
+  <link rel="stylesheet" href="style.css?v=20261024_16">
+  <link rel="stylesheet" href="live-schedule.css?v=20261024_16">
   
   <style>
     /* Iframe 임베드 및 세로 스크롤 최적화 (sticky/fixed 호환) */
@@ -104,6 +104,8 @@
           <span class="ctrl-pace-info" id="ctrlPaceInfo" title="완료된 경기 기준 평균 소요시간 (기본: 개인 01:15 / 단체전 03:00)">평균 경기 진행속도:(01:15)(단체전:03:00)</span>
 
           <div class="ctrl-sync-group">
+            <button type="button" class="ctrl-action-btn ctrl-btn-download-all" id="btnDownloadAllScheduleImage" title="전체 출전 경기 대진표를 이미지(PNG)로 다운로드합니다">🖼️ 전체 대진표 저장</button>
+            <button type="button" class="ctrl-action-btn ctrl-btn-download-img" id="btnDownloadOurTeamImage" title="우리팀(거제몽꾸·거제야르) 출전 경기만 모아 고화질 이미지(PNG)로 다운로드합니다">🖼️ 우리팀 대진표 저장</button>
             <button type="button" class="ctrl-action-btn ctrl-btn-goto" id="btnScrollCurrentRace" title="현재 진행 중인 경기로 스크롤 이동">📍 현재 경기</button>
             <button type="button" class="ctrl-action-btn ctrl-btn-break" id="btnStartBreak" title="현재 순서 다음에 녹색 휴게 카드를 추가하고 휴게를 시작합니다">☕ 휴게 시작</button>
             <button type="button" class="ctrl-icon-btn active" id="btnAutoRefreshToggle" title="자동 갱신 켜기/끄기">
@@ -159,7 +161,7 @@
   </div>
 
   <!-- Scripts -->
-  <script type="module" src="live-schedule.js?v=20261024_04"></script>
-  <script type="module" src="sidebar.js?v=20261024_04"></script>
+  <script type="module" src="live-schedule.js?v=20261024_16"></script>
+  <script type="module" src="sidebar.js?v=20261024_16"></script>
 </body>
 </html>

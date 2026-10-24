@@ -877,3 +877,185 @@
     font-size: 10.5px;
   }
 }
+
+
+/* ─── 우리팀 대진표 이미지 저장 버튼 & 예정 휴식 카드 스타일 ──────────── */
+.ctrl-btn-download-img {
+  background: rgba(249, 115, 22, 0.24);
+  border: 1px solid rgba(251, 146, 60, 0.6);
+  color: #fed7aa;
+}
+
+.ctrl-btn-download-img:hover {
+  background: #f97316;
+  border-color: #fb923c;
+  color: #ffffff;
+}
+
+.race-card.break-card.state-break-scheduled {
+  background: #f0fdf4;
+  border: 1.5px dashed #10b981;
+  box-shadow: none;
+}
+
+.race-card.break-card.state-break-scheduled .rc-break-badge {
+  background: #0d9488;
+}
+
+.rc-btn-break-start {
+  height: 24px;
+  padding: 0 9px;
+  border-radius: 5px;
+  background: #0d9488;
+  color: #ffffff;
+  border: 1px solid #0f766e;
+  font-size: 11.5px;
+  font-weight: 800;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.12s;
+}
+
+.rc-btn-break-start:hover {
+  background: #0f766e;
+}
+
+
+/* 추천 드롭다운 닫기 버튼 */
+.suggest-header-right {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-close-suggest {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 8px;
+  border-radius: 5px;
+  border: 1px solid #cbd5e1;
+  background: #f1f5f9;
+  color: #334155;
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+
+.btn-close-suggest:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+  border-color: #94a3b8;
+}
+
+
+/* 전체 대진표 이미지 저장 버튼 */
+.ctrl-btn-download-all {
+  background: rgba(139, 92, 246, 0.25);
+  border: 1px solid rgba(167, 139, 250, 0.6);
+  color: #ddd6fe;
+}
+
+.ctrl-btn-download-all:hover {
+  background: #8b5cf6;
+  border-color: #a78bfa;
+  color: #ffffff;
+}
+
+
+/* ─── 마지막 경기 이후 [🏁 경기종료] 배너 카드 ─────────────────────────── */
+.race-card.finish-all-card {
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+  border: 2px solid #f59e0b;
+  box-shadow: 0 3px 12px rgba(245, 158, 11, 0.2);
+  margin-top: 4px;
+}
+
+.race-card.finish-all-card.state-finish-completed {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  border: 2px solid #475569;
+  box-shadow: none;
+}
+
+.rc-finish-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 9px;
+  border-radius: 5px;
+  background: #d97706;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+
+.race-card.finish-all-card.state-finish-completed .rc-finish-badge {
+  background: #0f172a;
+}
+
+.rc-finish-title {
+  flex: 1;
+  min-width: 0;
+  font-size: 13px;
+  font-weight: 800;
+  color: #92400e;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.race-card.finish-all-card.state-finish-completed .rc-finish-title {
+  color: #1e293b;
+}
+
+.rc-btn-finish-all {
+  height: 25px;
+  padding: 0 11px;
+  border-radius: 5px;
+  background: #d97706;
+  color: #ffffff;
+  border: 1px solid #b45309;
+  font-size: 11.5px;
+  font-weight: 900;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.12s;
+}
+
+.rc-btn-finish-all:hover:not(:disabled) {
+  background: #b45309;
+}
+
+.rc-btn-finish-all:disabled {
+  background: #475569;
+  border-color: #334155;
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.rc-btn-finish-cancel {
+  height: 25px;
+  padding: 0 9px;
+  border-radius: 5px;
+  background: #ffffff;
+  color: #dc2626;
+  border: 1px solid #fca5a5;
+  font-size: 11.5px;
+  font-weight: 800;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.12s;
+}
+
+.rc-btn-finish-cancel:hover:not(:disabled) {
+  background: #dc2626;
+  color: #ffffff;
+  border-color: #dc2626;
+}
+
+.rc-btn-finish-cancel:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}

@@ -15,12 +15,12 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <title>대회결과 및 전체 참가팀 전력 분석 - 2026년 제19회 거제시장배 전국 마스터즈 수영대회</title>
+  <title>대회결과 (학생부·성인부 접수분석 / 진행요약 / 결과분석) - 2026 제19회 거제시장배</title>
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏆</text></svg>">
-  <link rel="stylesheet" href="style.css?v=20261024_09">
-  <link rel="stylesheet" href="sidebar.css?v=20261024_09">
+  <link rel="stylesheet" href="style.css?v=20261024_11">
+  <link rel="stylesheet" href="sidebar.css?v=20261024_11">
   <style>
     .comp-analysis-header {
       background: #ffffff;
@@ -37,7 +37,7 @@
       justify-content: space-between;
       flex-wrap: wrap;
       gap: 12px;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
 
     .comp-title-group {
@@ -55,14 +55,25 @@
       letter-spacing: -0.02em;
     }
 
-    .comp-source-badge {
-      font-size: 11.5px;
-      font-weight: 700;
+    .comp-breadcrumb-badge {
+      font-size: 12px;
+      font-weight: 800;
       color: #0369a1;
       background: #e0f2fe;
       border: 1px solid #bae6fd;
-      padding: 3px 10px;
+      padding: 4px 11px;
       border-radius: 999px;
+    }
+
+    /* 1단(부문: 학생부 -> 성인부) & 2단(접수 분석 -> 진행 요약 -> 결과 분석) 네비게이션 바 */
+    .comp-nav-bars {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding-top: 10px;
+      border-top: 1px solid #f1f5f9;
     }
 
     .comp-div-tabs {
@@ -107,6 +118,48 @@
     .comp-div-tab-btn.active .tab-sub-badge {
       background: #e0f2fe;
       color: #0369a1;
+    }
+
+    .comp-subcat-tabs {
+      display: inline-flex;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      padding: 4px;
+      border-radius: 10px;
+      gap: 4px;
+    }
+
+    .comp-subcat-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 15px;
+      border-radius: 7px;
+      border: none;
+      background: transparent;
+      color: #475569;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.16s ease;
+    }
+
+    .comp-subcat-btn:hover {
+      color: #0f172a;
+      background: #f1f5f9;
+    }
+
+    .comp-subcat-btn.active {
+      background: #0284c7;
+      color: #ffffff;
+      box-shadow: 0 2px 6px rgba(2, 132, 199, 0.28);
+    }
+
+    /* 접수 분석: 팀 필터 칩 영역 */
+    .entry-team-filter-box {
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px dashed #e2e8f0;
     }
 
     .team-chips-label {
@@ -180,30 +233,39 @@
       color: #ffffff;
     }
 
-    /* 참가팀 전력 비교표 스타일 */
-    .team-power-section {
+    /* 참가팀 전력 비교표 & 공통 섹션 카드 스타일 */
+    .team-power-section,
+    .progress-card-section {
       background: #ffffff;
       border: 1px solid #e2e8f0;
       border-radius: 14px;
-      padding: 16px 20px;
+      padding: 18px 20px;
       margin-bottom: 16px;
       box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
     }
 
-    .team-power-header {
+    .team-power-header,
+    .progress-sec-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
       flex-wrap: wrap;
       gap: 8px;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
     }
 
-    .team-power-header h3 {
+    .team-power-header h3,
+    .progress-sec-header h3 {
       font-size: 15.5px;
       font-weight: 800;
       color: #0f172a;
       margin: 0;
+    }
+
+    .progress-sec-sub {
+      font-size: 12px;
+      font-weight: 700;
+      color: #64748b;
     }
 
     .btn-toggle-section {
@@ -322,189 +384,559 @@
       color: #0369a1;
       border-color: #7dd3fc;
     }
+
+    /* ─── 진행 요약 (학생부) 전용 시각화 & 표 스타일 ────────────────────── */
+    .kpi-grid-4 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .kpi-stat-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .kpi-stat-card.highlight-blue {
+      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+      border-color: #bae6fd;
+    }
+
+    .kpi-stat-card.highlight-emerald {
+      background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+      border-color: #bbf7d0;
+    }
+
+    .kpi-label {
+      font-size: 12px;
+      font-weight: 800;
+      color: #475569;
+    }
+
+    .kpi-value {
+      font-size: 20px;
+      font-weight: 900;
+      color: #0f172a;
+      letter-spacing: -0.02em;
+    }
+
+    .kpi-sub {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: #64748b;
+    }
+
+    /* 타임라인 가로 스택 바 */
+    .timeline-ratio-wrap {
+      margin-bottom: 16px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 12px 14px;
+    }
+
+    .timeline-ratio-title {
+      font-size: 12px;
+      font-weight: 800;
+      color: #334155;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .timeline-ratio-bar {
+      display: flex;
+      height: 30px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid #cbd5e1;
+      font-size: 11px;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    .tl-seg {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      white-space: nowrap;
+      overflow: hidden;
+      padding: 0 4px;
+    }
+
+    .tl-seg.seg-morning  { background: #0284c7; }
+    .tl-seg.seg-break1   { background: #10b981; }
+    .tl-seg.seg-afternoon{ background: #2563eb; }
+    .tl-seg.seg-break2   { background: #059669; }
+    .tl-seg.seg-relay    { background: #7c3aed; }
+
+    .timeline-legend-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 8px;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #475569;
+    }
+
+    .tl-dot {
+      display: inline-block;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      margin-right: 4px;
+    }
+
+    /* 가로형 막대그래프 (영법별, 그룹별, 성별 비교) */
+    .charts-two-col {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .hbar-chart-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 14px 16px;
+    }
+
+    .hbar-chart-title {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 0 0 12px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .hbar-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .hbar-row {
+      display: grid;
+      grid-template-columns: 115px 1fr 96px;
+      align-items: center;
+      gap: 10px;
+      font-size: 12.5px;
+    }
+
+    .hbar-label {
+      font-weight: 800;
+      color: #1e293b;
+      white-space: nowrap;
+    }
+
+    .hbar-track {
+      height: 22px;
+      background: #e2e8f0;
+      border-radius: 6px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hbar-fill {
+      height: 100%;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 8px;
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 800;
+      transition: width 0.3s ease;
+    }
+
+    .hbar-val {
+      text-align: right;
+      font-weight: 800;
+      color: #0f172a;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* 그룹 × 영법 세로 그룹 막대그래프 */
+    .group-stroke-vchart-wrap {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .vchart-top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .vchart-legend {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #334155;
+    }
+
+    .vchart-grid {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(95px, 1fr));
+      gap: 10px;
+      align-items: end;
+      min-height: 210px;
+      padding-top: 24px;
+      border-bottom: 2px solid #cbd5e1;
+      overflow-x: auto;
+    }
+
+    .vchart-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .vchart-bars-cluster {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 4px;
+      height: 165px;
+      width: 100%;
+      padding: 0 4px;
+    }
+
+    .vbar-item {
+      flex: 1;
+      max-width: 18px;
+      border-radius: 4px 4px 0 0;
+      position: relative;
+      display: flex;
+      justify-content: center;
+    }
+
+    .vbar-item .vbar-num {
+      position: absolute;
+      top: -16px;
+      font-size: 10px;
+      font-weight: 800;
+      color: #334155;
+      white-space: nowrap;
+    }
+
+    .vchart-col-footer {
+      text-align: center;
+      padding-top: 6px;
+    }
+
+    .vchart-grp-title {
+      font-size: 12.5px;
+      font-weight: 800;
+      color: #0f172a;
+      display: block;
+    }
+
+    .vchart-grp-avg {
+      font-size: 11px;
+      font-weight: 800;
+      color: #0284c7;
+      background: #e0f2fe;
+      padding: 1px 6px;
+      border-radius: 999px;
+      display: inline-block;
+      margin-top: 2px;
+    }
+
+    /* 매트릭스 셀 강조 */
+    .dur-cell-fast {
+      background: #eff6ff !important;
+      color: #1d4ed8 !important;
+      font-weight: 800 !important;
+    }
+
+    .dur-cell-slow {
+      background: #fff1f2 !important;
+      color: #be123c !important;
+      font-weight: 800 !important;
+    }
+
+    .dur-cell-avg {
+      background: #f8fafc !important;
+      color: #0f172a !important;
+      font-weight: 900 !important;
+    }
+
+    /* 추후 업데이트 예정 안내 카드 */
+    .pending-update-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 56px 24px;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+      margin-top: 8px;
+    }
+
+    .pending-icon {
+      font-size: 46px;
+      margin-bottom: 12px;
+      display: inline-block;
+    }
+
+    .pending-title {
+      font-size: 20px;
+      font-weight: 900;
+      color: #0f172a;
+      margin: 0 0 8px 0;
+    }
+
+    .pending-desc {
+      font-size: 14px;
+      font-weight: 600;
+      color: #64748b;
+      max-width: 520px;
+      margin: 0 auto 20px auto;
+      line-height: 1.6;
+    }
+
+    .pending-Quick-btns {
+      display: inline-flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn-quick-nav {
+      padding: 9px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 800;
+      border: 1px solid #cbd5e1;
+      background: #f8fafc;
+      color: #0f172a;
+      cursor: pointer;
+      transition: all 0.16s ease;
+    }
+
+    .btn-quick-nav.primary {
+      background: #0284c7;
+      border-color: #0284c7;
+      color: #ffffff;
+    }
+
+    @media (max-width: 768px) {
+      .hbar-row {
+        grid-template-columns: 95px 1fr 84px;
+        font-size: 11.5px;
+      }
+      .vchart-grid {
+        grid-template-columns: repeat(7, minmax(82px, 1fr));
+      }
+    }
   </style>
 </head>
 
 <body>
   <div class="app-container" style="padding-top: 16px;">
 
-    <!-- 1. 상단 부문 전환 & 소속팀(전력 분석 대상) 선택 바 -->
+    <!-- 상단 공통 헤더: 현재 페이지 제목 및 경로 표시 -->
     <section class="comp-analysis-header">
-      <div class="comp-top-row">
+      <div class="comp-top-row" style="margin-bottom: 0;">
         <div class="comp-title-group">
-          <h2>🏆 2026 제19회 거제시장배 참가팀 전력 분석 & 전체 출전선수</h2>
-          <span class="comp-source-badge">공식 대진표(공지용) 기준</span>
-        </div>
-
-        <div class="comp-div-tabs" role="tablist" aria-label="대회 부문 선택">
-          <button type="button" class="comp-div-tab-btn active" id="tabBtnAdult">
-            🏊 성인부 (25일)
-          </button>
-          <button type="button" class="comp-div-tab-btn" id="tabBtnStudent">
-            🧒 학생부 (24일)
-          </button>
+          <h2 id="pageMainHeading">🏆 2026 제19회 거제시장배 대회결과</h2>
+          <span class="comp-breadcrumb-badge" id="pageBreadcrumbBadge">대회결과 &gt; 학생부 &gt; 접수 분석</span>
         </div>
       </div>
 
-      <div class="team-chips-label">
-        <span>🎯 팀별 전력 필터 (클릭 시 아래 그래프·표·명단이 해당 팀 또는 전체로 즉시 전환됩니다)</span>
-      </div>
-      <div class="team-power-chips-wrap" id="teamFilterChips">
-        <!-- Rendered by competition-result.js -->
+      <!-- 접수 분석 전용: 팀별 전력 필터 칩 -->
+      <div class="entry-team-filter-box" id="entryTeamFilterBox">
+        <div class="team-chips-label">
+          <span>🎯 팀별 전력 필터 (클릭 시 아래 그래프·표·명단이 해당 팀 또는 전체로 즉시 전환됩니다)</span>
+        </div>
+        <div class="team-power-chips-wrap" id="teamFilterChips">
+          <!-- Rendered by competition-result.js -->
+        </div>
       </div>
     </section>
 
-    <!-- 2. 연령대(그룹)·성별·종목 출전 요약 섹션 (기본: 누적 막대그래프 / 전환: 요약 표) -->
-    <section class="events-summary-section">
-      <div class="events-summary-topbar">
-        <div class="events-summary-title-wrap">
-          <h3 class="events-summary-main-title" id="summarySectionTitle">📊 개인전 출전 요약</h3>
-          <div class="summary-chart-legend" id="summaryChartLegend">
-            <!-- Rendered by competition-result.js -->
+    <!-- =================================================================== -->
+    <!-- VIEW 1: 접수 분석 (학생부 > 접수 분석 / 성인부 > 접수 분석)           -->
+    <!-- =================================================================== -->
+    <div id="viewContainerEntry">
+      <!-- 1-1. 연령대(그룹)·성별·종목 출전 요약 섹션 (기본: 누적 막대그래프 / 전환: 요약 표) -->
+      <section class="events-summary-section">
+        <div class="events-summary-topbar">
+          <div class="events-summary-title-wrap">
+            <h3 class="events-summary-main-title" id="summarySectionTitle">📊 개인전 출전 요약</h3>
+            <div class="summary-chart-legend" id="summaryChartLegend"></div>
           </div>
-        </div>
-        <div class="events-summary-controls">
-          <div class="summary-view-switch" id="summaryViewSwitch" role="group" aria-label="출전 요약 보기 전환">
-            <button type="button" class="summary-switch-btn active" data-summary-view="chart">📊 그래프</button>
-            <button type="button" class="summary-switch-btn" data-summary-view="table">📋 표</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- 기본 뷰: 누적 막대그래프 -->
-      <div id="summaryChartContainer" class="summary-chart-card">
-        <!-- Rendered by competition-result.js -->
-      </div>
-
-      <!-- 전환 뷰: 남성 / 여성 출전 요약 표 -->
-      <div id="summaryTablesContainer" class="matrices-container" style="display: none;">
-        <!-- 👨 Male Matrix Card -->
-        <div class="matrix-card male-card">
-          <div class="matrix-card-header">
-            <div class="matrix-title-area">
-              <span class="matrix-badge male">남성부</span>
-              <h3 id="maleMatrixTitle">👨 남성 출전 요약</h3>
+          <div class="events-summary-controls">
+            <div class="summary-view-switch" id="summaryViewSwitch" role="group" aria-label="출전 요약 보기 전환">
+              <button type="button" class="summary-switch-btn active" data-summary-view="chart">📊 그래프</button>
+              <button type="button" class="summary-switch-btn" data-summary-view="table">📋 표</button>
             </div>
-            <span class="matrix-tip">💡 숫자에 마우스 오버 시 명단 확인</span>
-          </div>
-          <div class="table-responsive">
-            <table class="summary-matrix-table" id="maleMatrixTable">
-              <thead id="maleMatrixHead"></thead>
-              <tbody id="maleMatrixBody"></tbody>
-              <tfoot id="maleMatrixFoot"></tfoot>
-            </table>
           </div>
         </div>
 
-        <!-- 👩 Female Matrix Card -->
-        <div class="matrix-card female-card">
-          <div class="matrix-card-header">
-            <div class="matrix-title-area">
-              <span class="matrix-badge female">여성부</span>
-              <h3 id="femaleMatrixTitle">👩 여성 출전 요약</h3>
+        <!-- 기본 뷰: 누적 막대그래프 -->
+        <div id="summaryChartContainer" class="summary-chart-card"></div>
+
+        <!-- 전환 뷰: 남성 / 여성 출전 요약 표 -->
+        <div id="summaryTablesContainer" class="matrices-container" style="display: none;">
+          <div class="matrix-card male-card">
+            <div class="matrix-card-header">
+              <div class="matrix-title-area">
+                <span class="matrix-badge male">남성부</span>
+                <h3 id="maleMatrixTitle">👨 남성 출전 요약</h3>
+              </div>
+              <span class="matrix-tip">💡 숫자에 마우스 오버 시 명단 확인</span>
             </div>
-            <span class="matrix-tip">💡 숫자에 마우스 오버 시 명단 확인</span>
-          </div>
-          <div class="table-responsive">
-            <table class="summary-matrix-table" id="femaleMatrixTable">
-              <thead id="femaleMatrixHead"></thead>
-              <tbody id="femaleMatrixBody"></tbody>
-              <tfoot id="femaleMatrixFoot"></tfoot>
-            </table>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 3. 참가 팀별 전력 비교 요약표 -->
-    <section class="team-power-section">
-      <div class="team-power-header">
-        <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-          <h3>⚔️ 참가 팀별 전력 비교표 (연령대 그룹별 인원 및 개인·단체전)</h3>
-          <span id="teamPowerSummaryCount" style="font-size:12.5px; color:#64748b; font-weight:700;"></span>
-        </div>
-        <button type="button" class="btn-toggle-section" id="btnToggleTeamPowerTable">▲ 표 접기</button>
-      </div>
-      <div class="table-responsive" id="teamPowerTableWrap">
-        <table class="record-table" id="teamPowerTable">
-          <thead id="teamPowerTableHead"></thead>
-          <tbody id="teamPowerTableBody"></tbody>
-        </table>
-      </div>
-    </section>
-
-    <!-- 4. 전체 대회 출전선수 상세 명단 -->
-    <section class="events-detail-section">
-      <div class="events-detail-header">
-        <div class="events-detail-title-group">
-          <h3 id="compSwimmersTitle">📋 전체 대회 출전선수 명단</h3>
-        </div>
-      </div>
-
-      <section class="toolbar">
-        <div class="toolbar-left">
-          <div class="search-box">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="11" cy="11" r="8"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-            <input type="text" id="compSearchInput" placeholder="선수 이름 또는 소속팀 검색..." autocomplete="off">
+            <div class="table-responsive">
+              <table class="summary-matrix-table" id="maleMatrixTable">
+                <thead id="maleMatrixHead"></thead>
+                <tbody id="maleMatrixBody"></tbody>
+                <tfoot id="maleMatrixFoot"></tfoot>
+              </table>
+            </div>
           </div>
 
-          <div class="filter-group">
-            <select id="compTeamSelect" class="filter-select" aria-label="소속팀 필터">
-              <option value="all" selected>전체 대회 출전선수</option>
-            </select>
-          </div>
-
-          <div class="filter-group">
-            <select id="compGenderSelect" class="filter-select" aria-label="성별 필터">
-              <option value="all" selected>전체 성별</option>
-              <option value="남">남자</option>
-              <option value="여">여자</option>
-            </select>
-          </div>
-
-          <div class="filter-group">
-            <select id="compGroupSelect" class="filter-select" aria-label="그룹 필터">
-              <option value="all" selected>모든 연령대(그룹)</option>
-            </select>
-          </div>
-
-          <div class="filter-group">
-            <select id="compStrokeSelect" class="filter-select" aria-label="종목 필터">
-              <option value="all" selected>모든 종목</option>
-            </select>
+          <div class="matrix-card female-card">
+            <div class="matrix-card-header">
+              <div class="matrix-title-area">
+                <span class="matrix-badge female">여성부</span>
+                <h3 id="femaleMatrixTitle">👩 여성 출전 요약</h3>
+              </div>
+              <span class="matrix-tip">💡 숫자에 마우스 오버 시 명단 확인</span>
+            </div>
+            <div class="table-responsive">
+              <table class="summary-matrix-table" id="femaleMatrixTable">
+                <thead id="femaleMatrixHead"></thead>
+                <tbody id="femaleMatrixBody"></tbody>
+                <tfoot id="femaleMatrixFoot"></tfoot>
+              </table>
+            </div>
           </div>
         </div>
       </section>
 
-      <main class="table-card" style="margin-top: 12px;">
-        <div class="table-responsive">
-          <table class="record-table events-table" id="compSwimmersTable">
-            <thead>
-              <tr>
-                <th style="width: 56px; text-align:center;">NO</th>
-                <th style="width: 135px; text-align:center;">소속팀</th>
-                <th style="width: 85px; text-align:center;">연령대(그룹)</th>
-                <th style="width: 65px; text-align:center;">성별</th>
-                <th style="width: 110px; text-align:center;">이름</th>
-                <th style="min-width: 210px; text-align:left;">출전 종목 1 (경기번호·레인)</th>
-                <th style="min-width: 210px; text-align:left;">출전 종목 2 (경기번호·레인)</th>
-              </tr>
-            </thead>
-            <tbody id="compSwimmersTableBody">
-              <!-- Rendered by competition-result.js -->
-            </tbody>
+      <!-- 1-2. 참가 팀별 전력 비교 요약표 -->
+      <section class="team-power-section">
+        <div class="team-power-header">
+          <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+            <h3>⚔️ 참가 팀별 전력 비교표 (연령대 그룹별 인원 및 개인·단체전)</h3>
+            <span id="teamPowerSummaryCount" style="font-size:12.5px; color:#64748b; font-weight:700;"></span>
+          </div>
+          <button type="button" class="btn-toggle-section" id="btnToggleTeamPowerTable">▲ 표 접기</button>
+        </div>
+        <div class="table-responsive" id="teamPowerTableWrap">
+          <table class="record-table" id="teamPowerTable">
+            <thead id="teamPowerTableHead"></thead>
+            <tbody id="teamPowerTableBody"></tbody>
           </table>
         </div>
-      </main>
-    </section>
+      </section>
+
+      <!-- 1-3. 전체 대회 출전선수 상세 명단 -->
+      <section class="events-detail-section">
+        <div class="events-detail-header">
+          <div class="events-detail-title-group">
+            <h3 id="compSwimmersTitle">📋 전체 대회 출전선수 명단</h3>
+          </div>
+        </div>
+
+        <section class="toolbar">
+          <div class="toolbar-left">
+            <div class="search-box">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input type="text" id="compSearchInput" placeholder="선수 이름 또는 소속팀 검색..." autocomplete="off">
+            </div>
+
+            <div class="filter-group">
+              <select id="compTeamSelect" class="filter-select" aria-label="소속팀 필터">
+                <option value="all" selected>전체 대회 출전선수</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <select id="compGenderSelect" class="filter-select" aria-label="성별 필터">
+                <option value="all" selected>전체 성별</option>
+                <option value="남">남자</option>
+                <option value="여">여자</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <select id="compGroupSelect" class="filter-select" aria-label="그룹 필터">
+                <option value="all" selected>모든 연령대(그룹)</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <select id="compStrokeSelect" class="filter-select" aria-label="종목 필터">
+                <option value="all" selected>모든 종목</option>
+              </select>
+            </div>
+          </div>
+        </section>
+
+        <main class="table-card" style="margin-top: 12px;">
+          <div class="table-responsive">
+            <table class="record-table events-table" id="compSwimmersTable">
+              <thead>
+                <tr>
+                  <th style="width: 56px; text-align:center;">NO</th>
+                  <th style="width: 135px; text-align:center;">소속팀</th>
+                  <th style="width: 85px; text-align:center;">연령대(그룹)</th>
+                  <th style="width: 65px; text-align:center;">성별</th>
+                  <th style="width: 110px; text-align:center;">이름</th>
+                  <th style="min-width: 210px; text-align:left;">출전 종목 1 (경기번호·레인)</th>
+                  <th style="min-width: 210px; text-align:left;">출전 종목 2 (경기번호·레인)</th>
+                </tr>
+              </thead>
+              <tbody id="compSwimmersTableBody"></tbody>
+            </table>
+          </div>
+        </main>
+      </section>
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- VIEW 2: 진행 요약 (학생부 > 진행 요약 / 성인부 > 진행 요약)           -->
+    <!-- =================================================================== -->
+    <div id="viewContainerProgress" style="display: none;"></div>
+
+    <!-- =================================================================== -->
+    <!-- VIEW 3: 결과 분석 (학생부 > 결과 분석 / 성인부 > 결과 분석)           -->
+    <!-- =================================================================== -->
+    <div id="viewContainerResult" style="display: none;"></div>
 
   </div>
 
-  <script type="module" src="competition-result.js?v=20261024_09"></script>
-  <script type="module" src="sidebar.js?v=20261024_09"></script>
+  <script type="module" src="competition-result.js?v=20261024_14"></script>
+  <script type="module" src="sidebar.js?v=20261024_14"></script>
 </body>
 
 </html>

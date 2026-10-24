@@ -1,9 +1,9 @@
 // ==========================================================================
-// GMDC Swim Club - 2026 거제시장배 전국마스터즈 수영대회 전력 분석 & 전체 출전선수 현황
-// 대진표(공지용).xlsx 기반 타팀 전력(연령대/그룹, 성별, 종목 그래프·표) 및 전체 출전선수 명단
+// GMDC Swim Club - 2026 거제시장배 전국마스터즈 수영대회 대회결과 통합 컨트롤러
+// 구조: 대회결과 > [학생부 / 성인부] > [접수 분석 / 진행 요약 / 결과 분석]
 // ==========================================================================
 
-import { ADULT_RACES_DATA, STUDENT_RACES_DATA } from "./races-data.js?v=20261024_09";
+import { ADULT_RACES_DATA, STUDENT_RACES_DATA } from "./races-data.js?v=20261024_11";
 
 const ADULT_GROUPS = ["1그룹", "2그룹", "3그룹", "4그룹", "5그룹", "6그룹"];
 const STUDENT_GROUPS = ["1그룹", "2그룹", "3그룹", "4그룹", "5그룹", "6그룹", "7그룹"];
@@ -26,16 +26,16 @@ const STUDENT_STROKES = [
 
 const OUR_TEAMS = new Set(["거제몽꾸", "거제야르"]);
 
-// State
-let currentDivision = "adult"; // 'adult' | 'student'
-let summaryViewMode = "chart"; // 'chart' (기본) | 'table'
-let selectedTeamFilter = "all"; // 'all' | 'other_all' | 특정 팀명
-let selectedGenderFilter = "all"; // 'all' | '남' | '여'
-let selectedGroupFilter = "all"; // 'all' | '1그룹' ...
-let selectedStrokeFilter = "all"; // 'all' | '자유형' ...
+// State (기본: 학생부 > 접수 분석)
+let currentDivision = "student"; // 'student' | 'adult'
+let currentSubTab = "entry";     // 'entry' | 'progress' | 'result'
+let summaryViewMode = "chart";   // 'chart' (기본) | 'table'
+let selectedTeamFilter = "all";  // 'all' | 'other_all' | 특정 팀명
+let selectedGenderFilter = "all";
+let selectedGroupFilter = "all";
+let selectedStrokeFilter = "all";
 let searchQuery = "";
 
-// Parsed datasets cache
 const parsedCache = {
   adult: null,
   student: null
@@ -48,6 +48,31 @@ function escapeHtml(str) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
+}
+
+function getRouteHash(div, tab) {
+  return `#/competition-result-${div}-${tab}`;
+}
+
+function syncRouteWithParentAndUrl() {
+  const targetHash = getRouteHash(currentDivision, currentSubTab);
+  try {
+    const url = new URL(window.location.href);
+    url.searchParams.set("div", currentDivision);
+    url.searchParams.set("tab", currentSubTab);
+    history.replaceState(null, "", `${url.pathname}${url.search}`);
+  } catch (e) {}
+
+  if (window.parent && window.parent !== window) {
+    try {
+      window.parent.postMessage({
+        type: "GMDC_COMP_RESULT_TAB_CHANGED",
+        div: currentDivision,
+        tab: currentSubTab,
+        hash: targetHash
+      }, "*");
+    } catch (e) {}
+  }
 }
 
 /**
@@ -85,7 +110,6 @@ function parseDivisionData(races, divisionKey) {
   }
 
   for (const race of races) {
-    // 통합조(합침)에서 각 original_match_no별 실제 그룹/성별 추출
     const headerMeta = new Map();
     for (const h of (race.original_headers || [])) {
       const m = h.match(/^(\d+(?:-\d+)?)\.\s*(.+)$/);
@@ -162,7 +186,6 @@ function parseDivisionData(races, divisionKey) {
     }
   }
 
-  // 그룹별 고유 선수 수 집계
   for (const tStat of teamStatsMap.values()) {
     groups.forEach(g => {
       tStat.groupCounts[g] = tStat.groupSwimmerKeys.get(g)?.size || 0;
@@ -170,7 +193,6 @@ function parseDivisionData(races, divisionKey) {
   }
 
   const swimmers = [...swimmerMap.values()].sort((a, b) => {
-    // 소속팀 인원수 내림차순 -> 그룹 오름차순 -> 성별 -> 이름순
     const teamCountDiff = (teamStatsMap.get(b.team)?.swimmerKeys.size || 0) - (teamStatsMap.get(a.team)?.swimmerKeys.size || 0);
     if (teamCountDiff !== 0) return teamCountDiff;
     if (a.team !== b.team) return a.team.localeCompare(b.team, "ko");
@@ -210,40 +232,54 @@ function getDivisionData(divisionKey) {
   return parsedCache[divisionKey];
 }
 
-/**
- * 현재 선택된 팀 필터('all' | 'other_all' | 특정 팀명)에 해당하는 선수 목록 반환
- */
 function getTeamFilteredSwimmers(data) {
-  if (selectedTeamFilter === "all") {
-    return data.swimmers;
-  }
-  if (selectedTeamFilter === "other_all") {
-    return data.swimmers.filter(s => !s.isOurTeam);
-  }
+  if (selectedTeamFilter === "all") return data.swimmers;
+  if (selectedTeamFilter === "other_all") return data.swimmers.filter(s => !s.isOurTeam);
   return data.swimmers.filter(s => s.team === selectedTeamFilter);
 }
 
-/**
- * 상단 부문 탭 및 요약 배지 업데이트
- */
-function renderDivisionHeaderAndTeamChips() {
-  const adultData = getDivisionData("adult");
-  const studentData = getDivisionData("student");
+// ==========================================================================
+// 🧭 상단 부문(학생부 / 성인부) & 하위 탭(접수 분석 / 진행 요약 / 결과 분석) 헤더
+// ==========================================================================
+function renderTopNavigationHeader() {
+  const divLabel = currentDivision === "student" ? "학생부 (24일)" : "성인부 (25일)";
+  const subLabelMap = {
+    entry: "접수 분석",
+    progress: "진행 요약",
+    result: "결과 분석"
+  };
+  const subLabel = subLabelMap[currentSubTab] || "접수 분석";
+
+  const mainHeading = document.getElementById("pageMainHeading");
+  const breadcrumb = document.getElementById("pageBreadcrumbBadge");
+  if (mainHeading) {
+    mainHeading.textContent = `🏆 ${divLabel} — ${subLabel}`;
+  }
+  if (breadcrumb) {
+    breadcrumb.textContent = `대회결과 > ${currentDivision === "student" ? "학생부" : "성인부"} > ${subLabel}`;
+  }
+
+  // 팀별 전력 필터 칩 박스는 '접수 분석' 페이지에서만 노출
+  const entryFilterBox = document.getElementById("entryTeamFilterBox");
+  if (entryFilterBox) {
+    entryFilterBox.style.display = currentSubTab === "entry" ? "block" : "none";
+  }
+
+  const viewEntry = document.getElementById("viewContainerEntry");
+  const viewProgress = document.getElementById("viewContainerProgress");
+  const viewResult = document.getElementById("viewContainerResult");
+
+  if (viewEntry) viewEntry.style.display = currentSubTab === "entry" ? "block" : "none";
+  if (viewProgress) viewProgress.style.display = currentSubTab === "progress" ? "block" : "none";
+  if (viewResult) viewResult.style.display = currentSubTab === "result" ? "block" : "none";
+}
+
+// ==========================================================================
+// 📊 TAB 1: 접수 분석 (학생부 > 접수 분석 / 성인부 > 접수 분석)
+// ==========================================================================
+function renderEntryTeamChipsAndToolbar() {
   const data = getDivisionData(currentDivision);
 
-  // 부문 탭 텍스트 및 활성화
-  const btnAdult = document.getElementById("tabBtnAdult");
-  const btnStudent = document.getElementById("tabBtnStudent");
-  if (btnAdult) {
-    btnAdult.classList.toggle("active", currentDivision === "adult");
-    btnAdult.innerHTML = `🏊 성인부 (25일) <span class="tab-sub-badge">${adultData.teams.length}개팀 · ${adultData.totalSwimmers}명</span>`;
-  }
-  if (btnStudent) {
-    btnStudent.classList.toggle("active", currentDivision === "student");
-    btnStudent.innerHTML = `🧒 학생부 (24일) <span class="tab-sub-badge">${studentData.teams.length}개팀 · ${studentData.totalSwimmers}명</span>`;
-  }
-
-  // 팀 선택 칩 렌더링
   const chipsContainer = document.getElementById("teamFilterChips");
   if (chipsContainer) {
     const otherSwimmerCount = data.swimmers.filter(s => !s.isOurTeam).length;
@@ -272,7 +308,6 @@ function renderDivisionHeaderAndTeamChips() {
     chipsContainer.innerHTML = allChipHtml + teamChipsHtml;
   }
 
-  // 하단 툴바의 팀/그룹/종목 셀렉트 옵션 동기화
   const teamSelect = document.getElementById("compTeamSelect");
   if (teamSelect) {
     teamSelect.innerHTML = `
@@ -308,9 +343,6 @@ function renderDivisionHeaderAndTeamChips() {
   }
 }
 
-/**
- * 신청서 개인 페이지와 동일한 누적 막대그래프(기본) 렌더링
- */
 function renderSummaryChart() {
   const chartContainer = document.getElementById("summaryChartContainer");
   const chartLegend = document.getElementById("summaryChartLegend");
@@ -340,7 +372,6 @@ function renderSummaryChart() {
     femaleTitle.textContent = `👩 여성 출전 요약 (${selectedTeamFilter === "all" ? "전체" : selectedTeamFilter === "other_all" ? "타팀 전체" : selectedTeamFilter})`;
   }
 
-  // 범례 렌더링 (성인부 6종목 / 학생부 4종목)
   if (chartLegend) {
     chartLegend.innerHTML = `
       ${data.strokes.map(s => `<span class="chart-legend-item"><span class="chart-legend-swatch ${s.swatchCls}"></span>${escapeHtml(s.key)}</span>`).join("")}
@@ -493,9 +524,6 @@ function renderSummaryChart() {
   `;
 }
 
-/**
- * 남성 / 여성 출전 요약 매트릭스 표 렌더링 (표 모드 전환 시 표시)
- */
 function renderSummaryMatrices() {
   const data = getDivisionData(currentDivision);
   const targetSwimmers = getTeamFilteredSwimmers(data);
@@ -585,9 +613,6 @@ function renderSummaryMatrices() {
   fillGenderMatrix("여", femaleBody, femaleFoot);
 }
 
-/**
- * 참가 팀별 전력 비교 표 렌더링
- */
 function renderTeamPowerComparisonTable() {
   const headEl = document.getElementById("teamPowerTableHead");
   const bodyEl = document.getElementById("teamPowerTableBody");
@@ -646,9 +671,6 @@ function renderTeamPowerComparisonTable() {
   }).join("");
 }
 
-/**
- * 하단 전체 대회 출전선수 (및 필터링된 선수) 상세 명단 렌더링
- */
 function renderSwimmersDetailTable() {
   const tbody = document.getElementById("compSwimmersTableBody");
   const titleEl = document.getElementById("compSwimmersTitle");
@@ -754,32 +776,540 @@ function renderSwimmersDetailTable() {
   }).join("");
 }
 
+// ==========================================================================
+// ⏱️ TAB 2: 진행 요약 (학생부: 2번, 4번, 5-2번, 5-3번 시각화·표 / 성인부: 추후 업데이트 예정)
+// ==========================================================================
+function renderProgressSummaryView() {
+  const container = document.getElementById("viewContainerProgress");
+  if (!container) return;
+
+  if (currentDivision === "adult") {
+    container.innerHTML = `
+      <section class="pending-update-card">
+        <span class="pending-icon">⏱️</span>
+        <h3 class="pending-title">성인부 (25일) 진행 요약 — 추후 업데이트 예정</h3>
+        <p class="pending-desc" style="margin-bottom: 0;">
+          성인부 경기는 <strong>2026년 10월 25일(일) 08:30</strong>부터 진행됩니다.<br>
+          전 경기 종료 후 실제 경기 타임라인, 영법별·그룹별·성별 평균 소요시간 분석 데이터가 이곳에 업데이트될 예정입니다.
+        </p>
+      </section>
+    `;
+    return;
+  }
+
+  // 학생부 (2026-10-24, 232경기) 진행 요약: 2번, 4번, 5번(2), 5번(3) 기준 표 + 막대그래프
+  const groupMatrixRows = [
+    { group: "1그룹 (7세 이하)", races: 18, fly: 115, back: 125, breast: 102, free: 93, avg: 104.3, avgStr: "01:44" },
+    { group: "2그룹 (8세)",      races: 31, fly: 116, back: 126, breast: 110, free: 95, avg: 110.1, avgStr: "01:50" },
+    { group: "3그룹 (9세)",      races: 32, fly: 112, back: 138, breast: 106, free: 93, avg: 107.2, avgStr: "01:47" },
+    { group: "4그룹 (10세)",     races: 49, fly: 92,  back: 80,  breast: 90,  free: 81, avg: 84.6,  avgStr: "01:25" },
+    { group: "5그룹 (11세)",     races: 38, fly: 94,  back: 98,  breast: 92,  free: 83, avg: 90.9,  avgStr: "01:31" },
+    { group: "6그룹 (12세)",     races: 31, fly: 83,  back: 116, breast: 89,  free: 69, avg: 85.9,  avgStr: "01:26" },
+    { group: "7그룹 (13~16세)",  races: 21, fly: 87,  back: 90,  breast: 88,  free: 77, avg: 83.9,  avgStr: "01:24" }
+  ];
+
+  const fmtMMSS = (sec) => {
+    const s = Math.round(sec);
+    const m = Math.floor(s / 60);
+    const rem = s % 60;
+    return `${String(m).padStart(2, "0")}:${String(rem).padStart(2, "0")}`;
+  };
+
+  const maxStrokeSec = 140; // 그룹×영법 세로 차트 기준 최대값(138초)
+  const vchartColsHtml = groupMatrixRows.map(r => {
+    const hFly = Math.round((r.fly / maxStrokeSec) * 100);
+    const hBack = Math.round((r.back / maxStrokeSec) * 100);
+    const hBreast = Math.round((r.breast / maxStrokeSec) * 100);
+    const hFree = Math.round((r.free / maxStrokeSec) * 100);
+    const shortGrp = r.group.split(" ")[0];
+    const ageNote = r.group.replace(/^[^\s]+\s*/, "");
+    return `
+      <div class="vchart-col">
+        <div class="vchart-bars-cluster">
+          <div class="vbar-item" style="height:${hFly}%; background:#e11d48;" title="${r.group} 접영 50m: ${r.fly}초 (${fmtMMSS(r.fly)})">
+            <span class="vbar-num">${r.fly}s</span>
+          </div>
+          <div class="vbar-item" style="height:${hBack}%; background:#16a34a;" title="${r.group} 배영 50m: ${r.back}초 (${fmtMMSS(r.back)})">
+            <span class="vbar-num">${r.back}s</span>
+          </div>
+          <div class="vbar-item" style="height:${hBreast}%; background:#d97706;" title="${r.group} 평영 50m: ${r.breast}초 (${fmtMMSS(r.breast)})">
+            <span class="vbar-num">${r.breast}s</span>
+          </div>
+          <div class="vbar-item" style="height:${hFree}%; background:#2563eb;" title="${r.group} 자유형 50m: ${r.free}초 (${fmtMMSS(r.free)})">
+            <span class="vbar-num">${r.free}s</span>
+          </div>
+        </div>
+        <div class="vchart-col-footer">
+          <span class="vchart-grp-title">${escapeHtml(shortGrp)} <small style="color:#64748b;font-weight:600;">${escapeHtml(ageNote)}</small></span>
+          <span class="vchart-grp-avg">평균 ${r.avg}초 (${r.avgStr})</span>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  const matrixBodyHtml = groupMatrixRows.map(r => {
+    const cellCls = (val) => val >= 120 ? "dur-cell-slow" : (val <= 83 ? "dur-cell-fast" : "");
+    return `
+      <tr>
+        <td style="text-align:left; font-weight:800; color:#0f172a;">${escapeHtml(r.group)}</td>
+        <td style="text-align:center; font-weight:700; color:#475569;">${r.races}경기</td>
+        <td class="${cellCls(r.fly)}" style="text-align:center; font-weight:700;">${r.fly}초 <span style="color:#64748b;font-size:11.5px;">(${fmtMMSS(r.fly)})</span></td>
+        <td class="${cellCls(r.back)}" style="text-align:center; font-weight:700;">${r.back}초 <span style="color:#64748b;font-size:11.5px;">(${fmtMMSS(r.back)})</span></td>
+        <td class="${cellCls(r.breast)}" style="text-align:center; font-weight:700;">${r.breast}초 <span style="color:#64748b;font-size:11.5px;">(${fmtMMSS(r.breast)})</span></td>
+        <td class="${cellCls(r.free)}" style="text-align:center; font-weight:700;">${r.free}초 <span style="color:#64748b;font-size:11.5px;">(${fmtMMSS(r.free)})</span></td>
+        <td class="dur-cell-avg" style="text-align:center;">${r.avg}초 (${r.avgStr})</td>
+      </tr>
+    `;
+  }).join("");
+
+  container.innerHTML = `
+    <!-- =============================================================== -->
+    <!-- 1. 학생부 전체 타임라인 요약 (08:30 ~ 17:05)                     -->
+    <!-- =============================================================== -->
+    <section class="progress-card-section">
+      <div class="progress-sec-header">
+        <div>
+          <h3>⏱️ 1. 학생부 전체 타임라인 요약 (08:30 ~ 17:05)</h3>
+          <span class="progress-sec-sub">2026년 10월 24일(토) · 총 232경기 (개인전 220경기 + 단체전 12경기) 및 공식 휴게 2회 실측 기준</span>
+        </div>
+      </div>
+
+      <div class="kpi-grid-4">
+        <div class="kpi-stat-card highlight-blue">
+          <span class="kpi-label">🏁 전체 대회 소요 시간</span>
+          <span class="kpi-value">8시간 35분 00초</span>
+          <span class="kpi-sub">08:30:00 ~ 17:05:00 (총 30,900초)</span>
+        </div>
+        <div class="kpi-stat-card">
+          <span class="kpi-label">🏊 순수 경기 진행 시간</span>
+          <span class="kpi-value">7시간 02분 22초</span>
+          <span class="kpi-sub">총 25,342초 · 232경기 (경기당 평균 01:49)</span>
+        </div>
+        <div class="kpi-stat-card highlight-emerald">
+          <span class="kpi-label">☕ 총 휴게 시간 (2회 합산)</span>
+          <span class="kpi-value">1시간 32분 38초</span>
+          <span class="kpi-sub">개회식·중식 78분 17초 + 혼계영 준비 14분 21초</span>
+        </div>
+        <div class="kpi-stat-card">
+          <span class="kpi-label">⚡ 개인전 vs 단체전 평균</span>
+          <span class="kpi-value">01:34 / 06:22</span>
+          <span class="kpi-sub">개인 220경기(94.3초) · 단체 12경기(382.1초)</span>
+        </div>
+      </div>
+
+      <!-- 타임라인 구성 비율 바 -->
+      <div class="timeline-ratio-wrap">
+        <div class="timeline-ratio-title">
+          <span>🕒 시간대별 진행 구성 비율 (08:30 ~ 17:05, 총 515분)</span>
+          <span>순수 경기 82.0% (422.4분) · 휴게 18.0% (92.6분)</span>
+        </div>
+        <div class="timeline-ratio-bar">
+          <div class="tl-seg seg-morning" style="width: 25.5%;" title="오전 경기 (#1~#55): 08:30:00 ~ 10:41:17 (2시간 11분 17초)">오전 #1~#55 (2h 11m)</div>
+          <div class="tl-seg seg-break1" style="width: 15.2%;" title="휴게 1 (개회식·중식): 10:41:17 ~ 11:59:34 (1시간 18분 17초)">휴게1 (1h 18m)</div>
+          <div class="tl-seg seg-afternoon" style="width: 50.0%;" title="오후 개인전 (#56~#226): 11:59:34 ~ 16:17:04 (4시간 17분 30초)">오후 개인전 #56~#226 (4h 17m)</div>
+          <div class="tl-seg seg-break2" style="width: 2.8%;" title="휴게 2 (혼계영 준비): 16:17:04 ~ 16:31:25 (14분 21초)">휴게2</div>
+          <div class="tl-seg seg-relay" style="width: 6.5%;" title="오후 혼계영 (#227~#232): 16:31:25 ~ 17:05:00 (33분 35초)">혼계영 (34m)</div>
+        </div>
+        <div class="timeline-legend-row">
+          <span><i class="tl-dot" style="background:#0284c7;"></i>오전 경기 (#1~#55, 08:30~10:41)</span>
+          <span><i class="tl-dot" style="background:#10b981;"></i>휴게 1·개회식/중식 (10:41~11:59)</span>
+          <span><i class="tl-dot" style="background:#2563eb;"></i>오후 개인전 (#56~#226, 11:59~16:17)</span>
+          <span><i class="tl-dot" style="background:#059669;"></i>휴게 2·단체전 준비 (16:17~16:31)</span>
+          <span><i class="tl-dot" style="background:#7c3aed;"></i>오후 혼계영 (#227~#232, 16:31~17:05)</span>
+        </div>
+      </div>
+
+      <!-- 전체 타임라인 요약 표 -->
+      <div class="table-responsive">
+        <table class="record-table">
+          <thead>
+            <tr>
+              <th style="min-width: 165px; text-align:left;">구분</th>
+              <th style="min-width: 170px; text-align:center;">시각 / 구간</th>
+              <th style="min-width: 150px; text-align:center;">소요 시간</th>
+              <th style="width: 100px; text-align:center;">경기 수</th>
+              <th style="min-width: 135px; text-align:center;">평균 소요시간</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="text-align:left; font-weight:800; color:#0f172a;">전체 대회 시간</td>
+              <td style="text-align:center; font-weight:700;">08:30:00 ~ 17:05:00</td>
+              <td style="text-align:center; font-weight:800; color:#0f172a;">8시간 35분 00초 (30,900초)</td>
+              <td style="text-align:center; font-weight:700;">232경기 + 휴게 2회</td>
+              <td style="text-align:center; color:#94a3b8;">-</td>
+            </tr>
+            <tr style="background:#f0fdf4;">
+              <td style="text-align:left; font-weight:800; color:#15803d;">☕ 휴게 1 (개회식·중식)</td>
+              <td style="text-align:center; font-weight:700;">#55 종료 후 (10:41:17 ~ 11:59:34)</td>
+              <td style="text-align:center; font-weight:800; color:#15803d;">1시간 18분 17초 (4,697초)</td>
+              <td style="text-align:center; color:#94a3b8;">-</td>
+              <td style="text-align:center; color:#94a3b8;">-</td>
+            </tr>
+            <tr style="background:#f0fdf4;">
+              <td style="text-align:left; font-weight:800; color:#15803d;">☕ 휴게 2 (혼계영 준비)</td>
+              <td style="text-align:center; font-weight:700;">#226 종료 후 (16:17:04 ~ 16:31:25)</td>
+              <td style="text-align:center; font-weight:800; color:#15803d;">14분 21초 (861초)</td>
+              <td style="text-align:center; color:#94a3b8;">-</td>
+              <td style="text-align:center; color:#94a3b8;">-</td>
+            </tr>
+            <tr style="background:#f0f9ff;">
+              <td style="text-align:left; font-weight:900; color:#0369a1;">🏊 순수 경기 진행 시간</td>
+              <td style="text-align:center; font-weight:700;">휴게 2회 (92분 38초) 제외</td>
+              <td style="text-align:center; font-weight:900; color:#0369a1;">7시간 02분 22초 (25,342초)</td>
+              <td style="text-align:center; font-weight:900; color:#0369a1;">232경기</td>
+              <td style="text-align:center; font-weight:900; color:#0369a1;">01:49 (109.2초)</td>
+            </tr>
+            <tr>
+              <td style="text-align:left; padding-left:22px; font-weight:700; color:#334155;">├─ 개인전 (50m 4종목 합계)</td>
+              <td style="text-align:center; color:#475569;">#7 ~ #226 (오전·오후 개인전)</td>
+              <td style="text-align:center; font-weight:700;">5시간 45분 43초 (20,743초)</td>
+              <td style="text-align:center; font-weight:700;">220경기</td>
+              <td style="text-align:center; font-weight:800; color:#0284c7;">01:34 (94.3초)</td>
+            </tr>
+            <tr>
+              <td style="text-align:left; padding-left:22px; font-weight:700; color:#334155;">└─ 단체전 (계영·혼계영 200m 합계)</td>
+              <td style="text-align:center; color:#475569;">#1~#6 (계영) · #227~#232 (혼계영)</td>
+              <td style="text-align:center; font-weight:700;">1시간 16분 25초 (4,585초)</td>
+              <td style="text-align:center; font-weight:700;">12경기</td>
+              <td style="text-align:center; font-weight:800; color:#7c3aed;">06:22 (382.1초)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- =============================================================== -->
+    <!-- 2. 영법별(종목별) 평균 소요시간 (막대그래프 + 상세 표)           -->
+    <!-- =============================================================== -->
+    <section class="progress-card-section">
+      <div class="progress-sec-header">
+        <div>
+          <h3>🌊 2. 영법별(종목별) 평균 소요시간</h3>
+          <span class="progress-sec-sub">자유형(83.9초) &lt; 평영(96.3초) &lt; 접영(98.3초) &lt; 배영(105.7초) — 배영은 수중 입수·손잡이 정렬로 약 15~22초 추가 소요</span>
+        </div>
+      </div>
+
+      <!-- 영법별 막대그래프 (개인전 4종목 / 단체전 2종목) -->
+      <div class="charts-two-col">
+        <div class="hbar-chart-box">
+          <h4 class="hbar-chart-title">
+            <span>📊 개인전 50m 영법별 평균 소요시간 비교</span>
+            <span style="font-size:11.5px; color:#64748b;">전체 평균 94.3초 (01:34)</span>
+          </h4>
+          <div class="hbar-list">
+            <div class="hbar-row">
+              <span class="hbar-label">1. 자유형 50m</span>
+              <div class="hbar-track"><div class="hbar-fill" style="width: 75.5%; background:#2563eb;">78경기</div></div>
+              <span class="hbar-val">01:24 (83.9s)</span>
+            </div>
+            <div class="hbar-row">
+              <span class="hbar-label">2. 평영 50m</span>
+              <div class="hbar-track"><div class="hbar-fill" style="width: 86.8%; background:#d97706;">55경기</div></div>
+              <span class="hbar-val">01:36 (96.3s)</span>
+            </div>
+            <div class="hbar-row">
+              <span class="hbar-label">3. 접영 50m</span>
+              <div class="hbar-track"><div class="hbar-fill" style="width: 88.6%; background:#e11d48;">40경기</div></div>
+              <span class="hbar-val">01:38 (98.3s)</span>
+            </div>
+            <div class="hbar-row">
+              <span class="hbar-label">4. 배영 50m</span>
+              <div class="hbar-track"><div class="hbar-fill" style="width: 95.2%; background:#16a34a;">47경기</div></div>
+              <span class="hbar-val">01:46 (105.7s)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hbar-chart-box">
+          <h4 class="hbar-chart-title">
+            <span>🤝 단체전 200m 종목별 평균 소요시간 비교</span>
+            <span style="font-size:11.5px; color:#64748b;">전체 평균 382.1초 (06:22)</span>
+          </h4>
+          <div class="hbar-list">
+            <div class="hbar-row">
+              <span class="hbar-label">혼계영 200m</span>
+              <div class="hbar-track"><div class="hbar-fill" style="width: 74.7%; background:#7c3aed;">오후 6경기 실측</div></div>
+              <span class="hbar-val">05:36 (336.2s)</span>
+            </div>
+            <div class="hbar-row">
+              <span class="hbar-label">계영 200m</span>
+              <div class="hbar-track"><div class="hbar-fill" style="width: 95.1%; background:#0284c7;">오전 첫 6경기</div></div>
+              <span class="hbar-val">07:08 (428.0s)</span>
+            </div>
+            <div class="hbar-row">
+              <span class="hbar-label" style="color:#475569;">단체전 평균</span>
+              <div class="hbar-track"><div class="hbar-fill" style="width: 84.9%; background:#475569;">총 12경기</div></div>
+              <span class="hbar-val">06:22 (382.1s)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 영법별 평균 소요시간 상세 표 -->
+      <div class="table-responsive">
+        <table class="record-table">
+          <thead>
+            <tr>
+              <th style="width: 110px; text-align:center;">순위</th>
+              <th style="width: 155px; text-align:left;">종목 (영법)</th>
+              <th style="width: 90px; text-align:center;">경기 수</th>
+              <th style="width: 140px; text-align:center;">평균 소요시간 (분:초)</th>
+              <th style="width: 110px; text-align:center;">평균 (초)</th>
+              <th style="min-width: 280px; text-align:left;">실측 체크포인트 특성 분석</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="text-align:center; font-weight:800; color:#1d4ed8;">1 (가장 빠름)</td>
+              <td style="text-align:left; font-weight:800;"><span class="comp-ev-pill ev-pill-free">자유형 50m</span></td>
+              <td style="text-align:center; font-weight:700;">78경기</td>
+              <td style="text-align:center; font-weight:900; color:#1d4ed8;">01:24</td>
+              <td style="text-align:center; font-weight:800;">83.9초</td>
+              <td style="text-align:left; font-size:12.5px; color:#334155;">다이빙 출발 + 가장 빠른 영법 (오후 여학생 #204~#226 23경기 순수 실측 평균 <strong>01:20 [79.8초]</strong>)</td>
+            </tr>
+            <tr>
+              <td style="text-align:center; font-weight:800; color:#64748b;">2</td>
+              <td style="text-align:left; font-weight:800;"><span class="comp-ev-pill ev-pill-breast">평영 50m</span></td>
+              <td style="text-align:center; font-weight:700;">55경기</td>
+              <td style="text-align:center; font-weight:900; color:#0f172a;">01:36</td>
+              <td style="text-align:center; font-weight:800;">96.3초</td>
+              <td style="text-align:left; font-size:12.5px; color:#334155;">다이빙 출발이나 수영 자체 소요시간이 자유형·접영보다 약 10~12초 더 소요</td>
+            </tr>
+            <tr>
+              <td style="text-align:center; font-weight:800; color:#64748b;">3</td>
+              <td style="text-align:left; font-weight:800;"><span class="comp-ev-pill ev-pill-fly">접영 50m</span></td>
+              <td style="text-align:center; font-weight:700;">40경기</td>
+              <td style="text-align:center; font-weight:900; color:#0f172a;">01:38</td>
+              <td style="text-align:center; font-weight:800;">98.3초</td>
+              <td style="text-align:left; font-size:12.5px; color:#334155;">오전 첫 개인전 종목(#7~#46)으로 진행 요원·선수 초반 적응 시간 포함</td>
+            </tr>
+            <tr>
+              <td style="text-align:center; font-weight:800; color:#be123c;">4 (개인전 최장)</td>
+              <td style="text-align:left; font-weight:800;"><span class="comp-ev-pill ev-pill-back">배영 50m</span></td>
+              <td style="text-align:center; font-weight:700;">47경기</td>
+              <td style="text-align:center; font-weight:900; color:#be123c;">01:46</td>
+              <td style="text-align:center; font-weight:800;">105.7초</td>
+              <td style="text-align:left; font-size:12.5px; color:#334155;"><strong>수중 입수 출발 + 백스트로크 손잡이 정렬</strong>로 인해 다이빙 종목 대비 경기당 약 <strong>15~22초</strong> 추가 소요</td>
+            </tr>
+            <tr style="background:#faf5ff;">
+              <td style="text-align:center; font-weight:800; color:#7c3aed;">5 (단체전)</td>
+              <td style="text-align:left; font-weight:800; color:#6d28d9;">혼계영 200m (단체)</td>
+              <td style="text-align:center; font-weight:700;">6경기</td>
+              <td style="text-align:center; font-weight:900; color:#6d28d9;">05:36</td>
+              <td style="text-align:center; font-weight:800;">336.2초</td>
+              <td style="text-align:left; font-size:12.5px; color:#334155;">1번 영자 수중 입수(배영) + 4영법 계영 실측 평균 (#227~#232, 16:31:25~17:05:00)</td>
+            </tr>
+            <tr style="background:#f0f9ff;">
+              <td style="text-align:center; font-weight:800; color:#0369a1;">6 (단체전)</td>
+              <td style="text-align:left; font-weight:800; color:#0369a1;">계영 200m (단체)</td>
+              <td style="text-align:center; font-weight:700;">6경기</td>
+              <td style="text-align:center; font-weight:900; color:#0369a1;">07:08</td>
+              <td style="text-align:center; font-weight:800;">428.0초</td>
+              <td style="text-align:left; font-size:12.5px; color:#334155;">오전 개시 직후 첫 6경기 평균 (#1~#6, 08:30 공식 시작 대기 및 초반 정렬 포함)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- =============================================================== -->
+    <!-- 3. 그룹 × 영법 상세 매트릭스 (연령대별 막대그래프 + 매트릭스 표) -->
+    <!-- =============================================================== -->
+    <section class="progress-card-section">
+      <div class="progress-sec-header">
+        <div>
+          <h3>👦👧 3. 그룹 × 영법 상세 매트릭스 (단위: 평균 초)</h3>
+          <span class="progress-sec-sub">저학년(1~3그룹, 평균 104~110초) 대비 고학년·중등(4~7그룹, 평균 84~91초) 구간에서 경기당 약 20~25초 단축</span>
+        </div>
+      </div>
+
+      <!-- 그룹 × 영법 세로 비교 막대그래프 -->
+      <div class="group-stroke-vchart-wrap">
+        <div class="vchart-top-bar">
+          <strong style="font-size:13.5px; color:#0f172a;">📊 연령대 그룹별 · 4대 영법별 평균 소요시간 비교 그래프 (단위: 초)</strong>
+          <div class="vchart-legend">
+            <span><i class="tl-dot" style="background:#e11d48;"></i>접영 50m</span>
+            <span><i class="tl-dot" style="background:#16a34a;"></i>배영 50m</span>
+            <span><i class="tl-dot" style="background:#d97706;"></i>평영 50m</span>
+            <span><i class="tl-dot" style="background:#2563eb;"></i>자유형 50m</span>
+          </div>
+        </div>
+        <div class="vchart-grid">
+          ${vchartColsHtml}
+        </div>
+      </div>
+
+      <!-- 그룹 × 영법 상세 매트릭스 표 -->
+      <div class="table-responsive">
+        <table class="record-table">
+          <thead>
+            <tr>
+              <th style="min-width: 140px; text-align:left;">그룹 (연령 기준)</th>
+              <th style="width: 85px; text-align:center;">경기 수</th>
+              <th style="min-width: 120px; text-align:center;">접영 50m</th>
+              <th style="min-width: 120px; text-align:center;">배영 50m</th>
+              <th style="min-width: 120px; text-align:center;">평영 50m</th>
+              <th style="min-width: 120px; text-align:center;">자유형 50m</th>
+              <th style="min-width: 135px; text-align:center;">그룹 전체 평균</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${matrixBodyHtml}
+          </tbody>
+          <tfoot>
+            <tr style="background:#f1f5f9; font-weight:900;">
+              <td style="text-align:left; color:#0f172a;">전체 개인전 합계 / 평균</td>
+              <td style="text-align:center; color:#0f172a;">220경기</td>
+              <td style="text-align:center; color:#be123c;">98.3초 (01:38)</td>
+              <td style="text-align:center; color:#15803d;">105.7초 (01:46)</td>
+              <td style="text-align:center; color:#b45309;">96.3초 (01:36)</td>
+              <td style="text-align:center; color:#1d4ed8;">83.9초 (01:24)</td>
+              <td style="text-align:center; color:#0284c7; background:#e0f2fe;">94.3초 (01:34)</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </section>
+
+    <!-- =============================================================== -->
+    <!-- 4. 성별 개인전 평균 소요시간 (막대그래프 + 비교 표)              -->
+    <!-- =============================================================== -->
+    <section class="progress-card-section">
+      <div class="progress-sec-header">
+        <div>
+          <h3>🚻 4. 성별 개인전 평균 소요시간</h3>
+          <span class="progress-sec-sub">남자 01:35 (94.9초) vs 여자 01:34 (93.5초) — 성별 간 차이는 1.4초 이내로 동일하며 연령대와 영법이 핵심 변수</span>
+        </div>
+      </div>
+
+      <div class="charts-two-col">
+        <div class="hbar-chart-box">
+          <h4 class="hbar-chart-title">
+            <span>📊 성별 개인전 전체 평균 소요시간 비교</span>
+            <span style="font-size:11.5px; color:#64748b;">차이 1.4초 (거의 동일)</span>
+          </h4>
+          <div class="hbar-list">
+            <div class="hbar-row">
+              <span class="hbar-label">👨 남자 (119경기)</span>
+              <div class="hbar-track"><div class="hbar-fill" style="width: 89.5%; background:#0284c7;">총 188분 15초 (11,295초)</div></div>
+              <span class="hbar-val">01:35 (94.9s)</span>
+            </div>
+            <div class="hbar-row">
+              <span class="hbar-label">👩 여자 (101경기)</span>
+              <div class="hbar-track"><div class="hbar-fill" style="width: 88.2%; background:#ec4899;">총 157분 28초 (9,448초)</div></div>
+              <span class="hbar-val">01:34 (93.5s)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hbar-chart-box" style="display:flex; flex-direction:column; justify-content:center; gap:8px;">
+          <h4 class="hbar-chart-title" style="margin-bottom:4px;">💡 성별 소요시간 핵심 결론</h4>
+          <p style="margin:0; font-size:13px; color:#334155; line-height:1.6; font-weight:600;">
+            • <strong>남자 (119경기)</strong>: 평균 <strong>01:35 (94.9초)</strong><br>
+            • <strong>여자 (101경기)</strong>: 평균 <strong>01:34 (93.5초)</strong><br>
+            • 성별에 따른 진행 시간 차이는 <strong>1.4초 이내</strong>로 거의 동일하며, <strong>영법(배영 &gt; 접영·평영 &gt; 자유형)</strong>과 <strong>연령대(1~3그룹 &gt; 4~7그룹)</strong>가 경기 시간을 좌우하는 핵심 변수입니다.
+          </p>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="record-table">
+          <thead>
+            <tr>
+              <th style="width: 120px; text-align:center;">성별</th>
+              <th style="width: 100px; text-align:center;">개인전 경기 수</th>
+              <th style="width: 160px; text-align:center;">총 소요시간</th>
+              <th style="width: 140px; text-align:center;">평균 소요시간 (분:초)</th>
+              <th style="width: 110px; text-align:center;">평균 (초)</th>
+              <th style="min-width: 240px; text-align:left;">비고</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="text-align:center;"><span class="gender-badge male">남자</span></td>
+              <td style="text-align:center; font-weight:800;">119경기</td>
+              <td style="text-align:center; font-weight:700;">3시간 08분 15초 (11,295초)</td>
+              <td style="text-align:center; font-weight:900; color:#0284c7;">01:35</td>
+              <td style="text-align:center; font-weight:800;">94.9초</td>
+              <td style="text-align:left; font-size:12.5px; color:#334155;">저학년(2·3그룹) 출전 비중이 소폭 높아 1.4초 차이 발생</td>
+            </tr>
+            <tr>
+              <td style="text-align:center;"><span class="gender-badge female">여자</span></td>
+              <td style="text-align:center; font-weight:800;">101경기</td>
+              <td style="text-align:center; font-weight:700;">2시간 37분 28초 (9,448초)</td>
+              <td style="text-align:center; font-weight:900; color:#db2777;">01:34</td>
+              <td style="text-align:center; font-weight:800;">93.5초</td>
+              <td style="text-align:left; font-size:12.5px; color:#334155;">오후 자유형 연속 구간(#204~#226) 평균 79.8초로 빠른 진행</td>
+            </tr>
+            <tr style="background:#f8fafc; font-weight:900;">
+              <td style="text-align:center; color:#0f172a;">개인전 전체</td>
+              <td style="text-align:center; color:#0f172a;">220경기</td>
+              <td style="text-align:center; color:#0f172a;">5시간 45분 43초 (20,743초)</td>
+              <td style="text-align:center; color:#0f172a;">01:34</td>
+              <td style="text-align:center; color:#0f172a;">94.3초</td>
+              <td style="text-align:left; font-size:12.5px; color:#475569;">성별 차이 거의 없음 (영법 및 연령대 그룹이 핵심 변수)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  `;
+}
+
+// ==========================================================================
+// 🏅 TAB 3: 결과 분석 (학생부 / 성인부 공통: 추후 업데이트 예정 안내)
+// ==========================================================================
+function renderResultAnalysisView() {
+  const container = document.getElementById("viewContainerResult");
+  if (!container) return;
+
+  const isStudent = currentDivision === "student";
+  const divTitle = isStudent ? "학생부 (24일)" : "성인부 (25일)";
+
+  container.innerHTML = `
+    <section class="pending-update-card">
+      <span class="pending-icon">🏅</span>
+      <h3 class="pending-title">${divTitle} 결과 분석 — 추후 업데이트 예정</h3>
+      <p class="pending-desc" style="margin-bottom: 0;">
+        거제시수영연맹의 공식 대회 기록표(종목별 최종 기록, 순위, 대회신기록 및 종합 입상 집계)가 확정된 후<br>
+        우리 팀(<strong>거제몽꾸 · 거제야르</strong>) 및 전체 참가팀의 결과 분석 데이터가 이곳에 업데이트될 예정입니다.
+      </p>
+    </section>
+  `;
+}
+
 function renderAll() {
-  renderDivisionHeaderAndTeamChips();
-  renderSummaryChart();
-  renderSummaryMatrices();
-  renderTeamPowerComparisonTable();
-  renderSwimmersDetailTable();
+  renderTopNavigationHeader();
+
+  if (currentSubTab === "entry") {
+    renderEntryTeamChipsAndToolbar();
+    renderSummaryChart();
+    renderSummaryMatrices();
+    renderTeamPowerComparisonTable();
+    renderSwimmersDetailTable();
+  } else if (currentSubTab === "progress") {
+    renderProgressSummaryView();
+  } else if (currentSubTab === "result") {
+    renderResultAnalysisView();
+  }
 }
 
 function bindEvents() {
-  // 부문 전환 (성인부 / 학생부)
-  document.getElementById("tabBtnAdult")?.addEventListener("click", () => {
-    if (currentDivision === "adult") return;
-    currentDivision = "adult";
-    selectedTeamFilter = "all";
-    selectedGroupFilter = "all";
-    selectedStrokeFilter = "all";
-    renderAll();
-  });
-
-  document.getElementById("tabBtnStudent")?.addEventListener("click", () => {
-    if (currentDivision === "student") return;
-    currentDivision = "student";
-    selectedTeamFilter = "all";
-    selectedGroupFilter = "all";
-    selectedStrokeFilter = "all";
-    renderAll();
+  // 부모(sidebar.js)에서 postMessage로 페이지 전환 요청 시 즉시 반영
+  window.addEventListener("message", (e) => {
+    if (e.data && e.data.type === "GMDC_COMP_RESULT_NAV") {
+      const nextDiv = e.data.div === "adult" ? "adult" : "student";
+      const nextTab = ["entry", "progress", "result"].includes(e.data.tab) ? e.data.tab : "entry";
+      if (nextDiv !== currentDivision) {
+        selectedTeamFilter = "all";
+        selectedGroupFilter = "all";
+        selectedStrokeFilter = "all";
+      }
+      currentDivision = nextDiv;
+      currentSubTab = nextTab;
+      renderAll();
+    }
   });
 
   // 그래프 / 표 보기 스위치 (기본: 그래프)
@@ -801,38 +1331,46 @@ function bindEvents() {
     });
   });
 
-  // 팀 선택 칩 클릭
+  // 상단 팀 선택 칩 클릭
   document.getElementById("teamFilterChips")?.addEventListener("click", (e) => {
-    const chip = e.target.closest("[data-team-filter]");
+    const chip = e.target.closest(".team-power-chip");
     if (!chip) return;
-    selectedTeamFilter = chip.dataset.teamFilter;
+    selectedTeamFilter = chip.dataset.teamFilter || "all";
     renderAll();
   });
 
-  // 팀별 전력 비교표 행 클릭 시 해당 팀 필터 토글
+  // 팀별 전력 비교표 행 클릭 시 해당 팀 토글 필터링
   document.getElementById("teamPowerTableBody")?.addEventListener("click", (e) => {
-    const row = e.target.closest("[data-team-row]");
+    const row = e.target.closest(".team-power-row");
     if (!row) return;
-    const team = row.dataset.teamRow;
-    selectedTeamFilter = selectedTeamFilter === team ? "all" : team;
+    const teamName = row.dataset.teamRow;
+    if (!teamName) return;
+    selectedTeamFilter = selectedTeamFilter === teamName ? "all" : teamName;
     renderAll();
   });
 
-  // 선수 명단에서 소속팀 배지 클릭 시 해당 팀 필터
+  // 선수 명단 내 소속팀 배지 클릭 시 해당 팀 필터링
   document.getElementById("compSwimmersTableBody")?.addEventListener("click", (e) => {
     const btn = e.target.closest("[data-team-filter-click]");
     if (!btn) return;
-    const team = btn.dataset.teamFilterClick;
-    selectedTeamFilter = selectedTeamFilter === team ? "all" : team;
+    const teamName = btn.dataset.teamFilterClick;
+    if (!teamName) return;
+    selectedTeamFilter = selectedTeamFilter === teamName ? "all" : teamName;
     renderAll();
   });
 
-  // 하단 명단 툴바 필터 이벤트
-  document.getElementById("compSearchInput")?.addEventListener("input", (e) => {
-    searchQuery = e.target.value || "";
-    renderSwimmersDetailTable();
-  });
+  // 전력 비교표 접기/펼치기
+  const btnTogglePower = document.getElementById("btnToggleTeamPowerTable");
+  const powerWrap = document.getElementById("teamPowerTableWrap");
+  if (btnTogglePower && powerWrap) {
+    btnTogglePower.addEventListener("click", () => {
+      const isHidden = powerWrap.style.display === "none";
+      powerWrap.style.display = isHidden ? "block" : "none";
+      btnTogglePower.textContent = isHidden ? "▲ 표 접기" : "▼ 표 펼치기";
+    });
+  }
 
+  // 하단 툴바 필터링 이벤트
   document.getElementById("compTeamSelect")?.addEventListener("change", (e) => {
     selectedTeamFilter = e.target.value;
     renderAll();
@@ -853,24 +1391,33 @@ function bindEvents() {
     renderSwimmersDetailTable();
   });
 
-  // 팀별 전력 비교표 접기/펼치기
-  const btnToggleTeamTable = document.getElementById("btnToggleTeamPowerTable");
-  const teamTableWrap = document.getElementById("teamPowerTableWrap");
-  btnToggleTeamTable?.addEventListener("click", () => {
-    if (!teamTableWrap) return;
-    const isHidden = teamTableWrap.style.display === "none";
-    teamTableWrap.style.display = isHidden ? "block" : "none";
-    btnToggleTeamTable.textContent = isHidden ? "▲ 표 접기" : "▼ 표 펼치기";
+  document.getElementById("compSearchInput")?.addEventListener("input", (e) => {
+    searchQuery = e.target.value || "";
+    renderSwimmersDetailTable();
   });
 }
 
-function initCompetitionResultPage() {
-  bindEvents();
-  renderAll();
+function initFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  const divParam = params.get("div");
+  const tabParam = params.get("tab");
+
+  if (divParam === "adult" || divParam === "student") {
+    currentDivision = divParam;
+  } else {
+    currentDivision = "student";
+  }
+
+  if (["entry", "progress", "result"].includes(tabParam)) {
+    currentSubTab = tabParam;
+  } else {
+    currentSubTab = "entry";
+  }
 }
 
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", initCompetitionResultPage);
-} else {
-  initCompetitionResultPage();
-}
+document.addEventListener("DOMContentLoaded", () => {
+  initFromUrl();
+  bindEvents();
+  renderAll();
+  syncRouteWithParentAndUrl();
+});

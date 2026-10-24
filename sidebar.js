@@ -17,9 +17,15 @@ export const SPA_ROUTES = {
   '#/training-meeting':       { url: 'meeting_notes.html', title: '운영기록', catId: 'cat-training', itemId: 'meeting' },
   '#/competition-prospectus':    { url: 'prospectus.html', title: '모집요강', catId: 'cat-competition', itemId: 'prospectus' },
   '#/competition-coach-meeting': { url: 'coach-meeting.html?v=20261024_08', title: '감독자회의요강', catId: 'cat-competition', itemId: 'coach-meeting' },
-  '#/competition-live-student':  { url: 'live-schedule.html?div=student&v=20261024_08', title: '학생부 (24일)', catId: 'cat-competition', itemId: 'live-student' },
-  '#/competition-live-adult':    { url: 'live-schedule.html?div=adult&v=20261024_08', title: '성인부 (25일)', catId: 'cat-competition', itemId: 'live-adult' },
-  '#/competition-result':        { url: 'competition-result.html?v=20261024_09', title: '대회결과', catId: 'cat-competition', itemId: 'comp-result' },
+  '#/competition-live-student':  { url: 'live-schedule.html?div=student&v=20261024_16', title: '학생부 (24일)', catId: 'cat-competition', itemId: 'live-student' },
+  '#/competition-live-adult':    { url: 'live-schedule.html?div=adult&v=20261024_16', title: '성인부 (25일)', catId: 'cat-competition', itemId: 'live-adult' },
+  '#/competition-result':                  { url: 'competition-result.html?div=student&tab=entry&v=20261024_14', title: '학생부 접수 분석', catId: 'cat-competition', itemId: 'comp-res-student-entry', div: 'student', tab: 'entry' },
+  '#/competition-result-student-entry':    { url: 'competition-result.html?div=student&tab=entry&v=20261024_14', title: '학생부 접수 분석', catId: 'cat-competition', itemId: 'comp-res-student-entry', div: 'student', tab: 'entry' },
+  '#/competition-result-student-progress': { url: 'competition-result.html?div=student&tab=progress&v=20261024_14', title: '학생부 진행 요약', catId: 'cat-competition', itemId: 'comp-res-student-progress', div: 'student', tab: 'progress' },
+  '#/competition-result-student-result':   { url: 'competition-result.html?div=student&tab=result&v=20261024_14', title: '학생부 결과 분석', catId: 'cat-competition', itemId: 'comp-res-student-result', div: 'student', tab: 'result' },
+  '#/competition-result-adult-entry':      { url: 'competition-result.html?div=adult&tab=entry&v=20261024_14', title: '성인부 접수 분석', catId: 'cat-competition', itemId: 'comp-res-adult-entry', div: 'adult', tab: 'entry' },
+  '#/competition-result-adult-progress':   { url: 'competition-result.html?div=adult&tab=progress&v=20261024_14', title: '성인부 진행 요약', catId: 'cat-competition', itemId: 'comp-res-adult-progress', div: 'adult', tab: 'progress' },
+  '#/competition-result-adult-result':     { url: 'competition-result.html?div=adult&tab=result&v=20261024_14', title: '성인부 결과 분석', catId: 'cat-competition', itemId: 'comp-res-adult-result', div: 'adult', tab: 'result' },
   '#/admin-share':               { url: 'share.html?v=20261024_08', title: '페이지 공유', catId: 'cat-admin', itemId: 'admin-share' },
   '#/admin-settings':            { url: 'admin.html', title: '관리자 설정', catId: 'cat-admin', itemId: 'admin-settings', adminOnly: true }
 };
@@ -52,11 +58,37 @@ const MENU_CATEGORIES = [
     title: "3. 대회기록",
     icon: "🏅",
     items: [
-      { id: "prospectus",    title: "모집요강",               hash: "#/competition-prospectus",    icon: "📄" },
-      { id: "coach-meeting", title: "감독자회의요강",          hash: "#/competition-coach-meeting", icon: "📋" },
-      { id: "live-student",  title: "학생부 (24일)",          hash: "#/competition-live-student",  icon: "⏱️" },
-      { id: "live-adult",    title: "성인부 (25일)",          hash: "#/competition-live-adult",    icon: "⏱️" },
-      { id: "comp-result",   title: "대회결과",               hash: "#/competition-result",        icon: "🏆" }
+      { id: "prospectus",    title: "모집요강",      hash: "#/competition-prospectus",    icon: "📄" },
+      { id: "coach-meeting", title: "감독자회의요강", hash: "#/competition-coach-meeting", icon: "📋" },
+      { id: "live-student",  title: "학생부 (24일)", hash: "#/competition-live-student",  icon: "⏱️" },
+      { id: "live-adult",    title: "성인부 (25일)", hash: "#/competition-live-adult",    icon: "⏱️" },
+      {
+        id: "comp-result-tree",
+        title: "대회결과",
+        icon: "🏆",
+        subgroups: [
+          {
+            id: "sub-student",
+            title: "학생부",
+            icon: "🧒",
+            items: [
+              { id: "comp-res-student-entry",    title: "접수 분석", hash: "#/competition-result-student-entry",    icon: "📊" },
+              { id: "comp-res-student-progress", title: "진행 요약", hash: "#/competition-result-student-progress", icon: "⏱️" },
+              { id: "comp-res-student-result",   title: "결과 분석", hash: "#/competition-result-student-result",   icon: "🏅" }
+            ]
+          },
+          {
+            id: "sub-adult",
+            title: "성인부",
+            icon: "🏊",
+            items: [
+              { id: "comp-res-adult-entry",    title: "접수 분석", hash: "#/competition-result-adult-entry",    icon: "📊" },
+              { id: "comp-res-adult-progress", title: "진행 요약", hash: "#/competition-result-adult-progress", icon: "⏱️" },
+              { id: "comp-res-adult-result",   title: "결과 분석", hash: "#/competition-result-adult-result",   icon: "🏅" }
+            ]
+          }
+        ]
+      }
     ]
   },
   {
@@ -126,6 +158,38 @@ function buildSidebarHTML() {
     const catId = cat.id;
 
     const itemsHtml = cat.items.map(item => {
+      if (Array.isArray(item.subgroups)) {
+        const subGroupsHtml = item.subgroups.map(sg => {
+          const leafHtml = sg.items.map(subItem => `
+            <a href="${subItem.hash}" class="sidebar-item-link is-sub-leaf" id="navItem-${subItem.id}" data-item-id="${subItem.id}" data-hash="${subItem.hash}">
+              <span class="item-icon">${subItem.icon}</span>
+              <span class="item-title">${subItem.title}</span>
+            </a>
+          `).join('');
+          return `
+            <div class="sidebar-tree-division" id="treeDiv-${sg.id}">
+              <div class="sidebar-tree-div-label">
+                <span>${sg.icon}</span>
+                <span>${sg.title}</span>
+              </div>
+              <div class="sidebar-tree-div-items">
+                ${leafHtml}
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        return `
+          <div class="sidebar-tree-group" id="treeGroup-${item.id}">
+            <div class="sidebar-tree-root-label">
+              <span class="item-icon">${item.icon}</span>
+              <span>${item.title}</span>
+            </div>
+            ${subGroupsHtml}
+          </div>
+        `;
+      }
+
       const dataAction = item.action ? `data-action="${item.action}"` : '';
       return `
         <a href="${item.hash}" class="sidebar-item-link" id="navItem-${item.id}" data-item-id="${item.id}" data-hash="${item.hash}" ${dataAction}>
@@ -401,8 +465,26 @@ export function navigateToRoute(hash) {
 
   const spaFrame = document.getElementById('spaFrame');
   if (spaFrame) {
-    // 메인 SPA 셸 환경인 경우 iframe에 로드
-    if (spaFrame.getAttribute('data-current-hash') !== hash) {
+    const prevHash = spaFrame.getAttribute('data-current-hash') || '';
+    const prevRoute = SPA_ROUTES[prevHash];
+    const isSameCompResultPage = prevRoute &&
+      prevRoute.url.startsWith('competition-result.html') &&
+      route.url.startsWith('competition-result.html') &&
+      spaFrame.contentWindow;
+
+    if (isSameCompResultPage) {
+      spaFrame.setAttribute('data-current-hash', hash);
+      try {
+        spaFrame.contentWindow.postMessage({
+          type: 'GMDC_COMP_RESULT_NAV',
+          div: route.div || 'student',
+          tab: route.tab || 'entry',
+          hash
+        }, '*');
+      } catch (err) {
+        spaFrame.src = route.url;
+      }
+    } else if (prevHash !== hash) {
       spaFrame.src = route.url;
       spaFrame.setAttribute('data-current-hash', hash);
     }
@@ -438,7 +520,7 @@ function initSpaRouter() {
     return;
   }
 
-  // 초기 해시 판별 (2026/10/24: 학생부, 2026/10/25: 성인부, 그 외: 대회결과)
+  // 초기 해시 판별 (2026/10/24: 학생부, 2026/10/25: 성인부, 그 외: 대회결과 > 학생부 > 접수 분석)
   const now = new Date();
   const y = now.getFullYear();
   const m = now.getMonth() + 1;
@@ -447,7 +529,7 @@ function initSpaRouter() {
     ? '#/competition-live-student'
     : (y === 2026 && m === 10 && d === 25)
       ? '#/competition-live-adult'
-      : '#/competition-result';
+      : '#/competition-result-student-entry';
   let currentHash = window.location.hash || defaultHash;
   if (!SPA_ROUTES[currentHash]) {
     currentHash = defaultHash;
@@ -462,6 +544,21 @@ function initSpaRouter() {
       navigateToRoute(newHash);
     }
   });
+
+  // iframe 내부(competition-result.html 등)에서 탭 전환 시 사이드바 하이라이트 및 해시 동기화
+  window.addEventListener('message', (e) => {
+    if (e.data && e.data.type === 'GMDC_COMP_RESULT_TAB_CHANGED' && e.data.hash) {
+      const targetHash = e.data.hash;
+      const route = SPA_ROUTES[targetHash];
+      if (route) {
+        if (window.location.hash !== targetHash) {
+          history.replaceState(null, '', targetHash);
+        }
+        spaFrame.setAttribute('data-current-hash', targetHash);
+        highlightActiveItem(route.itemId, route.catId);
+      }
+    }
+  });
 }
 
 function highlightMenuFromUrl() {
@@ -469,6 +566,13 @@ function highlightMenuFromUrl() {
   const search = window.location.search;
   const hash = window.location.hash;
   const fullTarget = `${file}${search}`;
+  if (file === 'competition-result.html') {
+    const params = new URLSearchParams(search);
+    const div = params.get('div') === 'adult' ? 'adult' : 'student';
+    const tab = ['entry', 'progress', 'result'].includes(params.get('tab')) ? params.get('tab') : 'entry';
+    highlightActiveItem(`comp-res-${div}-${tab}`, 'cat-competition');
+    return;
+  }
   for (const [, route] of Object.entries(SPA_ROUTES)) {
     if (route.url === fullTarget) {
       highlightActiveItem(route.itemId, route.catId);

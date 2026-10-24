@@ -9,8 +9,9 @@ import { ADULT_RACES_DATA, STUDENT_RACES_DATA } from "./races-data.js?v=20261024
 import { 
   subscribeLiveStatus, subscribeRosterDoc, fetchLiveStatus, getDefaultLiveStatus, 
   startRaceAt, cancelRaceAt, startBreak, endBreak, cancelBreak,
+  finishAllRaces, cancelFinishAllRaces,
   calculateScheduleEstimates, formatMMSS, formatTimeHM
-} from "./live-service.js?v=20261024_04";
+} from "./live-service.js?v=20261024_16";
 
 // 모집요강(5. 경기 일정 및 순서) 기준 부별 종목 순서 매핑
 const PROSPECTUS_EVENT_ORDER = {
@@ -155,6 +156,8 @@ const elCtrlCurrentNo = document.getElementById('ctrlCurrentNo');
 const elCtrlCurrentEvent = document.getElementById('ctrlCurrentEvent');
 const elCtrlPaceInfo = document.getElementById('ctrlPaceInfo');
 const elBtnScrollCurrentRace = document.getElementById('btnScrollCurrentRace');
+const elBtnDownloadAllScheduleImage = document.getElementById('btnDownloadAllScheduleImage');
+const elBtnDownloadOurTeamImage = document.getElementById('btnDownloadOurTeamImage');
 const elBtnStartBreak = document.getElementById('btnStartBreak');
 const elBtnAutoRefreshToggle = document.getElementById('btnAutoRefreshToggle');
 const elCountdownBadge = document.getElementById('countdownBadge');
@@ -426,7 +429,17 @@ function renderControllerHeader(data) {
       elCtrlCurrentNo.classList.remove('is-waiting', 'is-break');
     }
     if (elCtrlCurrentEvent) {
-      elCtrlCurrentEvent.textContent = formatProspectusCurrentEvent(curRace, currentDivision);
+      const baseText = formatProspectusCurrentEvent(curRace, currentDivision);
+      if (liveStatus.status === 'finished') {
+        const lastHist = Array.isArray(liveStatus.history)
+          ? liveStatus.history.find(h => h.race_index === totalRaces)
+          : null;
+        const finIso = liveStatus.finished_at || lastHist?.finished_at;
+        const finTimeLabel = finIso ? formatTimeHM(new Date(finIso)) : '17:05';
+        elCtrlCurrentEvent.textContent = `${baseText} · 🏁 전 경기 종료 (${finTimeLabel})`;
+      } else {
+        elCtrlCurrentEvent.textContent = baseText;
+      }
     }
   }
 }
@@ -461,6 +474,61 @@ function renderRacesList(races, breaks = []) {
       }
     });
 
+    // 해당 순번(race_index) 다음에 등록된 휴게(break-card) 렌더링 문자열 생성
+    const attachedBreaks = breaksByAfterIdx.get(race.race_index) || [];
+    const breaksHtml = attachedBreaks.map(brk => {
+      const isBreakScheduled = brk.state === 'scheduled';
+      const isBreakRunning = brk.state === 'running';
+
+      if (isBreakScheduled) {
+        const schedSec = brk.duration_sec || brk.scheduled_duration_sec || 600;
+        const schedMin = Math.round(schedSec / 60);
+        const estStart = brk.estimated_started_at ? new Date(brk.estimated_started_at) : null;
+        const estEnd = brk.estimated_finished_at ? new Date(brk.estimated_finished_at) : null;
+        const estTimeStr = estStart
+          ? (estEnd ? `예상 ${formatTimeHM(estStart)}~${formatTimeHM(estEnd)}` : `예상 ${formatTimeHM(estStart)}`)
+          : `예정 ${schedMin}분`;
+        const descText = brk.label || `예정 휴식 (${formatMMSS(schedSec)})`;
+
+        return `
+          <article class="race-card break-card state-break-scheduled" id="break-card-${escapeHtml(brk.id)}" data-break-id="${escapeHtml(brk.id)}">
+            <div class="rc-row-1">
+              <span class="rc-break-badge">☕ 예정 휴식 (${schedMin}분)</span>
+              <span class="rc-break-title">#${race.race_index} (${escapeHtml(race.primary_match_no)}번) 다음 · ${escapeHtml(descText)}</span>
+              <div class="rc-right-controls">
+                <span class="rc-time">${escapeHtml(estTimeStr)}</span>
+                <button type="button" class="rc-btn-break-start" data-action="start-scheduled-break" data-break-id="${escapeHtml(brk.id)}">▶ 휴게 시작</button>
+                <button type="button" class="rc-btn-break-cancel" data-action="cancel-break" data-break-id="${escapeHtml(brk.id)}">휴게 취소</button>
+              </div>
+            </div>
+          </article>
+        `;
+      }
+
+      const bStart = brk.started_at ? new Date(brk.started_at) : new Date();
+      const elapsedSec = isBreakRunning
+        ? Math.max(0, Math.round((Date.now() - bStart.getTime()) / 1000))
+        : (brk.duration_sec || 0);
+      const startTimeStr = formatTimeHM(bStart, true);
+      const breakStatusText = isBreakRunning
+        ? `경과 ${formatMMSS(elapsedSec)}`
+        : `소요 ${formatMMSS(elapsedSec)}`;
+
+      return `
+        <article class="race-card break-card ${isBreakRunning ? 'state-break-running' : 'state-break-finished'}" id="break-card-${escapeHtml(brk.id)}" data-break-id="${escapeHtml(brk.id)}">
+          <div class="rc-row-1">
+            <span class="rc-break-badge">${isBreakRunning ? '☕ 휴게 중' : '☕ 휴게 완료'}</span>
+            <span class="rc-break-title">#${race.race_index} (${escapeHtml(race.primary_match_no)}번) 다음 휴게 · ${breakStatusText}</span>
+            <div class="rc-right-controls">
+              <span class="rc-time">${escapeHtml(startTimeStr)}</span>
+              <button type="button" class="rc-btn-break-end" data-action="end-break" data-break-id="${escapeHtml(brk.id)}" ${!isBreakRunning ? 'disabled' : ''}>휴게 종료</button>
+              <button type="button" class="rc-btn-break-cancel" data-action="cancel-break" data-break-id="${escapeHtml(brk.id)}">휴게 취소</button>
+            </div>
+          </div>
+        </article>
+      `;
+    }).join('');
+
     // 검색어 필터링 (index, 순번, 종목명, 개인전 선수명, 단체전 영자명, 우리 팀명)
     if (q) {
       const cleanQ = q.replace(/^#/, '');
@@ -474,7 +542,13 @@ function renderRacesList(races, breaks = []) {
         const relayMatch = Array.isArray(item.relaySwimmers) && item.relaySwimmers.some(sw => sw.toLowerCase().includes(q));
         return nameMatch || teamMatch || relayMatch;
       });
-      if (!matchIdx && !matchNo && !matchTitle && !matchLane) return '';
+      if (!matchIdx && !matchNo && !matchTitle && !matchLane) {
+        // 우리 팀 필터('거제몽꾸'/'거제야르') 시에도 휴식 카드는 함께 보여줌
+        if ((q === '거제몽꾸' || q === '거제야르') && breaksHtml) {
+          return breaksHtml;
+        }
+        return '';
+      }
     }
 
     const isRunning = race.state === 'running' || race.state === 'paused';
@@ -555,38 +629,50 @@ function renderRacesList(races, breaks = []) {
       </article>
     `;
 
-    // 해당 순번(race_index) 다음에 등록된 휴게(break-card)가 있으면 함께 렌더링
-    const attachedBreaks = breaksByAfterIdx.get(race.race_index) || [];
-    const breaksHtml = attachedBreaks.map(brk => {
-      const isBreakRunning = brk.state === 'running';
-      const bStart = brk.started_at ? new Date(brk.started_at) : new Date();
-      const elapsedSec = isBreakRunning
-        ? Math.max(0, Math.round((Date.now() - bStart.getTime()) / 1000))
-        : (brk.duration_sec || 0);
-      const startTimeStr = formatTimeHM(bStart, true);
-      const breakStatusText = isBreakRunning
-        ? `경과 ${formatMMSS(elapsedSec)}`
-        : `소요 ${formatMMSS(elapsedSec)}`;
-
-      return `
-        <article class="race-card break-card ${isBreakRunning ? 'state-break-running' : 'state-break-finished'}" id="break-card-${escapeHtml(brk.id)}" data-break-id="${escapeHtml(brk.id)}">
-          <div class="rc-row-1">
-            <span class="rc-break-badge">${isBreakRunning ? '☕ 휴게 중' : '☕ 휴게 완료'}</span>
-            <span class="rc-break-title">#${race.race_index} (${escapeHtml(race.primary_match_no)}번) 다음 휴게 · ${breakStatusText}</span>
-            <div class="rc-right-controls">
-              <span class="rc-time">${escapeHtml(startTimeStr)}</span>
-              <button type="button" class="rc-btn-break-end" data-action="end-break" data-break-id="${escapeHtml(brk.id)}" ${!isBreakRunning ? 'disabled' : ''}>휴게 종료</button>
-              <button type="button" class="rc-btn-break-cancel" data-action="cancel-break" data-break-id="${escapeHtml(brk.id)}">휴게 취소</button>
-            </div>
-          </div>
-        </article>
-      `;
-    }).join('');
-
     return raceCardHtml + breaksHtml;
   }).join('');
 
-  elRacesContainer.innerHTML = html || '<div class="loading-placeholder">검색 조건에 맞는 경기가 없습니다.</div>';
+  // 마지막 경기 이후 [🏁 경기종료] 배너 카드 생성
+  let finishAllCardHtml = '';
+  const lastRace = races[races.length - 1];
+  if (lastRace && (!q || q === '거제몽꾸' || q === '거제야르' || html.includes(`id="race-card-${lastRace.race_index}"`))) {
+    const isAllFinished = liveStatus?.status === 'finished';
+    const lastHist = Array.isArray(liveStatus?.history)
+      ? liveStatus.history.find(h => h.race_index === lastRace.race_index)
+      : null;
+    const finIso = liveStatus?.finished_at || lastHist?.finished_at;
+
+    let finishTimeLabel = '';
+    if (isAllFinished && finIso) {
+      finishTimeLabel = `종료 ${formatTimeHM(new Date(finIso), true)}`;
+    } else if (lastRace.estimated_start_time instanceof Date) {
+      const estDurSec = Math.round((lastRace.base_duration_sec || (lastRace.is_relay ? 180 : 75)) * (calculatedSchedule?.paceFactor || 1));
+      const estEndDate = new Date(lastRace.estimated_start_time.getTime() + estDurSec * 1000);
+      finishTimeLabel = `예상 종료 ${formatTimeHM(estEndDate)}`;
+    }
+
+    const cardStateClass = isAllFinished ? 'state-finish-completed' : 'state-finish-ready';
+    const badgeLabel = isAllFinished ? '🏁 전 경기 종료 완료' : '🏁 대회 일정 마감';
+    const titleLabel = isAllFinished
+      ? `전체 ${races.length}경기 진행 완료 · 마지막 #${lastRace.race_index} (${escapeHtml(lastRace.primary_match_no)}번) 종료됨`
+      : `마지막 #${lastRace.race_index} (${escapeHtml(lastRace.primary_match_no)}번) 경기 이후 전체 대회를 종료합니다`;
+
+    finishAllCardHtml = `
+      <article class="race-card finish-all-card ${cardStateClass}" id="finish-all-card">
+        <div class="rc-row-1">
+          <span class="rc-finish-badge">${badgeLabel}</span>
+          <span class="rc-finish-title">${titleLabel}</span>
+          <div class="rc-right-controls">
+            ${finishTimeLabel ? `<span class="rc-time">${escapeHtml(finishTimeLabel)}</span>` : ''}
+            <button type="button" class="rc-btn-finish-all ${isAllFinished ? 'active' : ''}" data-action="finish-all-races" ${isAllFinished ? 'disabled' : ''} title="마지막 경기 종료 및 전체 대회 마감">🏁 경기종료</button>
+            <button type="button" class="rc-btn-finish-cancel" data-action="cancel-finish-all" ${!isAllFinished ? 'disabled' : ''} title="경기 종료 취소 (마지막 경기 진행 중 상태로 복귀)">↩ 종료 취소</button>
+          </div>
+        </div>
+      </article>
+    `;
+  }
+
+  elRacesContainer.innerHTML = (html + finishAllCardHtml) || '<div class="loading-placeholder">검색 조건에 맞는 경기가 없습니다.</div>';
 }
 
 function formatStudentClickable(name) {
@@ -639,7 +725,10 @@ function renderSwimmerSuggestions(filterText = '') {
   elSwimmerSuggestDropdown.innerHTML = `
     <div class="suggest-header">
       <span>🏊 우리 팀(거제몽꾸·거제야르) 및 선수 추천 (${filteredSwimmers.length}명)</span>
-      <span style="font-weight:600; font-size:10.5px;">클릭 시 해당 팀·선수 경기 필터</span>
+      <div class="suggest-header-right">
+        <span style="font-weight:600; font-size:10.5px;">클릭 시 해당 팀·선수 필터</span>
+        <button type="button" class="btn-close-suggest" data-action="close-suggest" title="추천 창 닫기">✕ 닫기</button>
+      </div>
     </div>
     <div class="suggest-chips-wrap">
       ${teamChipsHtml}
@@ -731,7 +820,407 @@ function scrollToCurrentRace() {
   }
 }
 
+// ──────────────────────────────────────────────────────────────────────────
+// 🖼️ 우리팀(거제몽꾸·거제야르) 전체 대진표 고화질 이미지(PNG) 생성 및 다운로드
+// ──────────────────────────────────────────────────────────────────────────
+
+function drawRoundedRect(ctx, x, y, w, h, r) {
+  const radius = Math.min(r, w / 2, h / 2);
+  ctx.beginPath();
+  ctx.moveTo(x + radius, y);
+  ctx.arcTo(x + w, y, x + w, y + h, radius);
+  ctx.arcTo(x + w, y + h, x, y + h, radius);
+  ctx.arcTo(x, y + h, x, y, radius);
+  ctx.arcTo(x, y, x + w, y, radius);
+  ctx.closePath();
+}
+
+function truncateCanvasText(ctx, text, maxWidth) {
+  const str = String(text || '');
+  if (ctx.measureText(str).width <= maxWidth) return str;
+  let len = str.length;
+  while (len > 0 && ctx.measureText(str.slice(0, len) + '…').width > maxWidth) {
+    len--;
+  }
+  return str.slice(0, Math.max(1, len)) + '…';
+}
+
+async function downloadScheduleImage(onlyOurTeam = true) {
+  if (!calculatedSchedule || !Array.isArray(calculatedSchedule.races)) {
+    showToast('대진표 데이터가 아직 준비되지 않았습니다.');
+    return;
+  }
+
+  const modeLabel = onlyOurTeam ? '우리팀 대진표' : '전체 대진표';
+  showToast(`🖼️ ${modeLabel} 이미지를 생성하고 있습니다...`);
+
+  const allRaces = calculatedSchedule.races;
+  const allBreaks = Array.isArray(calculatedSchedule.breaks) ? calculatedSchedule.breaks : [];
+
+  const breaksByAfterIdx = new Map();
+  allBreaks.forEach(b => {
+    const idx = Number(b.after_race_index) || 1;
+    if (!breaksByAfterIdx.has(idx)) breaksByAfterIdx.set(idx, []);
+    breaksByAfterIdx.get(idx).push(b);
+  });
+
+  // 타임라인 순서대로 경기 + 휴식 항목 구성
+  const renderItems = [];
+  let targetRaceCount = 0;
+
+  for (const race of allRaces) {
+    const hasOurTeam = (race.lanes || []).some(
+      l => l.team === '거제몽꾸' || l.team === '거제야르'
+    );
+    if (!onlyOurTeam || hasOurTeam) {
+      renderItems.push({ type: 'race', race });
+      targetRaceCount++;
+    }
+    const attachedBreaks = breaksByAfterIdx.get(race.race_index) || [];
+    for (const brk of attachedBreaks) {
+      renderItems.push({ type: 'break', brk, afterRace: race });
+    }
+  }
+
+  if (targetRaceCount === 0) {
+    showToast('저장할 출전 경기가 없습니다.');
+    return;
+  }
+
+  const fontStack = '"Pretendard", -apple-system, BlinkMacSystemFont, "Malgun Gothic", sans-serif';
+  const canvasW = 940;
+  const padX = 20;
+  const headerH = 114;
+  const footerH = 40;
+  const gapY = 7;
+
+  const itemHeights = renderItems.map(item => {
+    if (item.type === 'break') return 38;
+    return item.race.is_relay ? 66 : 58;
+  });
+
+  const contentH = itemHeights.reduce((sum, h) => sum + h, 0) + Math.max(0, renderItems.length - 1) * gapY;
+  const canvasH = headerH + contentH + footerH;
+
+  // 모바일/데스크톱 최대 캔버스 높이(16,384px) 및 면적(1,600만px) 한계 안에서 최적 고해상도 배율 결정
+  const maxByHeight = Math.floor((15800 / canvasH) * 10) / 10;
+  const maxByArea = Math.floor(Math.sqrt(16000000 / (canvasW * canvasH)) * 10) / 10;
+  const scale = Math.max(0.8, Math.min(2, maxByHeight, maxByArea));
+  const canvas = document.createElement('canvas');
+  canvas.width = Math.round(canvasW * scale);
+  canvas.height = Math.round(canvasH * scale);
+
+  const ctx = canvas.getContext('2d');
+  ctx.scale(scale, scale);
+
+  // 1. 전체 배경
+  ctx.fillStyle = '#f1f5f9';
+  ctx.fillRect(0, 0, canvasW, canvasH);
+
+  // 2. 상단 헤더 배너
+  drawRoundedRect(ctx, padX, 14, canvasW - padX * 2, 86, 12);
+  ctx.fillStyle = '#0f172a';
+  ctx.fill();
+
+  const divTitle = currentDivision === 'student' ? '학생부 (10월 24일 토)' : '성인부 (10월 25일 일)';
+  ctx.fillStyle = '#ffffff';
+  ctx.font = `900 19px ${fontStack}`;
+  ctx.textBaseline = 'middle';
+  ctx.fillText(`🏊 2026 제19회 거제시장배 — ${divTitle} ${modeLabel}`, padX + 18, 41);
+
+  ctx.fillStyle = '#94a3b8';
+  ctx.font = `700 12.5px ${fontStack}`;
+  const subSummaryText = onlyOurTeam
+    ? `우리팀(거제몽꾸·거제야르) 출전 총 ${targetRaceCount}경기 (전체 ${allRaces.length}경기 중) · 공식 시작 08:30 · 예정 휴식 시간 반영`
+    : `전체 출전 총 ${targetRaceCount}경기 · 공식 시작 08:30 · 우리팀(거제몽꾸·거제야르) 레인 하이라이트 및 예정 휴식 시간 반영`;
+  ctx.fillText(
+    subSummaryText,
+    padX + 18,
+    72
+  );
+
+  // 우측 상단 범례 배지
+  const legendItems = [
+    { label: '거제몽꾸', bg: '#ffedd5', border: '#f97316', text: '#9a3412' },
+    { label: '거제야르', bg: '#dbeafe', border: '#3b82f6', text: '#1e40af' },
+    { label: '예정/완료 휴식', bg: '#dcfce7', border: '#10b981', text: '#065f46' }
+  ];
+  let legX = canvasW - padX - 16;
+  for (let i = legendItems.length - 1; i >= 0; i--) {
+    const lg = legendItems[i];
+    ctx.font = `800 11.5px ${fontStack}`;
+    const tw = ctx.measureText(lg.label).width + 18;
+    legX -= tw;
+    drawRoundedRect(ctx, legX, 30, tw, 22, 6);
+    ctx.fillStyle = lg.bg;
+    ctx.fill();
+    ctx.lineWidth = 1.5;
+    ctx.strokeStyle = lg.border;
+    ctx.stroke();
+    ctx.fillStyle = lg.text;
+    ctx.fillText(lg.label, legX + 9, 41);
+    legX -= 8;
+  }
+
+  // 3. 각 경기 카드 및 휴식 카드 렌더링
+  let curY = headerH;
+  const cardW = canvasW - padX * 2;
+
+  for (let idx = 0; idx < renderItems.length; idx++) {
+    const item = renderItems[idx];
+    const cardH = itemHeights[idx];
+
+    if (item.type === 'break') {
+      const brk = item.brk;
+      const afterRace = item.afterRace;
+      drawRoundedRect(ctx, padX, curY, cardW, cardH, 8);
+      ctx.fillStyle = '#ecfdf5';
+      ctx.fill();
+      ctx.lineWidth = 1.5;
+      ctx.strokeStyle = '#10b981';
+      ctx.stroke();
+
+      const schedSec = brk.duration_sec || brk.scheduled_duration_sec || 600;
+      const schedMin = Math.round(schedSec / 60);
+      const badgeText = brk.state === 'scheduled'
+        ? `☕ 예정 휴식 (${schedMin}분)`
+        : (brk.state === 'running' ? '☕ 휴게 진행 중' : `☕ 휴게 완료 (${formatMMSS(schedSec)})`);
+
+      ctx.font = `900 12px ${fontStack}`;
+      const bdgW = ctx.measureText(badgeText).width + 16;
+      drawRoundedRect(ctx, padX + 10, curY + 7, bdgW, 24, 5);
+      ctx.fillStyle = '#0d9488';
+      ctx.fill();
+      ctx.fillStyle = '#ffffff';
+      ctx.fillText(badgeText, padX + 18, curY + 19);
+
+      const titleStr = `#${afterRace.race_index} (${afterRace.primary_match_no}번 ${afterRace.stroke} ${afterRace.distance}) 다음 · ${brk.label || `휴식 ${schedMin}분`}`;
+      ctx.fillStyle = '#065f46';
+      ctx.font = `800 12.5px ${fontStack}`;
+      ctx.fillText(titleStr, padX + 18 + bdgW, curY + 19);
+
+      let timeRightStr = '';
+      if (brk.state === 'scheduled') {
+        const estS = brk.estimated_started_at ? new Date(brk.estimated_started_at) : null;
+        const estE = brk.estimated_finished_at ? new Date(brk.estimated_finished_at) : null;
+        timeRightStr = estS ? (estE ? `예상 ${formatTimeHM(estS)}~${formatTimeHM(estE)}` : `예상 ${formatTimeHM(estS)}`) : `예정 ${schedMin}분`;
+      } else if (brk.started_at) {
+        timeRightStr = `${formatTimeHM(new Date(brk.started_at), true)} (${formatMMSS(schedSec)})`;
+      }
+
+      if (timeRightStr) {
+        ctx.font = `800 12px ${fontStack}`;
+        const trW = ctx.measureText(timeRightStr).width + 14;
+        drawRoundedRect(ctx, padX + cardW - trW - 10, curY + 7, trW, 24, 5);
+        ctx.fillStyle = '#d1fae5';
+        ctx.fill();
+        ctx.fillStyle = '#047857';
+        ctx.fillText(timeRightStr, padX + cardW - trW - 3, curY + 19);
+      }
+
+      curY += cardH + gapY;
+      continue;
+    }
+
+    const race = item.race;
+    drawRoundedRect(ctx, padX, curY, cardW, cardH, 8);
+    ctx.fillStyle = '#ffffff';
+    ctx.fill();
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = '#cbd5e1';
+    ctx.stroke();
+
+    // 1열: [#순번] [경기번호] [성별] [종목명] ... [예상/실제 시간]
+    const row1Y = curY + 16;
+    let cursorX = padX + 10;
+
+    // #순번
+    const idxText = `#${race.race_index}`;
+    ctx.font = `800 11.5px monospace`;
+    const idxW = Math.max(36, ctx.measureText(idxText).width + 12);
+    drawRoundedRect(ctx, cursorX, curY + 6, idxW, 20, 4);
+    ctx.fillStyle = '#e2e8f0';
+    ctx.fill();
+    ctx.fillStyle = '#334155';
+    ctx.fillText(idxText, cursorX + 6, row1Y);
+    cursorX += idxW + 6;
+
+    // 경기번호
+    const noText = `${race.primary_match_no}번`;
+    ctx.font = `900 12px ${fontStack}`;
+    const noW = Math.max(40, ctx.measureText(noText).width + 12);
+    drawRoundedRect(ctx, cursorX, curY + 6, noW, 20, 4);
+    ctx.fillStyle = '#0f172a';
+    ctx.fill();
+    ctx.fillStyle = '#ffffff';
+    ctx.fillText(noText, cursorX + 6, row1Y);
+    cursorX += noW + 6;
+
+    // 성별 배지
+    const genText = race.gender || '-';
+    ctx.font = `800 11.5px ${fontStack}`;
+    const genW = ctx.measureText(genText).width + 12;
+    drawRoundedRect(ctx, cursorX, curY + 6, genW, 20, 4);
+    if (genText === '남자') {
+      ctx.fillStyle = '#eff6ff';
+      ctx.fill();
+      ctx.fillStyle = '#2563eb';
+    } else if (genText === '여자') {
+      ctx.fillStyle = '#fff1f2';
+      ctx.fill();
+      ctx.fillStyle = '#e11d48';
+    } else {
+      ctx.fillStyle = '#f3e8ff';
+      ctx.fill();
+      ctx.fillStyle = '#7c3aed';
+    }
+    ctx.fillText(genText, cursorX + 6, row1Y);
+    cursorX += genW + 8;
+
+    // 종목명
+    const compactEvent = formatCompactEventTitle(race);
+    ctx.fillStyle = '#0f172a';
+    ctx.font = `800 13px ${fontStack}`;
+    ctx.fillText(compactEvent, cursorX, row1Y);
+
+    // 우측 예상/실제 시작 시각
+    const timeStr = race.display_time || '';
+    if (timeStr) {
+      ctx.font = `800 12px monospace`;
+      const timeW = ctx.measureText(timeStr).width + 14;
+      drawRoundedRect(ctx, padX + cardW - timeW - 10, curY + 6, timeW, 20, 4);
+      ctx.fillStyle = '#f1f5f9';
+      ctx.fill();
+      ctx.fillStyle = '#0284c7';
+      ctx.fillText(timeStr, padX + cardW - timeW - 3, row1Y);
+    }
+
+    // 2열: 1~4레인 셀
+    const laneDataByNo = { 1: [], 2: [], 3: [], 4: [] };
+    (race.lanes || []).forEach(l => {
+      const ln = Number(l.lane);
+      if (ln >= 1 && ln <= 4) {
+        laneDataByNo[ln].push({
+          ...l,
+          relaySwimmers: getOurRelaySwimmers(race, l.team)
+        });
+      }
+    });
+
+    const laneGap = 6;
+    const totalLaneW = cardW - 20;
+    const singleLaneW = (totalLaneW - laneGap * 3) / 4;
+    const laneY = curY + 30;
+    const laneH = cardH - 35;
+
+    for (let laneNo = 1; laneNo <= 4; laneNo++) {
+      const lx = padX + 10 + (laneNo - 1) * (singleLaneW + laneGap);
+      const entries = laneDataByNo[laneNo];
+      const hasMongkku = entries.some(e => e.team === '거제몽꾸');
+      const hasYareu = entries.some(e => e.team === '거제야르');
+
+      drawRoundedRect(ctx, lx, laneY, singleLaneW, laneH, 5);
+      if (hasMongkku) {
+        ctx.fillStyle = '#ffedd5';
+        ctx.fill();
+        ctx.lineWidth = 1.5;
+        ctx.strokeStyle = '#f97316';
+        ctx.stroke();
+      } else if (hasYareu) {
+        ctx.fillStyle = '#dbeafe';
+        ctx.fill();
+        ctx.lineWidth = 1.5;
+        ctx.strokeStyle = '#3b82f6';
+        ctx.stroke();
+      } else {
+        ctx.fillStyle = '#f8fafc';
+        ctx.fill();
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = '#e2e8f0';
+        ctx.stroke();
+      }
+
+      // 레인 번호
+      ctx.font = `800 10.5px ${fontStack}`;
+      ctx.fillStyle = hasMongkku ? '#ea580c' : (hasYareu ? '#2563eb' : '#94a3b8');
+      ctx.fillText(String(laneNo), lx + 7, laneY + laneH / 2);
+
+      // 선수명 표시
+      let displayNames = '-';
+      if (entries.length > 0) {
+        displayNames = entries.map(e => {
+          if (race.is_relay) {
+            if (Array.isArray(e.relaySwimmers) && e.relaySwimmers.length > 0) {
+              return `[${e.team}] ${e.relaySwimmers.join(' ')}`;
+            }
+            return e.team || '-';
+          }
+          const swName = e.name || '-';
+          if (e.team === '거제몽꾸' || e.team === '거제야르') {
+            return `${swName} (${e.team})`;
+          }
+          return swName;
+        }).join(' / ');
+      }
+
+      ctx.font = (hasMongkku || hasYareu)
+        ? `800 ${race.is_relay ? '11px' : '12px'} ${fontStack}`
+        : `600 11.5px ${fontStack}`;
+      ctx.fillStyle = hasMongkku ? '#9a3412' : (hasYareu ? '#1e40af' : (entries.length > 0 ? '#475569' : '#cbd5e1'));
+      const clipped = truncateCanvasText(ctx, displayNames, singleLaneW - 24);
+      ctx.fillText(clipped, lx + 19, laneY + laneH / 2);
+    }
+
+    curY += cardH + gapY;
+  }
+
+  // 4. 하단 푸터
+  ctx.fillStyle = '#64748b';
+  ctx.font = `700 11.5px ${fontStack}`;
+  ctx.fillText(
+    `생성 시각: ${new Date().toLocaleString('ko-KR')} · 거제몽꾸 & 거제야르 통합 포털 (https://iseohyun.github.io/GMDC-getPB/)`,
+    padX + 4,
+    canvasH - 18
+  );
+
+  // 5. PNG 파일 다운로드 실행
+  const fileSuffix = onlyOurTeam ? '우리팀대진표' : '전체대진표';
+  const fileName = `2026_거제시장배_${currentDivision === 'student' ? '학생부(24일)' : '성인부(25일)'}_${fileSuffix}.png`;
+  const triggerDownload = (url) => {
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  };
+
+  if (canvas.toBlob) {
+    canvas.toBlob((blob) => {
+      if (!blob) {
+        triggerDownload(canvas.toDataURL('image/png'));
+        return;
+      }
+      const blobUrl = URL.createObjectURL(blob);
+      triggerDownload(blobUrl);
+      setTimeout(() => URL.revokeObjectURL(blobUrl), 10000);
+      showToast(`✅ ${modeLabel} 이미지(${targetRaceCount}경기) 다운로드가 완료되었습니다.`);
+    }, 'image/png');
+  } else {
+    triggerDownload(canvas.toDataURL('image/png'));
+    showToast(`✅ ${modeLabel} 이미지(${targetRaceCount}경기) 다운로드가 완료되었습니다.`);
+  }
+}
+
 function bindEvents() {
+  // 상단 [🖼️ 전체 대진표 저장] 및 [🖼️ 우리팀 대진표 저장] 버튼 클릭
+  if (elBtnDownloadAllScheduleImage) {
+    elBtnDownloadAllScheduleImage.addEventListener('click', () => downloadScheduleImage(false));
+  }
+  if (elBtnDownloadOurTeamImage) {
+    elBtnDownloadOurTeamImage.addEventListener('click', () => downloadScheduleImage(true));
+  }
+
   // 상단 [현재순번] 및 [📍 현재 경기] 버튼 클릭 시 현재 진행 중인 카드로 스크롤 이동
   if (elCtrlCurrentNo) {
     elCtrlCurrentNo.addEventListener('click', scrollToCurrentRace);
@@ -799,10 +1288,23 @@ function bindEvents() {
     });
   }
 
-  // 검색창 포커스 / 입력 / 추천 선수 클릭
+  // 검색창 포커스 / 클릭 / 입력 / 추천 선수 클릭 / 닫기
   if (elInputSearch) {
     elInputSearch.addEventListener('focus', () => {
       renderSwimmerSuggestions(elInputSearch.value);
+    });
+
+    elInputSearch.addEventListener('click', () => {
+      if (elSwimmerSuggestDropdown && elSwimmerSuggestDropdown.style.display === 'none') {
+        renderSwimmerSuggestions(elInputSearch.value);
+      }
+    });
+
+    elInputSearch.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' || e.key === 'Enter') {
+        if (elSwimmerSuggestDropdown) elSwimmerSuggestDropdown.style.display = 'none';
+        elInputSearch.blur();
+      }
     });
 
     elInputSearch.addEventListener('input', (e) => {
@@ -826,6 +1328,14 @@ function bindEvents() {
 
   if (elSwimmerSuggestDropdown) {
     elSwimmerSuggestDropdown.addEventListener('click', (e) => {
+      const closeBtn = e.target.closest('[data-action="close-suggest"]');
+      if (closeBtn) {
+        e.stopPropagation();
+        elSwimmerSuggestDropdown.style.display = 'none';
+        if (elInputSearch) elInputSearch.blur();
+        return;
+      }
+
       const chip = e.target.closest('[data-suggest-name]');
       if (!chip) return;
       const name = chip.getAttribute('data-suggest-name');
@@ -908,6 +1418,29 @@ function bindEvents() {
         return;
       }
 
+      // 3-2. 예정 휴식 카드의 [▶ 휴게 시작] 버튼 클릭
+      const startSchedBreakBtn = e.target.closest('[data-action="start-scheduled-break"]');
+      if (startSchedBreakBtn) {
+        if (isActionInFlight) return;
+        const breakId = startSchedBreakBtn.getAttribute('data-break-id');
+
+        isActionInFlight = true;
+        try {
+          countdownRemaining = 10;
+          if (isAutoRefresh && elCountdownBadge) elCountdownBadge.textContent = '10s';
+          liveStatus = await startBreak(currentDivision, liveStatus, breakId);
+          updateUI();
+          scrollToCurrentRace();
+          showToast('☕ 예정된 휴식이 시작되었습니다.');
+        } catch (err) {
+          console.error('startScheduledBreak error:', err);
+          showToast('예정 휴식 시작 처리 중 오류가 발생했습니다.');
+        } finally {
+          isActionInFlight = false;
+        }
+        return;
+      }
+
       // 4. [휴게 종료] 버튼 클릭
       const endBreakBtn = e.target.closest('[data-action="end-break"]');
       if (endBreakBtn && !endBreakBtn.disabled) {
@@ -951,6 +1484,48 @@ function bindEvents() {
         } catch (err) {
           console.error('cancelBreak error:', err);
           showToast('휴게 취소 처리 중 오류가 발생했습니다.');
+        } finally {
+          isActionInFlight = false;
+        }
+        return;
+      }
+
+      // 6. 마지막 경기 이후 [🏁 경기종료] 버튼 클릭
+      const finishAllBtn = e.target.closest('[data-action="finish-all-races"]');
+      if (finishAllBtn && !finishAllBtn.disabled) {
+        if (isActionInFlight) return;
+
+        isActionInFlight = true;
+        try {
+          countdownRemaining = 10;
+          if (isAutoRefresh && elCountdownBadge) elCountdownBadge.textContent = '10s';
+          liveStatus = await finishAllRaces(currentDivision, liveStatus);
+          updateUI();
+          showToast('🏁 모든 경기가 종료 처리되었습니다. 수고하셨습니다!');
+        } catch (err) {
+          console.error('finishAllRaces error:', err);
+          showToast('경기 종료 처리 중 오류가 발생했습니다.');
+        } finally {
+          isActionInFlight = false;
+        }
+        return;
+      }
+
+      // 7. 마지막 경기 이후 [↩ 종료 취소] 버튼 클릭
+      const cancelFinishAllBtn = e.target.closest('[data-action="cancel-finish-all"]');
+      if (cancelFinishAllBtn && !cancelFinishAllBtn.disabled) {
+        if (isActionInFlight) return;
+
+        isActionInFlight = true;
+        try {
+          countdownRemaining = 10;
+          if (isAutoRefresh && elCountdownBadge) elCountdownBadge.textContent = '10s';
+          liveStatus = await cancelFinishAllRaces(currentDivision, liveStatus);
+          updateUI();
+          showToast('↩ 경기 종료 처리가 취소되어 마지막 경기 진행 중 상태로 복귀했습니다.');
+        } catch (err) {
+          console.error('cancelFinishAllRaces error:', err);
+          showToast('경기 종료 취소 처리 중 오류가 발생했습니다.');
         } finally {
           isActionInFlight = false;
         }
