@@ -1853,16 +1853,7 @@ function renderResultAnalysisView() {
   if (!container) return;
 
   if (currentDivision === "adult") {
-    container.innerHTML = `
-      <section class="pending-update-card">
-        <span class="pending-icon">🏅</span>
-        <h3 class="pending-title">성인부 (25일) 결과 분석 — 추후 업데이트 예정</h3>
-        <p class="pending-desc" style="margin-bottom: 0;">
-          성인부 경기는 <strong>2026년 10월 25일(일)</strong> 진행 후 공식 기록지 사진이 확보되는 대로<br>
-          우리 팀(<strong>거제몽꾸 · 거제야르</strong>) 및 전체 참가 클럽의 결과 분석 데이터가 이곳에 업데이트될 예정입니다.
-        </p>
-      </section>
-    `;
+    renderAdultResultAnalysisView(container);
     return;
   }
 
@@ -2279,7 +2270,978 @@ function renderResultAnalysisView() {
   renderAllVerifiedSheetRows();
 }
 
+// ==========================================================================
+// 🏅 성인부 (25일) 결과 분석: 대진표 기반 초/비고 실시간 입력 + 등수·점수 자동 산정 + 팀별 세로 막대그래프
+// ==========================================================================
+const ADULT_RESULTS_STORAGE_KEY = "gmdc_adult_results_2026";
+const ADULT_RESULTS_FIRESTORE_COL = "attendance";
+const ADULT_RESULTS_FIRESTORE_DOC = "adult_results_2026";
+
+const ADULT_RESULT_COLUMNS = [
+  { key: "matchNo", label: "경기번호", width: "74px",  align: "center" },
+  { key: "stroke",  label: "종목",     width: "115px", align: "center" },
+  { key: "gender",  label: "성별",     width: "56px",  align: "center" },
+  { key: "group",   label: "그룹",     width: "66px",  align: "center" },
+  { key: "lane",    label: "레인",     width: "52px",  align: "center" },
+  { key: "name",    label: "이름",     width: "135px", align: "left" },
+  { key: "team",    label: "소속팀",   width: "120px", align: "center" },
+  { key: "sec",     label: "기록(초)", width: "96px",  align: "center" },
+  { key: "rank",    label: "등수",     width: "60px",  align: "center" },
+  { key: "points",  label: "점수",     width: "60px",  align: "center" },
+  { key: "note",    label: "비고",     width: "160px", align: "left" }
+];
+
+let visibleAdultResultCols = new Set(ADULT_RESULT_COLUMNS.map(c => c.key));
+
+let adultResStrokeFilter = "all";
+let adultResGroupFilter = "all";
+let adultResGenderFilter = "all";
+let adultResTeamFilter = "all";
+let adultResStatusFilter = "all"; // 'all' | 'entered' | 'pending' | 'top6'
+let adultResSearchQuery = "";
+
+let adultScheduleEntriesCache = null;
+let adultResultInputs = loadAdultResultsFromLocal();
+let dirtyAdultEntryKeys = new Set();
+let adultSyncState = "synced"; // 'synced' | 'syncing' | 'offline'
+let adultSyncTimer = null;
+let adultFirestoreListenerStarted = false;
+let adultFirestoreDepsPromise = null;
+
+// 경기번호 진행에 따른 점수 변화 재생(Playback) 상태
+const ADULT_TOTAL_RACES = ADULT_RACES_DATA.length; // 141경기
+let adultPlaybackRaceIndex = ADULT_TOTAL_RACES;    // 기본: 최종 경기(141)까지 반영
+let adultPlaybackTimer = null;
+let isAdultPlaybackRunning = false;
+
+function loadAdultResultsFromLocal() {
+  try {
+    const raw = localStorage.getItem(ADULT_RESULTS_STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed && typeof parsed === "object") {
+        return parsed;
+      }
+    }
+  } catch (e) {
+    console.warn("[AdultResults] localStorage load warning:", e);
+  }
+  return {};
+}
+
+function saveAdultResultsToLocal() {
+  try {
+    localStorage.setItem(ADULT_RESULTS_STORAGE_KEY, JSON.stringify(adultResultInputs));
+  } catch (e) {
+    console.warn("[AdultResults] localStorage save warning:", e);
+  }
+}
+
+async function getAdultFirestoreDeps() {
+  if (!adultFirestoreDepsPromise) {
+    adultFirestoreDepsPromise = Promise.all([
+      import("./firebase-config.js?v=20261024_19"),
+      import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js")
+    ]).then(([cfgMod, fsMod]) => {
+      const db = fsMod.getFirestore(cfgMod.firebaseApp);
+      return {
+        db,
+        doc: fsMod.doc,
+        setDoc: fsMod.setDoc,
+        onSnapshot: fsMod.onSnapshot
+      };
+    }).catch(err => {
+      adultFirestoreDepsPromise = null;
+      throw err;
+    });
+  }
+  return adultFirestoreDepsPromise;
+}
+
+function updateAdultSyncBadgeDOM() {
+  const badge = document.getElementById("adultResultSyncBadge");
+  if (!badge) return;
+  badge.classList.remove("is-synced", "is-syncing", "is-offline");
+  if (adultSyncState === "syncing") {
+    badge.classList.add("is-syncing");
+    badge.textContent = "⏳ 로컬 즉시 반영됨 · DB 동기화 중...";
+  } else if (adultSyncState === "offline") {
+    badge.classList.add("is-offline");
+    badge.textContent = "📴 로컬 저장 완료 (인터넷 연결 시 자동 동기화)";
+  } else {
+    badge.classList.add("is-synced");
+    badge.textContent = "☁️ 실시간 자동 저장 · DB 동기화 완료";
+  }
+}
+
+function scheduleAdultResultsFirestoreSync(delayMs = 380) {
+  adultSyncState = navigator.onLine === false ? "offline" : "syncing";
+  updateAdultSyncBadgeDOM();
+
+  if (adultSyncTimer) {
+    clearTimeout(adultSyncTimer);
+  }
+  adultSyncTimer = setTimeout(() => {
+    flushAdultResultsToFirestore();
+  }, delayMs);
+}
+
+async function flushAdultResultsToFirestore() {
+  if (dirtyAdultEntryKeys.size === 0) {
+    adultSyncState = "synced";
+    updateAdultSyncBadgeDOM();
+    return;
+  }
+
+  const keysToSync = [...dirtyAdultEntryKeys];
+  const entriesPayload = {};
+  for (const k of keysToSync) {
+    if (adultResultInputs[k]) {
+      entriesPayload[k] = adultResultInputs[k];
+    }
+  }
+
+  try {
+    const { db, doc, setDoc } = await getAdultFirestoreDeps();
+    const docRef = doc(db, ADULT_RESULTS_FIRESTORE_COL, ADULT_RESULTS_FIRESTORE_DOC);
+    await setDoc(
+      docRef,
+      {
+        entries: entriesPayload,
+        updated_at: new Date().toISOString()
+      },
+      { merge: true }
+    );
+    keysToSync.forEach(k => dirtyAdultEntryKeys.delete(k));
+    adultSyncState = dirtyAdultEntryKeys.size > 0 ? "syncing" : "synced";
+    updateAdultSyncBadgeDOM();
+  } catch (err) {
+    console.warn("[AdultResults] Firestore sync deferred:", err);
+    adultSyncState = "offline";
+    updateAdultSyncBadgeDOM();
+  }
+}
+
+function startAdultResultsFirestoreListener() {
+  if (adultFirestoreListenerStarted) return;
+  adultFirestoreListenerStarted = true;
+
+  getAdultFirestoreDeps().then(({ db, doc, onSnapshot }) => {
+    const docRef = doc(db, ADULT_RESULTS_FIRESTORE_COL, ADULT_RESULTS_FIRESTORE_DOC);
+    onSnapshot(docRef, (snap) => {
+      if (!snap.exists()) return;
+      const data = snap.data();
+      const remoteEntries = (data && data.entries && typeof data.entries === "object") ? data.entries : {};
+      let hasChanged = false;
+
+      for (const [entryKey, rVal] of Object.entries(remoteEntries)) {
+        if (!rVal || typeof rVal !== "object") continue;
+        const lVal = adultResultInputs[entryKey];
+        const rTime = Number(rVal.updatedAt || 0);
+        const lTime = Number(lVal?.updatedAt || 0);
+        if (!lVal || rTime > lTime) {
+          adultResultInputs[entryKey] = {
+            sec: String(rVal.sec ?? ""),
+            note: String(rVal.note ?? ""),
+            updatedAt: rTime || Date.now()
+          };
+          hasChanged = true;
+        }
+      }
+
+      if (hasChanged) {
+        saveAdultResultsToLocal();
+        if (currentDivision === "adult" && currentSubTab === "result") {
+          patchAdultInputsAndResultsFromState();
+        }
+      }
+      if (dirtyAdultEntryKeys.size === 0) {
+        adultSyncState = "synced";
+        updateAdultSyncBadgeDOM();
+      }
+    }, (err) => {
+      console.warn("[AdultResults] onSnapshot warning:", err);
+    });
+  }).catch(() => {});
+
+  window.addEventListener("online", () => {
+    if (dirtyAdultEntryKeys.size > 0) {
+      scheduleAdultResultsFirestoreSync(150);
+    }
+  });
+}
+
+function buildAdultScheduleEntriesBase() {
+  if (adultScheduleEntriesCache) return adultScheduleEntriesCache;
+
+  const list = [];
+  for (const race of ADULT_RACES_DATA) {
+    const headerMeta = new Map();
+    for (const h of (race.original_headers || [])) {
+      const m = h.match(/^(\d+(?:-\d+)?)\.\s*(.+)$/);
+      if (m) {
+        const no = m[1];
+        const title = m[2];
+        const grpMatch = title.match(/([1-6]그룹)/);
+        const genMatch = title.match(/(남자|여자|혼성)/);
+        headerMeta.set(no, {
+          group: grpMatch ? grpMatch[1] : race.group,
+          gender: genMatch ? genMatch[1] : race.gender
+        });
+      }
+    }
+
+    for (const lane of (race.lanes || [])) {
+      const entryKey = `${race.primary_match_no}_${lane.lane}`;
+      const matchNo = String(lane.original_match_no || race.primary_match_no);
+      const isRelay = Boolean(race.is_relay);
+      const team = (lane.team || "개인").trim() || "개인";
+
+      const meta = headerMeta.get(matchNo) || {
+        group: race.group,
+        gender: race.gender
+      };
+
+      const gender = isRelay ? race.gender : (meta.gender === "여자" ? "여자" : "남자");
+      const genderShort = gender === "남자" ? "남" : gender === "여자" ? "여" : "혼성";
+      const group = isRelay ? "단체" : (ADULT_GROUPS.includes(meta.group) ? meta.group : race.group);
+      const groupNum = isRelay ? "-" : String(group).replace(/[^0-9]/g, "") || "-";
+      const strokeDisplay = isRelay ? `${race.stroke} ${race.distance}` : `${race.stroke} ${race.distance || "50m"}`;
+      const name = isRelay
+        ? (lane.name && lane.name.trim() ? lane.name.trim() : `${team} 단체조`)
+        : (lane.name || "").trim();
+
+      const eventCategoryKey = isRelay
+        ? `RELAY|${race.gender}|${race.stroke}|${race.distance}`
+        : `INDIV|${gender}|${group}|${race.stroke}`;
+
+      list.push({
+        entryKey,
+        raceIndex: race.race_index,
+        primaryMatchNo: String(race.primary_match_no),
+        matchNo,
+        isRelay,
+        strokeRaw: race.stroke,
+        strokeDisplay,
+        distance: race.distance || "50m",
+        gender,
+        genderShort,
+        group,
+        groupNum,
+        lane: lane.lane,
+        name,
+        team,
+        isOurTeam: OUR_TEAMS.has(team),
+        eventCategoryKey
+      });
+    }
+  }
+
+  adultScheduleEntriesCache = list;
+  return list;
+}
+
+/**
+ * 입력된 기록 문자열(예: "28.45", "28\"45", "00'28\"45", "2:15.30")을 초(number)로 변환
+ */
+function parseAdultRecordInputToSeconds(rawStr) {
+  const s = String(rawStr ?? "").trim();
+  if (!s || s === "99'99\"99" || s === "88'88\"88") return null;
+
+  // 1) 순수 숫자 또는 소수 (예: "28.45", "31", "132.5")
+  if (/^\d+(?:\.\d+)?$/.test(s)) {
+    const val = parseFloat(s);
+    return val > 0 ? val : null;
+  }
+
+  // 2) 분'초"백분의일초 또는 분:초.소수 (예: "02'15\"20", "2:15.20", "00'28\"45")
+  const mFull = s.match(/^(\d+)[':분]\s*(\d{1,2})(?:["초.](\d{1,2}))?$/);
+  if (mFull) {
+    const mins = parseInt(mFull[1], 10);
+    const secs = parseInt(mFull[2], 10);
+    const hundredths = mFull[3] ? parseInt(mFull[3].padEnd(2, "0"), 10) : 0;
+    const total = mins * 60 + secs + hundredths / 100;
+    return total > 0 ? total : null;
+  }
+
+  // 3) 초"백분의일초 (예: "28\"45")
+  const mSecQuote = s.match(/^(\d{1,3})"(\d{1,2})$/);
+  if (mSecQuote) {
+    const secs = parseInt(mSecQuote[1], 10);
+    const hundredths = parseInt(mSecQuote[2].padEnd(2, "0"), 10);
+    const total = secs + hundredths / 100;
+    return total > 0 ? total : null;
+  }
+
+  return null;
+}
+
+function isAdultNoteExcludedFromRanking(noteStr) {
+  const n = String(noteStr ?? "").trim().toLowerCase();
+  if (!n) return false;
+  return (
+    n.includes("실격") ||
+    n.includes("불참") ||
+    n.includes("기권") ||
+    n.includes("번외") ||
+    n.includes("오픈") ||
+    n.includes("참고") ||
+    n.includes("dq") ||
+    n.includes("dns")
+  );
+}
+
+/**
+ * 전체 492개 엔트리에 대해 실시간 등수·점수 및 10개 클럽(`개인` 제외) 점수 순위를 계산
+ * @param {number} maxRaceIndex 경기번호 진행 재생용 최대 race_index (1 ~ 141)
+ */
+function computeAdultCalculatedResults(maxRaceIndex = ADULT_TOTAL_RACES) {
+  const baseList = buildAdultScheduleEntriesBase();
+  const INDIV_PTS = [7, 5, 4, 3, 2, 1];
+  const RELAY_PTS = [14, 10, 8, 6, 4, 2];
+
+  const calcMap = new Map();
+  const categoryGroups = new Map();
+
+  let enteredCount = 0;
+
+  for (const item of baseList) {
+    const userInp = adultResultInputs[item.entryKey] || { sec: "", note: "" };
+    const rawSec = String(userInp.sec ?? "");
+    const rawNote = String(userInp.note ?? "");
+    const secNum = parseAdultRecordInputToSeconds(rawSec);
+    const isExcluded = isAdultNoteExcludedFromRanking(rawNote);
+
+    if (rawSec.trim() !== "" || rawNote.trim() !== "") {
+      enteredCount++;
+    }
+
+    const rowState = {
+      ...item,
+      rawSec,
+      rawNote,
+      secNum,
+      isExcluded,
+      rank: null,
+      points: 0
+    };
+
+    calcMap.set(item.entryKey, rowState);
+
+    if (item.raceIndex <= maxRaceIndex) {
+      if (!categoryGroups.has(item.eventCategoryKey)) {
+        categoryGroups.set(item.eventCategoryKey, []);
+      }
+      categoryGroups.get(item.eventCategoryKey).push(rowState);
+    }
+  }
+
+  // 각 세부 종목(성별·그룹·영법 / 단체전 종목)별 타임레이스 등수 및 점수 계산
+  for (const groupItems of categoryGroups.values()) {
+    const validRunners = groupItems.filter(r => !r.isExcluded && r.secNum !== null && r.secNum > 0);
+    validRunners.sort((a, b) => a.secNum - b.secNum);
+
+    let currentRank = 1;
+    for (let i = 0; i < validRunners.length; i++) {
+      if (i > 0 && Math.abs(validRunners[i].secNum - validRunners[i - 1].secNum) > 1e-6) {
+        currentRank = i + 1;
+      }
+      const runner = validRunners[i];
+      runner.rank = currentRank;
+      const ptsTable = runner.isRelay ? RELAY_PTS : INDIV_PTS;
+      runner.points = currentRank >= 1 && currentRank <= 6 ? ptsTable[currentRank - 1] : 0;
+    }
+  }
+
+  // 팀별 득점 집계 ('개인' 제외, 성인부 10개 참가 클럽 전체 포함)
+  const adultDivData = getDivisionData("adult");
+  const clubMap = new Map();
+
+  for (const t of adultDivData.teams) {
+    if (t.team === "개인") continue;
+    clubMap.set(t.team, {
+      team: t.team,
+      isOurTeam: OUR_TEAMS.has(t.team),
+      expectedPoints: t.expectedPoints || 0,
+      totalEntries: t.indivEntries + t.relayEntries,
+      enteredEntries: 0,
+      gold: 0,
+      silver: 0,
+      bronze: 0,
+      rank4to6: 0,
+      top6Total: 0,
+      indivWins: 0,
+      relayWins: 0,
+      indivPoints: 0,
+      relayPoints: 0,
+      totalPoints: 0
+    });
+  }
+
+  for (const r of calcMap.values()) {
+    if (r.team === "개인") continue;
+    if (r.raceIndex > maxRaceIndex) continue;
+
+    if (!clubMap.has(r.team)) {
+      clubMap.set(r.team, {
+        team: r.team,
+        isOurTeam: OUR_TEAMS.has(r.team),
+        expectedPoints: 0,
+        totalEntries: 0,
+        enteredEntries: 0,
+        gold: 0,
+        silver: 0,
+        bronze: 0,
+        rank4to6: 0,
+        top6Total: 0,
+        indivWins: 0,
+        relayWins: 0,
+        indivPoints: 0,
+        relayPoints: 0,
+        totalPoints: 0
+      });
+    }
+    const c = clubMap.get(r.team);
+    if (r.rawSec.trim() !== "" || r.rawNote.trim() !== "") {
+      c.enteredEntries++;
+    }
+    if (r.rank === 1) {
+      c.gold++;
+      if (r.isRelay) c.relayWins++;
+      else c.indivWins++;
+    } else if (r.rank === 2) {
+      c.silver++;
+    } else if (r.rank === 3) {
+      c.bronze++;
+    } else if (r.rank && r.rank >= 4 && r.rank <= 6) {
+      c.rank4to6++;
+    }
+
+    if (r.rank && r.rank >= 1 && r.rank <= 6) {
+      c.top6Total++;
+    }
+    if (r.points > 0) {
+      c.totalPoints += r.points;
+      if (r.isRelay) c.relayPoints += r.points;
+      else c.indivPoints += r.points;
+    }
+  }
+
+  const clubStandings = [...clubMap.values()].sort((a, b) => {
+    if (b.totalPoints !== a.totalPoints) return b.totalPoints - a.totalPoints;
+    if (b.gold !== a.gold) return b.gold - a.gold;
+    if (b.silver !== a.silver) return b.silver - a.silver;
+    if (b.bronze !== a.bronze) return b.bronze - a.bronze;
+    if (b.top6Total !== a.top6Total) return b.top6Total - a.top6Total;
+    return b.expectedPoints - a.expectedPoints;
+  });
+
+  return {
+    calcMap,
+    clubStandings,
+    enteredCount,
+    totalCount: baseList.length
+  };
+}
+
+function getAdultPlaybackRaceLabel(raceIdx) {
+  const idx = Math.max(1, Math.min(ADULT_TOTAL_RACES, Number(raceIdx) || ADULT_TOTAL_RACES));
+  const race = ADULT_RACES_DATA[idx - 1];
+  if (!race) return `전체 완료 (${ADULT_TOTAL_RACES} / ${ADULT_TOTAL_RACES}경기)`;
+  const shortTitle = String(race.title || "").replace(/^성인부\s*/, "");
+  return `경기 #${race.primary_match_no} · ${shortTitle} (${idx} / ${ADULT_TOTAL_RACES})`;
+}
+
+function updateAdultPlaybackControlsDOM() {
+  const playBtn = document.getElementById("btnAdultPlaybackToggle");
+  const slider = document.getElementById("adultPlaybackSlider");
+  const infoEl = document.getElementById("adultPlaybackMatchInfo");
+
+  if (playBtn) {
+    playBtn.classList.toggle("is-playing", isAdultPlaybackRunning);
+    playBtn.innerHTML = isAdultPlaybackRunning ? "⏸️ 일시정지" : "▶️ 재생";
+  }
+  if (slider && Number(slider.value) !== adultPlaybackRaceIndex) {
+    slider.value = String(adultPlaybackRaceIndex);
+  }
+  if (infoEl) {
+    infoEl.textContent = getAdultPlaybackRaceLabel(adultPlaybackRaceIndex);
+  }
+}
+
+function stopAdultPlayback() {
+  if (adultPlaybackTimer) {
+    clearInterval(adultPlaybackTimer);
+    adultPlaybackTimer = null;
+  }
+  isAdultPlaybackRunning = false;
+  updateAdultPlaybackControlsDOM();
+}
+
+function startAdultPlayback() {
+  if (adultPlaybackTimer) {
+    clearInterval(adultPlaybackTimer);
+    adultPlaybackTimer = null;
+  }
+  if (adultPlaybackRaceIndex >= ADULT_TOTAL_RACES) {
+    adultPlaybackRaceIndex = 1;
+  }
+  isAdultPlaybackRunning = true;
+  renderAdultStandingsAndChartForCurrentStep();
+  updateAdultPlaybackControlsDOM();
+
+  adultPlaybackTimer = setInterval(() => {
+    if (adultPlaybackRaceIndex < ADULT_TOTAL_RACES) {
+      adultPlaybackRaceIndex++;
+      renderAdultStandingsAndChartForCurrentStep();
+      updateAdultPlaybackControlsDOM();
+    } else {
+      stopAdultPlayback();
+    }
+  }, 150);
+}
+
+function renderAdultStandingsAndChartForCurrentStep() {
+  const { clubStandings, enteredCount, totalCount } = computeAdultCalculatedResults(adultPlaybackRaceIndex);
+  const progressBadge = document.getElementById("adultResultEnteredProgressBadge");
+  if (progressBadge) {
+    const pct = totalCount > 0 ? ((enteredCount / totalCount) * 100).toFixed(1) : "0.0";
+    progressBadge.textContent = `기록 입력: ${enteredCount} / ${totalCount}건 (${pct}%)`;
+  }
+
+  // 1) 가로막대그래프: 팀명, 그래프, 총점만 표시 / 1·2·3등은 금·은·동, 나머지는 파란색
+  const hbarBox = document.getElementById("adultTeamScoreHBarContainer");
+  if (hbarBox) {
+    const maxPts = Math.max(...clubStandings.map(c => c.totalPoints), 10);
+    hbarBox.innerHTML = clubStandings.map((c, idx) => {
+      const widthPct = c.totalPoints > 0 ? Math.max(3, Math.round((c.totalPoints / maxPts) * 100)) : 0;
+      const barColorCls = idx === 0
+        ? "is-gold"
+        : idx === 1
+          ? "is-silver"
+          : idx === 2
+            ? "is-bronze"
+            : "is-blue";
+      const activeCls = adultResTeamFilter === c.team ? "is-active-filter" : "";
+
+      return `
+        <div class="adult-hbar-row ${activeCls}" data-adult-vbar-team="${escapeHtml(c.team)}" title="클릭 시 [${escapeHtml(c.team)}] 대진표 필터링">
+          <span class="adult-hbar-team">${escapeHtml(c.team)}</span>
+          <div class="adult-hbar-track">
+            <div class="adult-hbar-fill ${barColorCls}" style="width:${widthPct}%;"></div>
+          </div>
+          <span class="adult-hbar-score">${c.totalPoints}점</span>
+        </div>
+      `;
+    }).join("");
+  }
+
+  // 2) 메달 개수 및 개인·단체전 우승 횟수·점수 집계표
+  const medalTbody = document.getElementById("adultTeamMedalTableBody");
+  if (medalTbody) {
+    medalTbody.innerHTML = clubStandings.map((c, idx) => {
+      const rowCls = c.team === "거제몽꾸"
+        ? "team-power-row row-team-mongkku"
+        : c.team === "거제야르"
+          ? "team-power-row row-team-yareu"
+          : "team-power-row";
+      const teamTextColor = c.team === "거제몽꾸"
+        ? "#c2410c"
+        : c.team === "거제야르"
+          ? "#0369a1"
+          : "#0f172a";
+
+      return `
+        <tr class="${rowCls}" data-adult-vbar-team="${escapeHtml(c.team)}" title="클릭 시 [${escapeHtml(c.team)}] 대진표 필터링">
+          <td style="text-align:center; font-weight:800; color:#475569; font-variant-numeric:tabular-nums;">${idx + 1}</td>
+          <td style="text-align:left; font-weight:${c.isOurTeam ? "900" : "800"}; color:${teamTextColor};">${escapeHtml(c.team)}</td>
+          <td style="text-align:center; font-weight:800; color:${c.gold > 0 ? "#b45309" : "#cbd5e1"}; font-variant-numeric:tabular-nums;">${c.gold}</td>
+          <td style="text-align:center; font-weight:800; color:${c.silver > 0 ? "#334155" : "#cbd5e1"}; font-variant-numeric:tabular-nums;">${c.silver}</td>
+          <td style="text-align:center; font-weight:800; color:${c.bronze > 0 ? "#9a3412" : "#cbd5e1"}; font-variant-numeric:tabular-nums;">${c.bronze}</td>
+          <td style="text-align:center; font-weight:700; color:${c.rank4to6 > 0 ? "#0284c7" : "#cbd5e1"}; font-variant-numeric:tabular-nums;">${c.rank4to6}</td>
+          <td style="text-align:center; font-weight:800; color:${c.indivWins > 0 ? "#0f172a" : "#cbd5e1"}; font-variant-numeric:tabular-nums;">${c.indivWins}</td>
+          <td style="text-align:center; font-weight:800; color:${c.relayWins > 0 ? "#7c3aed" : "#cbd5e1"}; font-variant-numeric:tabular-nums;">${c.relayWins}</td>
+          <td style="text-align:center; font-weight:800; color:#0284c7; font-variant-numeric:tabular-nums;">${c.indivPoints}</td>
+          <td style="text-align:center; font-weight:800; color:#7c3aed; font-variant-numeric:tabular-nums;">${c.relayPoints}</td>
+          <td style="text-align:center; font-weight:900; font-size:14px; color:${c.totalPoints > 0 ? "#0f172a" : "#94a3b8"}; font-variant-numeric:tabular-nums;">${c.totalPoints}</td>
+        </tr>
+      `;
+    }).join("");
+  }
+}
+
+function getAdultRankCellInnerHtml(rowState) {
+  if (rowState.isExcluded) {
+    return `<span style="color:#be123c; font-weight:800; font-size:12px;">-</span>`;
+  }
+  if (rowState.rank !== null && rowState.rank > 0) {
+    const r = rowState.rank;
+    const color = r === 1 ? "#b45309" : r === 2 ? "#334155" : r === 3 ? "#9a3412" : r <= 6 ? "#0284c7" : "#475569";
+    return `<span style="font-weight:${r <= 6 ? "900" : "700"}; color:${color}; font-variant-numeric:tabular-nums;">${r}</span>`;
+  }
+  return `<span style="color:#cbd5e1;">-</span>`;
+}
+
+function getAdultPointsCellInnerHtml(rowState) {
+  if (rowState.isExcluded) {
+    return `<span style="color:#cbd5e1;">0</span>`;
+  }
+  if (rowState.rank !== null && rowState.rank > 0) {
+    const pts = rowState.points;
+    return `<span style="font-weight:${pts > 0 ? "900" : "600"}; color:${pts > 0 ? "#1d4ed8" : "#94a3b8"}; font-variant-numeric:tabular-nums;">${pts}</span>`;
+  }
+  return `<span style="color:#cbd5e1;">-</span>`;
+}
+
+/**
+ * 인풋 포커스를 유지한 채 등수·점수 셀과 상단 가로막대그래프·집계표만 즉시 갱신
+ */
+function recalculateAndPatchAdultResultsDOM() {
+  const { calcMap } = computeAdultCalculatedResults(ADULT_TOTAL_RACES);
+  renderAdultStandingsAndChartForCurrentStep();
+
+  const tbody = document.getElementById("adultResultScheduleTableBody");
+  if (!tbody) return;
+
+  tbody.querySelectorAll("tr[data-adult-entry-key]").forEach(tr => {
+    const key = tr.dataset.adultEntryKey;
+    const st = calcMap.get(key);
+    if (!st) return;
+
+    const rankCell = tr.querySelector("[data-adult-rank-cell]");
+    if (rankCell) {
+      rankCell.innerHTML = getAdultRankCellInnerHtml(st);
+    }
+
+    const ptsCell = tr.querySelector("[data-adult-pts-cell]");
+    if (ptsCell) {
+      ptsCell.innerHTML = getAdultPointsCellInnerHtml(st);
+    }
+
+    const secInput = tr.querySelector("input[data-adult-sec]");
+    if (secInput) {
+      secInput.classList.toggle("has-value", st.secNum !== null && st.secNum > 0);
+    }
+
+    const noteInput = tr.querySelector("input[data-adult-note]");
+    if (noteInput) {
+      noteInput.classList.toggle("is-excluded-note", st.isExcluded);
+    }
+  });
+}
+
+function patchAdultInputsAndResultsFromState() {
+  const tbody = document.getElementById("adultResultScheduleTableBody");
+  if (tbody) {
+    tbody.querySelectorAll("tr[data-adult-entry-key]").forEach(tr => {
+      const key = tr.dataset.adultEntryKey;
+      const inp = adultResultInputs[key] || { sec: "", note: "" };
+      const secEl = tr.querySelector("input[data-adult-sec]");
+      if (secEl && document.activeElement !== secEl && secEl.value !== String(inp.sec ?? "")) {
+        secEl.value = String(inp.sec ?? "");
+      }
+      const noteEl = tr.querySelector("input[data-adult-note]");
+      if (noteEl && document.activeElement !== noteEl && noteEl.value !== String(inp.note ?? "")) {
+        noteEl.value = String(inp.note ?? "");
+      }
+    });
+  }
+  recalculateAndPatchAdultResultsDOM();
+}
+
+function renderAdultScheduleTableRows() {
+  const thead = document.getElementById("adultResultScheduleTableHead");
+  const tbody = document.getElementById("adultResultScheduleTableBody");
+  const titleEl = document.getElementById("adultResultTableTitle");
+  if (!thead || !tbody) return;
+
+  const { calcMap, totalCount } = computeAdultCalculatedResults(ADULT_TOTAL_RACES);
+  renderAdultStandingsAndChartForCurrentStep();
+  updateAdultPlaybackControlsDOM();
+
+  const activeCols = ADULT_RESULT_COLUMNS.filter(c => visibleAdultResultCols.has(c.key));
+  thead.innerHTML = `
+    <tr>
+      ${activeCols.map(c => `<th style="width:${c.width}; text-align:${c.align};">${escapeHtml(c.label)}</th>`).join("")}
+    </tr>
+  `;
+
+  let list = [...calcMap.values()];
+
+  if (adultResStrokeFilter !== "all") {
+    if (adultResStrokeFilter === "RELAY_ALL") {
+      list = list.filter(r => r.isRelay);
+    } else {
+      list = list.filter(r => r.strokeRaw === adultResStrokeFilter);
+    }
+  }
+  if (adultResGroupFilter !== "all") {
+    list = list.filter(r => r.group === adultResGroupFilter);
+  }
+  if (adultResGenderFilter !== "all") {
+    list = list.filter(r => r.gender === adultResGenderFilter);
+  }
+  if (adultResTeamFilter !== "all") {
+    if (adultResTeamFilter === "OUR_ALL") {
+      list = list.filter(r => r.isOurTeam);
+    } else {
+      list = list.filter(r => r.team === adultResTeamFilter);
+    }
+  }
+  if (adultResStatusFilter === "entered") {
+    list = list.filter(r => r.rawSec.trim() !== "" || r.rawNote.trim() !== "");
+  } else if (adultResStatusFilter === "pending") {
+    list = list.filter(r => r.rawSec.trim() === "" && r.rawNote.trim() === "");
+  } else if (adultResStatusFilter === "top6") {
+    list = list.filter(r => r.rank !== null && r.rank >= 1 && r.rank <= 6);
+  }
+
+  if (adultResSearchQuery.trim() !== "") {
+    const q = adultResSearchQuery.trim().toLowerCase();
+    list = list.filter(r =>
+      r.name.toLowerCase().includes(q) ||
+      r.team.toLowerCase().includes(q) ||
+      r.matchNo.toLowerCase().includes(q) ||
+      r.strokeDisplay.toLowerCase().includes(q) ||
+      r.group.toLowerCase().includes(q) ||
+      r.rawNote.toLowerCase().includes(q)
+    );
+  }
+
+  if (titleEl) {
+    titleEl.textContent = `📋 2. 성인부 대진표 결과 입력 및 상세분석 (${list.length}건 표시 중 / 전체 ${totalCount}건)`;
+  }
+
+  if (activeCols.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td style="text-align:center; padding:32px 16px; color:#64748b; font-weight:600;">
+          표시할 열(항목)을 최소 1개 이상 선택해 주세요.
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  if (list.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="${activeCols.length}" style="text-align:center; padding:32px 16px; color:#64748b; font-weight:600;">
+          선택한 필터 조건에 해당하는 성인부 대진표 엔트리가 없습니다.
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  tbody.innerHTML = list.map(r => {
+    const rowCls = r.team === "거제몽꾸"
+      ? "team-power-row row-team-mongkku"
+      : r.team === "거제야르"
+        ? "team-power-row row-team-yareu"
+        : "";
+    const teamColor = r.team === "거제몽꾸"
+      ? "#c2410c"
+      : r.team === "거제야르"
+        ? "#0369a1"
+        : "#334155";
+
+    const cellMap = {
+      matchNo: `<td style="text-align:center; font-weight:800; color:#0284c7; font-variant-numeric:tabular-nums;">#${escapeHtml(r.matchNo)}</td>`,
+      stroke:  `<td style="text-align:center; font-weight:700; color:#334155;">${escapeHtml(r.strokeDisplay)}</td>`,
+      gender:  `<td style="text-align:center; font-weight:700; color:#334155;">${escapeHtml(r.genderShort)}</td>`,
+      group:   `<td style="text-align:center; font-weight:700; color:#334155; font-variant-numeric:tabular-nums;">${escapeHtml(r.groupNum)}</td>`,
+      lane:    `<td style="text-align:center; font-weight:800; color:#334155; font-variant-numeric:tabular-nums;">${r.lane}</td>`,
+      name:    `<td style="text-align:left; font-weight:${r.isOurTeam ? "900" : "700"}; color:#0f172a;">${escapeHtml(r.name)}</td>`,
+      team:    `<td style="text-align:center; font-weight:${r.isOurTeam ? "900" : "700"}; color:${teamColor};">${escapeHtml(r.team)}</td>`,
+      sec:     `<td style="text-align:center;"><input type="text" inputmode="decimal" class="adult-sec-input ${r.secNum !== null && r.secNum > 0 ? "has-value" : ""}" data-adult-sec="${escapeHtml(r.entryKey)}" value="${escapeHtml(r.rawSec)}" placeholder="초 (예:28.45)" autocomplete="off"></td>`,
+      rank:    `<td style="text-align:center;" data-adult-rank-cell="${escapeHtml(r.entryKey)}">${getAdultRankCellInnerHtml(r)}</td>`,
+      points:  `<td style="text-align:center;" data-adult-pts-cell="${escapeHtml(r.entryKey)}">${getAdultPointsCellInnerHtml(r)}</td>`,
+      note:    `<td style="text-align:left;"><input type="text" class="adult-note-input ${r.isExcluded ? "is-excluded-note" : ""}" data-adult-note="${escapeHtml(r.entryKey)}" value="${escapeHtml(r.rawNote)}" placeholder="실격/불참/비고" autocomplete="off"></td>`
+    };
+
+    return `
+      <tr class="${rowCls}" data-adult-entry-key="${escapeHtml(r.entryKey)}">
+        ${activeCols.map(c => cellMap[c.key]).join("")}
+      </tr>
+    `;
+  }).join("");
+}
+
+function renderAdultResultAnalysisView(container) {
+  startAdultResultsFirestoreListener();
+
+  const adultDivData = getDivisionData("adult");
+  const allTeamNames = adultDivData.teams.map(t => t.team);
+
+  const colToggleChipsHtml = ADULT_RESULT_COLUMNS.map(col => {
+    const isChecked = visibleAdultResultCols.has(col.key);
+    return `
+      <label class="col-toggle-chip ${isChecked ? "is-checked" : ""}">
+        <input type="checkbox" data-adult-col-key="${col.key}" ${isChecked ? "checked" : ""}>
+        <span>${escapeHtml(col.label)}</span>
+      </label>
+    `;
+  }).join("");
+
+  container.innerHTML = `
+    <!-- =============================================================== -->
+    <!-- 1. 성인부 팀별 점수 가로막대그래프 (경기번호 진행 재생 지원)      -->
+    <!-- =============================================================== -->
+    <section class="progress-card-section">
+      <div class="progress-sec-header">
+        <div>
+          <h3>📊 1. 성인부 팀별 점수 및 메달·우승 집계</h3>
+          <span class="progress-sec-sub">재생 버튼을 누르면 경기번호가 진행됨(1~141경기)에 따라 팀별 점수 변화를 보여주며, 1·2·3등은 금·은·동 색, 나머지는 파란색 막대로 표시됩니다.</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+          <span id="adultResultEnteredProgressBadge" class="adult-sync-badge" style="background:#eff6ff; border-color:#bfdbfe; color:#1d4ed8;">기록 입력: 0 / 492건</span>
+          <span id="adultResultSyncBadge" class="adult-sync-badge is-synced">☁️ 실시간 자동 저장 · DB 동기화 완료</span>
+        </div>
+      </div>
+
+      <!-- 경기번호 진행 재생(Playback) 컨트롤 바 -->
+      <div class="adult-playback-bar">
+        <div class="adult-playback-controls">
+          <button type="button" class="btn-adult-play" id="btnAdultPlaybackToggle">▶️ 재생</button>
+          <button type="button" class="btn-adult-step" id="btnAdultPlaybackReset" title="1번 경기로 이동">⏮️ 처음</button>
+          <button type="button" class="btn-adult-step" id="btnAdultPlaybackEnd" title="최종 경기로 이동">⏭️ 최종</button>
+        </div>
+        <div class="adult-playback-slider-wrap">
+          <input type="range" class="adult-race-slider" id="adultPlaybackSlider" min="1" max="${ADULT_TOTAL_RACES}" value="${adultPlaybackRaceIndex}">
+          <span class="adult-playback-match-info" id="adultPlaybackMatchInfo">${escapeHtml(getAdultPlaybackRaceLabel(adultPlaybackRaceIndex))}</span>
+        </div>
+      </div>
+
+      <!-- 팀명 · 가로막대그래프(1·2·3위 금은동 / 나머지 파란색) · 총점 -->
+      <div class="adult-hbar-wrap">
+        <div class="adult-hbar-list" id="adultTeamScoreHBarContainer"></div>
+      </div>
+
+      <!-- 메달 개수 및 개인·단체전 우승 횟수·점수 집계표 -->
+      <div class="table-responsive">
+        <table class="record-table">
+          <thead>
+            <tr>
+              <th style="width: 56px; text-align: center;">순위</th>
+              <th style="min-width: 120px; text-align: left;">소속팀</th>
+              <th style="width: 68px; text-align: center;">🥇 금</th>
+              <th style="width: 68px; text-align: center;">🥈 은</th>
+              <th style="width: 68px; text-align: center;">🥉 동</th>
+              <th style="width: 72px; text-align: center;">4~6위</th>
+              <th style="width: 92px; text-align: center;">개인전 우승</th>
+              <th style="width: 92px; text-align: center;">단체전 우승</th>
+              <th style="width: 88px; text-align: center;">개인전 점수</th>
+              <th style="width: 88px; text-align: center;">단체전 점수</th>
+              <th style="width: 88px; text-align: center;">총점</th>
+            </tr>
+          </thead>
+          <tbody id="adultTeamMedalTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- =============================================================== -->
+    <!-- 2. 성인부 대진표 결과 입력 및 상세분석                          -->
+    <!-- =============================================================== -->
+    <section class="progress-card-section">
+      <div class="progress-sec-header">
+        <div>
+          <h3 id="adultResultTableTitle">📋 2. 성인부 대진표 결과 입력 및 상세분석 (492건)</h3>
+          <span class="progress-sec-sub">각 영자마다 기록(초, 예: <code>28.45</code>)과 비고(<code>실격</code>·<code>불참</code> 등)를 입력하면 같은 성별·그룹·종목 타임레이스 기준으로 등수와 점수가 즉시 자동 계산됩니다.</span>
+        </div>
+      </div>
+
+      <!-- 표시 열(항목) 선택 체크박스 칩 바 + 원클릭 프리셋 -->
+      <div class="col-toggle-bar" id="adultResultColToggleBar">
+        <div class="col-toggle-left">
+          <span class="col-toggle-label">☑️ 표시 열 항목:</span>
+          ${colToggleChipsHtml}
+        </div>
+        <div class="col-toggle-presets">
+          <button type="button" class="col-preset-btn" data-adult-col-preset="all">전체 열 표시</button>
+          <button type="button" class="col-preset-btn" data-adult-col-preset="compact">핵심 열만 (모바일 추천)</button>
+        </div>
+      </div>
+
+      <section class="toolbar" style="margin-bottom: 12px;">
+        <div class="toolbar-left">
+          <div class="search-box">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="adultResSearchInput" value="${escapeHtml(adultResSearchQuery)}" placeholder="선수명, 소속팀, 경기번호(#1, #3-1) 검색..." autocomplete="off">
+          </div>
+
+          <div class="filter-group">
+            <select id="adultResStrokeSelect" class="filter-select" aria-label="성인부 종목 필터">
+              <option value="all" ${adultResStrokeFilter === "all" ? "selected" : ""}>전체 종목</option>
+              <option value="핀접영" ${adultResStrokeFilter === "핀접영" ? "selected" : ""}>핀접영 50m</option>
+              <option value="배영" ${adultResStrokeFilter === "배영" ? "selected" : ""}>배영 50m</option>
+              <option value="접영" ${adultResStrokeFilter === "접영" ? "selected" : ""}>접영 50m</option>
+              <option value="핀자유형" ${adultResStrokeFilter === "핀자유형" ? "selected" : ""}>핀자유형 50m</option>
+              <option value="평영" ${adultResStrokeFilter === "평영" ? "selected" : ""}>평영 50m</option>
+              <option value="자유형" ${adultResStrokeFilter === "자유형" ? "selected" : ""}>자유형 50m</option>
+              <option value="RELAY_ALL" ${adultResStrokeFilter === "RELAY_ALL" ? "selected" : ""}>단체전 전체 (계영·혼계영·핀계영)</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <select id="adultResGroupSelect" class="filter-select" aria-label="성인부 그룹 필터">
+              <option value="all" ${adultResGroupFilter === "all" ? "selected" : ""}>모든 그룹</option>
+              ${ADULT_GROUPS.map(g => `<option value="${g}" ${adultResGroupFilter === g ? "selected" : ""}>${g}</option>`).join("")}
+              <option value="단체" ${adultResGroupFilter === "단체" ? "selected" : ""}>단체전</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <select id="adultResGenderSelect" class="filter-select" aria-label="성인부 성별 필터">
+              <option value="all" ${adultResGenderFilter === "all" ? "selected" : ""}>전체 성별</option>
+              <option value="남자" ${adultResGenderFilter === "남자" ? "selected" : ""}>남자</option>
+              <option value="여자" ${adultResGenderFilter === "여자" ? "selected" : ""}>여자</option>
+              <option value="혼성" ${adultResGenderFilter === "혼성" ? "selected" : ""}>혼성</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <select id="adultResTeamSelect" class="filter-select" aria-label="성인부 소속팀 필터">
+              <option value="all" ${adultResTeamFilter === "all" ? "selected" : ""}>모든 소속팀</option>
+              <option value="OUR_ALL" ${adultResTeamFilter === "OUR_ALL" ? "selected" : ""}>🏊 우리팀 전체 (거제몽꾸 + 거제야르)</option>
+              <option value="거제몽꾸" ${adultResTeamFilter === "거제몽꾸" ? "selected" : ""}>🟠 거제몽꾸</option>
+              <option value="거제야르" ${adultResTeamFilter === "거제야르" ? "selected" : ""}>🔵 거제야르</option>
+              ${allTeamNames.filter(t => !OUR_TEAMS.has(t)).map(t => `<option value="${escapeHtml(t)}" ${adultResTeamFilter === t ? "selected" : ""}>${escapeHtml(t)}</option>`).join("")}
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <select id="adultResStatusSelect" class="filter-select" aria-label="성인부 입력 상태 필터">
+              <option value="all" ${adultResStatusFilter === "all" ? "selected" : ""}>전체 엔트리</option>
+              <option value="entered" ${adultResStatusFilter === "entered" ? "selected" : ""}>✅ 기록/비고 입력됨</option>
+              <option value="pending" ${adultResStatusFilter === "pending" ? "selected" : ""}>⏳ 미입력 엔트리만</option>
+              <option value="top6" ${adultResStatusFilter === "top6" ? "selected" : ""}>🏅 현재 1~6위 입상권만</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <div class="table-responsive">
+        <table class="record-table">
+          <thead id="adultResultScheduleTableHead"></thead>
+          <tbody id="adultResultScheduleTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+  `;
+
+  updateAdultSyncBadgeDOM();
+  renderAdultScheduleTableRows();
+}
+
 function renderAll() {
+  if (!(currentDivision === "adult" && currentSubTab === "result")) {
+    stopAdultPlayback();
+  }
   renderTopNavigationHeader();
 
   if (currentSubTab === "entry") {
@@ -2427,6 +3389,61 @@ function bindEvents() {
       return;
     }
 
+    if (e.target.closest("#btnAdultPlaybackToggle")) {
+      if (isAdultPlaybackRunning) {
+        stopAdultPlayback();
+      } else {
+        startAdultPlayback();
+      }
+      return;
+    }
+
+    if (e.target.closest("#btnAdultPlaybackReset")) {
+      stopAdultPlayback();
+      adultPlaybackRaceIndex = 1;
+      renderAdultStandingsAndChartForCurrentStep();
+      updateAdultPlaybackControlsDOM();
+      return;
+    }
+
+    if (e.target.closest("#btnAdultPlaybackEnd")) {
+      stopAdultPlayback();
+      adultPlaybackRaceIndex = ADULT_TOTAL_RACES;
+      renderAdultStandingsAndChartForCurrentStep();
+      updateAdultPlaybackControlsDOM();
+      return;
+    }
+
+    const adultVbarCol = e.target.closest("[data-adult-vbar-team]");
+    if (adultVbarCol) {
+      const clickedTeam = adultVbarCol.dataset.adultVbarTeam;
+      if (clickedTeam) {
+        adultResTeamFilter = adultResTeamFilter === clickedTeam ? "all" : clickedTeam;
+        const teamSel = document.getElementById("adultResTeamSelect");
+        if (teamSel) teamSel.value = adultResTeamFilter;
+        renderAdultScheduleTableRows();
+      }
+      return;
+    }
+
+    const adultPresetBtn = e.target.closest("[data-adult-col-preset]");
+    if (adultPresetBtn) {
+      const preset = adultPresetBtn.dataset.adultColPreset;
+      if (preset === "compact") {
+        visibleAdultResultCols = new Set(["stroke", "group", "name", "team", "sec", "rank", "points"]);
+      } else {
+        visibleAdultResultCols = new Set(ADULT_RESULT_COLUMNS.map(c => c.key));
+      }
+      resultContainer.querySelectorAll("input[data-adult-col-key]").forEach(chk => {
+        const key = chk.dataset.adultColKey;
+        const checked = visibleAdultResultCols.has(key);
+        chk.checked = checked;
+        chk.closest(".col-toggle-chip")?.classList.toggle("is-checked", checked);
+      });
+      renderAdultScheduleTableRows();
+      return;
+    }
+
     const presetBtn = e.target.closest("[data-col-preset]");
     if (presetBtn) {
       const preset = presetBtn.dataset.colPreset;
@@ -2446,6 +3463,22 @@ function bindEvents() {
   });
 
   resultContainer?.addEventListener("change", (e) => {
+    const adultColKey = e.target.dataset?.adultColKey;
+    if (adultColKey) {
+      if (e.target.checked) {
+        visibleAdultResultCols.add(adultColKey);
+      } else {
+        if (visibleAdultResultCols.size <= 1) {
+          e.target.checked = true;
+          return;
+        }
+        visibleAdultResultCols.delete(adultColKey);
+      }
+      e.target.closest(".col-toggle-chip")?.classList.toggle("is-checked", e.target.checked);
+      renderAdultScheduleTableRows();
+      return;
+    }
+
     const ourColKey = e.target.dataset?.ourColKey;
     if (ourColKey) {
       if (e.target.checked) {
@@ -2491,13 +3524,88 @@ function bindEvents() {
     } else if (id === "rawSheetRankSelect") {
       rawSheetRankFilter = e.target.value;
       renderAllVerifiedSheetRows();
+    } else if (id === "adultResStrokeSelect") {
+      adultResStrokeFilter = e.target.value;
+      renderAdultScheduleTableRows();
+    } else if (id === "adultResGroupSelect") {
+      adultResGroupFilter = e.target.value;
+      renderAdultScheduleTableRows();
+    } else if (id === "adultResGenderSelect") {
+      adultResGenderFilter = e.target.value;
+      renderAdultScheduleTableRows();
+    } else if (id === "adultResTeamSelect") {
+      adultResTeamFilter = e.target.value;
+      renderAdultScheduleTableRows();
+    } else if (id === "adultResStatusSelect") {
+      adultResStatusFilter = e.target.value;
+      renderAdultScheduleTableRows();
     }
   });
 
   resultContainer?.addEventListener("input", (e) => {
+    const secKey = e.target.dataset?.adultSec;
+    if (secKey) {
+      const prev = adultResultInputs[secKey] || { sec: "", note: "" };
+      adultResultInputs[secKey] = {
+        sec: e.target.value,
+        note: String(prev.note ?? ""),
+        updatedAt: Date.now()
+      };
+      dirtyAdultEntryKeys.add(secKey);
+      saveAdultResultsToLocal();
+      recalculateAndPatchAdultResultsDOM();
+      scheduleAdultResultsFirestoreSync();
+      return;
+    }
+
+    const noteKey = e.target.dataset?.adultNote;
+    if (noteKey) {
+      const prev = adultResultInputs[noteKey] || { sec: "", note: "" };
+      adultResultInputs[noteKey] = {
+        sec: String(prev.sec ?? ""),
+        note: e.target.value,
+        updatedAt: Date.now()
+      };
+      dirtyAdultEntryKeys.add(noteKey);
+      saveAdultResultsToLocal();
+      recalculateAndPatchAdultResultsDOM();
+      scheduleAdultResultsFirestoreSync();
+      return;
+    }
+
+    if (e.target.id === "adultPlaybackSlider") {
+      stopAdultPlayback();
+      adultPlaybackRaceIndex = Number(e.target.value) || ADULT_TOTAL_RACES;
+      renderAdultStandingsAndChartForCurrentStep();
+      updateAdultPlaybackControlsDOM();
+      return;
+    }
+
     if (e.target.id === "rawSheetSearchInput") {
       rawSheetSearchQuery = e.target.value || "";
       renderAllVerifiedSheetRows();
+    } else if (e.target.id === "adultResSearchInput") {
+      adultResSearchQuery = e.target.value || "";
+      renderAdultScheduleTableRows();
+    }
+  });
+
+  resultContainer?.addEventListener("keydown", (e) => {
+    const isSecInput = Boolean(e.target.dataset?.adultSec);
+    const isNoteInput = Boolean(e.target.dataset?.adultNote);
+    if (!isSecInput && !isNoteInput) return;
+
+    if (e.key === "Enter" || e.key === "ArrowDown" || e.key === "ArrowUp") {
+      e.preventDefault();
+      const selector = isSecInput ? "input[data-adult-sec]" : "input[data-adult-note]";
+      const inputs = [...resultContainer.querySelectorAll(selector)];
+      const currIdx = inputs.indexOf(e.target);
+      if (currIdx === -1) return;
+      const nextIdx = e.key === "ArrowUp" ? currIdx - 1 : currIdx + 1;
+      if (nextIdx >= 0 && nextIdx < inputs.length) {
+        inputs[nextIdx].focus();
+        inputs[nextIdx].select?.();
+      }
     }
   });
 }
