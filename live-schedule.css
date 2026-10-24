@@ -1059,3 +1059,65 @@
   opacity: 0.35;
   cursor: not-allowed;
 }
+
+
+/* ─── DB 반영 대기 중(미동기화) 색상 힌트 (UI 레이아웃 변경 없음) ───────── */
+/* 상단 컨트롤 바 순번 배지 & 새로고침 아이콘 (주황/호박색) */
+.ctrl-current-no.is-pending-sync {
+  background: #d97706 !important;
+  box-shadow: 0 0 0 2px rgba(251, 191, 36, 0.45);
+}
+
+.ctrl-icon-btn.is-pending-sync {
+  background: rgba(245, 158, 11, 0.28);
+  border-color: #f59e0b;
+  color: #fde68a;
+}
+
+/* 진행 중인 경기 카드: DB 반영 전에는 주황/호박색, 반영 완료 시 기존 파란색(#0284c7) */
+.race-card.state-running.is-pending-sync {
+  border: 2px solid #f59e0b;
+  background: #fffbeb;
+  box-shadow: 0 3px 12px rgba(245, 158, 11, 0.22);
+}
+
+.race-card.state-running.is-pending-sync .rc-index {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.race-card.state-running.is-pending-sync .rc-no {
+  background: #d97706;
+}
+
+.race-card.state-running.is-pending-sync .rc-time {
+  background: #d97706;
+  color: #ffffff;
+}
+
+.race-card.state-running.is-pending-sync .rc-btn-start.active {
+  background: #d97706;
+  border-color: #b45309;
+  color: #ffffff;
+}
+
+/* 진행 중인 휴게 카드: DB 반영 전 주황/호박색 힌트 */
+.race-card.break-card.state-break-running.is-pending-sync {
+  border: 2px solid #f59e0b;
+  background: #fffbeb;
+  box-shadow: 0 3px 12px rgba(245, 158, 11, 0.22);
+}
+
+.race-card.break-card.state-break-running.is-pending-sync .rc-break-badge {
+  background: #d97706;
+}
+
+/* 마지막 경기 종료 완료 카드: DB 반영 전 주황/호박색 힌트 */
+.race-card.finish-all-card.state-finish-completed.is-pending-sync {
+  border: 2px solid #f59e0b;
+  background: #fffbeb;
+}
+
+.race-card.finish-all-card.state-finish-completed.is-pending-sync .rc-finish-badge {
+  background: #d97706;
+}

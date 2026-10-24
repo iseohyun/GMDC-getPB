@@ -1,19 +1,57 @@
 // ==========================================================================
 // GMDC Swim Club - Real-time Competition Live Service & Estimation Engine
-// 대회 당일 실시간 경기 순서, 시간 추론 및 명부(DB) 연동 서비스
+// 대회 당일 실시간 경기 순서, 시간 추론, 로컬 우선(Offline-First) & 스마트 병합 서비스
 // ==========================================================================
 
-import { firebaseApp } from "./firebase-config.js?v=20261024_02";
-import { 
-  getFirestore, doc, getDoc, setDoc, onSnapshot 
-} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-import { ADULT_RACES_DATA, STUDENT_RACES_DATA } from "./races-data.js?v=20261024_02";
-import { RESTORED_STUDENT_LIVE_STATUS_2026 } from "./student-live-restored-2026.js?v=20261024_10";
-
-const db = getFirestore(firebaseApp);
+import { ADULT_RACES_DATA, STUDENT_RACES_DATA } from "./races-data.js?v=20261024_19";
+import { RESTORED_STUDENT_LIVE_STATUS_2026 } from "./student-live-restored-2026.js?v=20261024_19";
 
 // 배포된 Firestore 보안 규칙(match /attendance/{docId})과 즉시 호환되도록 attendance 컬렉션 내 전용 문서 사용
 export const LIVE_COL_NAME = "attendance";
+
+// ─── 비동기 지연 로딩(Lazy Loading) Firebase 컨텍스트 ────────────────────────
+// 느린 인터넷 환경에서도 대진표 화면 렌더링이 절대 차단되지 않도록 Firebase SDK는 백그라운드에서 비동기 로드
+let firestoreDepsPromise = null;
+
+async function getFirestoreDeps() {
+  if (!firestoreDepsPromise) {
+    firestoreDepsPromise = Promise.all([
+      import("./firebase-config.js?v=20261024_19"),
+      import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js")
+    ]).then(([cfgMod, fsMod]) => {
+      const db = fsMod.getFirestore(cfgMod.firebaseApp);
+      return {
+        db,
+        doc: fsMod.doc,
+        getDoc: fsMod.getDoc,
+        setDoc: fsMod.setDoc,
+        onSnapshot: fsMod.onSnapshot
+      };
+    }).catch((err) => {
+      firestoreDepsPromise = null;
+      throw err;
+    });
+  }
+  return firestoreDepsPromise;
+}
+
+function withTimeout(promise, ms = 4500) {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => {
+      reject(new Error(`FIRESTORE_TIMEOUT_${ms}MS`));
+    }, ms);
+    promise.then(
+      (val) => {
+        clearTimeout(timer);
+        resolve(val);
+      },
+      (err) => {
+        clearTimeout(timer);
+        reject(err);
+      }
+    );
+  });
+}
 
 function getLiveDocId(division = 'adult') {
   return `live_status_${division}_2026`;
@@ -43,6 +81,50 @@ function writeLocalCache(division = 'adult', statusObj) {
   } catch (e) {
     console.warn("[LiveStatus] localStorage write warning:", e);
   }
+}
+
+// ─── 상태 변경 리스너 레지스트리 및 백그라운드 동기화 큐 상태 ─────────────────
+const statusListeners = {
+  adult: new Set(),
+  student: new Set()
+};
+
+const hasEverFetchedRemote = {
+  adult: false,
+  student: false
+};
+
+const syncTimers = {
+  adult: null,
+  student: null
+};
+
+const isSyncingNow = {
+  adult: false,
+  student: false
+};
+
+function notifyStatusListeners(division, statusObj) {
+  const set = statusListeners[division];
+  if (!set) return;
+  for (const cb of set) {
+    try {
+      cb(statusObj);
+    } catch (e) {
+      console.warn("[LiveStatus] listener error:", e);
+    }
+  }
+}
+
+if (typeof window !== 'undefined') {
+  window.addEventListener('online', () => {
+    ['adult', 'student'].forEach(div => {
+      const local = readLocalCache(div);
+      if (local && local.pending_sync) {
+        scheduleBackgroundSync(div, 100);
+      }
+    });
+  });
 }
 
 /**
@@ -114,9 +196,36 @@ export function getDefaultLiveStatus(division = 'adult') {
     history: [], // [{ race_index: 1, started_at: ISO, finished_at: ISO, duration_sec: 72 }, ...]
     breaks: DEFAULT_ADULT_SCHEDULED_BREAKS.map(b => ({ ...b })),
     removed_scheduled_break_ids: [],
+    pending_sync: false,
     updated_at: new Date().toISOString(),
     updated_by: '현장 운영'
   };
+}
+
+/**
+ * 페이지 로드 직후 네트워크 대기 없이 즉시 사용할 초기 상태 반환
+ * 브라우저 localStorage에 이전 시작 정보가 있으면 이를 우선 복원
+ */
+export function getInitialLiveStatus(division = 'adult') {
+  const localData = readLocalCache(division);
+  if (division === 'student') {
+    if (localData && Array.isArray(localData.history) && localData.history.length >= 232) {
+      return localData;
+    }
+    const restored = getDefaultLiveStatus('student');
+    writeLocalCache('student', restored);
+    return restored;
+  }
+
+  if (localData && typeof localData === 'object') {
+    const ensured = ensureAdultScheduledBreaks(localData);
+    if (ensured.pending_sync) {
+      scheduleBackgroundSync(division, 300);
+    }
+    return ensured;
+  }
+
+  return getDefaultLiveStatus(division);
 }
 
 /**
@@ -164,197 +273,493 @@ export function formatDuration(sec) {
   return `${m}분 ${s}초`;
 }
 
-function pickNewerStatus(remoteData, localData) {
-  if (!remoteData && !localData) return null;
-  if (!remoteData) return localData;
-  if (!localData) return remoteData;
+// ──────────────────────────────────────────────────────────────────────────
+// 🔄 경기별 타임스탬프 스마트 병합 (Smart Merge Engine)
+// 이전 정보가 로딩되지 않은 상태에서 다음 경기 시작을 먼저 기록했더라도,
+// 추후 DB에서 도착한 이전 경기 시작 기록과 현재 로컬 기록을 경기 순번(race_index)별로 병합
+// ──────────────────────────────────────────────────────────────────────────
 
+function interpolateSpanHistory(races, startIdx, endIdx, startMs, endMs, isInterpolated = true) {
+  if (startIdx > endIdx) return [];
+  const totalElapsedSec = Math.max(endIdx - startIdx + 1, Math.round((endMs - startMs) / 1000));
+  const spanIndices = [];
+  for (let rIdx = startIdx; rIdx <= endIdx; rIdx++) spanIndices.push(rIdx);
+
+  const weights = spanIndices.map(rIdx => {
+    const rObj = races[rIdx - 1];
+    return rObj ? (rObj.base_duration_sec || (rObj.is_relay ? 210 : 85)) : 85;
+  });
+  const weightSum = weights.reduce((a, b) => a + b, 0) || 1;
+  const allocated = weights.map(w => Math.max(1, Math.round((totalElapsedSec * w) / weightSum)));
+  const diff = totalElapsedSec - allocated.reduce((a, b) => a + b, 0);
+  allocated[allocated.length - 1] = Math.max(1, allocated[allocated.length - 1] + diff);
+
+  const items = [];
+  let cursorMs = startMs;
+  const endIso = new Date(endMs).toISOString();
+  spanIndices.forEach((rIdx, i) => {
+    const dur = allocated[i];
+    const sIso = new Date(cursorMs).toISOString();
+    const fIso = (i === spanIndices.length - 1) ? endIso : new Date(cursorMs + dur * 1000).toISOString();
+    items.push({
+      race_index: rIdx,
+      started_at: sIso,
+      finished_at: fIso,
+      duration_sec: dur,
+      is_interpolated: isInterpolated
+    });
+    cursorMs += dur * 1000;
+  });
+  return items;
+}
+
+export function mergeLiveStatuses(remoteData, localData, division = 'adult') {
+  if (!remoteData && !localData) return getDefaultLiveStatus(division);
+  if (!remoteData) return division === 'adult' ? ensureAdultScheduledBreaks(localData) : localData;
+  if (!localData) return division === 'adult' ? ensureAdultScheduledBreaks(remoteData) : remoteData;
+
+  const races = division === 'adult' ? ADULT_RACES_DATA : STUDENT_RACES_DATA;
   const remoteTime = remoteData.updated_at ? new Date(remoteData.updated_at).getTime() : 0;
   const localTime = localData.updated_at ? new Date(localData.updated_at).getTime() : 0;
-  return localTime > remoteTime ? localData : remoteData;
+
+  // 로컬에 아직 DB에 반영되지 않은 조작(pending_sync)이 있거나 로컬이 더 최신이면 로컬 액션이 우선
+  const localIsPrimary = Boolean(localData.pending_sync) || (localTime >= remoteTime);
+  const primary = localIsPrimary ? localData : remoteData;
+  const secondary = localIsPrimary ? remoteData : localData;
+
+  // 전체 초기화(1조 취소) 액션이 로컬에서 방금 발생한 경우 그대로 반환
+  if (localIsPrimary && localData.last_action_type === 'reset' && localData.status === 'ready') {
+    const resetResult = {
+      ...localData,
+      division
+    };
+    return division === 'adult' ? ensureAdultScheduledBreaks(resetResult) : resetResult;
+  }
+
+  // 유효한 완료 히스토리 상한선 결정 (취소 액션인 경우 primary.current_race_index 미만까지만 허용)
+  const maxCompletedIdx = primary.status === 'finished'
+    ? races.length
+    : Math.max(0, (primary.current_race_index || 0) - (primary.status === 'paused' ? 0 : 1));
+
+  // 1. race_index 기준 히스토리 병합 (실측 기록 > 추정 보간 기록 우선)
+  const histMap = new Map();
+
+  const addHistoryList = (list, isFromPrimary) => {
+    if (!Array.isArray(list)) return;
+    for (const item of list) {
+      if (!item || typeof item.race_index !== 'number') continue;
+      if (item.race_index < 1 || item.race_index > maxCompletedIdx) continue;
+
+      const existing = histMap.get(item.race_index);
+      if (!existing) {
+        histMap.set(item.race_index, { ...item });
+      } else {
+        // 기존 항목이 추정 보간(is_interpolated)이고 새 항목이 실측 기록이면 실측 기록으로 교체
+        if (existing.is_interpolated && !item.is_interpolated) {
+          histMap.set(item.race_index, { ...item });
+        } else if (!existing.is_interpolated && item.is_interpolated) {
+          // 실측 기록 유지
+        } else if (isFromPrimary) {
+          histMap.set(item.race_index, { ...item });
+        }
+      }
+    }
+  };
+
+  addHistoryList(secondary.history, false);
+  addHistoryList(primary.history, true);
+
+  // 2. 핵심 시나리오: DB의 이전 정보(예: R조 진행 중)가 로딩되기 전에 로컬에서 다음 경기(L조, L > R) 시작을 먼저 누른 경우!
+  // DB가 갖고 있던 R조의 실제 시작 시각(T_R)과 로컬에서 누른 L조의 시작 시각(T_L)을 연결하여 R~(L-1)조 소요시간을 정밀 산출
+  const remIdx = Number(remoteData.current_race_index) || 0;
+  const locIdx = Number(localData.current_race_index) || 0;
+  if (
+    localIsPrimary &&
+    remIdx > 0 &&
+    locIdx > remIdx &&
+    remoteData.current_race_started_at &&
+    localData.current_race_started_at
+  ) {
+    const remStartMs = new Date(remoteData.current_race_started_at).getTime();
+    const locStartMs = new Date(localData.current_race_started_at).getTime();
+    if (locStartMs > remStartMs) {
+      const bridgedItems = interpolateSpanHistory(
+        races,
+        remIdx,
+        locIdx - 1,
+        remStartMs,
+        locStartMs,
+        locIdx - remIdx > 1
+      );
+      for (const bItem of bridgedItems) {
+        const cur = histMap.get(bItem.race_index);
+        if (!cur || cur.is_interpolated) {
+          histMap.set(bItem.race_index, bItem);
+        }
+      }
+    }
+  }
+
+  const mergedHistory = Array.from(histMap.values()).sort((a, b) => a.race_index - b.race_index);
+
+  // 3. 휴게(breaks) 병합
+  const breakMap = new Map();
+  const removedIds = Array.from(new Set([
+    ...(Array.isArray(remoteData.removed_scheduled_break_ids) ? remoteData.removed_scheduled_break_ids : []),
+    ...(Array.isArray(localData.removed_scheduled_break_ids) ? localData.removed_scheduled_break_ids : [])
+  ]));
+
+  const stateRank = { scheduled: 1, running: 2, finished: 3 };
+  const mergeBreakList = (list, isFromPrimary) => {
+    if (!Array.isArray(list)) return;
+    for (const brk of list) {
+      if (!brk || !brk.id) continue;
+      if (removedIds.includes(brk.id)) continue;
+      const existing = breakMap.get(brk.id);
+      if (!existing) {
+        breakMap.set(brk.id, { ...brk });
+      } else {
+        const rExist = stateRank[existing.state] || 0;
+        const rNew = stateRank[brk.state] || 0;
+        if (isFromPrimary || rNew > rExist) {
+          breakMap.set(brk.id, { ...brk });
+        }
+      }
+    }
+  };
+
+  mergeBreakList(secondary.breaks, false);
+  mergeBreakList(primary.breaks, true);
+
+  let mergedBreaks = Array.from(breakMap.values()).sort(
+    (a, b) => (Number(a.after_race_index) || 0) - (Number(b.after_race_index) || 0)
+  );
+
+  // 취소 액션이 있었던 경우 취소된 순번 이후의 비예정 휴게 정리
+  if (localIsPrimary && localData.last_action_type === 'cancel') {
+    const curIdx = primary.current_race_index || 1;
+    mergedBreaks = mergedBreaks.filter(
+      b => b.after_race_index < curIdx || b.state === 'scheduled' || String(b.id || '').startsWith('sched_brk_')
+    );
+  }
+
+  const merged = {
+    ...secondary,
+    ...primary,
+    division,
+    started_at: primary.started_at || secondary.started_at || mergedHistory[0]?.started_at || null,
+    history: mergedHistory,
+    breaks: mergedBreaks,
+    removed_scheduled_break_ids: removedIds,
+    pending_sync: Boolean(localData.pending_sync),
+    has_unmerged_interpolation: false,
+    updated_at: primary.updated_at || new Date().toISOString()
+  };
+
+  return division === 'adult' ? ensureAdultScheduledBreaks(merged) : merged;
+}
+
+// ──────────────────────────────────────────────────────────────────────────
+// 🔁 백그라운드 자동 재시도 동기화 큐 (Non-blocking Retry Sync Queue)
+// ──────────────────────────────────────────────────────────────────────────
+
+export function scheduleBackgroundSync(division = 'adult', delayMs = 0) {
+  if (syncTimers[division]) {
+    clearTimeout(syncTimers[division]);
+    syncTimers[division] = null;
+  }
+  syncTimers[division] = setTimeout(() => {
+    syncTimers[division] = null;
+    runBackgroundSync(division);
+  }, delayMs);
+}
+
+async function runBackgroundSync(division = 'adult') {
+  if (isSyncingNow[division]) return;
+  const localBefore = readLocalCache(division);
+  if (!localBefore || !localBefore.pending_sync) return;
+
+  isSyncingNow[division] = true;
+  try {
+    const { db, doc, getDoc, setDoc } = await withTimeout(getFirestoreDeps(), 5000);
+    const docRef = doc(db, LIVE_COL_NAME, getLiveDocId(division));
+
+    // 1. 서버의 이전 경기 시작 정보가 아직 로컬에 병합되지 않았다면 먼저 조회하여 스마트 병합 수행
+    let remoteData = null;
+    let getDocSucceeded = false;
+    try {
+      const snap = await withTimeout(getDoc(docRef), 4500);
+      getDocSucceeded = true;
+      hasEverFetchedRemote[division] = true;
+      if (snap.exists()) {
+        remoteData = snap.data();
+      }
+    } catch (readErr) {
+      console.warn(`[LiveSync] getDoc delayed (${division}):`, readErr.message || readErr);
+    }
+
+    // 만약 브라우저를 처음 켜서 아직 DB의 이전 경기 기록을 한 번도 못 가져왔는데 중간 조를 눌러 보간된 데이터가 있다면,
+    // 서버의 이전 기록을 덮어쓰지 않도록 getDoc이 성공할 때까지 재시도 대기
+    const latestLocal = readLocalCache(division) || localBefore;
+    if (!getDocSucceeded && !hasEverFetchedRemote[division] && latestLocal.has_unmerged_interpolation) {
+      scheduleBackgroundSync(division, 3000);
+      return;
+    }
+
+    // 2. 서버 데이터와 최신 로컬 데이터를 스마트 병합
+    const mergedToSave = remoteData
+      ? mergeLiveStatuses(remoteData, latestLocal, division)
+      : { ...latestLocal };
+
+    const syncedPayload = {
+      ...mergedToSave,
+      pending_sync: false,
+      has_unmerged_interpolation: false,
+      updated_at: new Date().toISOString()
+    };
+
+    // 3. Firestore에 병합본 저장 시도
+    await withTimeout(setDoc(docRef, syncedPayload, { merge: true }), 4500);
+
+    // 4. 저장 도중 사용자가 또 다른 버튼을 누르지 않았는지 확인 후 동기화 완료(파란색 전환) 처리
+    const currentLocalAfterWrite = readLocalCache(division);
+    if (
+      !currentLocalAfterWrite ||
+      currentLocalAfterWrite.local_action_id === latestLocal.local_action_id
+    ) {
+      writeLocalCache(division, syncedPayload);
+      notifyStatusListeners(division, syncedPayload);
+    } else {
+      // 저장하는 사이에 새로운 로컬 클릭이 발생했다면 즉시 다음 동기화 예약
+      scheduleBackgroundSync(division, 300);
+    }
+  } catch (err) {
+    console.warn(`[LiveSync] Background sync retry scheduled (${division}):`, err.message || err);
+    scheduleBackgroundSync(division, 3500);
+  } finally {
+    isSyncingNow[division] = false;
+  }
 }
 
 /**
- * 실시간 상태 리스너 구독
+ * 실시간 상태 리스너 구독 (로컬 캐시 즉시 반환 + 백그라운드 Firestore 실시간 연동)
  */
 export function subscribeLiveStatus(division, callback) {
-  const docRef = doc(db, LIVE_COL_NAME, getLiveDocId(division));
-  return onSnapshot(docRef, (snap) => {
-    const localData = readLocalCache(division);
-    if (snap.exists()) {
-      let merged = pickNewerStatus(snap.data(), localData);
-      if (division === 'student' && (!Array.isArray(merged?.history) || merged.history.length < 232)) {
-        merged = getDefaultLiveStatus('student');
-        saveLiveStatus('student', merged);
-      } else if (division === 'adult') {
-        merged = ensureAdultScheduledBreaks(merged);
-      }
-      writeLocalCache(division, merged);
-      callback(merged);
-    } else {
-      let fallback = division === 'student'
-        ? getDefaultLiveStatus('student')
-        : (localData || getDefaultLiveStatus(division));
-      if (division === 'adult') fallback = ensureAdultScheduledBreaks(fallback);
-      callback(fallback);
+  if (!statusListeners[division]) {
+    statusListeners[division] = new Set();
+  }
+  statusListeners[division].add(callback);
+
+  // 1. 네트워크를 기다리지 않고 브라우저가 기억하는 최신 상태를 0ms 만에 즉시 전달
+  const initialStatus = getInitialLiveStatus(division);
+  callback(initialStatus);
+
+  let unsubFirestore = null;
+  let isCancelled = false;
+
+  // 2. 백그라운드에서 Firestore 실시간 구독 연결
+  getFirestoreDeps()
+    .then(({ db, doc, onSnapshot }) => {
+      if (isCancelled) return;
+      const docRef = doc(db, LIVE_COL_NAME, getLiveDocId(division));
+      unsubFirestore = onSnapshot(docRef, (snap) => {
+        hasEverFetchedRemote[division] = true;
+        const localData = readLocalCache(division);
+
+        if (snap.exists()) {
+          const remoteData = snap.data();
+          let merged = mergeLiveStatuses(remoteData, localData, division);
+          if (division === 'student' && (!Array.isArray(merged?.history) || merged.history.length < 232)) {
+            merged = getDefaultLiveStatus('student');
+          }
+          writeLocalCache(division, merged);
+          notifyStatusListeners(division, merged);
+
+          // 로컬에 미동기화 상태가 남아 있었다면 방금 받은 서버 데이터와 합쳐 즉시 DB 반영
+          if (merged.pending_sync) {
+            scheduleBackgroundSync(division, 100);
+          }
+        } else {
+          const fallback = getInitialLiveStatus(division);
+          notifyStatusListeners(division, fallback);
+          if (fallback.pending_sync) {
+            scheduleBackgroundSync(division, 100);
+          }
+        }
+      }, (err) => {
+        console.warn(`[LiveStatus] Snapshot warning (${division}):`, err);
+        notifyStatusListeners(division, getInitialLiveStatus(division));
+      });
+    })
+    .catch((err) => {
+      console.warn(`[LiveStatus] Firestore init delayed (${division}):`, err);
+    });
+
+  return () => {
+    isCancelled = true;
+    statusListeners[division]?.delete(callback);
+    if (typeof unsubFirestore === 'function') {
+      unsubFirestore();
     }
-  }, (err) => {
-    console.warn(`[LiveStatus] Snapshot warning (${division}):`, err);
-    const localData = readLocalCache(division);
-    let fallback = (division === 'student' && (!Array.isArray(localData?.history) || localData.history.length < 232))
-      ? getDefaultLiveStatus('student')
-      : (localData || getDefaultLiveStatus(division));
-    if (division === 'adult') fallback = ensureAdultScheduledBreaks(fallback);
-    callback(fallback);
-  });
+  };
 }
 
 /**
- * 명부(DB) 실시간 구독 (성인부: records_2026_01_01, 학생부: records_student_2026_01_01)
+ * 명부(DB) 실시간 구독 (로컬 캐시 우선 복원 + 백그라운드 구독)
  */
 export function subscribeRosterDoc(division, callback) {
-  const docName = division === 'student' ? 'records_student_2026_01_01' : 'records_2026_01_01';
-  const docRef = doc(db, 'gmdc_swim_club', docName);
-  return onSnapshot(docRef, (snap) => {
-    if (snap.exists()) {
-      callback(snap.data());
+  const rosterCacheKey = `gmdc_roster_cache_${division}_2026`;
+  try {
+    const cachedRaw = localStorage.getItem(rosterCacheKey);
+    if (cachedRaw) {
+      callback(JSON.parse(cachedRaw));
     }
-  }, (err) => {
-    console.warn(`[RosterDoc] Snapshot warning (${division}):`, err);
-  });
+  } catch (e) {
+    // ignore localStorage error
+  }
+
+  let unsubFirestore = null;
+  let isCancelled = false;
+
+  getFirestoreDeps()
+    .then(({ db, doc, onSnapshot }) => {
+      if (isCancelled) return;
+      const docName = division === 'student' ? 'records_student_2026_01_01' : 'records_2026_01_01';
+      const docRef = doc(db, 'gmdc_swim_club', docName);
+      unsubFirestore = onSnapshot(docRef, (snap) => {
+        if (snap.exists()) {
+          const data = snap.data();
+          try {
+            localStorage.setItem(rosterCacheKey, JSON.stringify(data));
+          } catch (e) {
+            // ignore
+          }
+          callback(data);
+        }
+      }, (err) => {
+        console.warn(`[RosterDoc] Snapshot warning (${division}):`, err);
+      });
+    })
+    .catch((err) => {
+      console.warn(`[RosterDoc] Firestore init delayed (${division}):`, err);
+    });
+
+  return () => {
+    isCancelled = true;
+    if (typeof unsubFirestore === 'function') {
+      unsubFirestore();
+    }
+  };
 }
 
 /**
- * Firestore에서 1회 상태 조회 (폴링/수동 새로고침용)
+ * Firestore에서 1회 상태 조회 (폴링/수동 새로고침용 — 타임아웃 적용으로 블로킹 방지)
  */
 export async function fetchLiveStatus(division) {
   const localData = readLocalCache(division);
+  if (localData && localData.pending_sync) {
+    scheduleBackgroundSync(division, 0);
+  }
+
   try {
+    const { db, doc, getDoc } = await withTimeout(getFirestoreDeps(), 4000);
     const docRef = doc(db, LIVE_COL_NAME, getLiveDocId(division));
-    const snap = await getDoc(docRef);
+    const snap = await withTimeout(getDoc(docRef), 4000);
+    hasEverFetchedRemote[division] = true;
     if (snap.exists()) {
-      let merged = pickNewerStatus(snap.data(), localData);
+      let merged = mergeLiveStatuses(snap.data(), readLocalCache(division) || localData, division);
       if (division === 'student' && (!Array.isArray(merged?.history) || merged.history.length < 232)) {
         merged = getDefaultLiveStatus('student');
-      } else if (division === 'adult') {
-        merged = ensureAdultScheduledBreaks(merged);
       }
       writeLocalCache(division, merged);
+      notifyStatusListeners(division, merged);
       return merged;
     }
   } catch (err) {
-    console.warn("[LiveStatus] fetchLiveStatus error:", err);
+    console.warn("[LiveStatus] fetchLiveStatus warning (using local cache):", err.message || err);
   }
-  if (division === 'student' && (!Array.isArray(localData?.history) || localData.history.length < 232)) {
-    return getDefaultLiveStatus('student');
-  }
-  const fallback = localData || getDefaultLiveStatus(division);
-  return division === 'adult' ? ensureAdultScheduledBreaks(fallback) : fallback;
+
+  return getInitialLiveStatus(division);
 }
 
 /**
- * Firestore 및 로컬 캐시에 상태 저장
+ * 로컬 캐시에 즉시 저장하고 백그라운드 DB 동기화 큐에 등록
  */
 export async function saveLiveStatus(division, newStatus) {
+  const actionId = `act_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
   const payload = {
     ...newStatus,
+    pending_sync: true,
+    local_action_id: actionId,
     updated_at: new Date().toISOString()
   };
   writeLocalCache(division, payload);
-
-  try {
-    const docRef = doc(db, LIVE_COL_NAME, getLiveDocId(division));
-    await setDoc(docRef, payload, { merge: true });
-  } catch (err) {
-    console.warn("[LiveStatus] saveLiveStatus Firestore warning (local cache saved):", err);
-  }
+  notifyStatusListeners(division, payload);
+  scheduleBackgroundSync(division, 0);
+  return payload;
 }
 
 // ──────────────────────────────────────────────────────────────────────────
-// 🚀 개별 경기 카드 [시작 아이콘] / [시작 취소 아이콘] 조작 함수
+// 🚀 개별 경기 카드 [시작] / [취소] / [휴게] / [경기종료] 즉시 반영(Optimistic) 함수
+// DB 통신을 기다리지 않고 0ms 만에 로컬 상태를 계산·반영하며, 백그라운드에서 DB와 병합·동기화
 // ──────────────────────────────────────────────────────────────────────────
 
 /**
- * 특정 경기 카드의 [시작 아이콘] 클릭 시 해당 조 시작 처리
+ * 특정 경기 카드의 [시작 아이콘] 클릭 시 해당 조 즉시 시작 처리
  */
 export async function startRaceAt(division, targetRaceIndex, fallbackStatus = null) {
-  const fetched = await fetchLiveStatus(division);
-  const current = pickNewerStatus(fetched, fallbackStatus) || getDefaultLiveStatus(division);
+  const localData = readLocalCache(division);
+  const current = mergeLiveStatuses(fallbackStatus, localData, division) || getDefaultLiveStatus(division);
   const races = division === 'adult' ? ADULT_RACES_DATA : STUDENT_RACES_DATA;
   const validIndex = Math.max(1, Math.min(races.length, Number(targetRaceIndex)));
   const now = new Date();
   const nowStr = now.toISOString();
 
   let history = Array.isArray(current.history) ? [...current.history] : [];
+  let hasUnmergedInterpolation = Boolean(current.has_unmerged_interpolation);
 
   // 직전 진행 중이던 조가 있고, 그 다음/이후 조를 시작한 경우 직전(및 건너뛴 중간) 조 소요시간을 비례 배분하여 모두 기록
   if (current.status === 'running' && current.current_race_index > 0 && current.current_race_index < validIndex) {
     const startIdx = current.current_race_index;
     const endIdx = validIndex - 1;
-    const prevStart = current.current_race_started_at ? new Date(current.current_race_started_at) : new Date(now.getTime() - (endIdx - startIdx + 1) * 75000);
-    const totalElapsedSec = Math.max(endIdx - startIdx + 1, Math.round((now - prevStart) / 1000));
+    const prevStart = current.current_race_started_at
+      ? new Date(current.current_race_started_at)
+      : new Date(now.getTime() - (endIdx - startIdx + 1) * 75000);
 
     history = history.filter(h => h.race_index < startIdx || h.race_index > endIdx);
-
-    const spanIndices = [];
-    for (let rIdx = startIdx; rIdx <= endIdx; rIdx++) spanIndices.push(rIdx);
-    const weights = spanIndices.map(rIdx => {
-      const rObj = races[rIdx - 1];
-      return rObj ? (rObj.base_duration_sec || (rObj.is_relay ? 210 : 85)) : 85;
-    });
-    const weightSum = weights.reduce((a, b) => a + b, 0) || 1;
-    let allocated = weights.map(w => Math.max(1, Math.round((totalElapsedSec * w) / weightSum)));
-    const diff = totalElapsedSec - allocated.reduce((a, b) => a + b, 0);
-    allocated[allocated.length - 1] = Math.max(1, allocated[allocated.length - 1] + diff);
-
-    let cursorMs = prevStart.getTime();
-    spanIndices.forEach((rIdx, i) => {
-      const dur = allocated[i];
-      const sIso = new Date(cursorMs).toISOString();
-      const fIso = (i === spanIndices.length - 1) ? nowStr : new Date(cursorMs + dur * 1000).toISOString();
-      history.push({
-        race_index: rIdx,
-        started_at: sIso,
-        finished_at: fIso,
-        duration_sec: dur
-      });
-      cursorMs += dur * 1000;
-    });
+    const spanItems = interpolateSpanHistory(
+      races,
+      startIdx,
+      endIdx,
+      prevStart.getTime(),
+      now.getTime(),
+      endIdx > startIdx
+    );
+    history.push(...spanItems);
   } else if (current.current_race_index === 0 && validIndex > 1) {
-    // 첫 클릭이 1조가 아닌 중간 조에서 시작된 경우: 공식 시작(08:30)부터 건너뛴 1~(validIndex-1)조까지 비례 보간하여 자동 복원
+    // 아직 이전 경기 정보가 로딩되지 않았거나 1조가 아닌 중간 조에서 바로 시작한 경우:
+    // 공식 시작(08:30)부터 건너뛴 1~(validIndex-1)조까지 임시 보간(is_interpolated: true)으로 채워두고,
+    // 추후 DB에서 실제 1~(validIndex-1)조 기록이 도착하면 mergeLiveStatuses가 실제 기록으로 자동 교체!
     const officialStart = new Date(now.getTime());
     officialStart.setHours(8, 30, 0, 0);
     const spanCount = validIndex - 1;
     const baseStartMs = officialStart.getTime() < now.getTime() - spanCount * 30000
       ? officialStart.getTime()
       : now.getTime() - spanCount * 85000;
-    const totalElapsedSec = Math.max(spanCount, Math.round((now.getTime() - baseStartMs) / 1000));
 
     history = history.filter(h => h.race_index >= validIndex);
-    const spanIndices = [];
-    for (let rIdx = 1; rIdx < validIndex; rIdx++) spanIndices.push(rIdx);
-    const weights = spanIndices.map(rIdx => {
-      const rObj = races[rIdx - 1];
-      return rObj ? (rObj.base_duration_sec || (rObj.is_relay ? 210 : 85)) : 85;
-    });
-    const weightSum = weights.reduce((a, b) => a + b, 0) || 1;
-    let allocated = weights.map(w => Math.max(1, Math.round((totalElapsedSec * w) / weightSum)));
-    const diff = totalElapsedSec - allocated.reduce((a, b) => a + b, 0);
-    allocated[allocated.length - 1] = Math.max(1, allocated[allocated.length - 1] + diff);
-
-    let cursorMs = baseStartMs;
-    spanIndices.forEach((rIdx, i) => {
-      const dur = allocated[i];
-      const sIso = new Date(cursorMs).toISOString();
-      const fIso = (i === spanIndices.length - 1) ? nowStr : new Date(cursorMs + dur * 1000).toISOString();
-      history.push({
-        race_index: rIdx,
-        started_at: sIso,
-        finished_at: fIso,
-        duration_sec: dur
-      });
-      cursorMs += dur * 1000;
-    });
+    const spanItems = interpolateSpanHistory(
+      races,
+      1,
+      validIndex - 1,
+      baseStartMs,
+      now.getTime(),
+      true
+    );
+    history.push(...spanItems);
+    if (!hasEverFetchedRemote[division]) {
+      hasUnmergedInterpolation = true;
+    }
   }
 
   // targetRaceIndex 이후의 기존 히스토리는 정리
@@ -382,25 +787,27 @@ export async function startRaceAt(division, targetRaceIndex, fallbackStatus = nu
     division,
     status: 'running',
     current_race_index: validIndex,
-    started_at: current.started_at || nowStr,
+    started_at: current.started_at || history[0]?.started_at || nowStr,
     current_race_started_at: nowStr,
+    finished_at: null,
     is_paused: false,
     pause_started_at: null,
     history,
     breaks,
+    last_action_type: 'advance',
+    has_unmerged_interpolation: hasUnmergedInterpolation,
     updated_at: nowStr
   };
 
-  await saveLiveStatus(division, newStatus);
-  return newStatus;
+  return saveLiveStatus(division, newStatus);
 }
 
 /**
- * 특정 경기 카드의 [시작 취소 아이콘] 클릭 시 해당 조 시작 취소 처리
+ * 특정 경기 카드의 [시작 취소 아이콘] 클릭 시 해당 조 시작 즉시 취소 처리
  */
 export async function cancelRaceAt(division, targetRaceIndex, fallbackStatus = null) {
-  const fetched = await fetchLiveStatus(division);
-  const current = pickNewerStatus(fetched, fallbackStatus) || getDefaultLiveStatus(division);
+  const localData = readLocalCache(division);
+  const current = mergeLiveStatuses(fallbackStatus, localData, division) || getDefaultLiveStatus(division);
   const validIndex = Number(targetRaceIndex);
   const nowStr = new Date().toISOString();
 
@@ -411,10 +818,11 @@ export async function cancelRaceAt(division, targetRaceIndex, fallbackStatus = n
   if (validIndex <= 1 || current.current_race_index <= 1) {
     const resetState = {
       ...getDefaultLiveStatus(division),
+      last_action_type: 'reset',
+      has_unmerged_interpolation: false,
       updated_at: nowStr
     };
-    await saveLiveStatus(division, resetState);
-    return resetState;
+    return saveLiveStatus(division, resetState);
   }
 
   // 취소한 조 이상은 히스토리에서 제거하고 직전 조(validIndex - 1)로 복귀 (예정 휴식은 유지하거나 예정 상태로 복귀)
@@ -442,23 +850,24 @@ export async function cancelRaceAt(division, targetRaceIndex, fallbackStatus = n
     status: 'running',
     current_race_index: prevIndex,
     current_race_started_at: prevHistoryItem?.started_at || current.current_race_started_at || nowStr,
+    finished_at: null,
     is_paused: false,
     pause_started_at: null,
     history,
     breaks,
+    last_action_type: 'cancel',
     updated_at: nowStr
   };
 
-  await saveLiveStatus(division, newStatus);
-  return newStatus;
+  return saveLiveStatus(division, newStatus);
 }
 
 /**
- * [휴게 시작] 버튼 클릭 시: 현재 진행 순서 다음(또는 클릭한 예정 휴식 카드)에 녹색 휴게 시작
+ * [휴게 시작] 버튼 클릭 시: 현재 진행 순서 다음(또는 클릭한 예정 휴식 카드)에 녹색 휴게 즉시 시작
  */
 export async function startBreak(division, fallbackStatus = null, targetBreakId = null) {
-  const fetched = await fetchLiveStatus(division);
-  const current = pickNewerStatus(fetched, fallbackStatus) || getDefaultLiveStatus(division);
+  const localData = readLocalCache(division);
+  const current = mergeLiveStatuses(fallbackStatus, localData, division) || getDefaultLiveStatus(division);
   const now = new Date();
   const nowStr = now.toISOString();
 
@@ -490,7 +899,8 @@ export async function startBreak(division, fallbackStatus = null, targetBreakId 
       race_index: current.current_race_index,
       started_at: current.current_race_started_at || nowStr,
       finished_at: nowStr,
-      duration_sec: prevDuration
+      duration_sec: prevDuration,
+      is_interpolated: false
     });
   }
 
@@ -523,19 +933,19 @@ export async function startBreak(division, fallbackStatus = null, targetBreakId 
     pause_started_at: nowStr,
     history,
     breaks,
+    last_action_type: 'break',
     updated_at: nowStr
   };
 
-  await saveLiveStatus(division, newStatus);
-  return newStatus;
+  return saveLiveStatus(division, newStatus);
 }
 
 /**
  * [휴게 종료] 버튼 클릭 시: 휴게 카드를 완료 기록으로 남기고 바로 다음 순번 경기를 자동 시작
  */
 export async function endBreak(division, breakId, fallbackStatus = null) {
-  const fetched = await fetchLiveStatus(division);
-  const current = pickNewerStatus(fetched, fallbackStatus) || getDefaultLiveStatus(division);
+  const localData = readLocalCache(division);
+  const current = mergeLiveStatuses(fallbackStatus, localData, division) || getDefaultLiveStatus(division);
   const races = division === 'adult' ? ADULT_RACES_DATA : STUDENT_RACES_DATA;
   const now = new Date();
   const nowStr = now.toISOString();
@@ -570,19 +980,19 @@ export async function endBreak(division, breakId, fallbackStatus = null) {
     is_paused: false,
     pause_started_at: null,
     breaks,
+    last_action_type: 'advance',
     updated_at: nowStr
   };
 
-  await saveLiveStatus(division, newStatus);
-  return newStatus;
+  return saveLiveStatus(division, newStatus);
 }
 
 /**
  * [휴게 취소] 버튼 클릭 시: 해당 휴게 카드를 삭제하고 이전 상태로 복귀
  */
 export async function cancelBreak(division, breakId, fallbackStatus = null) {
-  const fetched = await fetchLiveStatus(division);
-  const current = pickNewerStatus(fetched, fallbackStatus) || getDefaultLiveStatus(division);
+  const localData = readLocalCache(division);
+  const current = mergeLiveStatuses(fallbackStatus, localData, division) || getDefaultLiveStatus(division);
   const nowStr = new Date().toISOString();
 
   let breaks = Array.isArray(current.breaks) ? [...current.breaks] : [];
@@ -592,7 +1002,6 @@ export async function cancelBreak(division, breakId, fallbackStatus = null) {
   const targetBreak = breaks.find(b => (breakId && b.id === breakId) || (!breakId && b.state === 'running'));
 
   if (targetBreak && String(targetBreak.id || '').startsWith('sched_brk_') && targetBreak.state !== 'scheduled') {
-    // 예정 휴식이 진행 중이거나 완료된 상태에서 취소 시 다시 예정(scheduled) 상태로 복귀
     breaks = breaks.map(b => b === targetBreak ? {
       ...b,
       state: 'scheduled',
@@ -622,11 +1031,11 @@ export async function cancelBreak(division, breakId, fallbackStatus = null) {
     pause_started_at: stillHasRunningBreak ? current.pause_started_at : null,
     breaks,
     removed_scheduled_break_ids: removedScheduledIds,
+    last_action_type: 'break_cancel',
     updated_at: nowStr
   };
 
-  await saveLiveStatus(division, newStatus);
-  return newStatus;
+  return saveLiveStatus(division, newStatus);
 }
 
 /**
@@ -634,8 +1043,8 @@ export async function cancelBreak(division, breakId, fallbackStatus = null) {
  * 현재 진행 중인 마지막 조(또는 남은 조들)의 소요시간을 기록하고 전체 대회를 완료(finished) 상태로 전환
  */
 export async function finishAllRaces(division, fallbackStatus = null) {
-  const fetched = await fetchLiveStatus(division);
-  const current = pickNewerStatus(fetched, fallbackStatus) || getDefaultLiveStatus(division);
+  const localData = readLocalCache(division);
+  const current = mergeLiveStatuses(fallbackStatus, localData, division) || getDefaultLiveStatus(division);
   const races = division === 'adult' ? ADULT_RACES_DATA : STUDENT_RACES_DATA;
   const totalRaces = races.length;
   const now = new Date();
@@ -651,37 +1060,19 @@ export async function finishAllRaces(division, fallbackStatus = null) {
     const prevStart = current.current_race_started_at
       ? new Date(current.current_race_started_at)
       : new Date(now.getTime() - (endIdx - startIdx + 1) * 75000);
-    const totalElapsedSec = Math.max(endIdx - startIdx + 1, Math.round((now - prevStart) / 1000));
 
     history = history.filter(h => h.race_index < startIdx || h.race_index > endIdx);
-
-    const spanIndices = [];
-    for (let rIdx = startIdx; rIdx <= endIdx; rIdx++) spanIndices.push(rIdx);
-    const weights = spanIndices.map(rIdx => {
-      const rObj = races[rIdx - 1];
-      return rObj ? (rObj.base_duration_sec || (rObj.is_relay ? 210 : 85)) : 85;
-    });
-    const weightSum = weights.reduce((a, b) => a + b, 0) || 1;
-    const allocated = weights.map(w => Math.max(1, Math.round((totalElapsedSec * w) / weightSum)));
-    const diff = totalElapsedSec - allocated.reduce((a, b) => a + b, 0);
-    allocated[allocated.length - 1] = Math.max(1, allocated[allocated.length - 1] + diff);
-
-    let cursorMs = prevStart.getTime();
-    spanIndices.forEach((rIdx, i) => {
-      const dur = allocated[i];
-      const sIso = new Date(cursorMs).toISOString();
-      const fIso = (i === spanIndices.length - 1) ? nowStr : new Date(cursorMs + dur * 1000).toISOString();
-      history.push({
-        race_index: rIdx,
-        started_at: sIso,
-        finished_at: fIso,
-        duration_sec: dur
-      });
-      cursorMs += dur * 1000;
-    });
+    const spanItems = interpolateSpanHistory(
+      races,
+      startIdx,
+      endIdx,
+      prevStart.getTime(),
+      now.getTime(),
+      endIdx > startIdx
+    );
+    history.push(...spanItems);
   }
 
-  // 진행 중이던 휴게가 있으면 완료 처리
   breaks = breaks.map(b => {
     if (b.state === 'running') {
       const bStart = b.started_at ? new Date(b.started_at) : now;
@@ -709,11 +1100,11 @@ export async function finishAllRaces(division, fallbackStatus = null) {
     pause_started_at: null,
     history,
     breaks,
+    last_action_type: 'finish',
     updated_at: nowStr
   };
 
-  await saveLiveStatus(division, newStatus);
-  return newStatus;
+  return saveLiveStatus(division, newStatus);
 }
 
 /**
@@ -721,8 +1112,8 @@ export async function finishAllRaces(division, fallbackStatus = null) {
  * 전 경기 종료(finished) 상태를 해제하고 마지막 조(totalRaces) 진행 중(running) 상태로 복귀
  */
 export async function cancelFinishAllRaces(division, fallbackStatus = null) {
-  const fetched = await fetchLiveStatus(division);
-  const current = pickNewerStatus(fetched, fallbackStatus) || getDefaultLiveStatus(division);
+  const localData = readLocalCache(division);
+  const current = mergeLiveStatuses(fallbackStatus, localData, division) || getDefaultLiveStatus(division);
   const races = division === 'adult' ? ADULT_RACES_DATA : STUDENT_RACES_DATA;
   const totalRaces = races.length;
   const nowStr = new Date().toISOString();
@@ -741,11 +1132,11 @@ export async function cancelFinishAllRaces(division, fallbackStatus = null) {
     is_paused: false,
     pause_started_at: null,
     history,
+    last_action_type: 'cancel',
     updated_at: nowStr
   };
 
-  await saveLiveStatus(division, newStatus);
-  return newStatus;
+  return saveLiveStatus(division, newStatus);
 }
 
 // ──────────────────────────────────────────────────────────────────────────

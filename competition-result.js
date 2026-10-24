@@ -4,6 +4,11 @@
 // ==========================================================================
 
 import { ADULT_RACES_DATA, STUDENT_RACES_DATA } from "./races-data.js?v=20261024_11";
+import {
+  STUDENT_SHEET_META,
+  OUR_TEAM_STUDENT_HIGHLIGHTS,
+  VERIFIED_SHEET_RESULTS
+} from "./student-result-data.js?v=20261024_23";
 
 const ADULT_GROUPS = ["1그룹", "2그룹", "3그룹", "4그룹", "5그룹", "6그룹"];
 const STUDENT_GROUPS = ["1그룹", "2그룹", "3그룹", "4그룹", "5그룹", "6그룹", "7그룹"];
@@ -1258,25 +1263,984 @@ function renderProgressSummaryView() {
 }
 
 // ==========================================================================
-// 🏅 TAB 3: 결과 분석 (학생부 / 성인부 공통: 추후 업데이트 예정 안내)
+// 🏅 TAB 3: 결과 분석 (학생부: 공식 기록지 사진 분석 / 성인부: 추후 업데이트 예정)
 // ==========================================================================
+let ourTeamResultFilterMode = "verified"; // 'verified' | 'scoring' | 'all'
+let rawSheetStrokeFilter = "all";
+let rawSheetGroupFilter = "all";
+let rawSheetTeamFilter = "all";
+let rawSheetRankFilter = "all";
+let rawSheetSearchQuery = "";
+
+const OUR_TEAM_COLUMNS = [
+  { key: "matchNo", label: "경기번호", width: "74px", align: "center" },
+  { key: "stroke",  label: "종목",     width: "105px", align: "center" },
+  { key: "gender",  label: "성별",     width: "58px", align: "center" },
+  { key: "group",   label: "그룹",     width: "68px", align: "center" },
+  { key: "lane",    label: "레인",     width: "54px", align: "center" },
+  { key: "name",    label: "이름",     width: "155px", align: "left" },
+  { key: "record",  label: "기록",     width: "96px", align: "center" },
+  { key: "rank",    label: "순위",     width: "60px", align: "center" },
+  { key: "points",  label: "점수",     width: "58px", align: "center" },
+  { key: "note",    label: "비고",     width: "180px", align: "left" }
+];
+
+let visibleOurTeamCols = new Set(OUR_TEAM_COLUMNS.map(c => c.key));
+
+const RAW_SHEET_COLUMNS = [
+  { key: "matchNo", label: "경기번호", width: "74px", align: "center" },
+  { key: "stroke",  label: "종목",     width: "105px", align: "center" },
+  { key: "gender",  label: "성별",     width: "58px", align: "center" },
+  { key: "group",   label: "그룹",     width: "68px", align: "center" },
+  { key: "lane",    label: "레인",     width: "54px", align: "center" },
+  { key: "name",    label: "이름",     width: "150px", align: "left" },
+  { key: "team",    label: "단체/개인", width: "135px", align: "center" },
+  { key: "record",  label: "기록",     width: "96px", align: "center" },
+  { key: "rank",    label: "순위",     width: "60px", align: "center" },
+  { key: "points",  label: "점수",     width: "58px", align: "center" },
+  { key: "note",    label: "비고",     width: "150px", align: "left" }
+];
+
+let visibleRawSheetCols = new Set(RAW_SHEET_COLUMNS.map(c => c.key));
+
+function parseRecordToSeconds(recordStr) {
+  const s = String(recordStr || "").trim();
+  if (!s || s === "99'99\"99" || s === "88'88\"88") return null;
+  const m = s.match(/^(\d{2})'(\d{2})"(\d{2})$/);
+  if (!m) return null;
+  const mins = parseInt(m[1], 10);
+  const secs = parseInt(m[2], 10);
+  const hundredths = parseInt(m[3], 10);
+  return mins * 60 + secs + hundredths / 100;
+}
+
+function getRankBadgeHtml(rankStr) {
+  const r = String(rankStr ?? "").trim();
+  if (!r || r === "-") {
+    return `<span class="result-rank-badge rank-unverified">미촬영</span>`;
+  }
+  if (r === "1" || r === "1위") {
+    return `<span class="result-rank-badge rank-1">🥇 1위</span>`;
+  }
+  if (r === "2" || r === "2위") {
+    return `<span class="result-rank-badge rank-2">🥈 2위</span>`;
+  }
+  if (r === "3" || r === "3위") {
+    return `<span class="result-rank-badge rank-3">🥉 3위</span>`;
+  }
+  if (["4", "5", "6", "4위", "5위", "6위"].includes(r)) {
+    const num = r.replace("위", "");
+    return `<span class="result-rank-badge rank-top6">🏅 ${num}위</span>`;
+  }
+  if (r.includes("실격")) {
+    return `<span class="result-rank-badge rank-dq">실격</span>`;
+  }
+  if (r.includes("불참")) {
+    return `<span class="result-rank-badge rank-dns">불참</span>`;
+  }
+  const num = r.replace("위", "");
+  return `<span class="result-rank-badge rank-normal">${escapeHtml(num)}위</span>`;
+}
+
+function getPointsPillHtml(points, isVerified = true) {
+  if (!isVerified) {
+    return `<span style="color:#cbd5e1; font-size:12px;">-</span>`;
+  }
+  const pts = Number(points || 0);
+  if (pts > 0) {
+    return `<span class="result-pts-pill">+${pts}점</span>`;
+  }
+  return `<span class="result-pts-pill is-zero">0점</span>`;
+}
+
+function getStrokeBadgeCls(strokeStr) {
+  const s = String(strokeStr || "");
+  if (s.includes("자유형")) return "ev-pill-free";
+  if (s.includes("배영")) return "ev-pill-back";
+  if (s.includes("평영")) return "ev-pill-breast";
+  if (s.includes("접영")) return "ev-pill-fly";
+  return "";
+}
+
+function buildOurTeamFullEntriesWithResults() {
+  const verifiedMap = new Map();
+  for (const r of VERIFIED_SHEET_RESULTS) {
+    if (r.team === "거제야르") {
+      verifiedMap.set(`${r.matchNo}|${r.lane}`, r);
+    }
+  }
+
+  const list = [];
+  for (const race of STUDENT_RACES_DATA) {
+    for (const lane of (race.lanes || [])) {
+      if (lane.team !== "거제야르") continue;
+      const matchNo = String(lane.original_match_no || race.primary_match_no);
+      const v = verifiedMap.get(`${matchNo}|${lane.lane}`) || null;
+
+      let groupLabel = race.group;
+      if (race.is_relay) {
+        groupLabel = race.gender === "남자" ? "남초" : "여초";
+      }
+
+      const displayName = v
+        ? v.name
+        : (race.is_relay ? "거제야르 계영팀 (여초)" : (lane.name || "거제야르"));
+
+      list.push({
+        raceNo: race.race_no,
+        matchNo,
+        isRelay: Boolean(race.is_relay),
+        stroke: race.is_relay ? `${race.stroke} ${race.distance}` : race.stroke,
+        distance: race.distance || "50m",
+        gender: race.gender === "여자" ? "여" : "남",
+        group: groupLabel,
+        lane: lane.lane,
+        name: displayName,
+        isVerified: Boolean(v),
+        record: v ? v.record : null,
+        rank: v ? v.rank : null,
+        points: v ? v.points : 0,
+        note: v ? v.note : "해당 종목 기록지 미촬영"
+      });
+    }
+  }
+  return list;
+}
+
+/**
+ * 참가 클럽별 득점 및 메달 집계 ('개인' 자격 참가자 제외)
+ */
+function buildClubStandingsFromVerifiedSheets() {
+  const map = new Map();
+  for (const r of VERIFIED_SHEET_RESULTS) {
+    const cleanTeam = r.team.replace("(중등)", "").trim();
+    if (cleanTeam === "개인") continue; // 개인 제외
+
+    if (!map.has(cleanTeam)) {
+      map.set(cleanTeam, {
+        team: cleanTeam,
+        isOurTeam: cleanTeam === "거제야르",
+        entries: 0,
+        completed: 0,
+        gold: 0,
+        silver: 0,
+        bronze: 0,
+        rank4to6: 0,
+        top6Total: 0,
+        indivPoints: 0,
+        relayPoints: 0,
+        totalPoints: 0
+      });
+    }
+    const st = map.get(cleanTeam);
+    st.entries++;
+    if (!String(r.rank).includes("불참") && !String(r.rank).includes("실격")) {
+      st.completed++;
+    }
+    if (r.rank === "1") st.gold++;
+    else if (r.rank === "2") st.silver++;
+    else if (r.rank === "3") st.bronze++;
+    else if (["4", "5", "6"].includes(r.rank)) st.rank4to6++;
+
+    if (["1", "2", "3", "4", "5", "6"].includes(r.rank)) {
+      st.top6Total++;
+    }
+    st.totalPoints += r.points;
+    if (r.isRelay) st.relayPoints += r.points;
+    else st.indivPoints += r.points;
+  }
+
+  return [...map.values()].sort((a, b) => {
+    if (b.totalPoints !== a.totalPoints) return b.totalPoints - a.totalPoints;
+    if (b.gold !== a.gold) return b.gold - a.gold;
+    if (b.silver !== a.silver) return b.silver - a.silver;
+    if (b.bronze !== a.bronze) return b.bronze - a.bronze;
+    return b.entries - a.entries;
+  });
+}
+
+/**
+ * 영법별(접/배/평/자) 그룹별 1위 기록 꺾은선 그래프 4개 (좌상: 접영, 우상: 배영, 좌하: 평영, 우하: 자유형)
+ */
+function renderStrokeFirstPlaceLineChartsHtml() {
+  const strokeConfigs = [
+    { key: "접영", title: "🦋 접영 50m — 그룹별 1위 기록 (좌상)", accent: "#e11d48" },
+    { key: "배영", title: "🌊 배영 50m — 그룹별 1위 기록 (우상)", accent: "#16a34a" },
+    { key: "평영", title: "🐸 평영 50m — 그룹별 1위 기록 (좌하)", accent: "#d97706" },
+    { key: "자유형", title: "🏊 자유형 50m — 그룹별 1위 기록 (우하)", accent: "#2563eb" }
+  ];
+
+  const groups = STUDENT_GROUPS; // ["1그룹" ~ "7그룹"]
+  const svgW = 460;
+  const svgH = 215;
+  const padL = 42;
+  const padR = 20;
+  const padT = 22;
+  const padB = 30;
+  const plotW = svgW - padL - padR;
+  const plotH = svgH - padT - padB;
+
+  const yMin = 25;
+  const yMax = 55;
+  const yTicks = [25, 30, 35, 40, 45, 50, 55];
+
+  const getX = (grpIdx) => padL + (grpIdx / (groups.length - 1)) * plotW;
+  const getY = (sec) => {
+    const clamped = Math.max(yMin, Math.min(yMax, sec));
+    return padT + plotH - ((clamped - yMin) / (yMax - yMin)) * plotH;
+  };
+
+  return strokeConfigs.map(cfg => {
+    const malePoints = [];
+    const femalePoints = [];
+
+    groups.forEach((grp, idx) => {
+      const mWinner = VERIFIED_SHEET_RESULTS.find(
+        r => !r.isRelay && r.stroke === cfg.key && r.gender === "남자" && r.group === grp && r.rank === "1"
+      );
+      if (mWinner) {
+        const sec = parseRecordToSeconds(mWinner.record);
+        if (sec !== null) {
+          malePoints.push({
+            idx,
+            grp,
+            x: getX(idx),
+            y: getY(sec),
+            sec,
+            winner: mWinner
+          });
+        }
+      }
+
+      const fWinner = VERIFIED_SHEET_RESULTS.find(
+        r => !r.isRelay && r.stroke === cfg.key && r.gender === "여자" && r.group === grp && r.rank === "1"
+      );
+      if (fWinner) {
+        const sec = parseRecordToSeconds(fWinner.record);
+        if (sec !== null) {
+          femalePoints.push({
+            idx,
+            grp,
+            x: getX(idx),
+            y: getY(sec),
+            sec,
+            winner: fWinner
+          });
+        }
+      }
+    });
+
+    const gridSvg = yTicks.map(t => {
+      const y = getY(t);
+      return `
+        <line x1="${padL}" y1="${y}" x2="${svgW - padR}" y2="${y}" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="${t === yMin ? "none" : "3,3"}" />
+        <text x="${padL - 6}" y="${y + 4}" text-anchor="end" font-size="10.5" font-weight="700" fill="#64748b">${t}s</text>
+      `;
+    }).join("");
+
+    const xLabelsSvg = groups.map((g, idx) => {
+      const x = getX(idx);
+      return `
+        <line x1="${x}" y1="${padT}" x2="${x}" y2="${padT + plotH}" stroke="#f1f5f9" stroke-width="1" />
+        <text x="${x}" y="${svgH - 8}" text-anchor="middle" font-size="11" font-weight="800" fill="#334155">${g}</text>
+      `;
+    }).join("");
+
+    const buildSeriesSvg = (pts, color, isFemale) => {
+      if (pts.length === 0) return "";
+      const polyPoints = pts.map(p => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(" ");
+      const lineHtml = pts.length > 1
+        ? `<polyline fill="none" stroke="${color}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" points="${polyPoints}" />`
+        : "";
+
+      const nodesHtml = pts.map(p => {
+        const isOur = p.winner.team === "거제야르";
+        const rRadius = isOur ? 5.5 : 4.2;
+        const fillCol = isOur ? "#eab308" : color;
+        const strokeCol = isOur ? "#713f12" : "#ffffff";
+        const labelOffsetY = isFemale ? -9 : 14;
+        const labelText = `${p.sec.toFixed(2)}s`;
+        const tooltip = `${p.grp} ${isFemale ? "여자" : "남자"} 1위: ${p.winner.name} (${p.winner.team}) — ${p.winner.record} (${p.sec.toFixed(2)}초)`;
+        return `
+          <g>
+            <title>${escapeHtml(tooltip)}</title>
+            <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${rRadius}" fill="${fillCol}" stroke="${strokeCol}" stroke-width="1.8" />
+            <text x="${p.x.toFixed(1)}" y="${(p.y + labelOffsetY).toFixed(1)}" text-anchor="middle" font-size="10" font-weight="800" fill="${isOur ? "#b45309" : color}">${labelText}</text>
+          </g>
+        `;
+      }).join("");
+
+      return lineHtml + nodesHtml;
+    };
+
+    const hasAnyData = malePoints.length > 0 || femalePoints.length > 0;
+    const emptyOverlaySvg = !hasAnyData
+      ? `
+        <rect x="${padL + 30}" y="${padT + plotH / 2 - 18}" width="${plotW - 60}" height="36" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-dasharray="4,3" />
+        <text x="${padL + plotW / 2}" y="${padT + plotH / 2 + 4}" text-anchor="middle" font-size="11.5" font-weight="800" fill="#64748b">해당 영법 기록지 사진 미포함 (데이터 추가 시 자동 표시)</text>
+      `
+      : "";
+
+    return `
+      <div class="stroke-linechart-card">
+        <div class="stroke-linechart-head">
+          <h4 class="stroke-linechart-title">${escapeHtml(cfg.title)}</h4>
+          <div class="stroke-linechart-legend">
+            <span><i class="line-legend-dot" style="background:#0284c7;"></i>남자 1위</span>
+            <span><i class="line-legend-dot" style="background:#ec4899;"></i>여자 1위</span>
+          </div>
+        </div>
+        <div class="stroke-svg-wrap">
+          <svg viewBox="0 0 ${svgW} ${svgH}" role="img" aria-label="${escapeHtml(cfg.title)}">
+            ${gridSvg}
+            ${xLabelsSvg}
+            ${buildSeriesSvg(malePoints, "#0284c7", false)}
+            ${buildSeriesSvg(femalePoints, "#ec4899", true)}
+            ${emptyOverlaySvg}
+          </svg>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function renderOurTeamResultRows() {
+  const thead = document.getElementById("ourTeamResultTableHead");
+  const tbody = document.getElementById("ourTeamResultTableBody");
+  const countBadge = document.getElementById("ourTeamResultCountBadge");
+  if (!tbody || !thead) return;
+
+  const activeCols = OUR_TEAM_COLUMNS.filter(c => visibleOurTeamCols.has(c.key));
+
+  thead.innerHTML = `
+    <tr>
+      ${activeCols.map(c => `<th style="width:${c.width}; text-align:${c.align};">${escapeHtml(c.label)}</th>`).join("")}
+    </tr>
+  `;
+
+  const allOurEntries = buildOurTeamFullEntriesWithResults();
+  let filtered = allOurEntries;
+  if (ourTeamResultFilterMode === "verified") {
+    filtered = allOurEntries.filter(item => item.isVerified);
+  } else if (ourTeamResultFilterMode === "scoring") {
+    filtered = allOurEntries.filter(item => item.isVerified && item.points > 0);
+  }
+
+  if (countBadge) {
+    countBadge.textContent = `${filtered.length}건 표시 중 (전체 53출전 · 확인 22건 · 입상 8건)`;
+  }
+
+  if (activeCols.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td style="text-align:center; padding:32px 16px; color:#64748b; font-weight:600;">
+          표시할 열(항목)을 최소 1개 이상 선택해 주세요.
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  tbody.innerHTML = filtered.map((item) => {
+    const isScoring = item.isVerified && item.points > 0;
+    const rowBg = isScoring ? "background:#f0f9ff;" : (!item.isVerified ? "opacity:0.75;" : "");
+    const recordDisplay = !item.isVerified
+      ? `<span style="color:#94a3b8; font-size:12px;">-</span>`
+      : (item.record === "99'99\"99" || item.record === "88'88\"88")
+        ? `<span style="color:#94a3b8; font-size:12px;">${escapeHtml(item.record)}</span>`
+        : `<strong style="color:#0f172a; font-variant-numeric:tabular-nums;">${escapeHtml(item.record)}</strong>`;
+
+    const strokeLabel = item.isRelay ? item.stroke : `${item.stroke} ${item.distance}`;
+
+    // 순위: 숫자만 출력 (실격/불참/미확인은 '-' 표시 후 비고에 사유 통합 표시)
+    const rawRankStr = item.isVerified ? String(item.rank ?? "").trim().replace("위", "") : "";
+    const isNumericRank = /^\d+$/.test(rawRankStr);
+    const rankNumHtml = isNumericRank
+      ? `<span style="font-weight:${Number(rawRankStr) <= 6 ? "900" : "700"}; color:${
+          rawRankStr === "1" ? "#b45309" : rawRankStr === "2" ? "#334155" : rawRankStr === "3" ? "#9a3412" : Number(rawRankStr) <= 6 ? "#0284c7" : "#475569"
+        }; font-variant-numeric:tabular-nums;">${rawRankStr}</span>`
+      : `<span style="color:#cbd5e1;">-</span>`;
+
+    // 점수: 숫자만 출력 (미확인은 '-')
+    const pointsHtml = !item.isVerified
+      ? `<span style="color:#cbd5e1;">-</span>`
+      : `<span style="font-weight:${item.points > 0 ? "900" : "600"}; color:${item.points > 0 ? "#1d4ed8" : "#94a3b8"}; font-variant-numeric:tabular-nums;">${item.points}</span>`;
+
+    // 비고: 실격/불참 여부 및 원문 비고 통합 표시
+    const noteParts = [];
+    if (item.isVerified && !isNumericRank && rawRankStr) noteParts.push(rawRankStr);
+    if (item.note) noteParts.push(item.note);
+    const noteText = noteParts.join(" · ");
+
+    const cellMap = {
+      matchNo: `<td style="text-align:center; font-weight:800; color:#0284c7;">#${escapeHtml(item.matchNo)}</td>`,
+      stroke:  `<td style="text-align:center;"><span class="comp-ev-pill ${getStrokeBadgeCls(item.stroke)}">${escapeHtml(strokeLabel)}</span></td>`,
+      gender:  `<td style="text-align:center;"><span class="gender-badge ${item.gender === "남" ? "male" : "female"}">${escapeHtml(item.gender)}</span></td>`,
+      group:   `<td style="text-align:center;"><span class="group-badge">${escapeHtml(item.group)}</span></td>`,
+      lane:    `<td style="text-align:center; font-weight:800; color:#334155; font-variant-numeric:tabular-nums;">${item.lane}</td>`,
+      name:    `<td style="text-align:left; font-weight:800; color:#0f172a;">${escapeHtml(item.name)}</td>`,
+      record:  `<td style="text-align:center;">${recordDisplay}</td>`,
+      rank:    `<td style="text-align:center;">${rankNumHtml}</td>`,
+      points:  `<td style="text-align:center;">${pointsHtml}</td>`,
+      note:    `<td style="text-align:left; font-size:12px; color:${item.rank === "실격" ? "#be123c" : "#475569"}; font-weight:${isScoring || item.rank === "실격" ? "700" : "500"};">${escapeHtml(noteText || "-")}</td>`
+    };
+
+    return `
+      <tr style="${rowBg}">
+        ${activeCols.map(c => cellMap[c.key]).join("")}
+      </tr>
+    `;
+  }).join("");
+}
+
+function renderAllVerifiedSheetRows() {
+  const thead = document.getElementById("verifiedSheetTableHead");
+  const tbody = document.getElementById("verifiedSheetTableBody");
+  const titleEl = document.getElementById("verifiedSheetTableTitle");
+  if (!tbody || !thead) return;
+
+  const activeCols = RAW_SHEET_COLUMNS.filter(c => visibleRawSheetCols.has(c.key));
+
+  thead.innerHTML = `
+    <tr>
+      ${activeCols.map(c => `<th style="width:${c.width}; text-align:${c.align};">${escapeHtml(c.label)}</th>`).join("")}
+    </tr>
+  `;
+
+  let list = [...VERIFIED_SHEET_RESULTS];
+
+  if (rawSheetStrokeFilter !== "all") {
+    list = list.filter(r => r.stroke === rawSheetStrokeFilter);
+  }
+  if (rawSheetGroupFilter !== "all") {
+    list = list.filter(r => `${r.gender} ${r.group}` === rawSheetGroupFilter);
+  }
+  if (rawSheetTeamFilter !== "all") {
+    list = list.filter(r => r.team.replace("(중등)", "").trim() === rawSheetTeamFilter);
+  }
+  if (rawSheetRankFilter === "top6") {
+    list = list.filter(r => ["1", "2", "3", "4", "5", "6"].includes(r.rank));
+  } else if (rawSheetRankFilter === "medal") {
+    list = list.filter(r => ["1", "2", "3"].includes(r.rank));
+  } else if (rawSheetRankFilter === "dq_dns") {
+    list = list.filter(r => r.rank === "실격" || r.rank === "불참");
+  }
+
+  if (rawSheetSearchQuery.trim() !== "") {
+    const q = rawSheetSearchQuery.trim().toLowerCase();
+    list = list.filter(r =>
+      r.name.toLowerCase().includes(q) ||
+      r.team.toLowerCase().includes(q) ||
+      r.matchNo.toLowerCase().includes(q) ||
+      r.stroke.toLowerCase().includes(q) ||
+      r.group.toLowerCase().includes(q)
+    );
+  }
+
+  if (titleEl) {
+    titleEl.textContent = `📄 공식 기록지 원문 전체 데이터 조회 (${list.length}건 표시 중 / 전체 ${VERIFIED_SHEET_RESULTS.length}건)`;
+  }
+
+  if (activeCols.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td style="text-align:center; padding:32px 16px; color:#64748b; font-weight:600;">
+          표시할 열(항목)을 최소 1개 이상 선택해 주세요.
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  if (list.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="${activeCols.length}" style="text-align:center; padding:32px 16px; color:#64748b; font-weight:600;">
+          선택한 조건에 해당하는 기록지 데이터가 없습니다.
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  tbody.innerHTML = list.map((r) => {
+    const isOurTeam = r.team === "거제야르";
+    const rowCls = isOurTeam ? "our-team-row-highlight" : "";
+    const recordHtml = (r.record === "99'99\"99" || r.record === "88'88\"88")
+      ? `<span style="color:#94a3b8; font-size:12px;">${escapeHtml(r.record)}</span>`
+      : `<strong style="color:#0f172a; font-variant-numeric:tabular-nums;">${escapeHtml(r.record)}</strong>`;
+
+    const strokeDisplay = r.isRelay ? r.stroke : `${r.stroke} 50m`;
+    const teamTag = isOurTeam
+      ? `<span class="comp-team-badge-btn team-badge-yareu">🏊 ${escapeHtml(r.team)}</span>`
+      : `<span style="font-weight:700; color:#334155;">${escapeHtml(r.team)}</span>`;
+
+    // 순위: 숫자만 출력 (실격/불참은 비고란에 표시하고 순위란에는 숫자만 출력)
+    const rawRankStr = String(r.rank ?? "").trim().replace("위", "");
+    const isNumericRank = /^\d+$/.test(rawRankStr);
+    const rankNumHtml = isNumericRank
+      ? `<span style="font-weight:${Number(rawRankStr) <= 6 ? "900" : "700"}; color:${
+          rawRankStr === "1" ? "#b45309" : rawRankStr === "2" ? "#334155" : rawRankStr === "3" ? "#9a3412" : Number(rawRankStr) <= 6 ? "#0284c7" : "#475569"
+        }; font-variant-numeric:tabular-nums;">${rawRankStr}</span>`
+      : `<span style="color:#cbd5e1;">-</span>`;
+
+    // 비고: 실격/불참 여부 및 원문 비고 통합 표시
+    const noteParts = [];
+    if (!isNumericRank && rawRankStr) noteParts.push(rawRankStr);
+    if (r.note) noteParts.push(r.note);
+    const noteText = noteParts.join(" · ");
+
+    const cellMap = {
+      matchNo: `<td style="text-align:center; font-weight:800; color:#0284c7;">#${escapeHtml(r.matchNo)}</td>`,
+      stroke:  `<td style="text-align:center;"><span class="comp-ev-pill ${getStrokeBadgeCls(r.stroke)}">${escapeHtml(strokeDisplay)}</span></td>`,
+      gender:  `<td style="text-align:center;"><span class="gender-badge ${r.gender === "남자" ? "male" : "female"}">${r.gender === "남자" ? "남" : "여"}</span></td>`,
+      group:   `<td style="text-align:center;"><span class="group-badge">${escapeHtml(r.group)}</span></td>`,
+      lane:    `<td style="text-align:center; font-weight:800; color:#334155; font-variant-numeric:tabular-nums;">${r.lane}</td>`,
+      name:    `<td style="text-align:left; font-weight:${isOurTeam ? "900" : "700"}; color:#0f172a;">${escapeHtml(r.name)}</td>`,
+      team:    `<td style="text-align:center;">${teamTag}</td>`,
+      record:  `<td style="text-align:center;">${recordHtml}</td>`,
+      rank:    `<td style="text-align:center;">${rankNumHtml}</td>`,
+      points:  `<td style="text-align:center; font-weight:${r.points > 0 ? "900" : "600"}; color:${r.points > 0 ? "#1d4ed8" : "#94a3b8"}; font-variant-numeric:tabular-nums;">${r.points}</td>`,
+      note:    `<td style="text-align:left; font-size:12px; color:${r.rank === "실격" ? "#be123c" : "#475569"}; font-weight:${r.rank === "실격" || r.points > 0 ? "700" : "500"};">${escapeHtml(noteText || "-")}</td>`
+    };
+
+    return `
+      <tr class="${rowCls}">
+        ${activeCols.map(c => cellMap[c.key]).join("")}
+      </tr>
+    `;
+  }).join("");
+}
+
 function renderResultAnalysisView() {
   const container = document.getElementById("viewContainerResult");
   if (!container) return;
 
-  const isStudent = currentDivision === "student";
-  const divTitle = isStudent ? "학생부 (24일)" : "성인부 (25일)";
+  if (currentDivision === "adult") {
+    container.innerHTML = `
+      <section class="pending-update-card">
+        <span class="pending-icon">🏅</span>
+        <h3 class="pending-title">성인부 (25일) 결과 분석 — 추후 업데이트 예정</h3>
+        <p class="pending-desc" style="margin-bottom: 0;">
+          성인부 경기는 <strong>2026년 10월 25일(일)</strong> 진행 후 공식 기록지 사진이 확보되는 대로<br>
+          우리 팀(<strong>거제몽꾸 · 거제야르</strong>) 및 전체 참가 클럽의 결과 분석 데이터가 이곳에 업데이트될 예정입니다.
+        </p>
+      </section>
+    `;
+    return;
+  }
+
+  const hl = OUR_TEAM_STUDENT_HIGHLIGHTS;
+  const clubStandings = buildClubStandingsFromVerifiedSheets();
+  const maxClubPts = Math.max(...clubStandings.map(c => c.totalPoints), 1);
+
+  // 입상 하이라이트 카드 8개
+  const podiumCardsHtml = hl.podiumAndScoringList.map(item => {
+    const cardCls = item.rank === "1위"
+      ? "is-gold"
+      : item.rank === "2위"
+        ? "is-silver"
+        : item.rank === "3위"
+          ? "is-bronze"
+          : "is-top6";
+
+    return `
+      <div class="podium-spot-card ${cardCls}">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
+          <span class="result-rank-badge ${item.badgeClass}">${escapeHtml(item.medal)}</span>
+          <span class="result-pts-pill">+${item.points}점</span>
+        </div>
+        <div style="display:flex; align-items:baseline; justify-content:space-between; gap:8px; margin-top:2px;">
+          <strong style="font-size:15px; font-weight:900; color:#0f172a;">${escapeHtml(item.name)}</strong>
+          <span style="font-size:14.5px; font-weight:900; color:#0284c7; font-variant-numeric:tabular-nums;">${escapeHtml(item.record)}</span>
+        </div>
+        <div style="font-size:12px; font-weight:700; color:#334155;">
+          ${escapeHtml(item.gender)} · ${escapeHtml(item.group)} · ${escapeHtml(item.event)} <span style="color:#64748b;">(#${escapeHtml(item.matchNo)} · ${item.lane}레인)</span>
+        </div>
+        <div style="font-size:11.5px; font-weight:600; color:#475569; line-height:1.45; border-top:1px dashed #e2e8f0; padding-top:5px;">
+          ${escapeHtml(item.note)}
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  // 상위 득점 클럽 비교 막대그래프 (개인 제외, 문구 무조건 1줄 출력)
+  const scoringClubs = clubStandings.filter(c => c.totalPoints > 0);
+  const clubBarsHtml = scoringClubs.map((c, idx) => {
+    const widthPct = Math.max(4, Math.round((c.totalPoints / maxClubPts) * 100));
+    const barColor = c.isOurTeam
+      ? "linear-gradient(90deg, #0284c7 0%, #0ea5e9 100%)"
+      : idx === 0
+        ? "#2563eb"
+        : idx === 1
+          ? "#4f46e5"
+          : idx === 2
+            ? "#0d9488"
+            : "#64748b";
+    const labelPrefix = c.isOurTeam ? "🏊 " : "";
+    const rowHighlight = c.isOurTeam ? "background:#f0f9ff; padding:4px 6px; border-radius:8px; border:1px solid #7dd3fc;" : "";
+    return `
+      <div class="hbar-row" style="${rowHighlight}">
+        <span class="hbar-label" style="color:${c.isOurTeam ? "#0369a1" : "#1e293b"};">${idx + 1}. ${labelPrefix}${escapeHtml(c.team)}</span>
+        <div class="hbar-track allow-overflow">
+          <div class="hbar-fill" style="width:${widthPct}%; background:${barColor};"></div>
+          <span class="hbar-bar-text">개인 ${c.indivPoints} + 단체 ${c.relayPoints}</span>
+        </div>
+        <span class="hbar-val" style="color:${c.isOurTeam ? "#0284c7" : "#0f172a"};">${c.totalPoints}점 (${c.top6Total}입상)</span>
+      </div>
+    `;
+  }).join("");
+
+  // 클럽 종합 순위표 행 (개인 제외)
+  const clubTableRowsHtml = clubStandings.map((c, idx) => {
+    const rowCls = c.isOurTeam ? "our-team-row-highlight" : "";
+    const ourPill = c.isOurTeam ? `<span class="team-tag-pill yareu" style="margin-left:6px;">우리팀</span>` : "";
+
+    return `
+      <tr class="${rowCls}">
+        <td style="text-align:center; font-weight:800; color:${c.isOurTeam ? "#0284c7" : "#475569"};">${idx + 1}위</td>
+        <td style="text-align:left; font-weight:${c.isOurTeam ? "900" : "800"}; color:#0f172a;">
+          ${escapeHtml(c.team)}${ourPill}
+        </td>
+        <td style="text-align:center; font-weight:700; color:#475569;">${c.entries}건 <span style="color:#94a3b8;font-size:11.5px;">(완주 ${c.completed})</span></td>
+        <td style="text-align:center; font-weight:800; color:${c.gold > 0 ? "#b45309" : "#cbd5e1"};">${c.gold > 0 ? `🥇 ${c.gold}` : "-"}</td>
+        <td style="text-align:center; font-weight:800; color:${c.silver > 0 ? "#334155" : "#cbd5e1"};">${c.silver > 0 ? `🥈 ${c.silver}` : "-"}</td>
+        <td style="text-align:center; font-weight:800; color:${c.bronze > 0 ? "#9a3412" : "#cbd5e1"};">${c.bronze > 0 ? `🥉 ${c.bronze}` : "-"}</td>
+        <td style="text-align:center; font-weight:700; color:${c.rank4to6 > 0 ? "#0369a1" : "#cbd5e1"};">${c.rank4to6 > 0 ? `${c.rank4to6}건` : "-"}</td>
+        <td style="text-align:center; font-weight:800; color:#0f172a;">${c.top6Total > 0 ? `${c.top6Total}건` : "-"}</td>
+        <td style="text-align:center; font-weight:800; color:#0284c7;">${c.indivPoints}점</td>
+        <td style="text-align:center; font-weight:800; color:#7c3aed;">${c.relayPoints}점</td>
+        <td style="text-align:center; font-weight:900; font-size:14px; color:${c.totalPoints > 0 ? "#0f172a" : "#cbd5e1"}; background:${c.isOurTeam ? "#e0f2fe" : "#f8fafc"};">
+          ${c.totalPoints}점
+        </td>
+      </tr>
+    `;
+  }).join("");
+
+  // 필터 옵션 목록 생성
+  const uniqueGroups = [...new Set(VERIFIED_SHEET_RESULTS.map(r => `${r.gender} ${r.group}`))];
+  const uniqueTeams = [...new Set(VERIFIED_SHEET_RESULTS.map(r => r.team.replace("(중등)", "").trim()))].sort((a, b) => a.localeCompare(b, "ko"));
+
+  const ourColToggleChipsHtml = OUR_TEAM_COLUMNS.map(col => {
+    const isChecked = visibleOurTeamCols.has(col.key);
+    return `
+      <label class="col-toggle-chip ${isChecked ? "is-checked" : ""}">
+        <input type="checkbox" data-our-col-key="${col.key}" ${isChecked ? "checked" : ""}>
+        <span>${escapeHtml(col.label)}</span>
+      </label>
+    `;
+  }).join("");
+
+  const colToggleChipsHtml = RAW_SHEET_COLUMNS.map(col => {
+    const isChecked = visibleRawSheetCols.has(col.key);
+    return `
+      <label class="col-toggle-chip ${isChecked ? "is-checked" : ""}">
+        <input type="checkbox" data-raw-col-key="${col.key}" ${isChecked ? "checked" : ""}>
+        <span>${escapeHtml(col.label)}</span>
+      </label>
+    `;
+  }).join("");
 
   container.innerHTML = `
-    <section class="pending-update-card">
-      <span class="pending-icon">🏅</span>
-      <h3 class="pending-title">${divTitle} 결과 분석 — 추후 업데이트 예정</h3>
-      <p class="pending-desc" style="margin-bottom: 0;">
-        거제시수영연맹의 공식 대회 기록표(종목별 최종 기록, 순위, 대회신기록 및 종합 입상 집계)가 확정된 후<br>
-        우리 팀(<strong>거제몽꾸 · 거제야르</strong>) 및 전체 참가팀의 결과 분석 데이터가 이곳에 업데이트될 예정입니다.
-      </p>
+    <!-- =============================================================== -->
+    <!-- 1. 우리팀 (거제야르) 대회 결과 종합 요약 & 명예의 전당          -->
+    <!-- =============================================================== -->
+    <section class="progress-card-section">
+      <div class="progress-sec-header">
+        <div>
+          <h3>🏅 1. 우리팀 (거제야르) 학생부 대회 결과 종합 요약</h3>
+          <span class="progress-sec-sub">${escapeHtml(STUDENT_SHEET_META.scoringRuleIndiv)} / ${escapeHtml(STUDENT_SHEET_META.scoringRuleRelay)}</span>
+        </div>
+      </div>
+
+      <div class="kpi-grid-4">
+        <div class="kpi-stat-card highlight-blue">
+          <span class="kpi-label">🏆 우리팀 총 획득 점수 (확인분)</span>
+          <span class="kpi-value">총 30점 (클럽 4위)</span>
+          <span class="kpi-sub">개인전 <strong>28점 (클럽 3위!)</strong> + 단체전 <strong>2점</strong></span>
+        </div>
+        <div class="kpi-stat-card highlight-amber">
+          <span class="kpi-label">🥇 메달 및 입상 (1~6위 득점)</span>
+          <span class="kpi-value">총 8건 입상</span>
+          <span class="kpi-sub">🥇금 1 · 🥈은 2 · 🥉동 1 · 4~6위 4건</span>
+        </div>
+        <div class="kpi-stat-card highlight-emerald">
+          <span class="kpi-label">📊 개인전 입상 적중률 (확인분)</span>
+          <span class="kpi-value">36.8% (7 / 19건)</span>
+          <span class="kpi-sub">완주 17건 중 7건이 그룹 Top 5 이내 입상</span>
+        </div>
+        <div class="kpi-stat-card highlight-purple">
+          <span class="kpi-label">⚡ 초박빙 명승부 하이라이트</span>
+          <span class="kpi-value">0.07초 · 0.13초 차</span>
+          <span class="kpi-sub">남초 계영 0.07초 차 6위 · 손민재 0.13초 차 4위</span>
+        </div>
+      </div>
+
+      <!-- 우리팀 선수별·종목별 득점 분석 차트 (2열) -->
+      <div class="charts-two-col">
+        <div class="hbar-chart-box">
+          <h4 class="hbar-chart-title">
+            <span>🌟 우리팀 (거제야르) 선수별 득점 기여도</span>
+            <span style="font-size:11.5px; color:#0284c7;">총 30점 (개인 28점 + 단체 2점)</span>
+          </h4>
+          <div class="hbar-list">
+            <div class="hbar-row">
+              <span class="hbar-label">🥇 류다윤 (여5)</span>
+              <div class="hbar-track allow-overflow">
+                <div class="hbar-fill" style="width: 100%; background:#eab308;"></div>
+                <span class="hbar-bar-text">자유형 50m 1위 (33"85)</span>
+              </div>
+              <span class="hbar-val">7점 (1위)</span>
+            </div>
+            <div class="hbar-row">
+              <span class="hbar-label">🥈 이선우 (남7)</span>
+              <div class="hbar-track allow-overflow">
+                <div class="hbar-fill" style="width: 100%; background:#0284c7;"></div>
+                <span class="hbar-bar-text">배영 2위(5점) + 자유형 5위(2점)</span>
+              </div>
+              <span class="hbar-val">7점 (2관왕급)</span>
+            </div>
+            <div class="hbar-row">
+              <span class="hbar-label">🥈 정채윤 (여7)</span>
+              <div class="hbar-track allow-overflow">
+                <div class="hbar-fill" style="width: 71.4%; background:#2563eb;"></div>
+                <span class="hbar-bar-text">자유형 50m 2위 (32"98)</span>
+              </div>
+              <span class="hbar-val">5점 (2위)</span>
+            </div>
+            <div class="hbar-row">
+              <span class="hbar-label">🥉 안서윤 (여7)</span>
+              <div class="hbar-track allow-overflow">
+                <div class="hbar-fill" style="width: 57.1%; background:#d97706;"></div>
+                <span class="hbar-bar-text">자유형 50m 3위 (33"68)</span>
+              </div>
+              <span class="hbar-val">4점 (3위)</span>
+            </div>
+            <div class="hbar-row">
+              <span class="hbar-label">🏅 손민재 (남4)</span>
+              <div class="hbar-track allow-overflow">
+                <div class="hbar-fill" style="width: 42.9%; background:#0d9488;"></div>
+                <span class="hbar-bar-text">자유형 50m 4위 (35"93)</span>
+              </div>
+              <span class="hbar-val">3점 (+계영)</span>
+            </div>
+            <div class="hbar-row">
+              <span class="hbar-label">🏅 김서윤 (여5)</span>
+              <div class="hbar-track allow-overflow">
+                <div class="hbar-fill" style="width: 28.6%; background:#6366f1;"></div>
+                <span class="hbar-bar-text">자유형 50m 5위 (36"25)</span>
+              </div>
+              <span class="hbar-val">2점 (5위)</span>
+            </div>
+            <div class="hbar-row">
+              <span class="hbar-label">🤝 남초 계영팀</span>
+              <div class="hbar-track allow-overflow">
+                <div class="hbar-fill" style="width: 28.6%; background:#7c3aed;"></div>
+                <span class="hbar-bar-text">배건우·손민재·양서진·김루민</span>
+              </div>
+              <span class="hbar-val">2점 (6위)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hbar-chart-box" style="display:flex; flex-direction:column; justify-content:space-between; gap:10px;">
+          <div>
+            <h4 class="hbar-chart-title" style="margin-bottom:8px;">💡 거제야르 학생부 결과 핵심 인사이트</h4>
+            <ul style="margin:0; padding-left:18px; font-size:12.8px; color:#334155; line-height:1.7; font-weight:600;">
+              <li><strong>여5 · 여7 · 남7 고학년 주력 그룹 초강세</strong>: 여5 자유형 <strong>류다윤(1위·7점)·김서윤(5위·2점)</strong>, 여7 자유형 <strong>정채윤(2위·5점)·안서윤(3위·4점)</strong>, 남7 <strong>이선우(배영 2위·5점 + 자유형 5위·2점)</strong>가 팀 득점의 핵심 축을 담당했습니다.</li>
+              <li><strong>개인전 득점력 전체 클럽 3위</strong>: 확인된 19개 세부 종목 기준 우리팀의 개인전 획득 점수는 <strong>28점</strong>으로, 대규모 선수단을 보유한 <strong>거제찬스아이(42점)</strong>, <strong>KJH디지스트(33점)</strong>에 이어 <strong>전체 클럽 중 3위</strong>(노블 TNV 24점, 금빛 20점 상회)를 기록했습니다.</li>
+              <li><strong>0.07초 차로 지켜낸 남초 계영 200m 6위</strong>: 1번 경기였던 남초 계영 200m에서 <strong>배건우·손민재·양서진·김루민</strong> 조가 <code>02'56"60</code>을 기록해 7위 거제찬스돌핀(<code>02'56"67</code>)을 <strong>0.07초 차이</strong>로 제치고 귀중한 단체전 2점을 획득했습니다.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 입상 8건 카드 그리드 -->
+      <div style="margin-bottom: 6px; font-size:13.5px; font-weight:800; color:#0f172a;">
+        🎖️ 우리팀 (거제야르) 입상 및 득점(1~6위) 명예의 전당 (총 8건 · 30점)
+      </div>
+      <div class="podium-grid-cards">
+        ${podiumCardsHtml}
+      </div>
+    </section>
+
+    <!-- =============================================================== -->
+    <!-- 2. 우리팀 (거제야르) 선수별·종목별 상세 성적표                  -->
+    <!-- =============================================================== -->
+    <section class="progress-card-section">
+      <div class="progress-sec-header">
+        <div>
+          <h3>🏊 2. 우리팀 (거제야르) 종목별 상세 성적표</h3>
+          <span class="progress-sec-sub" id="ourTeamResultCountBadge">기록지 사진으로 확인된 22건 및 미촬영 31건 통합 조회</span>
+        </div>
+        <div class="result-filter-pills" id="ourTeamResultFilterGroup">
+          <button type="button" class="result-filter-pill ${ourTeamResultFilterMode === "verified" ? "active" : ""}" data-our-filter="verified">✅ 기록지 확인 완료 (22건)</button>
+          <button type="button" class="result-filter-pill ${ourTeamResultFilterMode === "scoring" ? "active" : ""}" data-our-filter="scoring">🏅 입상·득점 경기만 (8건)</button>
+          <button type="button" class="result-filter-pill ${ourTeamResultFilterMode === "all" ? "active" : ""}" data-our-filter="all">🌐 전체 53출전 (미촬영 31건 포함)</button>
+        </div>
+      </div>
+
+      <!-- 표시 열(항목) 선택 체크박스 칩 바 + 원클릭 프리셋 -->
+      <div class="col-toggle-bar" id="ourTeamColToggleBar">
+        <div class="col-toggle-left">
+          <span class="col-toggle-label">☑️ 표시 열 항목:</span>
+          ${ourColToggleChipsHtml}
+        </div>
+        <div class="col-toggle-presets">
+          <button type="button" class="col-preset-btn" data-our-col-preset="all">전체 열 표시</button>
+          <button type="button" class="col-preset-btn" data-our-col-preset="compact">핵심 열만 (모바일 추천)</button>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="record-table">
+          <thead id="ourTeamResultTableHead"></thead>
+          <tbody id="ourTeamResultTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- =============================================================== -->
+    <!-- 3. 기록지 확인 종목 기준 클럽별 득점 & 입상 현황 비교           -->
+    <!-- =============================================================== -->
+    <section class="progress-card-section">
+      <div class="progress-sec-header">
+        <div>
+          <h3>⚔️ 3. 참가 클럽별 득점 및 메달 집계 비교 (확인된 기록지 19개 부별 · 267엔트리 기준)</h3>
+          <span class="progress-sec-sub">우리팀 <strong>거제야르(30점)</strong>는 확인된 종목 기준 <strong>전체 클럽 종합 4위 · 개인전 득점(28점) 클럽 3위</strong>를 기록했습니다. (개인 자격 참가자 제외, 중등부 팀은 소속 클럽으로 통합 집계)</span>
+        </div>
+      </div>
+
+      <div class="hbar-chart-box" style="margin-bottom: 16px;">
+        <h4 class="hbar-chart-title">
+          <span>📊 득점 클럽 총점 비교 그래프 (개인전 + 단체전 합산)</span>
+          <span style="font-size:11.5px; color:#64748b;">클럽별 개인전·단체전 획득 점수 비교</span>
+        </h4>
+        <div class="hbar-list">
+          ${clubBarsHtml}
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="record-table">
+          <thead>
+            <tr>
+              <th style="width: 68px; text-align:center;">클럽 순위</th>
+              <th style="min-width: 145px; text-align:left;">소속 클럽 (구분)</th>
+              <th style="width: 120px; text-align:center;">확인 엔트리 (완주)</th>
+              <th style="width: 72px; text-align:center;">🥇 1위</th>
+              <th style="width: 72px; text-align:center;">🥈 2위</th>
+              <th style="width: 72px; text-align:center;">🥉 3위</th>
+              <th style="width: 82px; text-align:center;">🏅 4~6위</th>
+              <th style="width: 85px; text-align:center;">입상 합계</th>
+              <th style="width: 92px; text-align:center;">개인전 점수</th>
+              <th style="width: 92px; text-align:center;">단체전 점수</th>
+              <th style="width: 95px; text-align:center;">총 획득 점수</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${clubTableRowsHtml}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- =============================================================== -->
+    <!-- 4. 영법별 그룹 1위 기록 추이 꺾은선 그래프 (2x2 그리드)          -->
+    <!-- =============================================================== -->
+    <section class="progress-card-section">
+      <div class="progress-sec-header">
+        <div>
+          <h3>📈 4. 영법별 · 연령대 그룹별 1위 기록 추이 (단위: 초)</h3>
+          <span class="progress-sec-sub">가로축: 연령대(1그룹~7그룹) · 세로축: 1위 기록(초) · 좌상(접영) / 우상(배영) / 좌하(평영) / 우하(자유형)</span>
+        </div>
+      </div>
+      <div class="stroke-linecharts-grid">
+        ${renderStrokeFirstPlaceLineChartsHtml()}
+      </div>
+    </section>
+
+    <!-- =============================================================== -->
+    <!-- 5. 공식 기록지 원문 전체 데이터 조회 (267개 레이스 엔트리)      -->
+    <!-- =============================================================== -->
+    <section class="progress-card-section">
+      <div class="progress-sec-header">
+        <div>
+          <h3 id="verifiedSheetTableTitle">📄 5. 공식 기록지 원문 전체 데이터 조회 (267건)</h3>
+          <span class="progress-sec-sub">성별·그룹 및 점수·비고 분리 / 레인·순위는 숫자만 출력 / 원하는 열(항목)만 선택하여 조회 가능</span>
+        </div>
+      </div>
+
+      <!-- 표시 열(항목) 선택 체크박스 칩 바 + 원클릭 프리셋 -->
+      <div class="col-toggle-bar" id="rawSheetColToggleBar">
+        <div class="col-toggle-left">
+          <span class="col-toggle-label">☑️ 표시 열 항목:</span>
+          ${colToggleChipsHtml}
+        </div>
+        <div class="col-toggle-presets">
+          <button type="button" class="col-preset-btn" data-col-preset="all">전체 열 표시</button>
+          <button type="button" class="col-preset-btn" data-col-preset="compact">핵심 열만 (모바일 추천)</button>
+        </div>
+      </div>
+
+      <section class="toolbar" style="margin-bottom: 12px;">
+        <div class="toolbar-left">
+          <div class="search-box">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="rawSheetSearchInput" placeholder="선수 이름, 소속팀, 경기번호(예: 57-1) 검색..." autocomplete="off" value="${escapeHtml(rawSheetSearchQuery)}">
+          </div>
+
+          <div class="filter-group">
+            <select id="rawSheetStrokeSelect" class="filter-select" aria-label="기록지 종목 필터">
+              <option value="all">모든 확인 종목</option>
+              <option value="계영 200m">계영 200m (단체)</option>
+              <option value="배영">배영 50m</option>
+              <option value="자유형">자유형 50m</option>
+              <option value="혼계영 200m">혼계영 200m (단체)</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <select id="rawSheetGroupSelect" class="filter-select" aria-label="기록지 그룹 필터">
+              <option value="all">모든 성별·그룹</option>
+              ${uniqueGroups.map(g => `<option value="${escapeHtml(g)}">${escapeHtml(g)}</option>`).join("")}
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <select id="rawSheetTeamSelect" class="filter-select" aria-label="기록지 소속팀 필터">
+              <option value="all">모든 소속팀</option>
+              <option value="거제야르">🏊 거제야르 (우리팀)</option>
+              ${uniqueTeams.filter(t => t !== "거제야르").map(t => `<option value="${escapeHtml(t)}">${escapeHtml(t)}</option>`).join("")}
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <select id="rawSheetRankSelect" class="filter-select" aria-label="기록지 순위 필터">
+              <option value="all">전체 순위 결과</option>
+              <option value="top6">🏅 1~6위 입상(득점)자만</option>
+              <option value="medal">🥇🥈🥉 1~3위 메달리스트만</option>
+              <option value="dq_dns">⚠️ 실격 · 불참만</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <div class="table-responsive">
+        <table class="record-table">
+          <thead id="verifiedSheetTableHead"></thead>
+          <tbody id="verifiedSheetTableBody"></tbody>
+        </table>
+      </div>
     </section>
   `;
+
+  // 하위 두 테이블 렌더링
+  renderOurTeamResultRows();
+  renderAllVerifiedSheetRows();
 }
 
 function renderAll() {
@@ -1394,6 +2358,111 @@ function bindEvents() {
   document.getElementById("compSearchInput")?.addEventListener("input", (e) => {
     searchQuery = e.target.value || "";
     renderSwimmersDetailTable();
+  });
+
+  // 결과 분석 (TAB 3) 내부 이벤트 위임
+  const resultContainer = document.getElementById("viewContainerResult");
+  resultContainer?.addEventListener("click", (e) => {
+    const filterBtn = e.target.closest("[data-our-filter]");
+    if (filterBtn) {
+      ourTeamResultFilterMode = filterBtn.dataset.ourFilter || "verified";
+      resultContainer.querySelectorAll("[data-our-filter]").forEach(b => {
+        b.classList.toggle("active", b.dataset.ourFilter === ourTeamResultFilterMode);
+      });
+      renderOurTeamResultRows();
+      return;
+    }
+
+    const ourPresetBtn = e.target.closest("[data-our-col-preset]");
+    if (ourPresetBtn) {
+      const preset = ourPresetBtn.dataset.ourColPreset;
+      if (preset === "compact") {
+        visibleOurTeamCols = new Set(["stroke", "group", "name", "record", "rank", "points"]);
+      } else {
+        visibleOurTeamCols = new Set(OUR_TEAM_COLUMNS.map(c => c.key));
+      }
+      resultContainer.querySelectorAll("input[data-our-col-key]").forEach(chk => {
+        const key = chk.dataset.ourColKey;
+        const checked = visibleOurTeamCols.has(key);
+        chk.checked = checked;
+        chk.closest(".col-toggle-chip")?.classList.toggle("is-checked", checked);
+      });
+      renderOurTeamResultRows();
+      return;
+    }
+
+    const presetBtn = e.target.closest("[data-col-preset]");
+    if (presetBtn) {
+      const preset = presetBtn.dataset.colPreset;
+      if (preset === "compact") {
+        visibleRawSheetCols = new Set(["stroke", "group", "name", "team", "record", "rank"]);
+      } else {
+        visibleRawSheetCols = new Set(RAW_SHEET_COLUMNS.map(c => c.key));
+      }
+      resultContainer.querySelectorAll("input[data-raw-col-key]").forEach(chk => {
+        const key = chk.dataset.rawColKey;
+        const checked = visibleRawSheetCols.has(key);
+        chk.checked = checked;
+        chk.closest(".col-toggle-chip")?.classList.toggle("is-checked", checked);
+      });
+      renderAllVerifiedSheetRows();
+    }
+  });
+
+  resultContainer?.addEventListener("change", (e) => {
+    const ourColKey = e.target.dataset?.ourColKey;
+    if (ourColKey) {
+      if (e.target.checked) {
+        visibleOurTeamCols.add(ourColKey);
+      } else {
+        if (visibleOurTeamCols.size <= 1) {
+          e.target.checked = true;
+          return;
+        }
+        visibleOurTeamCols.delete(ourColKey);
+      }
+      e.target.closest(".col-toggle-chip")?.classList.toggle("is-checked", e.target.checked);
+      renderOurTeamResultRows();
+      return;
+    }
+
+    const colKey = e.target.dataset?.rawColKey;
+    if (colKey) {
+      if (e.target.checked) {
+        visibleRawSheetCols.add(colKey);
+      } else {
+        if (visibleRawSheetCols.size <= 1) {
+          e.target.checked = true;
+          return;
+        }
+        visibleRawSheetCols.delete(colKey);
+      }
+      e.target.closest(".col-toggle-chip")?.classList.toggle("is-checked", e.target.checked);
+      renderAllVerifiedSheetRows();
+      return;
+    }
+
+    const id = e.target.id;
+    if (id === "rawSheetStrokeSelect") {
+      rawSheetStrokeFilter = e.target.value;
+      renderAllVerifiedSheetRows();
+    } else if (id === "rawSheetGroupSelect") {
+      rawSheetGroupFilter = e.target.value;
+      renderAllVerifiedSheetRows();
+    } else if (id === "rawSheetTeamSelect") {
+      rawSheetTeamFilter = e.target.value;
+      renderAllVerifiedSheetRows();
+    } else if (id === "rawSheetRankSelect") {
+      rawSheetRankFilter = e.target.value;
+      renderAllVerifiedSheetRows();
+    }
+  });
+
+  resultContainer?.addEventListener("input", (e) => {
+    if (e.target.id === "rawSheetSearchInput") {
+      rawSheetSearchQuery = e.target.value || "";
+      renderAllVerifiedSheetRows();
+    }
   });
 }
 

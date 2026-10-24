@@ -15,12 +15,12 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <title>페이지 공유 (QR코드) - 거제시장배 2026 GMDC</title>
+  <title>홍보 및 공유 - 거제시장배 2026 GMDC</title>
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📱</text></svg>">
-  <link rel="stylesheet" href="style.css?v=20261024_07">
-  <link rel="stylesheet" href="sidebar.css?v=20261024_07">
+  <link rel="stylesheet" href="style.css?v=20261024_21">
+  <link rel="stylesheet" href="sidebar.css?v=20261024_21">
   <style>
     body {
       background: #f8fafc;
@@ -31,19 +31,54 @@
     }
 
     .share-container {
-      max-width: 540px;
-      margin: 36px auto 60px;
+      max-width: 1020px;
+      margin: 28px auto 60px;
       padding: 0 16px;
       box-sizing: border-box;
+    }
+
+    .share-page-header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .share-page-header h1 {
+      font-size: 24px;
+      font-weight: 900;
+      color: #0f172a;
+      margin: 0 0 6px;
+      letter-spacing: -0.02em;
+    }
+
+    .share-page-header p {
+      font-size: 14px;
+      font-weight: 600;
+      color: #64748b;
+      margin: 0;
+    }
+
+    .share-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 20px;
+      align-items: stretch;
     }
 
     .share-card {
       background: #ffffff;
       border-radius: 24px;
       border: 1px solid #e2e8f0;
-      box-shadow: 0 12px 32px rgba(15, 23, 42, 0.07);
-      padding: 36px 28px 32px;
+      box-shadow: 0 12px 32px rgba(15, 23, 42, 0.06);
+      padding: 32px 26px 28px;
       text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .share-card.is-band-card {
+      border-color: #bbf7d0;
+      background: linear-gradient(180deg, #f0fdf4 0%, #ffffff 38%);
     }
 
     .share-badge {
@@ -60,8 +95,14 @@
       margin-bottom: 12px;
     }
 
+    .share-badge.band-badge {
+      background: #dcfce7;
+      color: #15803d;
+      border-color: #86efac;
+    }
+
     .share-title {
-      font-size: 22px;
+      font-size: 21px;
       font-weight: 900;
       color: #0f172a;
       margin: 0 0 8px;
@@ -70,10 +111,11 @@
 
     .share-subtitle {
       font-size: 14px;
-      color: #64748b;
-      margin: 0 0 24px;
+      color: #475569;
+      margin: 0 0 20px;
       line-height: 1.55;
       word-break: keep-all;
+      font-weight: 600;
     }
 
     .qr-frame {
@@ -84,14 +126,19 @@
       background: #ffffff;
       border: 2.5px solid #0284c7;
       border-radius: 20px;
-      padding: 20px;
+      padding: 18px;
       box-shadow: 0 8px 24px rgba(2, 132, 199, 0.12);
-      margin-bottom: 20px;
+      margin-bottom: 18px;
+    }
+
+    .qr-frame.band-qr-frame {
+      border-color: #16a34a;
+      box-shadow: 0 8px 24px rgba(22, 163, 74, 0.12);
     }
 
     .qr-canvas-wrap {
-      width: 240px;
-      height: 240px;
+      width: 200px;
+      height: 200px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -100,14 +147,14 @@
     .qr-canvas-wrap canvas,
     .qr-canvas-wrap img,
     .qr-canvas-wrap svg {
-      width: 240px;
-      height: 240px;
+      width: 200px;
+      height: 200px;
       display: block;
       border-radius: 8px;
     }
 
     .qr-scan-hint {
-      margin-top: 12px;
+      margin-top: 10px;
       font-size: 12.5px;
       font-weight: 800;
       color: #0284c7;
@@ -116,12 +163,16 @@
       gap: 5px;
     }
 
+    .qr-scan-hint.band-hint {
+      color: #15803d;
+    }
+
     .url-display-box {
       background: #f1f5f9;
       border: 1px solid #cbd5e1;
       border-radius: 12px;
-      padding: 12px 14px;
-      margin-bottom: 18px;
+      padding: 11px 14px;
+      margin-bottom: 14px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -129,12 +180,67 @@
     }
 
     .url-text {
-      font-size: 13.5px;
+      font-size: 13px;
       font-weight: 700;
       color: #1e293b;
       word-break: break-all;
       text-align: left;
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    /* 밴드 초대장 원문 박스 */
+    .band-invite-box {
+      background: #f8fafc;
+      border: 1.5px solid #bbf7d0;
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin-bottom: 14px;
+      text-align: left;
+    }
+
+    .band-invite-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .band-invite-tag {
+      font-size: 12px;
+      font-weight: 900;
+      color: #15803d;
+      background: #dcfce7;
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+
+    .band-code-badge {
+      font-size: 12.5px;
+      font-weight: 900;
+      color: #0f172a;
+      background: #fef9c3;
+      border: 1px solid #fde047;
+      padding: 3px 9px;
+      border-radius: 6px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    .band-invite-pre {
+      margin: 0;
+      font-size: 13px;
+      line-height: 1.65;
+      color: #1e293b;
+      font-weight: 700;
+      white-space: pre-wrap;
+      word-break: break-all;
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    .band-invite-pre a {
+      color: #15803d;
+      text-decoration: underline;
+      font-weight: 800;
     }
 
     .share-actions {
@@ -148,15 +254,16 @@
       align-items: center;
       justify-content: center;
       gap: 6px;
-      padding: 12px 14px;
+      padding: 12px 12px;
       border-radius: 12px;
-      font-size: 14px;
+      font-size: 13.5px;
       font-weight: 800;
       cursor: pointer;
       transition: all 0.18s ease;
       border: 1px solid #cbd5e1;
       background: #ffffff;
       color: #1e293b;
+      text-decoration: none;
     }
 
     .btn-share-action.primary {
@@ -164,6 +271,13 @@
       color: #ffffff;
       border-color: #0284c7;
       box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+    }
+
+    .btn-share-action.band-primary {
+      background: #16a34a;
+      color: #ffffff;
+      border-color: #16a34a;
+      box-shadow: 0 4px 12px rgba(22, 163, 74, 0.24);
     }
 
     .btn-share-action:hover {
@@ -196,19 +310,15 @@
       transform: translateX(-50%) translateY(0);
     }
 
-    @media (max-width: 480px) {
+    @media (max-width: 768px) {
       .share-container {
-        margin: 20px auto 40px;
+        margin: 18px auto 40px;
+      }
+      .share-cards-grid {
+        grid-template-columns: 1fr;
       }
       .share-card {
-        padding: 28px 18px 24px;
-      }
-      .qr-canvas-wrap,
-      .qr-canvas-wrap canvas,
-      .qr-canvas-wrap img,
-      .qr-canvas-wrap svg {
-        width: 210px;
-        height: 210px;
+        padding: 26px 18px 22px;
       }
     }
   </style>
@@ -216,37 +326,100 @@
 
 <body>
   <div class="share-container">
-    <div class="share-card">
-      <div class="share-badge">📱 QR코드 바로 접속</div>
-      <h1 class="share-title">거제시장배 2026 통합 포털 공유</h1>
-      <p class="share-subtitle">
-        스마트폰 기본 카메라로 아래 QR코드를 스캔하면<br>
-        <strong>실시간 경기 진행표 및 클럽 명단</strong> 페이지로 즉시 연결됩니다.
-      </p>
+    <header class="share-page-header">
+      <h1>📢 홍보 및 공유</h1>
+      <p>거제시장배 2026 통합 포털 접속 링크 및 경기 영상·사진 공유 밴드 안내</p>
+    </header>
 
-      <div class="qr-frame">
-        <div class="qr-canvas-wrap" id="qrMount">
-          <img
-            id="qrFallbackImg"
-            src="https://api.qrserver.com/v1/create-qr-code/?size=480x480&margin=10&data=https%3A%2F%2Fiseohyun.github.io%2FGMDC-getPB%2F"
-            alt="https://iseohyun.github.io/GMDC-getPB/ 접속 QR코드"
-            crossorigin="anonymous"
-          />
+    <div class="share-cards-grid">
+      <!-- 1. 거제시장배 2026 통합 포털 공유 카드 -->
+      <div class="share-card">
+        <div>
+          <div class="share-badge">📱 QR코드 바로 접속</div>
+          <h2 class="share-title">거제시장배 2026 통합 포털 공유</h2>
+          <p class="share-subtitle">
+            스마트폰 기본 카메라로 아래 QR코드를 스캔하면<br>
+            <strong>실시간 경기 진행표 및 클럽 명단</strong> 페이지로 즉시 연결됩니다.
+          </p>
+
+          <div class="qr-frame">
+            <div class="qr-canvas-wrap" id="qrMount">
+              <img
+                id="qrFallbackImg"
+                src="https://api.qrserver.com/v1/create-qr-code/?size=480x480&margin=10&data=https%3A%2F%2Fiseohyun.github.io%2FGMDC-getPB%2F"
+                alt="https://iseohyun.github.io/GMDC-getPB/ 접속 QR코드"
+                crossorigin="anonymous"
+              />
+            </div>
+            <div class="qr-scan-hint">📷 카메라로 스캔하여 바로 접속</div>
+          </div>
         </div>
-        <div class="qr-scan-hint">📷 카메라로 스캔하여 바로 접속</div>
+
+        <div>
+          <div class="url-display-box">
+            <span class="url-text" id="shareTargetUrl">https://iseohyun.github.io/GMDC-getPB/</span>
+          </div>
+
+          <div class="share-actions">
+            <button type="button" class="btn-share-action primary" id="btnCopyShareUrl">
+              📋 포털 주소 복사
+            </button>
+            <button type="button" class="btn-share-action" id="btnNativeShare">
+              📤 다른 앱으로 공유
+            </button>
+          </div>
+        </div>
       </div>
 
-      <div class="url-display-box">
-        <span class="url-text" id="shareTargetUrl">https://iseohyun.github.io/GMDC-getPB/</span>
-      </div>
+      <!-- 2. '거시배 영상_사진' 네이버 밴드 초대 카드 -->
+      <div class="share-card is-band-card">
+        <div>
+          <div class="share-badge band-badge">📸 네이버 밴드 초대장</div>
+          <h2 class="share-title">'거시배 영상_사진' 밴드</h2>
+          <p class="share-subtitle">
+            <strong>일정별로 사진과 영상을 공유합니다.</strong><br>
+            아래 QR코드 스캔 또는 초대 링크·초대 코드로 가입해 주세요.
+          </p>
 
-      <div class="share-actions">
-        <button type="button" class="btn-share-action primary" id="btnCopyShareUrl">
-          📋 링크 주소 복사
-        </button>
-        <button type="button" class="btn-share-action" id="btnNativeShare">
-          📤 다른 앱으로 공유
-        </button>
+          <div class="qr-frame band-qr-frame">
+            <div class="qr-canvas-wrap" id="bandQrMount">
+              <img
+                id="bandQrFallbackImg"
+                src="https://api.qrserver.com/v1/create-qr-code/?size=480x480&margin=10&data=https%3A%2F%2Fband.us%2Fn%2Fa5aab0K5u5a3R"
+                alt="거시배 영상_사진 밴드 접속 QR코드"
+                crossorigin="anonymous"
+              />
+            </div>
+            <div class="qr-scan-hint band-hint">📷 밴드 초대 링크 QR 스캔</div>
+          </div>
+        </div>
+
+        <div>
+          <div class="band-invite-box">
+            <div class="band-invite-header">
+              <span class="band-invite-tag">[밴드 초대장]</span>
+              <span class="band-code-badge">초대 코드: NRM-ABJ-B3</span>
+            </div>
+            <div class="band-invite-pre">[밴드 초대장]
+박재홍 5그룹 핀접 핀자 계영님이 당신을 '거시배 영상_사진' 밴드에 초대합니다.
+
+초대 코드: NRM-ABJ-B3
+
+<a href="https://band.us/n/a5aab0K5u5a3R" target="_blank" rel="noopener noreferrer">https://band.us/n/a5aab0K5u5a3R</a></div>
+          </div>
+
+          <div class="share-actions">
+            <a href="https://band.us/n/a5aab0K5u5a3R" target="_blank" rel="noopener noreferrer" class="btn-share-action band-primary full-width">
+              🟢 '거시배 영상_사진' 밴드 바로가기
+            </a>
+            <button type="button" class="btn-share-action" id="btnCopyBandInvite">
+              📋 초대장 문구 복사
+            </button>
+            <button type="button" class="btn-share-action" id="btnCopyBandCode">
+              🔑 초대 코드 복사
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -254,9 +427,17 @@
   <div class="share-toast" id="shareToast">링크가 클립보드에 복사되었습니다.</div>
 
   <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
-  <script type="module" src="sidebar.js?v=20261024_07"></script>
+  <script type="module" src="sidebar.js?v=20261024_21"></script>
   <script>
     const TARGET_URL = 'https://iseohyun.github.io/GMDC-getPB/';
+    const BAND_URL = 'https://band.us/n/a5aab0K5u5a3R';
+    const BAND_CODE = 'NRM-ABJ-B3';
+    const BAND_INVITE_TEXT = `[밴드 초대장]
+박재홍 5그룹 핀접 핀자 계영님이 당신을 '거시배 영상_사진' 밴드에 초대합니다.
+
+초대 코드: NRM-ABJ-B3
+
+https://band.us/n/a5aab0K5u5a3R`;
 
     function showShareToast(msg) {
       const toast = document.getElementById('shareToast');
@@ -267,34 +448,54 @@
       toast._timer = setTimeout(() => toast.classList.remove('show'), 2400);
     }
 
+    async function copyTextToClipboard(text, successMsg) {
+      try {
+        await navigator.clipboard.writeText(text);
+        showShareToast(successMsg);
+      } catch (err) {
+        const temp = document.createElement('textarea');
+        temp.value = text;
+        document.body.appendChild(temp);
+        temp.select();
+        document.execCommand('copy');
+        temp.remove();
+        showShareToast(successMsg);
+      }
+    }
+
     // 클라이언트 사이드 선명한 SVG QR코드 렌더링 (오프라인/빠른 로딩 지원)
     try {
       if (typeof qrcode === 'function') {
-        const qr = qrcode(0, 'M');
-        qr.addData(TARGET_URL);
-        qr.make();
-        const mount = document.getElementById('qrMount');
-        if (mount) {
-          mount.innerHTML = qr.createSvgTag({ cellSize: 6, margin: 2, scalable: true });
+        const qr1 = qrcode(0, 'M');
+        qr1.addData(TARGET_URL);
+        qr1.make();
+        const mount1 = document.getElementById('qrMount');
+        if (mount1) {
+          mount1.innerHTML = qr1.createSvgTag({ cellSize: 6, margin: 2, scalable: true });
+        }
+
+        const qr2 = qrcode(0, 'M');
+        qr2.addData(BAND_URL);
+        qr2.make();
+        const mount2 = document.getElementById('bandQrMount');
+        if (mount2) {
+          mount2.innerHTML = qr2.createSvgTag({ cellSize: 6, margin: 2, scalable: true });
         }
       }
     } catch (e) {
       console.warn('SVG QR fallback to image:', e);
     }
 
-    document.getElementById('btnCopyShareUrl')?.addEventListener('click', async () => {
-      try {
-        await navigator.clipboard.writeText(TARGET_URL);
-        showShareToast('📋 주소가 클립보드에 복사되었습니다!');
-      } catch (err) {
-        const temp = document.createElement('textarea');
-        temp.value = TARGET_URL;
-        document.body.appendChild(temp);
-        temp.select();
-        document.execCommand('copy');
-        temp.remove();
-        showShareToast('📋 주소가 클립보드에 복사되었습니다!');
-      }
+    document.getElementById('btnCopyShareUrl')?.addEventListener('click', () => {
+      copyTextToClipboard(TARGET_URL, '📋 포털 주소가 클립보드에 복사되었습니다!');
+    });
+
+    document.getElementById('btnCopyBandInvite')?.addEventListener('click', () => {
+      copyTextToClipboard(BAND_INVITE_TEXT, '📋 밴드 초대장 문구가 복사되었습니다!');
+    });
+
+    document.getElementById('btnCopyBandCode')?.addEventListener('click', () => {
+      copyTextToClipboard(BAND_CODE, '🔑 초대 코드(NRM-ABJ-B3)가 복사되었습니다!');
     });
 
     document.getElementById('btnNativeShare')?.addEventListener('click', async () => {

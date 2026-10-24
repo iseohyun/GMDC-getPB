@@ -3,7 +3,21 @@
 // 카테고리별 사이드바: 1.명부 / 2.훈련일지 / 3.대회기록 / 4.관리자 설정
 // ==========================================================================
 
-import { isAdmin, initAuth, getCurrentUser, loginWithGoogle, logoutUser, formatUserDisplayName } from "./auth.js?v=20260909_03";
+// 느린 네트워크 환경에서도 사이드바 및 SPA 라우터(대진표 iframe)가 0ms 만에 즉시 열리도록 auth 모듈은 백그라운드 지연 로드
+let authModRef = null;
+let authModPromise = null;
+function loadAuthModule() {
+  if (!authModPromise) {
+    authModPromise = import("./auth.js?v=20260909_03").then(mod => {
+      authModRef = mod;
+      return mod;
+    }).catch(err => {
+      authModPromise = null;
+      throw err;
+    });
+  }
+  return authModPromise;
+}
 
 const SIDEBAR_COLLAPSED_KEY = 'gmdc_sidebar_collapsed';
 
@@ -17,16 +31,16 @@ export const SPA_ROUTES = {
   '#/training-meeting':       { url: 'meeting_notes.html', title: '운영기록', catId: 'cat-training', itemId: 'meeting' },
   '#/competition-prospectus':    { url: 'prospectus.html', title: '모집요강', catId: 'cat-competition', itemId: 'prospectus' },
   '#/competition-coach-meeting': { url: 'coach-meeting.html?v=20261024_08', title: '감독자회의요강', catId: 'cat-competition', itemId: 'coach-meeting' },
-  '#/competition-live-student':  { url: 'live-schedule.html?div=student&v=20261024_17', title: '학생부 (24일)', catId: 'cat-competition', itemId: 'live-student' },
-  '#/competition-live-adult':    { url: 'live-schedule.html?div=adult&v=20261024_17', title: '성인부 (25일)', catId: 'cat-competition', itemId: 'live-adult' },
-  '#/competition-result':                  { url: 'competition-result.html?div=student&tab=entry&v=20261024_14', title: '학생부 접수 분석', catId: 'cat-competition', itemId: 'comp-res-student-entry', div: 'student', tab: 'entry' },
-  '#/competition-result-student-entry':    { url: 'competition-result.html?div=student&tab=entry&v=20261024_14', title: '학생부 접수 분석', catId: 'cat-competition', itemId: 'comp-res-student-entry', div: 'student', tab: 'entry' },
-  '#/competition-result-student-progress': { url: 'competition-result.html?div=student&tab=progress&v=20261024_14', title: '학생부 진행 요약', catId: 'cat-competition', itemId: 'comp-res-student-progress', div: 'student', tab: 'progress' },
-  '#/competition-result-student-result':   { url: 'competition-result.html?div=student&tab=result&v=20261024_14', title: '학생부 결과 분석', catId: 'cat-competition', itemId: 'comp-res-student-result', div: 'student', tab: 'result' },
-  '#/competition-result-adult-entry':      { url: 'competition-result.html?div=adult&tab=entry&v=20261024_14', title: '성인부 접수 분석', catId: 'cat-competition', itemId: 'comp-res-adult-entry', div: 'adult', tab: 'entry' },
-  '#/competition-result-adult-progress':   { url: 'competition-result.html?div=adult&tab=progress&v=20261024_14', title: '성인부 진행 요약', catId: 'cat-competition', itemId: 'comp-res-adult-progress', div: 'adult', tab: 'progress' },
-  '#/competition-result-adult-result':     { url: 'competition-result.html?div=adult&tab=result&v=20261024_14', title: '성인부 결과 분석', catId: 'cat-competition', itemId: 'comp-res-adult-result', div: 'adult', tab: 'result' },
-  '#/admin-share':               { url: 'share.html?v=20261024_08', title: '페이지 공유', catId: 'cat-admin', itemId: 'admin-share' },
+  '#/competition-live-student':  { url: 'live-schedule.html?div=student&v=20261024_19', title: '학생부 (24일)', catId: 'cat-competition', itemId: 'live-student' },
+  '#/competition-live-adult':    { url: 'live-schedule.html?div=adult&v=20261024_19', title: '성인부 (25일)', catId: 'cat-competition', itemId: 'live-adult' },
+  '#/competition-result':                  { url: 'competition-result.html?div=student&tab=entry&v=20261024_24', title: '학생부 접수 분석', catId: 'cat-competition', itemId: 'comp-res-student-entry', div: 'student', tab: 'entry' },
+  '#/competition-result-student-entry':    { url: 'competition-result.html?div=student&tab=entry&v=20261024_24', title: '학생부 접수 분석', catId: 'cat-competition', itemId: 'comp-res-student-entry', div: 'student', tab: 'entry' },
+  '#/competition-result-student-progress': { url: 'competition-result.html?div=student&tab=progress&v=20261024_24', title: '학생부 진행 요약', catId: 'cat-competition', itemId: 'comp-res-student-progress', div: 'student', tab: 'progress' },
+  '#/competition-result-student-result':   { url: 'competition-result.html?div=student&tab=result&v=20261024_24', title: '학생부 결과 분석', catId: 'cat-competition', itemId: 'comp-res-student-result', div: 'student', tab: 'result' },
+  '#/competition-result-adult-entry':      { url: 'competition-result.html?div=adult&tab=entry&v=20261024_24', title: '성인부 접수 분석', catId: 'cat-competition', itemId: 'comp-res-adult-entry', div: 'adult', tab: 'entry' },
+  '#/competition-result-adult-progress':   { url: 'competition-result.html?div=adult&tab=progress&v=20261024_24', title: '성인부 진행 요약', catId: 'cat-competition', itemId: 'comp-res-adult-progress', div: 'adult', tab: 'progress' },
+  '#/competition-result-adult-result':     { url: 'competition-result.html?div=adult&tab=result&v=20261024_24', title: '성인부 결과 분석', catId: 'cat-competition', itemId: 'comp-res-adult-result', div: 'adult', tab: 'result' },
+  '#/admin-share':               { url: 'share.html?v=20261024_21', title: '홍보 및 공유', catId: 'cat-admin', itemId: 'admin-share' },
   '#/admin-settings':            { url: 'admin.html', title: '관리자 설정', catId: 'cat-admin', itemId: 'admin-settings', adminOnly: true }
 };
 
@@ -35,6 +49,7 @@ const MENU_CATEGORIES = [
     id: "cat-roster",
     title: "1. 신청서",
     icon: "👥",
+    defaultCollapsed: true,
     items: [
       { id: "student-indiv", title: "학생 개인", hash: "#/roster-student-indiv", icon: "🧒" },
       { id: "student-relay", title: "학생 단체", hash: "#/roster-student-relay", icon: "🤝" },
@@ -46,6 +61,7 @@ const MENU_CATEGORIES = [
     id: "cat-training",
     title: "2. 훈련일지",
     icon: "📖",
+    defaultCollapsed: true,
     items: [
       { id: "attendance", title: "출석부",   hash: "#/training-attendance", icon: "📋" },
       { id: "calendar",   title: "일정표",   hash: "#/training-calendar",   icon: "📅" },
@@ -57,6 +73,7 @@ const MENU_CATEGORIES = [
     id: "cat-competition",
     title: "3. 대회기록",
     icon: "🏅",
+    defaultCollapsed: false,
     items: [
       { id: "prospectus",    title: "모집요강",      hash: "#/competition-prospectus",    icon: "📄" },
       { id: "coach-meeting", title: "감독자회의요강", hash: "#/competition-coach-meeting", icon: "📋" },
@@ -97,7 +114,7 @@ const MENU_CATEGORIES = [
     icon: "⚙️",
     adminOnly: false, // 기본으로 항상 노출됨
     items: [
-      { id: "admin-share",    title: "페이지 공유", hash: "#/admin-share",    icon: "📱" },
+      { id: "admin-share",    title: "홍보 및 공유", hash: "#/admin-share",    icon: "📱" },
       { id: "admin-settings", title: "관리자 설정", hash: "#/admin-settings", icon: "🔒", action: "adminCheck" }
     ]
   }
@@ -137,17 +154,22 @@ export function initSidebar() {
   // 4. 이벤트 바인딩
   bindSidebarEvents(sidebarEl, backdropEl);
 
-  // 5. Auth 상태 구독 및 하단 사용자 프로필 렌더링
-  initAuth({
-    onAuthChange: (authInfo) => {
-      const user = authInfo ? (authInfo.user || null) : null;
-      updateSidebarUserProfile(user);
-    }
-  });
-  updateSidebarUserProfile(getCurrentUser());
-
-  // 6. SPA 라우팅 초기화
+  // 5. SPA 라우팅 즉시 초기화 (네트워크 지연과 무관하게 화면 먼저 출력)
   initSpaRouter();
+
+  // 6. Auth 상태 비동기 구독 및 하단 사용자 프로필 렌더링
+  updateSidebarUserProfile(null);
+  loadAuthModule().then(mod => {
+    mod.initAuth({
+      onAuthChange: (authInfo) => {
+        const user = authInfo ? (authInfo.user || null) : null;
+        updateSidebarUserProfile(user);
+      }
+    });
+    updateSidebarUserProfile(mod.getCurrentUser());
+  }).catch(err => {
+    console.warn("[Sidebar] Auth module load delayed:", err);
+  });
 }
 
 /**
@@ -199,8 +221,9 @@ function buildSidebarHTML() {
       `;
     }).join('');
 
+    const collapsedClass = cat.defaultCollapsed ? ' collapsed' : '';
     return `
-      <div class="sidebar-category" id="${catId}">
+      <div class="sidebar-category${collapsedClass}" id="${catId}">
         <div class="sidebar-cat-header" data-cat-id="${catId}">
           <div class="cat-title-wrap">
             <span class="cat-icon">${cat.icon}</span>
@@ -261,8 +284,8 @@ export function updateSidebarUserProfile(user) {
   if (!card) return;
 
   if (user && user.email) {
-    const isUserAdmin = isAdmin();
-    const displayName = formatUserDisplayName(user) || user.email.split('@')[0];
+    const isUserAdmin = authModRef ? authModRef.isAdmin() : false;
+    const displayName = (authModRef ? authModRef.formatUserDisplayName(user) : null) || user.email.split('@')[0];
     const initial = displayName.charAt(0).toUpperCase();
     const avatarHtml = user.photoURL 
       ? `<img src="${user.photoURL}" class="user-avatar-img" alt="${displayName}">`
@@ -356,7 +379,8 @@ function bindSidebarEvents(sidebarEl, backdropEl) {
     if (loginBtn) {
       e.preventDefault();
       try {
-        const u = await loginWithGoogle();
+        const mod = await loadAuthModule();
+        const u = await mod.loginWithGoogle();
         if (u) {
           updateSidebarUserProfile(u);
           const spaFrame = document.getElementById('spaFrame');
@@ -373,10 +397,11 @@ function bindSidebarEvents(sidebarEl, backdropEl) {
     const logoutBtn = e.target.closest('#btnSidebarLogout');
     if (logoutBtn) {
       e.preventDefault();
-      const curr = getCurrentUser();
-      const displayName = curr ? (formatUserDisplayName(curr) || curr.email.split('@')[0]) : '사용자';
+      const mod = await loadAuthModule();
+      const curr = mod.getCurrentUser();
+      const displayName = curr ? (mod.formatUserDisplayName(curr) || curr.email.split('@')[0]) : '사용자';
       if (confirm(`'${displayName}' 님, 로그아웃하시겠습니까?`)) {
-        await logoutUser();
+        await mod.logoutUser();
         updateSidebarUserProfile(null);
         const spaFrame = document.getElementById('spaFrame');
         if (spaFrame && spaFrame.contentWindow) {
@@ -416,14 +441,15 @@ function bindSidebarEvents(sidebarEl, backdropEl) {
       }
 
       if (action === 'adminCheck') {
+        const mod = await loadAuthModule();
         // 관리자 설정 클릭 시: 로그인 검사
-        const user = getCurrentUser();
+        const user = mod.getCurrentUser();
         if (!user) {
           e.preventDefault();
           if (confirm("관리자 설정에 접근하려면 로그인이 필요합니다.\n지금 Google 계정으로 로그인하시겠습니까?")) {
             try {
-              const loggedUser = await loginWithGoogle();
-              if (isAdmin()) {
+              const loggedUser = await mod.loginWithGoogle();
+              if (mod.isAdmin()) {
                 navigateToRoute('#/admin-settings');
               } else {
                 alert(`로그인된 계정(${loggedUser.email})은 관리자 권한이 없습니다.`);
@@ -436,7 +462,7 @@ function bindSidebarEvents(sidebarEl, backdropEl) {
           return;
         }
 
-        if (!isAdmin()) {
+        if (!mod.isAdmin()) {
           e.preventDefault();
           alert(`현재 로그인된 계정(${user.email})은 관리자 권한이 없습니다.\n관리자 이메일로 다시 로그인해 주세요.`);
           closeMobileSidebar();
