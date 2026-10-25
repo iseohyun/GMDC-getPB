@@ -18,21 +18,23 @@
         "lane": 2,
         "name": "이우진",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'25\"61",
         "note": null,
         "original_match_no": "1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "정재용",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'33\"86",
         "note": null,
         "original_match_no": "2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       }
     ],
     "division": "성인부",
@@ -61,31 +63,34 @@
         "lane": 2,
         "name": "곽성훈",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'24\"27",
         "note": null,
         "original_match_no": "3-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 3,
         "name": "강태운",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "3-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "한상윤",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'30\"58",
         "note": null,
         "original_match_no": "3-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       }
     ],
     "division": "성인부",
@@ -116,41 +121,45 @@
         "lane": 1,
         "name": "박민정",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'27\"74",
         "note": null,
         "original_match_no": "3-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 2,
         "name": "김형준",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'32\"71",
         "note": null,
         "original_match_no": "3-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 3,
         "name": "조민우",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'28\"06",
         "note": null,
         "original_match_no": "3-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 4,
         "name": "조강영",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'27\"22",
         "note": null,
         "original_match_no": "4-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       }
     ],
     "division": "성인부",
@@ -179,41 +188,45 @@
         "lane": 1,
         "name": "이재곤",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'26\"90",
         "note": null,
         "original_match_no": "4-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 2,
         "name": "김성준",
         "team": "TYU",
-        "rank": null,
-        "record": null,
-        "note": null,
+        "rank": "실격",
+        "record": "88'88\"88",
+        "note": "한손터치",
         "original_match_no": "4-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
-        "name": "허   성",
+        "name": "허성",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "4-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "이재현",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'27\"29",
         "note": null,
         "original_match_no": "4-2",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 3
       }
     ],
     "division": "성인부",
@@ -223,7 +236,7 @@
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 5,
@@ -242,41 +255,45 @@
         "lane": 1,
         "name": "김기용",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'28\"80",
         "note": null,
         "original_match_no": "4-3",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 2
       },
       {
         "lane": 2,
         "name": "민병철",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
-        "note": null,
+        "rank": "실격",
+        "record": "88'88\"88",
+        "note": "15m넘음",
         "original_match_no": "4-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "배장효",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "4-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "심지수",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'30\"73",
         "note": null,
         "original_match_no": "4-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -286,7 +303,7 @@
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 6,
@@ -305,41 +322,45 @@
         "lane": 1,
         "name": "윤주권",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'34\"18",
         "note": null,
         "original_match_no": "4-4",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "안태균",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'26\"39",
         "note": null,
         "original_match_no": "4-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 3,
         "name": "고석보",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
-        "note": null,
+        "rank": "실격",
+        "record": "88'88\"88",
+        "note": "한손터치",
         "original_match_no": "4-4",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "최민석",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'30\"32",
         "note": null,
         "original_match_no": "4-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       }
     ],
     "division": "성인부",
@@ -368,41 +389,45 @@
         "lane": 1,
         "name": "박재홍",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'29\"16",
         "note": null,
         "original_match_no": "5-1",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 2
       },
       {
         "lane": 2,
         "name": "예성민",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'26\"22",
         "note": null,
         "original_match_no": "5-1",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 3,
         "name": "정의길",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "5-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "윤득환",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'36\"26",
         "note": null,
         "original_match_no": "5-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -431,41 +456,45 @@
         "lane": 1,
         "name": "서충근",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "5-2",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "한성주",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'28\"14",
         "note": null,
         "original_match_no": "5-2",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 3,
         "name": "유보승",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'28\"36",
         "note": null,
         "original_match_no": "5-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 4,
         "name": "박진홍",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'35\"58",
         "note": null,
         "original_match_no": "5-2",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -494,41 +523,45 @@
         "lane": 1,
         "name": "장상준",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'27\"82",
         "note": null,
         "original_match_no": "5-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 2,
         "name": "서정찬",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'30\"58",
         "note": null,
         "original_match_no": "5-3",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 1
       },
       {
         "lane": 3,
         "name": "이문희",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "5-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "성지경",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'33\"49",
         "note": null,
         "original_match_no": "5-3",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -538,7 +571,7 @@
     "group": "5그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 10,
@@ -557,21 +590,23 @@
         "lane": 3,
         "name": "성환용",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'35\"82",
         "note": null,
         "original_match_no": "6",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "진양호",
         "team": "팀shi",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'37\"64",
         "note": null,
         "original_match_no": "6",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       }
     ],
     "division": "성인부",
@@ -581,7 +616,7 @@
     "group": "6그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 11,
@@ -602,21 +637,23 @@
         "lane": 1,
         "name": "김주희",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'31\"61",
         "note": null,
         "original_match_no": "7",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "최주희",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'40\"37",
         "note": null,
         "original_match_no": "8-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -645,31 +682,34 @@
         "lane": 2,
         "name": "김지해",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'31\"93",
         "note": null,
         "original_match_no": "8-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 3,
         "name": "신효정",
         "team": "Team JOS",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'31\"63",
         "note": null,
         "original_match_no": "8-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 4,
         "name": "김장미",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'31\"93",
         "note": null,
         "original_match_no": "8-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       }
     ],
     "division": "성인부",
@@ -698,41 +738,45 @@
         "lane": 1,
         "name": "황다은",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'27\"82",
         "note": null,
         "original_match_no": "8-3",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 2,
         "name": "한지민",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'34\"25",
         "note": null,
         "original_match_no": "8-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "최예슬",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'30\"50",
         "note": null,
         "original_match_no": "8-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 4,
         "name": "정다운",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'30\"71",
         "note": null,
         "original_match_no": "8-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       }
     ],
     "division": "성인부",
@@ -742,7 +786,7 @@
     "group": "3그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 14,
@@ -761,41 +805,45 @@
         "lane": 1,
         "name": "서윤정",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "15",
+        "record": "00'37\"94",
         "note": null,
         "original_match_no": "9-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김선영",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "9-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "이수은",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'33\"78",
         "note": null,
         "original_match_no": "9-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "이미영",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "12",
+        "record": "00'35\"13",
         "note": null,
         "original_match_no": "9-1",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -805,7 +853,7 @@
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 15,
@@ -824,41 +872,45 @@
         "lane": 1,
         "name": "한솜이",
         "team": "팀shi",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'32\"81",
         "note": null,
         "original_match_no": "9-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 2,
         "name": "주민정",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'27\"99",
         "note": null,
         "original_match_no": "9-2",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 3,
         "name": "조유진",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "14",
+        "record": "00'37\"24",
         "note": null,
         "original_match_no": "9-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "한지혜",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'34\"18",
         "note": null,
         "original_match_no": "9-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -868,7 +920,7 @@
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 16,
@@ -887,41 +939,45 @@
         "lane": 1,
         "name": "유경화",
         "team": "Team JOS",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "9-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김순영",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'32\"62",
         "note": null,
         "original_match_no": "9-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 3,
         "name": "차진영",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "13",
+        "record": "00'37\"16",
         "note": null,
         "original_match_no": "9-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "엄지선",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "9-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -950,41 +1006,45 @@
         "lane": 1,
         "name": "한윤희",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "9-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "이주영",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'32\"90",
         "note": null,
         "original_match_no": "9-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "김현순",
         "team": "Team JOS",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'32\"16",
         "note": null,
         "original_match_no": "9-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 4,
         "name": "황은경",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'32\"69",
         "note": null,
         "original_match_no": "9-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       }
     ],
     "division": "성인부",
@@ -1013,41 +1073,45 @@
         "lane": 1,
         "name": "조경진",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "9-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "손혜정",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "11",
+        "record": "00'34\"78",
         "note": null,
         "original_match_no": "9-5",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "정희경",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'31\"94",
         "note": null,
         "original_match_no": "9-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 4,
         "name": "최효선",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "00'34\"61",
         "note": null,
         "original_match_no": "9-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -1057,7 +1121,7 @@
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 19,
@@ -1076,41 +1140,45 @@
         "lane": 1,
         "name": "황세린",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'28\"45",
         "note": null,
         "original_match_no": "10-1",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 2,
         "name": "윤현희",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'35\"75",
         "note": null,
         "original_match_no": "10-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 3,
         "name": "김부연",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "10-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "김진옥",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'35\"61",
         "note": null,
         "original_match_no": "10-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       }
     ],
     "division": "성인부",
@@ -1120,7 +1188,7 @@
     "group": "5그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 20,
@@ -1139,41 +1207,45 @@
         "lane": 1,
         "name": "최미영",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'34\"37",
         "note": null,
         "original_match_no": "10-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 2,
         "name": "허수진",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'35\"16",
         "note": null,
         "original_match_no": "10-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 3,
         "name": "정명혜",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'34\"96",
         "note": null,
         "original_match_no": "10-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 4,
         "name": "박명혜",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'37\"65",
         "note": null,
         "original_match_no": "10-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -1202,21 +1274,23 @@
         "lane": 3,
         "name": "조성찬",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'35\"42",
         "note": null,
         "original_match_no": "11",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 5
       },
       {
         "lane": 4,
         "name": "강민성",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'34\"47",
         "note": null,
         "original_match_no": "11",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       }
     ],
     "division": "성인부",
@@ -1226,7 +1300,7 @@
     "group": "1그룹",
     "is_relay": false,
     "base_duration_sec": 80,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 22,
@@ -1245,31 +1319,34 @@
         "lane": 2,
         "name": "조재광",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'39\"91",
         "note": null,
         "original_match_no": "12",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 3,
         "name": "김준우",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'36\"53",
         "note": null,
         "original_match_no": "12",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "이정환",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'42\"45",
         "note": null,
         "original_match_no": "12",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 4
       }
     ],
     "division": "성인부",
@@ -1279,7 +1356,7 @@
     "group": "2그룹",
     "is_relay": false,
     "base_duration_sec": 80,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 23,
@@ -1298,31 +1375,34 @@
         "lane": 2,
         "name": "박재희",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'37\"99",
         "note": null,
         "original_match_no": "13",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 3,
         "name": "김형준",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'35\"90",
         "note": null,
         "original_match_no": "13",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "양철민",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'38\"40",
         "note": null,
         "original_match_no": "13",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       }
     ],
     "division": "성인부",
@@ -1332,7 +1412,7 @@
     "group": "3그룹",
     "is_relay": false,
     "base_duration_sec": 80,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 24,
@@ -1351,41 +1431,45 @@
         "lane": 1,
         "name": "정서현",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'42\"96",
         "note": null,
         "original_match_no": "14-1",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 2
       },
       {
         "lane": 2,
         "name": "윤상열",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'38\"37",
         "note": null,
         "original_match_no": "14-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 3,
         "name": "김재환",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'29\"37",
         "note": null,
         "original_match_no": "14-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "제선호",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'50\"25",
         "note": null,
         "original_match_no": "14-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       }
     ],
     "division": "성인부",
@@ -1414,31 +1498,34 @@
         "lane": 2,
         "name": "한지훈",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'39\"79",
         "note": null,
         "original_match_no": "14-2",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 3,
         "name": "파브지오롤로",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "14-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "이수영",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'40\"74",
         "note": null,
         "original_match_no": "14-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       }
     ],
     "division": "성인부",
@@ -1448,7 +1535,7 @@
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 80,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 26,
@@ -1469,41 +1556,45 @@
         "lane": 1,
         "name": "김남곤",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'44\"35",
         "note": null,
         "original_match_no": "15",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 2,
         "name": "배종필",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'43\"28",
         "note": null,
         "original_match_no": "15",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 3,
         "name": "노용진",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "15",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "박봉권",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "01'11\"54",
         "note": null,
         "original_match_no": "16",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 7
       }
     ],
     "division": "성인부",
@@ -1532,21 +1623,23 @@
         "lane": 2,
         "name": "정혜선",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'43\"51",
         "note": null,
         "original_match_no": "17",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 3,
         "name": "윤규미",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'44\"85",
         "note": null,
         "original_match_no": "17",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       }
     ],
     "division": "성인부",
@@ -1575,41 +1668,45 @@
         "lane": 1,
         "name": "박혜진",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'56\"57",
         "note": null,
         "original_match_no": "18-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 2,
         "name": "노안나",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "18-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "한은지",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'43\"03",
         "note": null,
         "original_match_no": "18-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 4,
         "name": "박승아",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'59\"67",
         "note": null,
         "original_match_no": "18-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       }
     ],
     "division": "성인부",
@@ -1638,31 +1735,34 @@
         "lane": 2,
         "name": "황다은",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'39\"62",
         "note": null,
         "original_match_no": "18-2",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 3,
         "name": "박양재",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'43\"14",
         "note": null,
         "original_match_no": "18-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 4,
         "name": "박신애",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'55\"34",
         "note": null,
         "original_match_no": "18-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       }
     ],
     "division": "성인부",
@@ -1672,7 +1772,7 @@
     "group": "3그룹",
     "is_relay": false,
     "base_duration_sec": 80,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 30,
@@ -1691,41 +1791,45 @@
         "lane": 1,
         "name": "조화정",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'56\"28",
         "note": null,
         "original_match_no": "19-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "장현숙",
         "team": "Team JOS",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'47\"50",
         "note": null,
         "original_match_no": "19-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 3,
         "name": "박다유",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'42\"62",
         "note": null,
         "original_match_no": "19-1",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "심민경",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'47\"14",
         "note": null,
         "original_match_no": "19-1",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 5
       }
     ],
     "division": "성인부",
@@ -1754,31 +1858,34 @@
         "lane": 2,
         "name": "박선혜",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'52\"07",
         "note": null,
         "original_match_no": "19-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 3,
         "name": "이현경",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "19-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "홍효주",
         "team": "TYU",
-        "rank": null,
-        "record": null,
-        "note": null,
+        "rank": "실격",
+        "record": "88'88\"88",
+        "note": "잠영양발 배영2회",
         "original_match_no": "19-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -1807,41 +1914,45 @@
         "lane": 1,
         "name": "윤나영",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'52\"75",
         "note": null,
         "original_match_no": "19-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 2,
         "name": "조유진",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "01'01\"23",
         "note": null,
         "original_match_no": "19-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "정희경",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'47\"79",
         "note": null,
         "original_match_no": "19-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 4,
         "name": "이은희",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'56\"70",
         "note": null,
         "original_match_no": "19-3",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -1870,41 +1981,45 @@
         "lane": 1,
         "name": "강영숙",
         "team": "팀shi",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "01'04\"00",
         "note": null,
         "original_match_no": "20-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김희정",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'53\"65",
         "note": null,
         "original_match_no": "20-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 3,
         "name": "최미영",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'55\"73",
         "note": null,
         "original_match_no": "20-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 4,
         "name": "허수진",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'59\"47",
         "note": null,
         "original_match_no": "20-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -1933,41 +2048,45 @@
         "lane": 1,
         "name": "김애란",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'50\"45",
         "note": null,
         "original_match_no": "20-2",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 4
       },
       {
         "lane": 2,
         "name": "정근혜",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'57\"15",
         "note": null,
         "original_match_no": "20-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "김희숙",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'49\"67",
         "note": null,
         "original_match_no": "20-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 4,
         "name": "이경순",
         "team": "개인",
-        "rank": null,
-        "record": null,
-        "note": null,
+        "rank": "실격",
+        "record": "88'88\"88",
+        "note": "터치시등보임",
         "original_match_no": "20-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -1996,31 +2115,34 @@
         "lane": 2,
         "name": "김미진",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'51\"00",
         "note": null,
         "original_match_no": "20-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 3,
         "name": "김혜진",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'46\"94",
         "note": null,
         "original_match_no": "20-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "박현애",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "01'07\"42",
         "note": null,
         "original_match_no": "20-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -2047,43 +2169,47 @@
     "lanes": [
       {
         "lane": 1,
-        "name": "",
+        "name": "박슬우, 안상준, 김기용, 서정찬",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "02'10\"67",
         "note": null,
         "original_match_no": "21-1",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 4
       },
       {
         "lane": 2,
-        "name": "",
+        "name": "이경후, 이현우, 민병철, 김민재",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "01'57\"84",
         "note": null,
         "original_match_no": "21-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 10
       },
       {
         "lane": 3,
-        "name": "",
+        "name": "제선호, 이수영, 안태균, 장상준",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "02'07\"98",
         "note": null,
         "original_match_no": "21-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 6
       },
       {
         "lane": 4,
-        "name": "",
+        "name": "엄영길, 전용균, 엄정웅, 박우식",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "01'56\"67",
         "note": null,
         "original_match_no": "21-1",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 14
       }
     ],
     "division": "성인부",
@@ -2110,33 +2236,36 @@
     "lanes": [
       {
         "lane": 2,
-        "name": "",
+        "name": "김덕규, 송창현, 서종혜, 윤상열",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "02'03\"15",
         "note": null,
         "original_match_no": "21-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 8
       },
       {
         "lane": 3,
-        "name": "",
+        "name": "위지승, 임건형, 이원주, 윤득환",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "02'32\"98",
         "note": null,
         "original_match_no": "21-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 4,
-        "name": "",
+        "name": "윤주권, 정서현, 정성민, 권순용",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "03'09\"42",
         "note": null,
         "original_match_no": "21-2",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -2163,43 +2292,47 @@
     "lanes": [
       {
         "lane": 1,
-        "name": "",
+        "name": "장경화, 최예슬, 하미연, 김순영",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "02'39\"39",
         "note": null,
         "original_match_no": "22-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 6
       },
       {
         "lane": 2,
-        "name": "",
+        "name": "이은희, 김애란, 김상희, 심민경",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "22-1",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 3,
-        "name": "",
+        "name": "황세린, 조현정, 조신애, 주민정",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "02'23\"16",
         "note": null,
         "original_match_no": "22-1",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 14
       },
       {
         "lane": 4,
-        "name": "",
+        "name": "김혜진, 이성미, 김나람, 이해린",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "02'41\"47",
         "note": null,
         "original_match_no": "22-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       }
     ],
     "division": "성인부",
@@ -2226,33 +2359,36 @@
     "lanes": [
       {
         "lane": 2,
-        "name": "",
+        "name": "정남정, 정근혜, 박현애, 김은주",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "03'20\"69",
         "note": null,
         "original_match_no": "22-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 3,
-        "name": "",
+        "name": "이영경, 손혜정, 이미영, 송원자",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "02'38\"01",
         "note": null,
         "original_match_no": "22-2",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 8
       },
       {
         "lane": 4,
-        "name": "",
+        "name": "김이진, 홍효주, 정다운, 한은지",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "02'26\"60",
         "note": null,
         "original_match_no": "22-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 10
       }
     ],
     "division": "성인부",
@@ -2262,7 +2398,7 @@
     "group": "일반",
     "is_relay": true,
     "base_duration_sec": 180,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 40,
@@ -2281,41 +2417,45 @@
         "lane": 1,
         "name": "이지훈",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'31\"48",
         "note": null,
         "original_match_no": "23",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 5
       },
       {
         "lane": 2,
         "name": "김한주",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'32\"68",
         "note": null,
         "original_match_no": "23",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 3,
         "name": "박슬우",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'27\"94",
         "note": null,
         "original_match_no": "23",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "강민성",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'33\"68",
         "note": null,
         "original_match_no": "23",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       }
     ],
     "division": "성인부",
@@ -2325,7 +2465,7 @@
     "group": "1그룹",
     "is_relay": false,
     "base_duration_sec": 75,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 41,
@@ -2344,41 +2484,45 @@
         "lane": 1,
         "name": "박정현",
         "team": "팀shi",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "24-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김경모",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'32\"60",
         "note": null,
         "original_match_no": "24-1",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 3,
         "name": "위지승",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'33\"67",
         "note": null,
         "original_match_no": "24-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "최윤호",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'29\"69",
         "note": null,
         "original_match_no": "24-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       }
     ],
     "division": "성인부",
@@ -2388,7 +2532,7 @@
     "group": "2그룹",
     "is_relay": false,
     "base_duration_sec": 75,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 42,
@@ -2407,31 +2551,34 @@
         "lane": 1,
         "name": "김재훈",
         "team": "Team JOS",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'31\"76",
         "note": null,
         "original_match_no": "24-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 2,
         "name": "정재용",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'33\"61",
         "note": null,
         "original_match_no": "24-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 3,
         "name": "박대욱",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "24-2",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -2441,7 +2588,7 @@
     "group": "2그룹",
     "is_relay": false,
     "base_duration_sec": 75,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 43,
@@ -2460,31 +2607,34 @@
         "lane": 2,
         "name": "박예한",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'39\"22",
         "note": null,
         "original_match_no": "24-3",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "정광원",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'31\"84",
         "note": null,
         "original_match_no": "24-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 4,
         "name": "황규태",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'28\"29",
         "note": null,
         "original_match_no": "24-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       }
     ],
     "division": "성인부",
@@ -2494,7 +2644,7 @@
     "group": "2그룹",
     "is_relay": false,
     "base_duration_sec": 75,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 44,
@@ -2513,41 +2663,45 @@
         "lane": 1,
         "name": "강태운",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "25-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김우람",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'37\"33",
         "note": null,
         "original_match_no": "25-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 3,
         "name": "이태헌",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'31\"71",
         "note": null,
         "original_match_no": "25-1",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 4,
         "name": "이소열",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "25-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -2557,7 +2711,7 @@
     "group": "3그룹",
     "is_relay": false,
     "base_duration_sec": 75,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 45,
@@ -2576,31 +2730,34 @@
         "lane": 2,
         "name": "정민수",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'36\"32",
         "note": null,
         "original_match_no": "25-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 3,
         "name": "박민정",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'39\"31",
         "note": null,
         "original_match_no": "25-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 4,
         "name": "안재홍",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "25-2",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -2610,7 +2767,7 @@
     "group": "3그룹",
     "is_relay": false,
     "base_duration_sec": 75,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 46,
@@ -2629,41 +2786,45 @@
         "lane": 1,
         "name": "이태현",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'41\"84",
         "note": null,
         "original_match_no": "25-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
-        "name": "강준현",
+        "name": "조효진",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'46\"65",
         "note": null,
         "original_match_no": "25-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "김덕규",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'35\"67",
         "note": null,
         "original_match_no": "25-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 4,
         "name": "이경후",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'26\"83",
         "note": null,
         "original_match_no": "25-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       }
     ],
     "division": "성인부",
@@ -2692,41 +2853,45 @@
         "lane": 1,
         "name": "김병주",
         "team": "Team JOS",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'39\"56",
         "note": null,
         "original_match_no": "26-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 2,
         "name": "윤상열",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "26-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "손규식",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'37\"39",
         "note": null,
         "original_match_no": "26-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 4,
         "name": "김민재",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'41\"48",
         "note": null,
         "original_match_no": "26-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       }
     ],
     "division": "성인부",
@@ -2755,41 +2920,45 @@
         "lane": 1,
         "name": "엄정웅",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'31\"17",
         "note": null,
         "original_match_no": "26-2",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 2,
         "name": "송창현",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "26-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "안상준",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'35\"72",
         "note": null,
         "original_match_no": "26-2",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 4
       },
       {
         "lane": 4,
         "name": "임건형",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'45\"93",
         "note": null,
         "original_match_no": "26-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -2818,31 +2987,34 @@
         "lane": 2,
         "name": "이준욱",
         "team": "Team JOS",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'34\"06",
         "note": null,
         "original_match_no": "26-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 3,
         "name": "김양훈",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "26-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "정민철",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "26-3",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -2852,7 +3024,7 @@
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 75,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 50,
@@ -2871,31 +3043,34 @@
         "lane": 2,
         "name": "전용균",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'30\"17",
         "note": null,
         "original_match_no": "27-1",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 3,
         "name": "조영재",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "27-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "엄영길",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'37\"17",
         "note": null,
         "original_match_no": "27-1",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 5
       }
     ],
     "division": "성인부",
@@ -2905,7 +3080,7 @@
     "group": "5그룹",
     "is_relay": false,
     "base_duration_sec": 75,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 51,
@@ -2926,31 +3101,34 @@
         "lane": 1,
         "name": "박찬헌",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "27-2",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "조충남",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'39\"62",
         "note": null,
         "original_match_no": "27-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 4,
         "name": "김득수",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'41\"17",
         "note": null,
         "original_match_no": "28",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       }
     ],
     "division": "성인부",
@@ -2960,7 +3138,7 @@
     "group": "5그룹",
     "is_relay": false,
     "base_duration_sec": 75,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 52,
@@ -2981,31 +3159,34 @@
         "lane": 1,
         "name": "이지호",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'45\"38",
         "note": null,
         "original_match_no": "29",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 7
       },
       {
         "lane": 3,
         "name": "송주미",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'36\"95",
         "note": null,
         "original_match_no": "30-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "추성비",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'41\"86",
         "note": null,
         "original_match_no": "30-1",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 3
       }
     ],
     "division": "성인부",
@@ -3015,7 +3196,7 @@
     "group": "1그룹",
     "is_relay": false,
     "base_duration_sec": 75,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 53,
@@ -3034,41 +3215,45 @@
         "lane": 1,
         "name": "김지민",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'38\"17",
         "note": null,
         "original_match_no": "30-2",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 2,
         "name": "이해린",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'46\"50",
         "note": null,
         "original_match_no": "30-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 3,
         "name": "이영경",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'37\"58",
         "note": null,
         "original_match_no": "30-2",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 5
       },
       {
         "lane": 4,
         "name": "김민주",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "30-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -3097,41 +3282,45 @@
         "lane": 1,
         "name": "장경화",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "31-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "한은지",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'41\"48",
         "note": null,
         "original_match_no": "31-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 3,
         "name": "이하선",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'40\"41",
         "note": null,
         "original_match_no": "31-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "최이슬",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'50\"36",
         "note": null,
         "original_match_no": "31-1",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 2
       }
     ],
     "division": "성인부",
@@ -3141,7 +3330,7 @@
     "group": "3그룹",
     "is_relay": false,
     "base_duration_sec": 75,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 55,
@@ -3160,31 +3349,34 @@
         "lane": 1,
         "name": "박신애",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "01'02\"28",
         "note": null,
         "original_match_no": "31-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 2,
         "name": "김나람",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'47\"92",
         "note": null,
         "original_match_no": "31-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 3,
         "name": "김슬기",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'44\"08",
         "note": null,
         "original_match_no": "31-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       }
     ],
     "division": "성인부",
@@ -3213,31 +3405,34 @@
         "lane": 2,
         "name": "정영희",
         "team": "개인",
-        "rank": null,
-        "record": null,
-        "note": null,
+        "rank": "실격",
+        "record": "88'88\"88",
+        "note": "중도포기",
         "original_match_no": "32-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "김보람",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "32-1",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "하미연",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'40\"27",
         "note": null,
         "original_match_no": "32-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       }
     ],
     "division": "성인부",
@@ -3247,7 +3442,7 @@
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 75,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 57,
@@ -3266,31 +3461,34 @@
         "lane": 2,
         "name": "조신애",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'38\"12",
         "note": null,
         "original_match_no": "32-2",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 3,
         "name": "한윤희",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "32-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "조현정",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'36\"25",
         "note": null,
         "original_match_no": "32-2",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 7
       }
     ],
     "division": "성인부",
@@ -3300,7 +3498,7 @@
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 75,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 58,
@@ -3319,31 +3517,34 @@
         "lane": 1,
         "name": "정명혜",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'53\"55",
         "note": null,
         "original_match_no": "33-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 2,
         "name": "황세린",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'38\"61",
         "note": null,
         "original_match_no": "33-1",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 3,
         "name": "김혜진",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'48\"92",
         "note": null,
         "original_match_no": "33-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       }
     ],
     "division": "성인부",
@@ -3353,7 +3554,7 @@
     "group": "5그룹",
     "is_relay": false,
     "base_duration_sec": 75,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 59,
@@ -3372,21 +3573,23 @@
         "lane": 2,
         "name": "오수양",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'56\"17",
         "note": null,
         "original_match_no": "33-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 3,
         "name": "박현정",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'51\"75",
         "note": null,
         "original_match_no": "33-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       }
     ],
     "division": "성인부",
@@ -3417,31 +3620,34 @@
         "lane": 1,
         "name": "이지훈",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'25\"29",
         "note": null,
         "original_match_no": "34",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 5
       },
       {
         "lane": 2,
         "name": "이우진",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'24\"40",
         "note": null,
         "original_match_no": "34",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "김문정",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'26\"56",
         "note": null,
         "original_match_no": "35",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       }
     ],
     "division": "성인부",
@@ -3451,7 +3657,7 @@
     "group": "1그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 61,
@@ -3470,31 +3676,34 @@
         "lane": 1,
         "name": "정성문",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'30\"80",
         "note": null,
         "original_match_no": "36-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 2,
         "name": "김건",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "36-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "김익희",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "36-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -3523,31 +3732,34 @@
         "lane": 1,
         "name": "박재희",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'23\"66",
         "note": null,
         "original_match_no": "36-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 2,
         "name": "김형준",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'26\"80",
         "note": null,
         "original_match_no": "36-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 3,
         "name": "조민우",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'28\"80",
         "note": null,
         "original_match_no": "36-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       }
     ],
     "division": "성인부",
@@ -3576,41 +3788,45 @@
         "lane": 1,
         "name": "조강영",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'25\"86",
         "note": null,
         "original_match_no": "37-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 2,
         "name": "김기용",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'26\"69",
         "note": null,
         "original_match_no": "37-1",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 1
       },
       {
         "lane": 3,
         "name": "안태균",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'24\"96",
         "note": null,
         "original_match_no": "37-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 4,
         "name": "배장효",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "37-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -3620,7 +3836,7 @@
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 64,
@@ -3639,41 +3855,45 @@
         "lane": 1,
         "name": "김성준",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'28\"85",
         "note": null,
         "original_match_no": "37-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "한주한",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'29\"26",
         "note": null,
         "original_match_no": "37-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "이재현",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'25\"83",
         "note": null,
         "original_match_no": "37-2",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 4,
         "name": "이원주",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "11",
+        "record": "00'29\"55",
         "note": null,
         "original_match_no": "37-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -3683,7 +3903,7 @@
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 65,
@@ -3702,51 +3922,45 @@
         "lane": 1,
         "name": "김세종",
         "team": "팀shi",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'27\"59",
         "note": null,
         "original_match_no": "37-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "손철수",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "13",
+        "record": "00'30\"24",
         "note": null,
         "original_match_no": "37-3",
-        "is_our_team": false
-      },
-      {
-        "lane": 3,
-        "name": "성 명",
-        "team": "소   속",
-        "rank": "순위",
-        "record": "기     록",
-        "note": "비  고",
-        "original_match_no": "37-3",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "이도형",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "00'29\"29",
         "note": null,
         "original_match_no": "37-3",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "심지수",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "12",
+        "record": "00'29\"61",
         "note": null,
         "original_match_no": "37-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -3775,31 +3989,34 @@
         "lane": 2,
         "name": "변정현",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "37-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "한지훈",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'24\"27",
         "note": null,
         "original_match_no": "37-4",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 4,
-        "name": "허   성",
+        "name": "허성",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "37-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -3809,7 +4026,7 @@
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 67,
@@ -3828,21 +4045,23 @@
         "lane": 2,
         "name": "윤주권",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "37-5",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "이재곤",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'25\"57",
         "note": null,
         "original_match_no": "37-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       }
     ],
     "division": "성인부",
@@ -3871,41 +4090,45 @@
         "lane": 1,
         "name": "박재홍",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'27\"88",
         "note": null,
         "original_match_no": "38-1",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 1
       },
       {
         "lane": 2,
         "name": "김상오",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "38-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "배종필",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'25\"81",
         "note": null,
         "original_match_no": "38-1",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 4,
         "name": "박영수",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'26\"13",
         "note": null,
         "original_match_no": "38-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       }
     ],
     "division": "성인부",
@@ -3934,41 +4157,45 @@
         "lane": 1,
         "name": "문준호",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'27\"23",
         "note": null,
         "original_match_no": "38-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 2,
         "name": "정의길",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "38-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "예성민",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'24\"77",
         "note": null,
         "original_match_no": "38-2",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "이경열",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'29\"45",
         "note": null,
         "original_match_no": "38-2",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -3997,41 +4224,45 @@
         "lane": 1,
         "name": "장상준",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'27\"79",
         "note": null,
         "original_match_no": "38-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 2,
         "name": "서충근",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "38-3",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "이문희",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "38-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "박진홍",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'31\"35",
         "note": null,
         "original_match_no": "38-3",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -4041,7 +4272,7 @@
     "group": "5그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 71,
@@ -4062,41 +4293,45 @@
         "lane": 1,
         "name": "성지경",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'30\"56",
         "note": null,
         "original_match_no": "38-4",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "진양호",
         "team": "팀shi",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'31\"04",
         "note": null,
         "original_match_no": "39",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 3,
         "name": "성환용",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'32\"50",
         "note": null,
         "original_match_no": "39",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 4
       },
       {
         "lane": 4,
         "name": "최호균",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'31\"84",
         "note": null,
         "original_match_no": "39",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       }
     ],
     "division": "성인부",
@@ -4106,7 +4341,7 @@
     "group": "5그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 72,
@@ -4127,31 +4362,34 @@
         "lane": 1,
         "name": "이지호",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'30\"41",
         "note": null,
         "original_match_no": "40",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 7
       },
       {
         "lane": 3,
         "name": "신효정",
         "team": "Team JOS",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'29\"38",
         "note": null,
         "original_match_no": "41-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 4,
         "name": "김지해",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'28\"37",
         "note": null,
         "original_match_no": "41-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       }
     ],
     "division": "성인부",
@@ -4161,7 +4399,7 @@
     "group": "1그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 73,
@@ -4180,41 +4418,45 @@
         "lane": 1,
         "name": "김나라",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'35\"38",
         "note": null,
         "original_match_no": "41-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "고민지",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'27\"78",
         "note": null,
         "original_match_no": "41-2",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 3,
         "name": "최예슬",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'28\"89",
         "note": null,
         "original_match_no": "41-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 4,
         "name": "정다운",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'28\"73",
         "note": null,
         "original_match_no": "41-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       }
     ],
     "division": "성인부",
@@ -4224,7 +4466,7 @@
     "group": "3그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 74,
@@ -4243,31 +4485,34 @@
         "lane": 2,
         "name": "김서연",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'32\"84",
         "note": null,
         "original_match_no": "41-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "공채영",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'34\"43",
         "note": null,
         "original_match_no": "41-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "한지민",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'31\"77",
         "note": null,
         "original_match_no": "41-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       }
     ],
     "division": "성인부",
@@ -4296,41 +4541,45 @@
         "lane": 1,
         "name": "김순영",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "13",
+        "record": "00'32\"06",
         "note": null,
         "original_match_no": "42-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "박지숙",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'29\"83",
         "note": null,
         "original_match_no": "42-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 3,
         "name": "조세비",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'27\"58",
         "note": null,
         "original_match_no": "42-1",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "여수연",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "18",
+        "record": "00'36\"36",
         "note": null,
         "original_match_no": "42-1",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -4359,41 +4608,45 @@
         "lane": 1,
         "name": "유혜진",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "16",
+        "record": "00'33\"91",
         "note": null,
         "original_match_no": "42-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "한솜이",
         "team": "팀shi",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'28\"53",
         "note": null,
         "original_match_no": "42-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 3,
         "name": "주민정",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'27\"96",
         "note": null,
         "original_match_no": "42-2",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 4,
         "name": "서윤정",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "12",
+        "record": "00'31\"80",
         "note": null,
         "original_match_no": "42-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -4403,7 +4656,7 @@
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 77,
@@ -4422,41 +4675,45 @@
         "lane": 1,
         "name": "유경화",
         "team": "Team JOS",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "42-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "이주영",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'30\"29",
         "note": null,
         "original_match_no": "42-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "김민희",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "11",
+        "record": "00'31\"78",
         "note": null,
         "original_match_no": "42-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "조화정",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "00'31\"50",
         "note": null,
         "original_match_no": "42-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -4485,41 +4742,45 @@
         "lane": 1,
         "name": "한지혜",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "14",
+        "record": "00'33\"48",
         "note": null,
         "original_match_no": "42-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "차진영",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "17",
+        "record": "00'34\"58",
         "note": null,
         "original_match_no": "42-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "조경진",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "42-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "이미영",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'31\"14",
         "note": null,
         "original_match_no": "42-4",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -4529,7 +4790,7 @@
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 79,
@@ -4548,31 +4809,34 @@
         "lane": 2,
         "name": "김현순",
         "team": "Team JOS",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'29\"99",
         "note": null,
         "original_match_no": "42-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 3,
         "name": "황은경",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'30\"51",
         "note": null,
         "original_match_no": "42-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "김상희",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "15",
+        "record": "00'33\"80",
         "note": null,
         "original_match_no": "42-5",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -4601,21 +4865,23 @@
         "lane": 2,
         "name": "엄지선",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "42-6",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "윤나영",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'29\"79",
         "note": null,
         "original_match_no": "42-6",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       }
     ],
     "division": "성인부",
@@ -4644,41 +4910,45 @@
         "lane": 1,
         "name": "박명혜",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'35\"60",
         "note": null,
         "original_match_no": "43-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "정근혜",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'37\"54",
         "note": null,
         "original_match_no": "43-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "박선화",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'32\"21",
         "note": null,
         "original_match_no": "43-1",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 5
       },
       {
         "lane": 4,
         "name": "김희숙",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'30\"15",
         "note": null,
         "original_match_no": "43-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       }
     ],
     "division": "성인부",
@@ -4688,7 +4958,7 @@
     "group": "5그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 82,
@@ -4707,41 +4977,45 @@
         "lane": 1,
         "name": "강영숙",
         "team": "팀shi",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'32\"67",
         "note": null,
         "original_match_no": "43-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 2,
         "name": "김희정",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'33\"07",
         "note": null,
         "original_match_no": "43-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 3,
         "name": "김은주",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'37\"99",
         "note": null,
         "original_match_no": "43-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "전경미",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'32\"21",
         "note": null,
         "original_match_no": "43-2",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 5
       }
     ],
     "division": "성인부",
@@ -4751,7 +5025,7 @@
     "group": "5그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 83,
@@ -4772,31 +5046,34 @@
         "lane": 1,
         "name": "박현애",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "00'38\"22",
         "note": null,
         "original_match_no": "43-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김부연",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'32\"97",
         "note": null,
         "original_match_no": "43-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 4,
         "name": "최지희",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'35\"46",
         "note": null,
         "original_match_no": "44",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 7
       }
     ],
     "division": "성인부",
@@ -4806,7 +5083,7 @@
     "group": "5그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 84,
@@ -4825,31 +5102,34 @@
         "lane": 1,
         "name": "김지환",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'33\"46",
         "note": null,
         "original_match_no": "45",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 2,
         "name": "김영준",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'39\"81",
         "note": null,
         "original_match_no": "45",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 3,
         "name": "이동규",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'40\"25",
         "note": null,
         "original_match_no": "45",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       }
     ],
     "division": "성인부",
@@ -4878,41 +5158,45 @@
         "lane": 1,
         "name": "이정환",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'38\"63",
         "note": null,
         "original_match_no": "46-1",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 2,
         "name": "김문정",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'42\"38",
         "note": null,
         "original_match_no": "46-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 3,
         "name": "김준우",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'37\"60",
         "note": null,
         "original_match_no": "46-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 4,
         "name": "최호택",
         "team": "팀shi",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'44\"09",
         "note": null,
         "original_match_no": "46-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       }
     ],
     "division": "성인부",
@@ -4922,7 +5206,7 @@
     "group": "2그룹",
     "is_relay": false,
     "base_duration_sec": 80,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 86,
@@ -4941,31 +5225,34 @@
         "lane": 2,
         "name": "최윤호",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'36\"05",
         "note": null,
         "original_match_no": "46-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 3,
         "name": "정성민",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "01'10\"06",
         "note": null,
         "original_match_no": "46-2",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "박형서",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'37\"15",
         "note": null,
         "original_match_no": "46-2",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 5
       }
     ],
     "division": "성인부",
@@ -4994,41 +5281,45 @@
         "lane": 1,
         "name": "최치완",
         "team": "Team JOS",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'38\"95",
         "note": null,
         "original_match_no": "47-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "이태헌",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'35\"97",
         "note": null,
         "original_match_no": "47-1",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 3,
         "name": "이현우",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'34\"42",
         "note": null,
         "original_match_no": "47-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "박우식",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'37\"35",
         "note": null,
         "original_match_no": "47-1",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 3
       }
     ],
     "division": "성인부",
@@ -5038,7 +5329,7 @@
     "group": "3그룹",
     "is_relay": false,
     "base_duration_sec": 80,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 88,
@@ -5057,41 +5348,45 @@
         "lane": 1,
         "name": "이태현",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "11",
+        "record": "00'42\"64",
         "note": null,
         "original_match_no": "47-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "조건희",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "47-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "임은호",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'38\"29",
         "note": null,
         "original_match_no": "47-2",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 4,
         "name": "양기정",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'35\"53",
         "note": null,
         "original_match_no": "47-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       }
     ],
     "division": "성인부",
@@ -5101,7 +5396,7 @@
     "group": "3그룹",
     "is_relay": false,
     "base_duration_sec": 80,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 89,
@@ -5120,41 +5415,45 @@
         "lane": 1,
         "name": "정성훈",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'37\"88",
         "note": null,
         "original_match_no": "47-3",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 2,
         "name": "김익희",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "00'41\"34",
         "note": null,
         "original_match_no": "47-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "정민수",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'39\"85",
         "note": null,
         "original_match_no": "47-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "이소열",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "47-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -5164,7 +5463,7 @@
     "group": "3그룹",
     "is_relay": false,
     "base_duration_sec": 80,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 90,
@@ -5185,21 +5484,23 @@
         "lane": 1,
         "name": "양철민",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'38\"35",
         "note": null,
         "original_match_no": "47-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "김양훈",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "48-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -5228,41 +5529,45 @@
         "lane": 1,
         "name": "최민석",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'46\"80",
         "note": null,
         "original_match_no": "48-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김재환",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'33\"73",
         "note": null,
         "original_match_no": "48-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 3,
         "name": "정민철",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'37\"10",
         "note": null,
         "original_match_no": "48-2",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 4,
         "name": "정서현",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
-        "note": null,
+        "rank": "실격",
+        "record": "88'88\"88",
+        "note": "돌핀킥2회",
         "original_match_no": "48-2",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -5291,41 +5596,45 @@
         "lane": 1,
         "name": "서종혜",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "48-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "제선호",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'40\"97",
         "note": null,
         "original_match_no": "48-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 3,
         "name": "이원주",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'50\"42",
         "note": null,
         "original_match_no": "48-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "김준영",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'42\"32",
         "note": null,
         "original_match_no": "48-3",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 1
       }
     ],
     "division": "성인부",
@@ -5335,7 +5644,7 @@
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 80,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 93,
@@ -5354,41 +5663,45 @@
         "lane": 1,
         "name": "한주한",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'49\"32",
         "note": null,
         "original_match_no": "48-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "송창현",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "48-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "손규식",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'40\"87",
         "note": null,
         "original_match_no": "48-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 4,
         "name": "안창환",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'38\"68",
         "note": null,
         "original_match_no": "48-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       }
     ],
     "division": "성인부",
@@ -5417,31 +5730,34 @@
         "lane": 1,
         "name": "노용진",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "49-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "서정찬",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'42\"13",
         "note": null,
         "original_match_no": "49-1",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 5
       },
       {
         "lane": 3,
         "name": "유보승",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'37\"83",
         "note": null,
         "original_match_no": "49-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       }
     ],
     "division": "성인부",
@@ -5451,7 +5767,7 @@
     "group": "5그룹",
     "is_relay": false,
     "base_duration_sec": 80,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 95,
@@ -5470,31 +5786,34 @@
         "lane": 2,
         "name": "한성주",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'46\"03",
         "note": null,
         "original_match_no": "49-2",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 3,
         "name": "이경열",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'44\"01",
         "note": null,
         "original_match_no": "49-2",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 4
       },
       {
         "lane": 4,
         "name": "김상오",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "49-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -5523,31 +5842,34 @@
         "lane": 1,
         "name": "박봉권",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'53\"38",
         "note": null,
         "original_match_no": "50",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 5
       },
       {
         "lane": 2,
         "name": "권순용",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
-        "note": null,
+        "rank": "실격",
+        "record": "88'88\"88",
+        "note": "영법변경",
         "original_match_no": "50",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "김득수",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'45\"94",
         "note": null,
         "original_match_no": "50",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       }
     ],
     "division": "성인부",
@@ -5576,21 +5898,23 @@
         "lane": 2,
         "name": "이해린",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'52\"41",
         "note": null,
         "original_match_no": "51",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 3,
         "name": "김지원",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'59\"27",
         "note": null,
         "original_match_no": "51",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       }
     ],
     "division": "성인부",
@@ -5619,41 +5943,45 @@
         "lane": 1,
         "name": "고민지",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'46\"82",
         "note": null,
         "original_match_no": "52-1",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 2,
         "name": "최주희",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "01'03\"80",
         "note": null,
         "original_match_no": "52-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 3,
         "name": "김슬기",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'41\"01",
         "note": null,
         "original_match_no": "52-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "노언영",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'43\"34",
         "note": null,
         "original_match_no": "52-1",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 5
       }
     ],
     "division": "성인부",
@@ -5682,31 +6010,34 @@
         "lane": 1,
         "name": "김장미",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'59\"93",
         "note": null,
         "original_match_no": "52-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 2,
         "name": "김서연",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'58\"58",
         "note": null,
         "original_match_no": "52-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 3,
         "name": "노안나",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "52-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -5735,41 +6066,45 @@
         "lane": 1,
         "name": "전소영",
         "team": "팀shi",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'49\"43",
         "note": null,
         "original_match_no": "53-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 2,
         "name": "이은희",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'49\"53",
         "note": null,
         "original_match_no": "53-1",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 4
       },
       {
         "lane": 3,
         "name": "박지숙",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'47\"08",
         "note": null,
         "original_match_no": "53-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "윤아림",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'49\"78",
         "note": null,
         "original_match_no": "53-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       }
     ],
     "division": "성인부",
@@ -5798,41 +6133,45 @@
         "lane": 1,
         "name": "박선진",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'57\"41",
         "note": null,
         "original_match_no": "53-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "전현주",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
-        "note": null,
+        "rank": "실격",
+        "record": "88'88\"88",
+        "note": "돌핀킥5회",
         "original_match_no": "53-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "이연정",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "53-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "임영란",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'56\"14",
         "note": null,
         "original_match_no": "53-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -5861,41 +6200,45 @@
         "lane": 1,
         "name": "유혜진",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'56\"48",
         "note": null,
         "original_match_no": "53-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "손혜정",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'49\"78",
         "note": null,
         "original_match_no": "53-3",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 3
       },
       {
         "lane": 3,
         "name": "장현숙",
         "team": "Team JOS",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'54\"85",
         "note": null,
         "original_match_no": "53-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 4,
         "name": "서우선",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "53-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -5905,7 +6248,7 @@
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 80,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 103,
@@ -5924,41 +6267,45 @@
         "lane": 1,
         "name": "박현정",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'49\"78",
         "note": null,
         "original_match_no": "54-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 2,
         "name": "이성미",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'51\"68",
         "note": null,
         "original_match_no": "54-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 3,
         "name": "박선화",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'53\"37",
         "note": null,
         "original_match_no": "54-1",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 3
       },
       {
         "lane": 4,
         "name": "김진옥",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'59\"84",
         "note": null,
         "original_match_no": "54-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -5968,7 +6315,7 @@
     "group": "5그룹",
     "is_relay": false,
     "base_duration_sec": 80,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 104,
@@ -5987,41 +6334,45 @@
         "lane": 1,
         "name": "이경순",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "54-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "정남정",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "01'02\"47",
         "note": null,
         "original_match_no": "54-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "허희경",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'48\"73",
         "note": null,
         "original_match_no": "54-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "오수양",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'57\"03",
         "note": null,
         "original_match_no": "54-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       }
     ],
     "division": "성인부",
@@ -6052,21 +6403,23 @@
         "lane": 1,
         "name": "윤현희",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'56\"87",
         "note": null,
         "original_match_no": "54-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 4,
         "name": "송원자",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'48\"13",
         "note": null,
         "original_match_no": "55",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 7
       }
     ],
     "division": "성인부",
@@ -6076,7 +6429,7 @@
     "group": "5그룹",
     "is_relay": false,
     "base_duration_sec": 80,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 106,
@@ -6093,43 +6446,47 @@
     "lanes": [
       {
         "lane": 1,
-        "name": "",
+        "name": "이수영, 유보승, 손규식, 안태균",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "02'32\"45",
         "note": null,
         "original_match_no": "56-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 6
       },
       {
         "lane": 2,
-        "name": "",
+        "name": "윤주권, 권순용, 정서현, 정성민",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "03'35\"08",
         "note": null,
         "original_match_no": "56-1",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 3,
-        "name": "",
+        "name": "강민성, 안창환, 김양훈, 김득수",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "02'35\"19",
         "note": null,
         "original_match_no": "56-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 4,
-        "name": "",
+        "name": "전용균, 엄정웅, 김형준, 이태헌",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "02'08\"99",
         "note": null,
         "original_match_no": "56-1",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 14
       }
     ],
     "division": "성인부",
@@ -6156,33 +6513,36 @@
     "lanes": [
       {
         "lane": 2,
-        "name": "",
+        "name": "윤상열, 정민수, 김덕규, 서종혜",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "02'25\"74",
         "note": null,
         "original_match_no": "56-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 8
       },
       {
         "lane": 3,
-        "name": "",
+        "name": "이경후, 양철민, 민병철, 김민재",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "02'17\"80",
         "note": null,
         "original_match_no": "56-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 10
       },
       {
         "lane": 4,
-        "name": "",
+        "name": "조성찬, 서정찬, 박재홍, 안상준",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "02'32\"89",
         "note": null,
         "original_match_no": "56-2",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 4
       }
     ],
     "division": "성인부",
@@ -6192,7 +6552,7 @@
     "group": "일반",
     "is_relay": true,
     "base_duration_sec": 190,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 108,
@@ -6209,43 +6569,47 @@
     "lanes": [
       {
         "lane": 1,
-        "name": "",
+        "name": "심민경, 이은희, 김애란, 김상희",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "03'18\"19",
         "note": null,
         "original_match_no": "57-1",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 4
       },
       {
         "lane": 2,
-        "name": "",
+        "name": "김보람, 황세린, 조현정, 황다은",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "02'37\"19",
         "note": null,
         "original_match_no": "57-1",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 14
       },
       {
         "lane": 3,
-        "name": "",
+        "name": "윤아림, 유혜진, 김민주, 박선혜",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
-        "note": null,
+        "rank": "실격",
+        "record": "88'88\"88",
+        "note": "3번부정출발",
         "original_match_no": "57-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
-        "name": "",
+        "name": "김슬기, 김선영, 하미연, 김순영",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "57-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -6272,33 +6636,36 @@
     "lanes": [
       {
         "lane": 2,
-        "name": "",
+        "name": "김희정, 김혜진, 노안나, 이성미",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "03'08\"03",
         "note": null,
         "original_match_no": "57-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 10
       },
       {
         "lane": 3,
-        "name": "",
+        "name": "전경미, 추성비, 이미영, 손혜정",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "03'14\"30",
         "note": null,
         "original_match_no": "57-2",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 6
       },
       {
         "lane": 4,
-        "name": "",
+        "name": "김희숙, 박현정, 정명혜, 박희경",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "03'11\"50",
         "note": null,
         "original_match_no": "57-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 8
       }
     ],
     "division": "성인부",
@@ -6308,7 +6675,7 @@
     "group": "일반",
     "is_relay": true,
     "base_duration_sec": 190,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 110,
@@ -6327,31 +6694,34 @@
         "lane": 2,
         "name": "김영준",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'30\"78",
         "note": null,
         "original_match_no": "58-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 3,
         "name": "박슬우",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'25\"06",
         "note": null,
         "original_match_no": "58-1",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "김한주",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'29\"04",
         "note": null,
         "original_match_no": "58-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       }
     ],
     "division": "성인부",
@@ -6361,7 +6731,7 @@
     "group": "1그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 111,
@@ -6380,31 +6750,34 @@
         "lane": 1,
         "name": "조성찬",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'31\"15",
         "note": null,
         "original_match_no": "58-2",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 1
       },
       {
         "lane": 2,
         "name": "김지환",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'27\"15",
         "note": null,
         "original_match_no": "58-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 3,
         "name": "이동규",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'28\"12",
         "note": null,
         "original_match_no": "58-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       }
     ],
     "division": "성인부",
@@ -6414,7 +6787,7 @@
     "group": "1그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 112,
@@ -6433,41 +6806,45 @@
         "lane": 1,
         "name": "조재광",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'31\"97",
         "note": null,
         "original_match_no": "59-1",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김재훈",
         "team": "Team JOS",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'29\"16",
         "note": null,
         "original_match_no": "59-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 3,
         "name": "정광원",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'30\"45",
         "note": null,
         "original_match_no": "59-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 4,
         "name": "박정현",
         "team": "팀shi",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "59-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -6477,7 +6854,7 @@
     "group": "2그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 113,
@@ -6496,41 +6873,45 @@
         "lane": 1,
         "name": "김경모",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'31\"39",
         "note": null,
         "original_match_no": "59-2",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 2,
         "name": "정성민",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "01'03\"42",
         "note": null,
         "original_match_no": "59-2",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "위지승",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'29\"97",
         "note": null,
         "original_match_no": "59-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 4,
         "name": "박예한",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'33\"75",
         "note": null,
         "original_match_no": "59-2",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -6559,41 +6940,45 @@
         "lane": 1,
         "name": "황규태",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'26\"10",
         "note": null,
         "original_match_no": "59-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 2,
         "name": "박대욱",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "59-3",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "최호택",
         "team": "팀shi",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'31\"39",
         "note": null,
         "original_match_no": "59-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 4,
         "name": "박형서",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'28\"95",
         "note": null,
         "original_match_no": "59-3",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 5
       }
     ],
     "division": "성인부",
@@ -6603,7 +6988,7 @@
     "group": "2그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 115,
@@ -6622,41 +7007,45 @@
         "lane": 1,
         "name": "임은호",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'31\"77",
         "note": null,
         "original_match_no": "60-1",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김덕규",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'29\"79",
         "note": null,
         "original_match_no": "60-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 3,
         "name": "이경후",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'24\"88",
         "note": null,
         "original_match_no": "60-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "곽성훈",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'29\"50",
         "note": null,
         "original_match_no": "60-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       }
     ],
     "division": "성인부",
@@ -6666,7 +7055,7 @@
     "group": "3그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 116,
@@ -6685,41 +7074,45 @@
         "lane": 1,
         "name": "안재홍",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "60-2",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "양기정",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'28\"79",
         "note": null,
         "original_match_no": "60-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 3,
         "name": "강준현",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "11",
+        "record": "00'42\"13",
         "note": null,
         "original_match_no": "60-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "정성훈",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'29\"79",
         "note": null,
         "original_match_no": "60-2",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 1
       }
     ],
     "division": "성인부",
@@ -6748,41 +7141,45 @@
         "lane": 1,
         "name": "정성문",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "12",
+        "record": "00'46\"42",
         "note": null,
         "original_match_no": "60-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김건",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "60-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "최치완",
         "team": "Team JOS",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'28\"79",
         "note": null,
         "original_match_no": "60-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 4,
         "name": "김형준",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'29\"95",
         "note": null,
         "original_match_no": "60-3",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -6792,7 +7189,7 @@
     "group": "3그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 118,
@@ -6811,31 +7208,34 @@
         "lane": 2,
         "name": "조건희",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "60-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "박우식",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'27\"73",
         "note": null,
         "original_match_no": "60-4",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 4,
         "name": "김우람",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "00'32\"04",
         "note": null,
         "original_match_no": "60-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -6845,7 +7245,7 @@
     "group": "3그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 119,
@@ -6864,41 +7264,45 @@
         "lane": 1,
         "name": "임건형",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "13",
+        "record": "00'42\"23",
         "note": null,
         "original_match_no": "61-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김민재",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'32\"93",
         "note": null,
         "original_match_no": "61-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "이수영",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'30\"71",
         "note": null,
         "original_match_no": "61-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 4,
         "name": "김세종",
         "team": "팀shi",
-        "rank": null,
-        "record": null,
+        "rank": "12",
+        "record": "00'40\"16",
         "note": null,
         "original_match_no": "61-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -6927,41 +7331,45 @@
         "lane": 1,
         "name": "손철수",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "14",
+        "record": "00'45\"37",
         "note": null,
         "original_match_no": "61-2",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김병주",
         "team": "Team JOS",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'34\"14",
         "note": null,
         "original_match_no": "61-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "파브지오롤로",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "61-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "변정현",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "61-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -6971,7 +7379,7 @@
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 121,
@@ -6990,41 +7398,45 @@
         "lane": 1,
         "name": "양승진",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "15",
+        "record": "00'49\"29",
         "note": null,
         "original_match_no": "61-3",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "엄정웅",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'27\"77",
         "note": null,
         "original_match_no": "61-3",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 3,
         "name": "민병철",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'31\"80",
         "note": null,
         "original_match_no": "61-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 4,
         "name": "안상준",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'30\"01",
         "note": null,
         "original_match_no": "61-3",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 5
       }
     ],
     "division": "성인부",
@@ -7053,31 +7465,34 @@
         "lane": 1,
         "name": "안창환",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'32\"52",
         "note": null,
         "original_match_no": "61-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 2,
         "name": "서종혜",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "61-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "고석보",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "11",
+        "record": "00'38\"20",
         "note": null,
         "original_match_no": "61-4",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -7087,7 +7502,7 @@
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 123,
@@ -7106,31 +7521,34 @@
         "lane": 2,
         "name": "이준욱",
         "team": "Team JOS",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'32\"88",
         "note": null,
         "original_match_no": "61-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 3,
         "name": "김준영",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'37\"26",
         "note": null,
         "original_match_no": "61-5",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "이도형",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "00'37\"71",
         "note": null,
         "original_match_no": "61-5",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -7159,41 +7577,45 @@
         "lane": 1,
         "name": "조영재",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "62-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "엄영길",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'32\"15",
         "note": null,
         "original_match_no": "62-1",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 3,
         "name": "김남곤",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'35\"11",
         "note": null,
         "original_match_no": "62-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 4,
         "name": "박영수",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'31\"54",
         "note": null,
         "original_match_no": "62-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       }
     ],
     "division": "성인부",
@@ -7203,7 +7625,7 @@
     "group": "5그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 125,
@@ -7222,41 +7644,45 @@
         "lane": 1,
         "name": "조충남",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'34\"99",
         "note": null,
         "original_match_no": "62-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 2,
         "name": "전용균",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'27\"60",
         "note": null,
         "original_match_no": "62-2",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 3,
         "name": "윤득환",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "62-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "문준호",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'33\"07",
         "note": null,
         "original_match_no": "62-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       }
     ],
     "division": "성인부",
@@ -7266,7 +7692,7 @@
     "group": "5그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 126,
@@ -7287,31 +7713,34 @@
         "lane": 1,
         "name": "박찬헌",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "62-3",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "권순용",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'56\"04",
         "note": null,
         "original_match_no": "63",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 5
       },
       {
         "lane": 4,
         "name": "최호균",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'41\"65",
         "note": null,
         "original_match_no": "63",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       }
     ],
     "division": "성인부",
@@ -7340,41 +7769,45 @@
         "lane": 1,
         "name": "정혜선",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "64-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "윤규미",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'32\"75",
         "note": null,
         "original_match_no": "64-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 3,
         "name": "추성비",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'37\"52",
         "note": null,
         "original_match_no": "64-1",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 2
       },
       {
         "lane": 4,
         "name": "김지민",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'33\"98",
         "note": null,
         "original_match_no": "64-1",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 4
       }
     ],
     "division": "성인부",
@@ -7403,41 +7836,45 @@
         "lane": 1,
         "name": "김지원",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'39\"64",
         "note": null,
         "original_match_no": "64-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김주희",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'38\"26",
         "note": null,
         "original_match_no": "64-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 3,
         "name": "김민주",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "64-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "송주미",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'33\"37",
         "note": null,
         "original_match_no": "64-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       }
     ],
     "division": "성인부",
@@ -7468,31 +7905,34 @@
         "lane": 1,
         "name": "이영경",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'35\"50",
         "note": null,
         "original_match_no": "64-3",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 3
       },
       {
         "lane": 3,
         "name": "장경화",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "65-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "박승아",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'47\"95",
         "note": null,
         "original_match_no": "65-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -7502,7 +7942,7 @@
     "group": "2그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 130,
@@ -7521,41 +7961,45 @@
         "lane": 1,
         "name": "공채영",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'51\"48",
         "note": null,
         "original_match_no": "65-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "노언영",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'35\"42",
         "note": null,
         "original_match_no": "65-2",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 5
       },
       {
         "lane": 3,
         "name": "김나람",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'40\"61",
         "note": null,
         "original_match_no": "65-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 4,
         "name": "이하선",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'33\"58",
         "note": null,
         "original_match_no": "65-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       }
     ],
     "division": "성인부",
@@ -7565,7 +8009,7 @@
     "group": "3그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 131,
@@ -7584,41 +8028,45 @@
         "lane": 1,
         "name": "박양재",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'37\"36",
         "note": null,
         "original_match_no": "65-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 2,
         "name": "박혜진",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'44\"14",
         "note": null,
         "original_match_no": "65-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 3,
         "name": "김나라",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'50\"36",
         "note": null,
         "original_match_no": "65-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "최이슬",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'43\"37",
         "note": null,
         "original_match_no": "65-3",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 2
       }
     ],
     "division": "성인부",
@@ -7628,7 +8076,7 @@
     "group": "3그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 132,
@@ -7647,41 +8095,45 @@
         "lane": 1,
         "name": "박선혜",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "00'40\"58",
         "note": null,
         "original_match_no": "66-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "홍효주",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'34\"40",
         "note": null,
         "original_match_no": "66-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 3,
         "name": "임영란",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "13",
+        "record": "00'42\"65",
         "note": null,
         "original_match_no": "66-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "박다유",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'35\"66",
         "note": null,
         "original_match_no": "66-1",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 3
       }
     ],
     "division": "성인부",
@@ -7691,7 +8143,7 @@
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 133,
@@ -7710,41 +8162,45 @@
         "lane": 1,
         "name": "김보람",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'36\"52",
         "note": null,
         "original_match_no": "66-2",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 2,
         "name": "심민경",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'39\"49",
         "note": null,
         "original_match_no": "66-2",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "하미연",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'34\"69",
         "note": null,
         "original_match_no": "66-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 4,
         "name": "김민희",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "15",
+        "record": "00'54\"72",
         "note": null,
         "original_match_no": "66-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -7773,41 +8229,45 @@
         "lane": 1,
         "name": "이수은",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "14",
+        "record": "00'42\"76",
         "note": null,
         "original_match_no": "66-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "이연정",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "66-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "윤아림",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'39\"94",
         "note": null,
         "original_match_no": "66-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "이현경",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "66-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -7836,41 +8296,45 @@
         "lane": 1,
         "name": "전소영",
         "team": "팀shi",
-        "rank": null,
-        "record": null,
+        "rank": "11",
+        "record": "00'42\"01",
         "note": null,
         "original_match_no": "66-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "전현주",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "12",
+        "record": "00'42\"20",
         "note": null,
         "original_match_no": "66-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "서우선",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "66-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "조현정",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'32\"36",
         "note": null,
         "original_match_no": "66-4",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 7
       }
     ],
     "division": "성인부",
@@ -7880,7 +8344,7 @@
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 136,
@@ -7899,31 +8363,34 @@
         "lane": 2,
         "name": "조세비",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'35\"67",
         "note": null,
         "original_match_no": "66-5",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 3,
         "name": "김선영",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "66-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "조신애",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'36\"93",
         "note": null,
         "original_match_no": "66-5",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -7933,7 +8400,7 @@
     "group": "4그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 137,
@@ -7952,41 +8419,45 @@
         "lane": 1,
         "name": "김미진",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'38\"12",
         "note": null,
         "original_match_no": "67-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 2,
         "name": "전경미",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'44\"41",
         "note": null,
         "original_match_no": "67-1",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 1
       },
       {
         "lane": 3,
         "name": "김은주",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'49\"58",
         "note": null,
         "original_match_no": "67-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "이성미",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'40\"12",
         "note": null,
         "original_match_no": "67-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       }
     ],
     "division": "성인부",
@@ -7996,7 +8467,7 @@
     "group": "5그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 138,
@@ -8015,31 +8486,34 @@
         "lane": 2,
         "name": "김애란",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'38\"53",
         "note": null,
         "original_match_no": "67-2",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 5
       },
       {
         "lane": 3,
         "name": "정남정",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'44\"37",
         "note": null,
         "original_match_no": "67-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 4,
         "name": "허희경",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'41\"07",
         "note": null,
         "original_match_no": "67-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       }
     ],
     "division": "성인부",
@@ -8068,21 +8542,23 @@
         "lane": 2,
         "name": "송원자",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'40\"93",
         "note": null,
         "original_match_no": "68",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 7
       },
       {
         "lane": 3,
         "name": "최지희",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'43\"92",
         "note": null,
         "original_match_no": "68",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 5
       }
     ],
     "division": "성인부",
@@ -8092,7 +8568,7 @@
     "group": "6그룹",
     "is_relay": false,
     "base_duration_sec": 70,
-    "has_our_swimmer": false
+    "has_our_swimmer": true
   },
   {
     "race_index": 140,
@@ -8109,33 +8585,36 @@
     "lanes": [
       {
         "lane": 2,
-        "name": "",
+        "name": "심지수, 최민석, 이재곤, 윤규미, 이수은, 정희경",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "02'47\"68",
         "note": null,
         "original_match_no": "69-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 10
       },
       {
         "lane": 3,
-        "name": "",
+        "name": "예성민, 한지훈, 정민철, 조세비, 주민정, 황다은",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "02'35\"87",
         "note": null,
         "original_match_no": "69-1",
-        "is_our_team": true
+        "is_our_team": false,
+        "points": 14
       },
       {
         "lane": 4,
-        "name": "",
+        "name": "윤나영, 조충남, 김성준, 최미영, 박현정, 정다운",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "02'52\"76",
         "note": null,
         "original_match_no": "69-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 6
       }
     ],
     "division": "성인부",
@@ -8145,7 +8624,7 @@
     "group": "일반",
     "is_relay": true,
     "base_duration_sec": 270,
-    "has_our_swimmer": true
+    "has_our_swimmer": false
   },
   {
     "race_index": 141,
@@ -8162,33 +8641,36 @@
     "lanes": [
       {
         "lane": 2,
-        "name": "",
+        "name": "이지훈, 서충근, 박재홍, 이지호, 전경미, 박선화",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "69-2",
-        "is_our_team": false
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 3,
-        "name": "",
+        "name": "박양재, 김진옥, 오수양, 김덕규, 김우람, 정민수",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "02'50\"81",
         "note": null,
         "original_match_no": "69-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 8
       },
       {
         "lane": 4,
-        "name": "",
+        "name": "윤주권, 정서현, 권순용, 김애란, 이은희, 김상희",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "03'16\"66",
         "note": null,
         "original_match_no": "69-2",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 4
       }
     ],
     "division": "성인부",

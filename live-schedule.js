@@ -4,7 +4,7 @@
 // 2열: [1레인선수(들)] [2레인선수(들)] [3레인선수(들)] [4레인선수(들)]
 // ==========================================================================
 
-import { ADULT_RACES_DATA, STUDENT_RACES_DATA } from "./races-data.js?v=20261024_19";
+import { ADULT_RACES_DATA, STUDENT_RACES_DATA } from "./races-data.js?v=20261026_01";
 import { 
   subscribeLiveStatus, subscribeRosterDoc, fetchLiveStatus, getDefaultLiveStatus, getInitialLiveStatus,
   startRaceAt, cancelRaceAt, startBreak, endBreak, cancelBreak,

@@ -1,8 +1,8 @@
 // ==========================================================================
-// GMDC Swim Club - 2026 거제시장배 전국마스터즈 수영대회 대진표 데이터
+// GMDC Swim Club - 2026 거제시장배 전국마스터즈 수영대회 대진표 및 공식 기록 데이터
 // 통합조(합침) 규칙 반영 완료: 합친 그룹의 첫 번째 순번만 대표 순번으로 부여
-// 성인부: 총 141개 레이스 (합침 14건 반영)
-// 학생부: 총 232개 레이스 (합침 6건 반영)
+// 성인부: 총 141개 레이스 (492 엔트리 공식 기록 반영)
+// 학생부: 총 232개 레이스 (843 엔트리 공식 기록 반영)
 // 우리 팀 구분: 거제몽꾸 (주황색), 거제야르 (파란색)
 // ==========================================================================
 
@@ -26,21 +26,23 @@ export const ADULT_RACES_DATA = [
         "lane": 2,
         "name": "이우진",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'25\"61",
         "note": null,
         "original_match_no": "1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "정재용",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'33\"86",
         "note": null,
         "original_match_no": "2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       }
     ],
     "division": "성인부",
@@ -69,31 +71,34 @@ export const ADULT_RACES_DATA = [
         "lane": 2,
         "name": "곽성훈",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'24\"27",
         "note": null,
         "original_match_no": "3-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 3,
         "name": "강태운",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "3-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "한상윤",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'30\"58",
         "note": null,
         "original_match_no": "3-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       }
     ],
     "division": "성인부",
@@ -124,41 +129,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "박민정",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'27\"74",
         "note": null,
         "original_match_no": "3-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 2,
         "name": "김형준",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'32\"71",
         "note": null,
         "original_match_no": "3-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 3,
         "name": "조민우",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'28\"06",
         "note": null,
         "original_match_no": "3-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 4,
         "name": "조강영",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'27\"22",
         "note": null,
         "original_match_no": "4-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       }
     ],
     "division": "성인부",
@@ -187,41 +196,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "이재곤",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'26\"90",
         "note": null,
         "original_match_no": "4-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 2,
         "name": "김성준",
         "team": "TYU",
-        "rank": null,
-        "record": null,
-        "note": null,
+        "rank": "실격",
+        "record": "88'88\"88",
+        "note": "한손터치",
         "original_match_no": "4-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
-        "name": "허   성",
+        "name": "허성",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "4-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "이재현",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'27\"29",
         "note": null,
         "original_match_no": "4-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       }
     ],
     "division": "성인부",
@@ -250,41 +263,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "김기용",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'28\"80",
         "note": null,
         "original_match_no": "4-3",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 2
       },
       {
         "lane": 2,
         "name": "민병철",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
-        "note": null,
+        "rank": "실격",
+        "record": "88'88\"88",
+        "note": "15m넘음",
         "original_match_no": "4-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "배장효",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "4-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "심지수",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'30\"73",
         "note": null,
         "original_match_no": "4-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -313,41 +330,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "윤주권",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'34\"18",
         "note": null,
         "original_match_no": "4-4",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "안태균",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'26\"39",
         "note": null,
         "original_match_no": "4-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 3,
         "name": "고석보",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
-        "note": null,
+        "rank": "실격",
+        "record": "88'88\"88",
+        "note": "한손터치",
         "original_match_no": "4-4",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "최민석",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'30\"32",
         "note": null,
         "original_match_no": "4-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       }
     ],
     "division": "성인부",
@@ -376,41 +397,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "박재홍",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'29\"16",
         "note": null,
         "original_match_no": "5-1",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 2
       },
       {
         "lane": 2,
         "name": "예성민",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'26\"22",
         "note": null,
         "original_match_no": "5-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 3,
         "name": "정의길",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "5-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "윤득환",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'36\"26",
         "note": null,
         "original_match_no": "5-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -439,41 +464,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "서충근",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "5-2",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "한성주",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'28\"14",
         "note": null,
         "original_match_no": "5-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 3,
         "name": "유보승",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'28\"36",
         "note": null,
         "original_match_no": "5-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 4,
         "name": "박진홍",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'35\"58",
         "note": null,
         "original_match_no": "5-2",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -502,41 +531,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "장상준",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'27\"82",
         "note": null,
         "original_match_no": "5-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 2,
         "name": "서정찬",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'30\"58",
         "note": null,
         "original_match_no": "5-3",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 1
       },
       {
         "lane": 3,
         "name": "이문희",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "5-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "성지경",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'33\"49",
         "note": null,
         "original_match_no": "5-3",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -565,21 +598,23 @@ export const ADULT_RACES_DATA = [
         "lane": 3,
         "name": "성환용",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'35\"82",
         "note": null,
         "original_match_no": "6",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "진양호",
         "team": "팀shi",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'37\"64",
         "note": null,
         "original_match_no": "6",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       }
     ],
     "division": "성인부",
@@ -610,21 +645,23 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "김주희",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'31\"61",
         "note": null,
         "original_match_no": "7",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "최주희",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'40\"37",
         "note": null,
         "original_match_no": "8-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -653,31 +690,34 @@ export const ADULT_RACES_DATA = [
         "lane": 2,
         "name": "김지해",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'31\"93",
         "note": null,
         "original_match_no": "8-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 3,
         "name": "신효정",
         "team": "Team JOS",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'31\"63",
         "note": null,
         "original_match_no": "8-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 4,
         "name": "김장미",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'31\"93",
         "note": null,
         "original_match_no": "8-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       }
     ],
     "division": "성인부",
@@ -706,41 +746,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "황다은",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'27\"82",
         "note": null,
         "original_match_no": "8-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 2,
         "name": "한지민",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'34\"25",
         "note": null,
         "original_match_no": "8-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "최예슬",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'30\"50",
         "note": null,
         "original_match_no": "8-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 4,
         "name": "정다운",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'30\"71",
         "note": null,
         "original_match_no": "8-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       }
     ],
     "division": "성인부",
@@ -769,41 +813,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "서윤정",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "15",
+        "record": "00'37\"94",
         "note": null,
         "original_match_no": "9-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김선영",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "9-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "이수은",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'33\"78",
         "note": null,
         "original_match_no": "9-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "이미영",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "12",
+        "record": "00'35\"13",
         "note": null,
         "original_match_no": "9-1",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -832,41 +880,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "한솜이",
         "team": "팀shi",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'32\"81",
         "note": null,
         "original_match_no": "9-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 2,
         "name": "주민정",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'27\"99",
         "note": null,
         "original_match_no": "9-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 3,
         "name": "조유진",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "14",
+        "record": "00'37\"24",
         "note": null,
         "original_match_no": "9-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "한지혜",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'34\"18",
         "note": null,
         "original_match_no": "9-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -895,41 +947,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "유경화",
         "team": "Team JOS",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "9-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김순영",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'32\"62",
         "note": null,
         "original_match_no": "9-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 3,
         "name": "차진영",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "13",
+        "record": "00'37\"16",
         "note": null,
         "original_match_no": "9-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "엄지선",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "9-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -958,41 +1014,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "한윤희",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "9-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "이주영",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'32\"90",
         "note": null,
         "original_match_no": "9-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "김현순",
         "team": "Team JOS",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'32\"16",
         "note": null,
         "original_match_no": "9-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 4,
         "name": "황은경",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'32\"69",
         "note": null,
         "original_match_no": "9-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       }
     ],
     "division": "성인부",
@@ -1021,41 +1081,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "조경진",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "9-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "손혜정",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "11",
+        "record": "00'34\"78",
         "note": null,
         "original_match_no": "9-5",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "정희경",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'31\"94",
         "note": null,
         "original_match_no": "9-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 4,
         "name": "최효선",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "00'34\"61",
         "note": null,
         "original_match_no": "9-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -1084,41 +1148,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "황세린",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'28\"45",
         "note": null,
         "original_match_no": "10-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 2,
         "name": "윤현희",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'35\"75",
         "note": null,
         "original_match_no": "10-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 3,
         "name": "김부연",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "10-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "김진옥",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'35\"61",
         "note": null,
         "original_match_no": "10-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       }
     ],
     "division": "성인부",
@@ -1147,41 +1215,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "최미영",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'34\"37",
         "note": null,
         "original_match_no": "10-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 2,
         "name": "허수진",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'35\"16",
         "note": null,
         "original_match_no": "10-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 3,
         "name": "정명혜",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'34\"96",
         "note": null,
         "original_match_no": "10-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 4,
         "name": "박명혜",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'37\"65",
         "note": null,
         "original_match_no": "10-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -1210,21 +1282,23 @@ export const ADULT_RACES_DATA = [
         "lane": 3,
         "name": "조성찬",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'35\"42",
         "note": null,
         "original_match_no": "11",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 5
       },
       {
         "lane": 4,
         "name": "강민성",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'34\"47",
         "note": null,
         "original_match_no": "11",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       }
     ],
     "division": "성인부",
@@ -1253,31 +1327,34 @@ export const ADULT_RACES_DATA = [
         "lane": 2,
         "name": "조재광",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'39\"91",
         "note": null,
         "original_match_no": "12",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 3,
         "name": "김준우",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'36\"53",
         "note": null,
         "original_match_no": "12",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "이정환",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'42\"45",
         "note": null,
         "original_match_no": "12",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       }
     ],
     "division": "성인부",
@@ -1306,31 +1383,34 @@ export const ADULT_RACES_DATA = [
         "lane": 2,
         "name": "박재희",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'37\"99",
         "note": null,
         "original_match_no": "13",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 3,
         "name": "김형준",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'35\"90",
         "note": null,
         "original_match_no": "13",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "양철민",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'38\"40",
         "note": null,
         "original_match_no": "13",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       }
     ],
     "division": "성인부",
@@ -1359,41 +1439,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "정서현",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'42\"96",
         "note": null,
         "original_match_no": "14-1",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 2
       },
       {
         "lane": 2,
         "name": "윤상열",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'38\"37",
         "note": null,
         "original_match_no": "14-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 3,
         "name": "김재환",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'29\"37",
         "note": null,
         "original_match_no": "14-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "제선호",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'50\"25",
         "note": null,
         "original_match_no": "14-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       }
     ],
     "division": "성인부",
@@ -1422,31 +1506,34 @@ export const ADULT_RACES_DATA = [
         "lane": 2,
         "name": "한지훈",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'39\"79",
         "note": null,
         "original_match_no": "14-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 3,
         "name": "파브지오롤로",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "14-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "이수영",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'40\"74",
         "note": null,
         "original_match_no": "14-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       }
     ],
     "division": "성인부",
@@ -1477,41 +1564,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "김남곤",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'44\"35",
         "note": null,
         "original_match_no": "15",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 2,
         "name": "배종필",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'43\"28",
         "note": null,
         "original_match_no": "15",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 3,
         "name": "노용진",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "15",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "박봉권",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "01'11\"54",
         "note": null,
         "original_match_no": "16",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 7
       }
     ],
     "division": "성인부",
@@ -1540,21 +1631,23 @@ export const ADULT_RACES_DATA = [
         "lane": 2,
         "name": "정혜선",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'43\"51",
         "note": null,
         "original_match_no": "17",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 3,
         "name": "윤규미",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'44\"85",
         "note": null,
         "original_match_no": "17",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       }
     ],
     "division": "성인부",
@@ -1583,41 +1676,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "박혜진",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'56\"57",
         "note": null,
         "original_match_no": "18-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 2,
         "name": "노안나",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "18-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "한은지",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'43\"03",
         "note": null,
         "original_match_no": "18-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 4,
         "name": "박승아",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'59\"67",
         "note": null,
         "original_match_no": "18-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       }
     ],
     "division": "성인부",
@@ -1646,31 +1743,34 @@ export const ADULT_RACES_DATA = [
         "lane": 2,
         "name": "황다은",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'39\"62",
         "note": null,
         "original_match_no": "18-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 3,
         "name": "박양재",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'43\"14",
         "note": null,
         "original_match_no": "18-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 4,
         "name": "박신애",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'55\"34",
         "note": null,
         "original_match_no": "18-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       }
     ],
     "division": "성인부",
@@ -1699,41 +1799,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "조화정",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'56\"28",
         "note": null,
         "original_match_no": "19-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "장현숙",
         "team": "Team JOS",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'47\"50",
         "note": null,
         "original_match_no": "19-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 3,
         "name": "박다유",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'42\"62",
         "note": null,
         "original_match_no": "19-1",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "심민경",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'47\"14",
         "note": null,
         "original_match_no": "19-1",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 5
       }
     ],
     "division": "성인부",
@@ -1762,31 +1866,34 @@ export const ADULT_RACES_DATA = [
         "lane": 2,
         "name": "박선혜",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'52\"07",
         "note": null,
         "original_match_no": "19-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 3,
         "name": "이현경",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "19-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "홍효주",
         "team": "TYU",
-        "rank": null,
-        "record": null,
-        "note": null,
+        "rank": "실격",
+        "record": "88'88\"88",
+        "note": "잠영양발 배영2회",
         "original_match_no": "19-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -1815,41 +1922,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "윤나영",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'52\"75",
         "note": null,
         "original_match_no": "19-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 2,
         "name": "조유진",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "01'01\"23",
         "note": null,
         "original_match_no": "19-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "정희경",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'47\"79",
         "note": null,
         "original_match_no": "19-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 4,
         "name": "이은희",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'56\"70",
         "note": null,
         "original_match_no": "19-3",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -1878,41 +1989,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "강영숙",
         "team": "팀shi",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "01'04\"00",
         "note": null,
         "original_match_no": "20-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김희정",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'53\"65",
         "note": null,
         "original_match_no": "20-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 3,
         "name": "최미영",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'55\"73",
         "note": null,
         "original_match_no": "20-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 4,
         "name": "허수진",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'59\"47",
         "note": null,
         "original_match_no": "20-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -1941,41 +2056,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "김애란",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'50\"45",
         "note": null,
         "original_match_no": "20-2",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 4
       },
       {
         "lane": 2,
         "name": "정근혜",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'57\"15",
         "note": null,
         "original_match_no": "20-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "김희숙",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'49\"67",
         "note": null,
         "original_match_no": "20-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 4,
         "name": "이경순",
         "team": "개인",
-        "rank": null,
-        "record": null,
-        "note": null,
+        "rank": "실격",
+        "record": "88'88\"88",
+        "note": "터치시등보임",
         "original_match_no": "20-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -2004,31 +2123,34 @@ export const ADULT_RACES_DATA = [
         "lane": 2,
         "name": "김미진",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'51\"00",
         "note": null,
         "original_match_no": "20-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 3,
         "name": "김혜진",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'46\"94",
         "note": null,
         "original_match_no": "20-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "박현애",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "01'07\"42",
         "note": null,
         "original_match_no": "20-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -2055,43 +2177,47 @@ export const ADULT_RACES_DATA = [
     "lanes": [
       {
         "lane": 1,
-        "name": "",
+        "name": "박슬우, 안상준, 김기용, 서정찬",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "02'10\"67",
         "note": null,
         "original_match_no": "21-1",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 4
       },
       {
         "lane": 2,
-        "name": "",
+        "name": "이경후, 이현우, 민병철, 김민재",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "01'57\"84",
         "note": null,
         "original_match_no": "21-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 10
       },
       {
         "lane": 3,
-        "name": "",
+        "name": "제선호, 이수영, 안태균, 장상준",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "02'07\"98",
         "note": null,
         "original_match_no": "21-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 6
       },
       {
         "lane": 4,
-        "name": "",
+        "name": "엄영길, 전용균, 엄정웅, 박우식",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "01'56\"67",
         "note": null,
         "original_match_no": "21-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 14
       }
     ],
     "division": "성인부",
@@ -2118,33 +2244,36 @@ export const ADULT_RACES_DATA = [
     "lanes": [
       {
         "lane": 2,
-        "name": "",
+        "name": "김덕규, 송창현, 서종혜, 윤상열",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "02'03\"15",
         "note": null,
         "original_match_no": "21-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 8
       },
       {
         "lane": 3,
-        "name": "",
+        "name": "위지승, 임건형, 이원주, 윤득환",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "02'32\"98",
         "note": null,
         "original_match_no": "21-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 4,
-        "name": "",
+        "name": "윤주권, 정서현, 정성민, 권순용",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "03'09\"42",
         "note": null,
         "original_match_no": "21-2",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -2171,43 +2300,47 @@ export const ADULT_RACES_DATA = [
     "lanes": [
       {
         "lane": 1,
-        "name": "",
+        "name": "장경화, 최예슬, 하미연, 김순영",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "02'39\"39",
         "note": null,
         "original_match_no": "22-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 6
       },
       {
         "lane": 2,
-        "name": "",
+        "name": "이은희, 김애란, 김상희, 심민경",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "22-1",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 3,
-        "name": "",
+        "name": "황세린, 조현정, 조신애, 주민정",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "02'23\"16",
         "note": null,
         "original_match_no": "22-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 14
       },
       {
         "lane": 4,
-        "name": "",
+        "name": "김혜진, 이성미, 김나람, 이해린",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "02'41\"47",
         "note": null,
         "original_match_no": "22-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       }
     ],
     "division": "성인부",
@@ -2234,33 +2367,36 @@ export const ADULT_RACES_DATA = [
     "lanes": [
       {
         "lane": 2,
-        "name": "",
+        "name": "정남정, 정근혜, 박현애, 김은주",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "03'20\"69",
         "note": null,
         "original_match_no": "22-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 3,
-        "name": "",
+        "name": "이영경, 손혜정, 이미영, 송원자",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "02'38\"01",
         "note": null,
         "original_match_no": "22-2",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 8
       },
       {
         "lane": 4,
-        "name": "",
+        "name": "김이진, 홍효주, 정다운, 한은지",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "02'26\"60",
         "note": null,
         "original_match_no": "22-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 10
       }
     ],
     "division": "성인부",
@@ -2289,41 +2425,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "이지훈",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'31\"48",
         "note": null,
         "original_match_no": "23",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 5
       },
       {
         "lane": 2,
         "name": "김한주",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'32\"68",
         "note": null,
         "original_match_no": "23",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 3,
         "name": "박슬우",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'27\"94",
         "note": null,
         "original_match_no": "23",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "강민성",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'33\"68",
         "note": null,
         "original_match_no": "23",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       }
     ],
     "division": "성인부",
@@ -2352,41 +2492,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "박정현",
         "team": "팀shi",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "24-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김경모",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'32\"60",
         "note": null,
         "original_match_no": "24-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 3,
         "name": "위지승",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'33\"67",
         "note": null,
         "original_match_no": "24-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "최윤호",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'29\"69",
         "note": null,
         "original_match_no": "24-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       }
     ],
     "division": "성인부",
@@ -2415,31 +2559,34 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "김재훈",
         "team": "Team JOS",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'31\"76",
         "note": null,
         "original_match_no": "24-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 2,
         "name": "정재용",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'33\"61",
         "note": null,
         "original_match_no": "24-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 3,
         "name": "박대욱",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "24-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -2468,31 +2615,34 @@ export const ADULT_RACES_DATA = [
         "lane": 2,
         "name": "박예한",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'39\"22",
         "note": null,
         "original_match_no": "24-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "정광원",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'31\"84",
         "note": null,
         "original_match_no": "24-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 4,
         "name": "황규태",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'28\"29",
         "note": null,
         "original_match_no": "24-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       }
     ],
     "division": "성인부",
@@ -2521,41 +2671,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "강태운",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "25-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김우람",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'37\"33",
         "note": null,
         "original_match_no": "25-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 3,
         "name": "이태헌",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'31\"71",
         "note": null,
         "original_match_no": "25-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 4,
         "name": "이소열",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "25-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -2584,31 +2738,34 @@ export const ADULT_RACES_DATA = [
         "lane": 2,
         "name": "정민수",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'36\"32",
         "note": null,
         "original_match_no": "25-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 3,
         "name": "박민정",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'39\"31",
         "note": null,
         "original_match_no": "25-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 4,
         "name": "안재홍",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "25-2",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -2637,41 +2794,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "이태현",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'41\"84",
         "note": null,
         "original_match_no": "25-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
-        "name": "강준현",
+        "name": "조효진",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'46\"65",
         "note": null,
         "original_match_no": "25-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "김덕규",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'35\"67",
         "note": null,
         "original_match_no": "25-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 4,
         "name": "이경후",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'26\"83",
         "note": null,
         "original_match_no": "25-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       }
     ],
     "division": "성인부",
@@ -2700,41 +2861,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "김병주",
         "team": "Team JOS",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'39\"56",
         "note": null,
         "original_match_no": "26-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 2,
         "name": "윤상열",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "26-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "손규식",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'37\"39",
         "note": null,
         "original_match_no": "26-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 4,
         "name": "김민재",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'41\"48",
         "note": null,
         "original_match_no": "26-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       }
     ],
     "division": "성인부",
@@ -2763,41 +2928,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "엄정웅",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'31\"17",
         "note": null,
         "original_match_no": "26-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 2,
         "name": "송창현",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "26-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "안상준",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'35\"72",
         "note": null,
         "original_match_no": "26-2",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 4
       },
       {
         "lane": 4,
         "name": "임건형",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'45\"93",
         "note": null,
         "original_match_no": "26-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -2826,31 +2995,34 @@ export const ADULT_RACES_DATA = [
         "lane": 2,
         "name": "이준욱",
         "team": "Team JOS",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'34\"06",
         "note": null,
         "original_match_no": "26-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 3,
         "name": "김양훈",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "26-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "정민철",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "26-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -2879,31 +3051,34 @@ export const ADULT_RACES_DATA = [
         "lane": 2,
         "name": "전용균",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'30\"17",
         "note": null,
         "original_match_no": "27-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 3,
         "name": "조영재",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "27-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "엄영길",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'37\"17",
         "note": null,
         "original_match_no": "27-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       }
     ],
     "division": "성인부",
@@ -2934,31 +3109,34 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "박찬헌",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "27-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "조충남",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'39\"62",
         "note": null,
         "original_match_no": "27-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 4,
         "name": "김득수",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'41\"17",
         "note": null,
         "original_match_no": "28",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       }
     ],
     "division": "성인부",
@@ -2989,31 +3167,34 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "이지호",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'45\"38",
         "note": null,
         "original_match_no": "29",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 7
       },
       {
         "lane": 3,
         "name": "송주미",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'36\"95",
         "note": null,
         "original_match_no": "30-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "추성비",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'41\"86",
         "note": null,
         "original_match_no": "30-1",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 3
       }
     ],
     "division": "성인부",
@@ -3042,41 +3223,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "김지민",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'38\"17",
         "note": null,
         "original_match_no": "30-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 2,
         "name": "이해린",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'46\"50",
         "note": null,
         "original_match_no": "30-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 3,
         "name": "이영경",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'37\"58",
         "note": null,
         "original_match_no": "30-2",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 5
       },
       {
         "lane": 4,
         "name": "김민주",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "30-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -3105,41 +3290,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "장경화",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "31-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "한은지",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'41\"48",
         "note": null,
         "original_match_no": "31-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 3,
         "name": "이하선",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'40\"41",
         "note": null,
         "original_match_no": "31-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "최이슬",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'50\"36",
         "note": null,
         "original_match_no": "31-1",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 2
       }
     ],
     "division": "성인부",
@@ -3168,31 +3357,34 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "박신애",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "01'02\"28",
         "note": null,
         "original_match_no": "31-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 2,
         "name": "김나람",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'47\"92",
         "note": null,
         "original_match_no": "31-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 3,
         "name": "김슬기",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'44\"08",
         "note": null,
         "original_match_no": "31-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       }
     ],
     "division": "성인부",
@@ -3221,31 +3413,34 @@ export const ADULT_RACES_DATA = [
         "lane": 2,
         "name": "정영희",
         "team": "개인",
-        "rank": null,
-        "record": null,
-        "note": null,
+        "rank": "실격",
+        "record": "88'88\"88",
+        "note": "중도포기",
         "original_match_no": "32-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "김보람",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "32-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "하미연",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'40\"27",
         "note": null,
         "original_match_no": "32-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       }
     ],
     "division": "성인부",
@@ -3274,31 +3469,34 @@ export const ADULT_RACES_DATA = [
         "lane": 2,
         "name": "조신애",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'38\"12",
         "note": null,
         "original_match_no": "32-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 3,
         "name": "한윤희",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "32-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "조현정",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'36\"25",
         "note": null,
         "original_match_no": "32-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       }
     ],
     "division": "성인부",
@@ -3327,31 +3525,34 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "정명혜",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'53\"55",
         "note": null,
         "original_match_no": "33-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 2,
         "name": "황세린",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'38\"61",
         "note": null,
         "original_match_no": "33-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 3,
         "name": "김혜진",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'48\"92",
         "note": null,
         "original_match_no": "33-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       }
     ],
     "division": "성인부",
@@ -3380,21 +3581,23 @@ export const ADULT_RACES_DATA = [
         "lane": 2,
         "name": "오수양",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'56\"17",
         "note": null,
         "original_match_no": "33-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 3,
         "name": "박현정",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'51\"75",
         "note": null,
         "original_match_no": "33-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       }
     ],
     "division": "성인부",
@@ -3425,31 +3628,34 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "이지훈",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'25\"29",
         "note": null,
         "original_match_no": "34",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 5
       },
       {
         "lane": 2,
         "name": "이우진",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'24\"40",
         "note": null,
         "original_match_no": "34",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "김문정",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'26\"56",
         "note": null,
         "original_match_no": "35",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       }
     ],
     "division": "성인부",
@@ -3478,31 +3684,34 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "정성문",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'30\"80",
         "note": null,
         "original_match_no": "36-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 2,
         "name": "김건",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "36-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "김익희",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "36-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -3531,31 +3740,34 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "박재희",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'23\"66",
         "note": null,
         "original_match_no": "36-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 2,
         "name": "김형준",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'26\"80",
         "note": null,
         "original_match_no": "36-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 3,
         "name": "조민우",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'28\"80",
         "note": null,
         "original_match_no": "36-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       }
     ],
     "division": "성인부",
@@ -3584,41 +3796,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "조강영",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'25\"86",
         "note": null,
         "original_match_no": "37-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 2,
         "name": "김기용",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'26\"69",
         "note": null,
         "original_match_no": "37-1",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 1
       },
       {
         "lane": 3,
         "name": "안태균",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'24\"96",
         "note": null,
         "original_match_no": "37-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 4,
         "name": "배장효",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "37-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -3647,41 +3863,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "김성준",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'28\"85",
         "note": null,
         "original_match_no": "37-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "한주한",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'29\"26",
         "note": null,
         "original_match_no": "37-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "이재현",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'25\"83",
         "note": null,
         "original_match_no": "37-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 4,
         "name": "이원주",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "11",
+        "record": "00'29\"55",
         "note": null,
         "original_match_no": "37-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -3710,41 +3930,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "김세종",
         "team": "팀shi",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'27\"59",
         "note": null,
         "original_match_no": "37-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "손철수",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "13",
+        "record": "00'30\"24",
         "note": null,
         "original_match_no": "37-3",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "이도형",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "00'29\"29",
         "note": null,
         "original_match_no": "37-3",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "심지수",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "12",
+        "record": "00'29\"61",
         "note": null,
         "original_match_no": "37-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -3773,31 +3997,34 @@ export const ADULT_RACES_DATA = [
         "lane": 2,
         "name": "변정현",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "37-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "한지훈",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'24\"27",
         "note": null,
         "original_match_no": "37-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 4,
-        "name": "허   성",
+        "name": "허성",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "37-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -3826,21 +4053,23 @@ export const ADULT_RACES_DATA = [
         "lane": 2,
         "name": "윤주권",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "37-5",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "이재곤",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'25\"57",
         "note": null,
         "original_match_no": "37-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       }
     ],
     "division": "성인부",
@@ -3869,41 +4098,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "박재홍",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'27\"88",
         "note": null,
         "original_match_no": "38-1",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 1
       },
       {
         "lane": 2,
         "name": "김상오",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "38-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "배종필",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'25\"81",
         "note": null,
         "original_match_no": "38-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 4,
         "name": "박영수",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'26\"13",
         "note": null,
         "original_match_no": "38-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       }
     ],
     "division": "성인부",
@@ -3932,41 +4165,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "문준호",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'27\"23",
         "note": null,
         "original_match_no": "38-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 2,
         "name": "정의길",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "38-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "예성민",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'24\"77",
         "note": null,
         "original_match_no": "38-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "이경열",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'29\"45",
         "note": null,
         "original_match_no": "38-2",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -3995,41 +4232,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "장상준",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'27\"79",
         "note": null,
         "original_match_no": "38-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 2,
         "name": "서충근",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "38-3",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "이문희",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "38-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "박진홍",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'31\"35",
         "note": null,
         "original_match_no": "38-3",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -4060,41 +4301,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "성지경",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'30\"56",
         "note": null,
         "original_match_no": "38-4",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "진양호",
         "team": "팀shi",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'31\"04",
         "note": null,
         "original_match_no": "39",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 3,
         "name": "성환용",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'32\"50",
         "note": null,
         "original_match_no": "39",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 4
       },
       {
         "lane": 4,
         "name": "최호균",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'31\"84",
         "note": null,
         "original_match_no": "39",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       }
     ],
     "division": "성인부",
@@ -4125,31 +4370,34 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "이지호",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'30\"41",
         "note": null,
         "original_match_no": "40",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 7
       },
       {
         "lane": 3,
         "name": "신효정",
         "team": "Team JOS",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'29\"38",
         "note": null,
         "original_match_no": "41-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 4,
         "name": "김지해",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'28\"37",
         "note": null,
         "original_match_no": "41-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       }
     ],
     "division": "성인부",
@@ -4178,41 +4426,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "김나라",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'35\"38",
         "note": null,
         "original_match_no": "41-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "고민지",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'27\"78",
         "note": null,
         "original_match_no": "41-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 3,
         "name": "최예슬",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'28\"89",
         "note": null,
         "original_match_no": "41-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 4,
         "name": "정다운",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'28\"73",
         "note": null,
         "original_match_no": "41-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       }
     ],
     "division": "성인부",
@@ -4241,31 +4493,34 @@ export const ADULT_RACES_DATA = [
         "lane": 2,
         "name": "김서연",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'32\"84",
         "note": null,
         "original_match_no": "41-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "공채영",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'34\"43",
         "note": null,
         "original_match_no": "41-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "한지민",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'31\"77",
         "note": null,
         "original_match_no": "41-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       }
     ],
     "division": "성인부",
@@ -4294,41 +4549,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "김순영",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "13",
+        "record": "00'32\"06",
         "note": null,
         "original_match_no": "42-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "박지숙",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'29\"83",
         "note": null,
         "original_match_no": "42-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 3,
         "name": "조세비",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'27\"58",
         "note": null,
         "original_match_no": "42-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "여수연",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "18",
+        "record": "00'36\"36",
         "note": null,
         "original_match_no": "42-1",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -4357,41 +4616,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "유혜진",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "16",
+        "record": "00'33\"91",
         "note": null,
         "original_match_no": "42-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "한솜이",
         "team": "팀shi",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'28\"53",
         "note": null,
         "original_match_no": "42-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 3,
         "name": "주민정",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'27\"96",
         "note": null,
         "original_match_no": "42-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 4,
         "name": "서윤정",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "12",
+        "record": "00'31\"80",
         "note": null,
         "original_match_no": "42-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -4420,41 +4683,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "유경화",
         "team": "Team JOS",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "42-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "이주영",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'30\"29",
         "note": null,
         "original_match_no": "42-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "김민희",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "11",
+        "record": "00'31\"78",
         "note": null,
         "original_match_no": "42-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "조화정",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "00'31\"50",
         "note": null,
         "original_match_no": "42-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -4483,41 +4750,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "한지혜",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "14",
+        "record": "00'33\"48",
         "note": null,
         "original_match_no": "42-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "차진영",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "17",
+        "record": "00'34\"58",
         "note": null,
         "original_match_no": "42-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "조경진",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "42-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "이미영",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'31\"14",
         "note": null,
         "original_match_no": "42-4",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -4546,31 +4817,34 @@ export const ADULT_RACES_DATA = [
         "lane": 2,
         "name": "김현순",
         "team": "Team JOS",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'29\"99",
         "note": null,
         "original_match_no": "42-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 3,
         "name": "황은경",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'30\"51",
         "note": null,
         "original_match_no": "42-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "김상희",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "15",
+        "record": "00'33\"80",
         "note": null,
         "original_match_no": "42-5",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -4599,21 +4873,23 @@ export const ADULT_RACES_DATA = [
         "lane": 2,
         "name": "엄지선",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "42-6",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "윤나영",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'29\"79",
         "note": null,
         "original_match_no": "42-6",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       }
     ],
     "division": "성인부",
@@ -4642,41 +4918,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "박명혜",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'35\"60",
         "note": null,
         "original_match_no": "43-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "정근혜",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'37\"54",
         "note": null,
         "original_match_no": "43-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "박선화",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'32\"21",
         "note": null,
         "original_match_no": "43-1",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 5
       },
       {
         "lane": 4,
         "name": "김희숙",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'30\"15",
         "note": null,
         "original_match_no": "43-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       }
     ],
     "division": "성인부",
@@ -4705,41 +4985,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "강영숙",
         "team": "팀shi",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'32\"67",
         "note": null,
         "original_match_no": "43-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 2,
         "name": "김희정",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'33\"07",
         "note": null,
         "original_match_no": "43-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 3,
         "name": "김은주",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'37\"99",
         "note": null,
         "original_match_no": "43-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "전경미",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'32\"21",
         "note": null,
         "original_match_no": "43-2",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 5
       }
     ],
     "division": "성인부",
@@ -4770,31 +5054,34 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "박현애",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "00'38\"22",
         "note": null,
         "original_match_no": "43-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김부연",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'32\"97",
         "note": null,
         "original_match_no": "43-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 4,
         "name": "최지희",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'35\"46",
         "note": null,
         "original_match_no": "44",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 7
       }
     ],
     "division": "성인부",
@@ -4823,31 +5110,34 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "김지환",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'33\"46",
         "note": null,
         "original_match_no": "45",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 2,
         "name": "김영준",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'39\"81",
         "note": null,
         "original_match_no": "45",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 3,
         "name": "이동규",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'40\"25",
         "note": null,
         "original_match_no": "45",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       }
     ],
     "division": "성인부",
@@ -4876,41 +5166,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "이정환",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'38\"63",
         "note": null,
         "original_match_no": "46-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 2,
         "name": "김문정",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'42\"38",
         "note": null,
         "original_match_no": "46-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 3,
         "name": "김준우",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'37\"60",
         "note": null,
         "original_match_no": "46-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 4,
         "name": "최호택",
         "team": "팀shi",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'44\"09",
         "note": null,
         "original_match_no": "46-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       }
     ],
     "division": "성인부",
@@ -4939,31 +5233,34 @@ export const ADULT_RACES_DATA = [
         "lane": 2,
         "name": "최윤호",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'36\"05",
         "note": null,
         "original_match_no": "46-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 3,
         "name": "정성민",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "01'10\"06",
         "note": null,
         "original_match_no": "46-2",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "박형서",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'37\"15",
         "note": null,
         "original_match_no": "46-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       }
     ],
     "division": "성인부",
@@ -4992,41 +5289,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "최치완",
         "team": "Team JOS",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'38\"95",
         "note": null,
         "original_match_no": "47-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "이태헌",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'35\"97",
         "note": null,
         "original_match_no": "47-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 3,
         "name": "이현우",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'34\"42",
         "note": null,
         "original_match_no": "47-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "박우식",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'37\"35",
         "note": null,
         "original_match_no": "47-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       }
     ],
     "division": "성인부",
@@ -5055,41 +5356,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "이태현",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "11",
+        "record": "00'42\"64",
         "note": null,
         "original_match_no": "47-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "조건희",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "47-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "임은호",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'38\"29",
         "note": null,
         "original_match_no": "47-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 4,
         "name": "양기정",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'35\"53",
         "note": null,
         "original_match_no": "47-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       }
     ],
     "division": "성인부",
@@ -5118,41 +5423,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "정성훈",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'37\"88",
         "note": null,
         "original_match_no": "47-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 2,
         "name": "김익희",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "00'41\"34",
         "note": null,
         "original_match_no": "47-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "정민수",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'39\"85",
         "note": null,
         "original_match_no": "47-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "이소열",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "47-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -5183,21 +5492,23 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "양철민",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'38\"35",
         "note": null,
         "original_match_no": "47-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "김양훈",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "48-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -5226,41 +5537,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "최민석",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'46\"80",
         "note": null,
         "original_match_no": "48-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김재환",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'33\"73",
         "note": null,
         "original_match_no": "48-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 3,
         "name": "정민철",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'37\"10",
         "note": null,
         "original_match_no": "48-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 4,
         "name": "정서현",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
-        "note": null,
+        "rank": "실격",
+        "record": "88'88\"88",
+        "note": "돌핀킥2회",
         "original_match_no": "48-2",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -5289,41 +5604,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "서종혜",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "48-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "제선호",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'40\"97",
         "note": null,
         "original_match_no": "48-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 3,
         "name": "이원주",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'50\"42",
         "note": null,
         "original_match_no": "48-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "김준영",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'42\"32",
         "note": null,
         "original_match_no": "48-3",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 1
       }
     ],
     "division": "성인부",
@@ -5352,41 +5671,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "한주한",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'49\"32",
         "note": null,
         "original_match_no": "48-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "송창현",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "48-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "손규식",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'40\"87",
         "note": null,
         "original_match_no": "48-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 4,
         "name": "안창환",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'38\"68",
         "note": null,
         "original_match_no": "48-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       }
     ],
     "division": "성인부",
@@ -5415,31 +5738,34 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "노용진",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "49-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "서정찬",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'42\"13",
         "note": null,
         "original_match_no": "49-1",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 5
       },
       {
         "lane": 3,
         "name": "유보승",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'37\"83",
         "note": null,
         "original_match_no": "49-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       }
     ],
     "division": "성인부",
@@ -5468,31 +5794,34 @@ export const ADULT_RACES_DATA = [
         "lane": 2,
         "name": "한성주",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'46\"03",
         "note": null,
         "original_match_no": "49-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 3,
         "name": "이경열",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'44\"01",
         "note": null,
         "original_match_no": "49-2",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 4
       },
       {
         "lane": 4,
         "name": "김상오",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "49-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -5521,31 +5850,34 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "박봉권",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'53\"38",
         "note": null,
         "original_match_no": "50",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 5
       },
       {
         "lane": 2,
         "name": "권순용",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
-        "note": null,
+        "rank": "실격",
+        "record": "88'88\"88",
+        "note": "영법변경",
         "original_match_no": "50",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "김득수",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'45\"94",
         "note": null,
         "original_match_no": "50",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       }
     ],
     "division": "성인부",
@@ -5574,21 +5906,23 @@ export const ADULT_RACES_DATA = [
         "lane": 2,
         "name": "이해린",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'52\"41",
         "note": null,
         "original_match_no": "51",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 3,
         "name": "김지원",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'59\"27",
         "note": null,
         "original_match_no": "51",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       }
     ],
     "division": "성인부",
@@ -5617,41 +5951,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "고민지",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'46\"82",
         "note": null,
         "original_match_no": "52-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 2,
         "name": "최주희",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "01'03\"80",
         "note": null,
         "original_match_no": "52-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 3,
         "name": "김슬기",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'41\"01",
         "note": null,
         "original_match_no": "52-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "노언영",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'43\"34",
         "note": null,
         "original_match_no": "52-1",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 5
       }
     ],
     "division": "성인부",
@@ -5680,31 +6018,34 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "김장미",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'59\"93",
         "note": null,
         "original_match_no": "52-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 2,
         "name": "김서연",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'58\"58",
         "note": null,
         "original_match_no": "52-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 3,
         "name": "노안나",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "52-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -5733,41 +6074,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "전소영",
         "team": "팀shi",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'49\"43",
         "note": null,
         "original_match_no": "53-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 2,
         "name": "이은희",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'49\"53",
         "note": null,
         "original_match_no": "53-1",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 4
       },
       {
         "lane": 3,
         "name": "박지숙",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'47\"08",
         "note": null,
         "original_match_no": "53-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "윤아림",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'49\"78",
         "note": null,
         "original_match_no": "53-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       }
     ],
     "division": "성인부",
@@ -5796,41 +6141,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "박선진",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'57\"41",
         "note": null,
         "original_match_no": "53-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "전현주",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
-        "note": null,
+        "rank": "실격",
+        "record": "88'88\"88",
+        "note": "돌핀킥5회",
         "original_match_no": "53-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "이연정",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "53-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "임영란",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'56\"14",
         "note": null,
         "original_match_no": "53-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -5859,41 +6208,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "유혜진",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'56\"48",
         "note": null,
         "original_match_no": "53-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "손혜정",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'49\"78",
         "note": null,
         "original_match_no": "53-3",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 3
       },
       {
         "lane": 3,
         "name": "장현숙",
         "team": "Team JOS",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'54\"85",
         "note": null,
         "original_match_no": "53-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 4,
         "name": "서우선",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "53-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -5922,41 +6275,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "박현정",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'49\"78",
         "note": null,
         "original_match_no": "54-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 2,
         "name": "이성미",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'51\"68",
         "note": null,
         "original_match_no": "54-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 3,
         "name": "박선화",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'53\"37",
         "note": null,
         "original_match_no": "54-1",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 3
       },
       {
         "lane": 4,
         "name": "김진옥",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'59\"84",
         "note": null,
         "original_match_no": "54-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -5985,41 +6342,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "이경순",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "54-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "정남정",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "01'02\"47",
         "note": null,
         "original_match_no": "54-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "허희경",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'48\"73",
         "note": null,
         "original_match_no": "54-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "오수양",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'57\"03",
         "note": null,
         "original_match_no": "54-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       }
     ],
     "division": "성인부",
@@ -6050,21 +6411,23 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "윤현희",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'56\"87",
         "note": null,
         "original_match_no": "54-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 4,
         "name": "송원자",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'48\"13",
         "note": null,
         "original_match_no": "55",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 7
       }
     ],
     "division": "성인부",
@@ -6091,43 +6454,47 @@ export const ADULT_RACES_DATA = [
     "lanes": [
       {
         "lane": 1,
-        "name": "",
+        "name": "이수영, 유보승, 손규식, 안태균",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "02'32\"45",
         "note": null,
         "original_match_no": "56-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 6
       },
       {
         "lane": 2,
-        "name": "",
+        "name": "윤주권, 권순용, 정서현, 정성민",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "03'35\"08",
         "note": null,
         "original_match_no": "56-1",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 3,
-        "name": "",
+        "name": "강민성, 안창환, 김양훈, 김득수",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "02'35\"19",
         "note": null,
         "original_match_no": "56-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 4,
-        "name": "",
+        "name": "전용균, 엄정웅, 김형준, 이태헌",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "02'08\"99",
         "note": null,
         "original_match_no": "56-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 14
       }
     ],
     "division": "성인부",
@@ -6154,33 +6521,36 @@ export const ADULT_RACES_DATA = [
     "lanes": [
       {
         "lane": 2,
-        "name": "",
+        "name": "윤상열, 정민수, 김덕규, 서종혜",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "02'25\"74",
         "note": null,
         "original_match_no": "56-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 8
       },
       {
         "lane": 3,
-        "name": "",
+        "name": "이경후, 양철민, 민병철, 김민재",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "02'17\"80",
         "note": null,
         "original_match_no": "56-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 10
       },
       {
         "lane": 4,
-        "name": "",
+        "name": "조성찬, 서정찬, 박재홍, 안상준",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "02'32\"89",
         "note": null,
         "original_match_no": "56-2",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 4
       }
     ],
     "division": "성인부",
@@ -6207,43 +6577,47 @@ export const ADULT_RACES_DATA = [
     "lanes": [
       {
         "lane": 1,
-        "name": "",
+        "name": "심민경, 이은희, 김애란, 김상희",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "03'18\"19",
         "note": null,
         "original_match_no": "57-1",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 4
       },
       {
         "lane": 2,
-        "name": "",
+        "name": "김보람, 황세린, 조현정, 황다은",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "02'37\"19",
         "note": null,
         "original_match_no": "57-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 14
       },
       {
         "lane": 3,
-        "name": "",
+        "name": "윤아림, 유혜진, 김민주, 박선혜",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
-        "note": null,
+        "rank": "실격",
+        "record": "88'88\"88",
+        "note": "3번부정출발",
         "original_match_no": "57-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
-        "name": "",
+        "name": "김슬기, 김선영, 하미연, 김순영",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "57-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -6270,33 +6644,36 @@ export const ADULT_RACES_DATA = [
     "lanes": [
       {
         "lane": 2,
-        "name": "",
+        "name": "김희정, 김혜진, 노안나, 이성미",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "03'08\"03",
         "note": null,
         "original_match_no": "57-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 10
       },
       {
         "lane": 3,
-        "name": "",
+        "name": "전경미, 추성비, 이미영, 손혜정",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "03'14\"30",
         "note": null,
         "original_match_no": "57-2",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 6
       },
       {
         "lane": 4,
-        "name": "",
+        "name": "김희숙, 박현정, 정명혜, 박희경",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "03'11\"50",
         "note": null,
         "original_match_no": "57-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 8
       }
     ],
     "division": "성인부",
@@ -6325,31 +6702,34 @@ export const ADULT_RACES_DATA = [
         "lane": 2,
         "name": "김영준",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'30\"78",
         "note": null,
         "original_match_no": "58-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 3,
         "name": "박슬우",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'25\"06",
         "note": null,
         "original_match_no": "58-1",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "김한주",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'29\"04",
         "note": null,
         "original_match_no": "58-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       }
     ],
     "division": "성인부",
@@ -6378,31 +6758,34 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "조성찬",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'31\"15",
         "note": null,
         "original_match_no": "58-2",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 1
       },
       {
         "lane": 2,
         "name": "김지환",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'27\"15",
         "note": null,
         "original_match_no": "58-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 3,
         "name": "이동규",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'28\"12",
         "note": null,
         "original_match_no": "58-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       }
     ],
     "division": "성인부",
@@ -6431,41 +6814,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "조재광",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'31\"97",
         "note": null,
         "original_match_no": "59-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김재훈",
         "team": "Team JOS",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'29\"16",
         "note": null,
         "original_match_no": "59-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 3,
         "name": "정광원",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'30\"45",
         "note": null,
         "original_match_no": "59-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 4,
         "name": "박정현",
         "team": "팀shi",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "59-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -6494,41 +6881,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "김경모",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'31\"39",
         "note": null,
         "original_match_no": "59-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 2,
         "name": "정성민",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "01'03\"42",
         "note": null,
         "original_match_no": "59-2",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "위지승",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'29\"97",
         "note": null,
         "original_match_no": "59-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 4,
         "name": "박예한",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'33\"75",
         "note": null,
         "original_match_no": "59-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -6557,41 +6948,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "황규태",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'26\"10",
         "note": null,
         "original_match_no": "59-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 2,
         "name": "박대욱",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "59-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "최호택",
         "team": "팀shi",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'31\"39",
         "note": null,
         "original_match_no": "59-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 4,
         "name": "박형서",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'28\"95",
         "note": null,
         "original_match_no": "59-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       }
     ],
     "division": "성인부",
@@ -6620,41 +7015,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "임은호",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'31\"77",
         "note": null,
         "original_match_no": "60-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김덕규",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'29\"79",
         "note": null,
         "original_match_no": "60-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 3,
         "name": "이경후",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'24\"88",
         "note": null,
         "original_match_no": "60-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "곽성훈",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'29\"50",
         "note": null,
         "original_match_no": "60-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       }
     ],
     "division": "성인부",
@@ -6683,41 +7082,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "안재홍",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "60-2",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "양기정",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'28\"79",
         "note": null,
         "original_match_no": "60-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 3,
         "name": "강준현",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "11",
+        "record": "00'42\"13",
         "note": null,
         "original_match_no": "60-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "정성훈",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'29\"79",
         "note": null,
         "original_match_no": "60-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       }
     ],
     "division": "성인부",
@@ -6746,41 +7149,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "정성문",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "12",
+        "record": "00'46\"42",
         "note": null,
         "original_match_no": "60-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김건",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "60-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "최치완",
         "team": "Team JOS",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'28\"79",
         "note": null,
         "original_match_no": "60-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 4,
         "name": "김형준",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'29\"95",
         "note": null,
         "original_match_no": "60-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -6809,31 +7216,34 @@ export const ADULT_RACES_DATA = [
         "lane": 2,
         "name": "조건희",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "60-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "박우식",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'27\"73",
         "note": null,
         "original_match_no": "60-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 4,
         "name": "김우람",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "00'32\"04",
         "note": null,
         "original_match_no": "60-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -6862,41 +7272,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "임건형",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "13",
+        "record": "00'42\"23",
         "note": null,
         "original_match_no": "61-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김민재",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'32\"93",
         "note": null,
         "original_match_no": "61-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "이수영",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'30\"71",
         "note": null,
         "original_match_no": "61-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 4,
         "name": "김세종",
         "team": "팀shi",
-        "rank": null,
-        "record": null,
+        "rank": "12",
+        "record": "00'40\"16",
         "note": null,
         "original_match_no": "61-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -6925,41 +7339,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "손철수",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "14",
+        "record": "00'45\"37",
         "note": null,
         "original_match_no": "61-2",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김병주",
         "team": "Team JOS",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'34\"14",
         "note": null,
         "original_match_no": "61-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "파브지오롤로",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "61-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "변정현",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "61-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -6988,41 +7406,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "양승진",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "15",
+        "record": "00'49\"29",
         "note": null,
         "original_match_no": "61-3",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "엄정웅",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'27\"77",
         "note": null,
         "original_match_no": "61-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 3,
         "name": "민병철",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'31\"80",
         "note": null,
         "original_match_no": "61-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 4,
         "name": "안상준",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'30\"01",
         "note": null,
         "original_match_no": "61-3",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 5
       }
     ],
     "division": "성인부",
@@ -7051,31 +7473,34 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "안창환",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'32\"52",
         "note": null,
         "original_match_no": "61-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 2,
         "name": "서종혜",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "61-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "고석보",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "11",
+        "record": "00'38\"20",
         "note": null,
         "original_match_no": "61-4",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -7104,31 +7529,34 @@ export const ADULT_RACES_DATA = [
         "lane": 2,
         "name": "이준욱",
         "team": "Team JOS",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'32\"88",
         "note": null,
         "original_match_no": "61-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 3,
         "name": "김준영",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'37\"26",
         "note": null,
         "original_match_no": "61-5",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "이도형",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "00'37\"71",
         "note": null,
         "original_match_no": "61-5",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -7157,41 +7585,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "조영재",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "62-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "엄영길",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'32\"15",
         "note": null,
         "original_match_no": "62-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 3,
         "name": "김남곤",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'35\"11",
         "note": null,
         "original_match_no": "62-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 4,
         "name": "박영수",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'31\"54",
         "note": null,
         "original_match_no": "62-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       }
     ],
     "division": "성인부",
@@ -7220,41 +7652,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "조충남",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'34\"99",
         "note": null,
         "original_match_no": "62-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 2,
         "name": "전용균",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'27\"60",
         "note": null,
         "original_match_no": "62-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 3,
         "name": "윤득환",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "62-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "문준호",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'33\"07",
         "note": null,
         "original_match_no": "62-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       }
     ],
     "division": "성인부",
@@ -7285,31 +7721,34 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "박찬헌",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "62-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "권순용",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'56\"04",
         "note": null,
         "original_match_no": "63",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 5
       },
       {
         "lane": 4,
         "name": "최호균",
         "team": "DGIST",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'41\"65",
         "note": null,
         "original_match_no": "63",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       }
     ],
     "division": "성인부",
@@ -7338,41 +7777,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "정혜선",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "64-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "윤규미",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'32\"75",
         "note": null,
         "original_match_no": "64-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 3,
         "name": "추성비",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'37\"52",
         "note": null,
         "original_match_no": "64-1",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 2
       },
       {
         "lane": 4,
         "name": "김지민",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'33\"98",
         "note": null,
         "original_match_no": "64-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       }
     ],
     "division": "성인부",
@@ -7401,41 +7844,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "김지원",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'39\"64",
         "note": null,
         "original_match_no": "64-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김주희",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'38\"26",
         "note": null,
         "original_match_no": "64-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 3,
         "name": "김민주",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "64-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "송주미",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'33\"37",
         "note": null,
         "original_match_no": "64-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       }
     ],
     "division": "성인부",
@@ -7466,31 +7913,34 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "이영경",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'35\"50",
         "note": null,
         "original_match_no": "64-3",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 3
       },
       {
         "lane": 3,
         "name": "장경화",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "65-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "박승아",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'47\"95",
         "note": null,
         "original_match_no": "65-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -7519,41 +7969,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "공채영",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'51\"48",
         "note": null,
         "original_match_no": "65-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "노언영",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'35\"42",
         "note": null,
         "original_match_no": "65-2",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 5
       },
       {
         "lane": 3,
         "name": "김나람",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'40\"61",
         "note": null,
         "original_match_no": "65-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 4,
         "name": "이하선",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'33\"58",
         "note": null,
         "original_match_no": "65-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       }
     ],
     "division": "성인부",
@@ -7582,41 +8036,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "박양재",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'37\"36",
         "note": null,
         "original_match_no": "65-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 2,
         "name": "박혜진",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'44\"14",
         "note": null,
         "original_match_no": "65-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 3,
         "name": "김나라",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'50\"36",
         "note": null,
         "original_match_no": "65-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "최이슬",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'43\"37",
         "note": null,
         "original_match_no": "65-3",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 2
       }
     ],
     "division": "성인부",
@@ -7645,41 +8103,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "박선혜",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "00'40\"58",
         "note": null,
         "original_match_no": "66-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "홍효주",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'34\"40",
         "note": null,
         "original_match_no": "66-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 3,
         "name": "임영란",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "13",
+        "record": "00'42\"65",
         "note": null,
         "original_match_no": "66-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "박다유",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'35\"66",
         "note": null,
         "original_match_no": "66-1",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 3
       }
     ],
     "division": "성인부",
@@ -7708,41 +8170,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "김보람",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'36\"52",
         "note": null,
         "original_match_no": "66-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 2,
         "name": "심민경",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'39\"49",
         "note": null,
         "original_match_no": "66-2",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "하미연",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'34\"69",
         "note": null,
         "original_match_no": "66-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 4,
         "name": "김민희",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "15",
+        "record": "00'54\"72",
         "note": null,
         "original_match_no": "66-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -7771,41 +8237,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "이수은",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "14",
+        "record": "00'42\"76",
         "note": null,
         "original_match_no": "66-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "이연정",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "66-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "윤아림",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'39\"94",
         "note": null,
         "original_match_no": "66-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "이현경",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "66-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -7834,41 +8304,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "전소영",
         "team": "팀shi",
-        "rank": null,
-        "record": null,
+        "rank": "11",
+        "record": "00'42\"01",
         "note": null,
         "original_match_no": "66-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "전현주",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "12",
+        "record": "00'42\"20",
         "note": null,
         "original_match_no": "66-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "서우선",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "66-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "조현정",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'32\"36",
         "note": null,
         "original_match_no": "66-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       }
     ],
     "division": "성인부",
@@ -7897,31 +8371,34 @@ export const ADULT_RACES_DATA = [
         "lane": 2,
         "name": "조세비",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'35\"67",
         "note": null,
         "original_match_no": "66-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 3,
         "name": "김선영",
         "team": "팀애옹",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "66-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "조신애",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'36\"93",
         "note": null,
         "original_match_no": "66-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "성인부",
@@ -7950,41 +8427,45 @@ export const ADULT_RACES_DATA = [
         "lane": 1,
         "name": "김미진",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'38\"12",
         "note": null,
         "original_match_no": "67-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 2,
         "name": "전경미",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'44\"41",
         "note": null,
         "original_match_no": "67-1",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 1
       },
       {
         "lane": 3,
         "name": "김은주",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'49\"58",
         "note": null,
         "original_match_no": "67-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "이성미",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'40\"12",
         "note": null,
         "original_match_no": "67-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       }
     ],
     "division": "성인부",
@@ -8013,31 +8494,34 @@ export const ADULT_RACES_DATA = [
         "lane": 2,
         "name": "김애란",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'38\"53",
         "note": null,
         "original_match_no": "67-2",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 5
       },
       {
         "lane": 3,
         "name": "정남정",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'44\"37",
         "note": null,
         "original_match_no": "67-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 4,
         "name": "허희경",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'41\"07",
         "note": null,
         "original_match_no": "67-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       }
     ],
     "division": "성인부",
@@ -8066,21 +8550,23 @@ export const ADULT_RACES_DATA = [
         "lane": 2,
         "name": "송원자",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'40\"93",
         "note": null,
         "original_match_no": "68",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 7
       },
       {
         "lane": 3,
         "name": "최지희",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'43\"92",
         "note": null,
         "original_match_no": "68",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 5
       }
     ],
     "division": "성인부",
@@ -8107,33 +8593,36 @@ export const ADULT_RACES_DATA = [
     "lanes": [
       {
         "lane": 2,
-        "name": "",
+        "name": "심지수, 최민석, 이재곤, 윤규미, 이수은, 정희경",
         "team": "TEAM해수",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "02'47\"68",
         "note": null,
         "original_match_no": "69-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 10
       },
       {
         "lane": 3,
-        "name": "",
+        "name": "예성민, 한지훈, 정민철, 조세비, 주민정, 황다은",
         "team": "삼성중공업",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "02'35\"87",
         "note": null,
         "original_match_no": "69-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 14
       },
       {
         "lane": 4,
-        "name": "",
+        "name": "윤나영, 조충남, 김성준, 최미영, 박현정, 정다운",
         "team": "TYU",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "02'52\"76",
         "note": null,
         "original_match_no": "69-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 6
       }
     ],
     "division": "성인부",
@@ -8160,33 +8649,36 @@ export const ADULT_RACES_DATA = [
     "lanes": [
       {
         "lane": 2,
-        "name": "",
+        "name": "이지훈, 서충근, 박재홍, 이지호, 전경미, 박선화",
         "team": "거제몽꾸",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "69-2",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 3,
-        "name": "",
+        "name": "박양재, 김진옥, 오수양, 김덕규, 김우람, 정민수",
         "team": "해수의달인",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "02'50\"81",
         "note": null,
         "original_match_no": "69-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 8
       },
       {
         "lane": 4,
-        "name": "",
+        "name": "윤주권, 정서현, 권순용, 김애란, 이은희, 김상희",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "03'16\"66",
         "note": null,
         "original_match_no": "69-2",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 4
       }
     ],
     "division": "성인부",
@@ -8216,43 +8708,47 @@ export const STUDENT_RACES_DATA = [
     "lanes": [
       {
         "lane": 1,
-        "name": "",
+        "name": "마정우, 이은후, 조은우, 민형찬",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
-        "note": null,
+        "rank": "실격",
+        "record": "88'88\"88",
+        "note": "터치전출발(1->2번)",
         "original_match_no": "1-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
-        "name": "",
+        "name": "한서준, 김경민, 김대현, 김해솔",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "02'25\"01",
         "note": null,
         "original_match_no": "1-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 8
       },
       {
         "lane": 3,
-        "name": "",
+        "name": "배건우, 손민재, 양서진, 김루민",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "02'56\"60",
         "note": null,
         "original_match_no": "1-1",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 2
       },
       {
         "lane": 4,
-        "name": "",
+        "name": "유승현, 김태완, 정찬준, 조승우",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "02'23\"46",
         "note": null,
         "original_match_no": "1-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 10
       }
     ],
     "division": "학생부",
@@ -8279,43 +8775,47 @@ export const STUDENT_RACES_DATA = [
     "lanes": [
       {
         "lane": 1,
-        "name": "",
+        "name": "정연우, 박지후, 김도현, 김시윤",
         "team": "노블 TNV",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "02'20\"60",
         "note": null,
         "original_match_no": "1-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 14
       },
       {
         "lane": 2,
-        "name": "",
+        "name": "김현우, 박솔현, 김도담, 정도현",
         "team": "다람쥐특공대",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "02'32\"89",
         "note": null,
         "original_match_no": "1-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 6
       },
       {
         "lane": 3,
-        "name": "",
+        "name": "곽동혁, 이다은, 조유준, 김보겸",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "02'56\"67",
         "note": null,
         "original_match_no": "1-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
-        "name": "",
+        "name": "김태한, 정준휘, 류영준, 제유찬",
         "team": "통영유소년수영클럽",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "02'36\"79",
         "note": null,
         "original_match_no": "1-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       }
     ],
     "division": "학생부",
@@ -8342,33 +8842,36 @@ export const STUDENT_RACES_DATA = [
     "lanes": [
       {
         "lane": 1,
-        "name": "",
+        "name": "김승기, 조현서, 이재원, 원유찬",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "02'01\"72",
         "note": null,
         "original_match_no": "2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 14
       },
       {
         "lane": 2,
-        "name": "",
+        "name": "이다훈, 김종원, 김재우, 오성민",
         "team": "삼성야호",
-        "rank": null,
-        "record": null,
-        "note": null,
+        "rank": "실격",
+        "record": "88'88\"88",
+        "note": "4번주자 빨리뜀",
         "original_match_no": "2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
-        "name": "",
+        "name": "임성현, 최예준, 여준석, 김태하",
         "team": "노블 TNV",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "02'05\"01",
         "note": null,
         "original_match_no": "2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 10
       }
     ],
     "division": "학생부",
@@ -8395,43 +8898,47 @@ export const STUDENT_RACES_DATA = [
     "lanes": [
       {
         "lane": 1,
-        "name": "",
+        "name": "엄유민, 이지민, 김다연, 반서현",
         "team": "거제야호",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "02'40\"53",
         "note": null,
         "original_match_no": "3-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 6
       },
       {
         "lane": 2,
-        "name": "",
+        "name": "윤지민, 안지현, 전연서, 임하율",
         "team": "통영유소년수영클럽",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "02'46\"12",
         "note": null,
         "original_match_no": "3-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 3,
-        "name": "",
+        "name": "차세은, 김로아, 김재이, 김지나",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "02'56\"38",
         "note": null,
         "original_match_no": "3-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
-        "name": "",
+        "name": "김하준, 김예준, 양서진, 이서빈",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "03'04\"39",
         "note": null,
         "original_match_no": "3-1",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -8458,43 +8965,47 @@ export const STUDENT_RACES_DATA = [
     "lanes": [
       {
         "lane": 1,
-        "name": "",
+        "name": "조유빈, 조유나, 강다현, 명지안",
         "team": "오르카스위밍",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "02'49\"69",
         "note": null,
         "original_match_no": "3-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 2,
-        "name": "",
+        "name": "이유주, 김서연, 김나은, 황부민",
         "team": "노블 TNV",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "02'35\"58",
         "note": null,
         "original_match_no": "3-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 8
       },
       {
         "lane": 3,
-        "name": "",
+        "name": "김지율, 강예서, 전지예, 정효빈",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "02'24\"85",
         "note": null,
         "original_match_no": "3-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 14
       },
       {
         "lane": 4,
-        "name": "",
+        "name": "안채정, 최시원, 백미소, 안서현",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "03'10\"05",
         "note": null,
         "original_match_no": "3-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -8521,23 +9032,25 @@ export const STUDENT_RACES_DATA = [
     "lanes": [
       {
         "lane": 2,
-        "name": "",
+        "name": "김유희, 허은유, 이하경, 정예율",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "02'35\"15",
         "note": null,
         "original_match_no": "3-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 10
       },
       {
         "lane": 3,
-        "name": "",
+        "name": "강서아, 이아인, 신서인, 심지유",
         "team": "키튼드림팀",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "03'11\"59",
         "note": null,
         "original_match_no": "3-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -8568,21 +9081,23 @@ export const STUDENT_RACES_DATA = [
         "lane": 2,
         "name": "송이안",
         "team": "노블 TNV",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'39\"75",
         "note": null,
         "original_match_no": "4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "조승우",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'41\"66",
         "note": null,
         "original_match_no": "5-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       }
     ],
     "division": "학생부",
@@ -8611,41 +9126,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "이   현",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "16",
+        "record": "01'05\"07",
         "note": null,
         "original_match_no": "5-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김호현",
         "team": "IMD스위밍클럽",
-        "rank": null,
-        "record": null,
+        "rank": "11",
+        "record": "00'58\"44",
         "note": null,
         "original_match_no": "5-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "이도윤",
         "team": "다람쥐특공대",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'47\"61",
         "note": null,
         "original_match_no": "5-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 4,
         "name": "이서빈",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "5-2",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -8674,41 +9193,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "진시윤",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'52\"98",
         "note": null,
         "original_match_no": "5-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김현우",
         "team": "다람쥐특공대",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'51\"85",
         "note": null,
         "original_match_no": "5-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 3,
         "name": "김시원",
         "team": "IMD스위밍클럽",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'42\"89",
         "note": null,
         "original_match_no": "5-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 4,
         "name": "서한",
         "team": "진주스포츠클럽",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'52\"06",
         "note": null,
         "original_match_no": "5-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -8737,41 +9260,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "김준수",
         "team": "IMD스위밍클럽",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'54\"28",
         "note": null,
         "original_match_no": "5-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "주윤재",
         "team": "다람쥐특공대",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "00'55\"10",
         "note": null,
         "original_match_no": "5-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "정연우",
         "team": "노블 TNV",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'39\"14",
         "note": null,
         "original_match_no": "5-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "박윤우",
         "team": "진주스포츠클럽",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'47\"99",
         "note": null,
         "original_match_no": "5-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       }
     ],
     "division": "학생부",
@@ -8800,41 +9327,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "조은탁",
         "team": "진주스포츠클럽",
-        "rank": null,
-        "record": null,
+        "rank": "15",
+        "record": "01'01\"64",
         "note": null,
         "original_match_no": "5-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "이은후",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "12",
+        "record": "00'58\"47",
         "note": null,
         "original_match_no": "5-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "제유찬",
         "team": "통영유소년수영클럽",
-        "rank": null,
-        "record": null,
+        "rank": "13",
+        "record": "00'59\"76",
         "note": null,
         "original_match_no": "5-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "심도담",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "14",
+        "record": "01'01\"01",
         "note": null,
         "original_match_no": "5-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -8863,41 +9394,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "정찬준",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'39\"38",
         "note": null,
         "original_match_no": "6-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 2,
         "name": "노연준",
         "team": "프리라움샤크",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'56\"84",
         "note": null,
         "original_match_no": "6-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "김라온",
         "team": "IMD스위밍클럽",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'56\"88",
         "note": null,
         "original_match_no": "6-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "성예준",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "6-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -8926,31 +9461,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 2,
         "name": "손유준",
         "team": "IMD스위밍클럽",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'48\"56",
         "note": null,
         "original_match_no": "6-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 3,
         "name": "김태양",
         "team": "통영유소년수영클럽",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'38\"56",
         "note": null,
         "original_match_no": "6-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 4,
         "name": "정민재",
         "team": "키튼드림팀",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'54\"29",
         "note": null,
         "original_match_no": "6-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -8979,31 +9517,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 2,
         "name": "이다온",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'48\"92",
         "note": null,
         "original_match_no": "6-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 3,
         "name": "조연우",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'37\"08",
         "note": null,
         "original_match_no": "6-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "김건우",
         "team": "IMD스위밍클럽",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'43\"53",
         "note": null,
         "original_match_no": "6-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       }
     ],
     "division": "학생부",
@@ -9032,41 +9573,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "박성준",
         "team": "프리라움돌핀",
-        "rank": null,
-        "record": null,
-        "note": null,
+        "rank": "실격",
+        "record": "88'88\"88",
+        "note": "멈춤",
         "original_match_no": "7-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "추승우",
         "team": "거제야호",
-        "rank": null,
-        "record": null,
+        "rank": "12",
+        "record": "00'59\"79",
         "note": null,
         "original_match_no": "7-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "최현도",
         "team": "IMD스위밍클럽",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'42\"47",
         "note": null,
         "original_match_no": "7-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 4,
         "name": "이동하",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'49\"90",
         "note": null,
         "original_match_no": "7-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -9095,41 +9640,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "진시원",
         "team": "개인",
-        "rank": null,
-        "record": null,
-        "note": null,
+        "rank": "실격",
+        "record": "88'88\"88",
+        "note": "영법실격",
         "original_match_no": "7-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "구노유",
         "team": "다람쥐특공대",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'45\"70",
         "note": null,
         "original_match_no": "7-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "문강현",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'45\"39",
         "note": null,
         "original_match_no": "7-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 4,
         "name": "이수민",
         "team": "노블 TNV",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'39\"70",
         "note": null,
         "original_match_no": "7-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       }
     ],
     "division": "학생부",
@@ -9158,41 +9707,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "박성원",
         "team": "거제찬스샤크",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "00'54\"12",
         "note": null,
         "original_match_no": "7-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "박건우",
         "team": "프리라움돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "15",
+        "record": "01'11\"56",
         "note": null,
         "original_match_no": "7-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "육상현",
         "team": "노블 TNV",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'36\"89",
         "note": null,
         "original_match_no": "7-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "양승현",
         "team": "프리라움샤크",
-        "rank": null,
-        "record": null,
+        "rank": "14",
+        "record": "01'03\"26",
         "note": null,
         "original_match_no": "7-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -9221,31 +9774,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "장이현",
         "team": "노블 TNV",
-        "rank": null,
-        "record": null,
+        "rank": "13",
+        "record": "01'00\"13",
         "note": null,
         "original_match_no": "7-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "류영준",
         "team": "통영유소년수영클럽",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'41\"42",
         "note": null,
         "original_match_no": "7-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 3,
         "name": "강규민",
         "team": "금빛",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'45\"01",
         "note": null,
         "original_match_no": "7-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       }
     ],
     "division": "학생부",
@@ -9274,21 +9830,23 @@ export const STUDENT_RACES_DATA = [
         "lane": 2,
         "name": "김태운",
         "team": "프리라움돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "11",
+        "record": "00'58\"41",
         "note": null,
         "original_match_no": "7-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "조은우",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'48\"41",
         "note": null,
         "original_match_no": "7-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -9317,41 +9875,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "김도현",
         "team": "노블 TNV",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'36\"60",
         "note": null,
         "original_match_no": "8-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 2,
         "name": "이리안",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "12",
+        "record": "00'47\"41",
         "note": null,
         "original_match_no": "8-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "천시후",
         "team": "프리라움웨일",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "8-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "하민성",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'40\"39",
         "note": null,
         "original_match_no": "8-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       }
     ],
     "division": "학생부",
@@ -9380,41 +9942,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "최건호",
         "team": "프리라움샤크",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "8-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "이현준",
         "team": "노블 TNV",
-        "rank": null,
-        "record": null,
-        "note": null,
+        "rank": "실격",
+        "record": "88'88\"88",
+        "note": "포기",
         "original_match_no": "8-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "민형찬",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'37\"99",
         "note": null,
         "original_match_no": "8-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 4,
         "name": "김도윤",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'42\"30",
         "note": null,
         "original_match_no": "8-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       }
     ],
     "division": "학생부",
@@ -9443,41 +10009,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "김태한",
         "team": "통영유소년수영클럽",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "8-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김도담",
         "team": "다람쥐특공대",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'43\"76",
         "note": null,
         "original_match_no": "8-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "장하준",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "15",
+        "record": "00'53\"31",
         "note": null,
         "original_match_no": "8-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "조은호",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'38\"90",
         "note": null,
         "original_match_no": "8-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       }
     ],
     "division": "학생부",
@@ -9506,41 +10076,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "오유준",
         "team": "금빛",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'42\"35",
         "note": null,
         "original_match_no": "8-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "임준후",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "14",
+        "record": "00'47\"70",
         "note": null,
         "original_match_no": "8-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "양서진",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "13",
+        "record": "00'47\"55",
         "note": null,
         "original_match_no": "8-4",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "김경민",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'40\"52",
         "note": null,
         "original_match_no": "8-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       }
     ],
     "division": "학생부",
@@ -9569,31 +10143,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "서윤우",
         "team": "노블 TNV",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'42\"96",
         "note": null,
         "original_match_no": "8-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "산지케난",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "11",
+        "record": "00'47\"05",
         "note": null,
         "original_match_no": "8-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "장현규",
         "team": "프리라움샤크",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "00'44\"43",
         "note": null,
         "original_match_no": "8-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -9622,41 +10199,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "유승현",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'35\"69",
         "note": null,
         "original_match_no": "9-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 2,
         "name": "안유찬",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'33\"54",
         "note": null,
         "original_match_no": "9-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 3,
         "name": "정준휘",
         "team": "통영유소년수영클럽",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'43\"79",
         "note": null,
         "original_match_no": "9-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "강진우",
         "team": "금빛",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'35\"38",
         "note": null,
         "original_match_no": "9-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       }
     ],
     "division": "학생부",
@@ -9685,31 +10266,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "이승원",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'36\"87",
         "note": null,
         "original_match_no": "9-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 2,
         "name": "이동근",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'34\"99",
         "note": null,
         "original_match_no": "9-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 3,
         "name": "마정우",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'34\"17",
         "note": null,
         "original_match_no": "9-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       }
     ],
     "division": "학생부",
@@ -9738,31 +10322,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "강한솔",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'38\"46",
         "note": null,
         "original_match_no": "9-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김현우",
         "team": "거제야호",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "9-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "김태완",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'39\"76",
         "note": null,
         "original_match_no": "9-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -9791,41 +10378,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "이동민",
         "team": "IMD스위밍클럽",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'30\"96",
         "note": null,
         "original_match_no": "10-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 2,
         "name": "박현민",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'38\"77",
         "note": null,
         "original_match_no": "10-1",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "추승현",
         "team": "삼성야호",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "00'41\"71",
         "note": null,
         "original_match_no": "10-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "김승기",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'36\"38",
         "note": null,
         "original_match_no": "10-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -9854,41 +10445,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "김태하",
         "team": "노블 TNV",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'32\"72",
         "note": null,
         "original_match_no": "10-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 2,
         "name": "김승후",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'37\"48",
         "note": null,
         "original_match_no": "10-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "최준영",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "10-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "원유찬",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'29\"29",
         "note": null,
         "original_match_no": "10-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       }
     ],
     "division": "학생부",
@@ -9917,31 +10512,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "심지완",
         "team": "키튼드림팀",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'30\"59",
         "note": null,
         "original_match_no": "10-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 2,
         "name": "김종원",
         "team": "삼성야호",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'32\"26",
         "note": null,
         "original_match_no": "10-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 3,
         "name": "최예준",
         "team": "노블 TNV",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'36\"14",
         "note": null,
         "original_match_no": "10-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       }
     ],
     "division": "학생부",
@@ -9970,41 +10568,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "김가람",
         "team": "키튼드림팀",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'57\"23",
         "note": null,
         "original_match_no": "11",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 2,
         "name": "백해인",
         "team": "노블 TNV",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "01'01\"86",
         "note": null,
         "original_match_no": "11",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 3,
         "name": "원이솔",
         "team": "IMD스위밍클럽",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'54\"84",
         "note": null,
         "original_match_no": "11",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "임승주",
         "team": "통영유소년수영클럽",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "01'18\"66",
         "note": null,
         "original_match_no": "11",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       }
     ],
     "division": "학생부",
@@ -10033,41 +10635,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "이유주",
         "team": "노블 TNV",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'57\"98",
         "note": null,
         "original_match_no": "12-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 2,
         "name": "박소율",
         "team": "프리라움샤크",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "01'52\"96",
         "note": null,
         "original_match_no": "12-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "이연서",
         "team": "금빛",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'46\"30",
         "note": null,
         "original_match_no": "12-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "윤설아",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'56\"23",
         "note": null,
         "original_match_no": "12-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       }
     ],
     "division": "학생부",
@@ -10096,31 +10702,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "지상희",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "12-2",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "임하율",
         "team": "통영유소년수영클럽",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "01'14\"21",
         "note": null,
         "original_match_no": "12-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 3,
         "name": "엄유민",
         "team": "거제야호",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'50\"60",
         "note": null,
         "original_match_no": "12-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       }
     ],
     "division": "학생부",
@@ -10149,31 +10758,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "박서우",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "01'19\"35",
         "note": null,
         "original_match_no": "12-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "강서아",
         "team": "키튼드림팀",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'58\"80",
         "note": null,
         "original_match_no": "12-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 3,
         "name": "김태희",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "01'24\"94",
         "note": null,
         "original_match_no": "12-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -10202,41 +10814,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "문정빈",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'44\"13",
         "note": null,
         "original_match_no": "13-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 2,
         "name": "김라은",
         "team": "프리라움샤크",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "01'05\"26",
         "note": null,
         "original_match_no": "13-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 3,
         "name": "허지우",
         "team": "IMD스위밍클럽",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'52\"15",
         "note": null,
         "original_match_no": "13-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 4,
         "name": "전아린",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'47\"26",
         "note": null,
         "original_match_no": "13-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       }
     ],
     "division": "학생부",
@@ -10265,31 +10881,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "이아인B",
         "team": "진주스포츠클럽",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'43\"70",
         "note": null,
         "original_match_no": "13-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 2,
         "name": "류하윤",
         "team": "프리라움돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "01'13\"62",
         "note": null,
         "original_match_no": "13-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "박해솔비",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'43\"21",
         "note": null,
         "original_match_no": "13-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       }
     ],
     "division": "학생부",
@@ -10318,41 +10937,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "정은아",
         "team": "프리라움웨일",
-        "rank": null,
-        "record": null,
+        "rank": "11",
+        "record": "00'59\"66",
         "note": null,
         "original_match_no": "14-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "주하윤",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'44\"33",
         "note": null,
         "original_match_no": "14-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 3,
         "name": "이지윤",
         "team": "다람쥐특공대",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'37\"84",
         "note": null,
         "original_match_no": "14-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "정예은",
         "team": "금빛",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'38\"32",
         "note": null,
         "original_match_no": "14-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       }
     ],
     "division": "학생부",
@@ -10381,41 +11004,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "전아윤",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'47\"01",
         "note": null,
         "original_match_no": "14-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김다온",
         "team": "IMD스위밍클럽",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'39\"81",
         "note": null,
         "original_match_no": "14-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 3,
         "name": "전연서",
         "team": "통영유소년수영클럽",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "00'50\"02",
         "note": null,
         "original_match_no": "14-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "이채빈",
         "team": "노블 TNV",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'45\"43",
         "note": null,
         "original_match_no": "14-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -10444,41 +11071,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "김은서",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'39\"88",
         "note": null,
         "original_match_no": "14-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 2,
         "name": "서지은",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "14-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "김나은",
         "team": "노블 TNV",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'47\"40",
         "note": null,
         "original_match_no": "14-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "이하경",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'43\"96",
         "note": null,
         "original_match_no": "14-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       }
     ],
     "division": "학생부",
@@ -10507,41 +11138,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "정예린",
         "team": "거제야호",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'55\"87",
         "note": null,
         "original_match_no": "15-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "차세은",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'43\"34",
         "note": null,
         "original_match_no": "15-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 3,
         "name": "이루비",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'42\"75",
         "note": null,
         "original_match_no": "15-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 4,
         "name": "전지예",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'37\"38",
         "note": null,
         "original_match_no": "15-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       }
     ],
     "division": "학생부",
@@ -10570,21 +11205,23 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "오은서",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'51\"09",
         "note": null,
         "original_match_no": "15-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "엄혜진",
         "team": "거제야호",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'47\"69",
         "note": null,
         "original_match_no": "15-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       }
     ],
     "division": "학생부",
@@ -10613,31 +11250,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "이은서",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'49\"49",
         "note": null,
         "original_match_no": "15-3",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김다연",
         "team": "거제야호",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'44\"83",
         "note": null,
         "original_match_no": "15-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 3,
         "name": "최서윤",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'42\"92",
         "note": null,
         "original_match_no": "15-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       }
     ],
     "division": "학생부",
@@ -10666,41 +11306,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "김지나",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
-        "note": null,
+        "rank": "실격",
+        "record": "88'88\"88",
+        "note": "한손터치",
         "original_match_no": "16-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "산지베스테",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'42\"14",
         "note": null,
         "original_match_no": "16-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 3,
         "name": "윤지민",
         "team": "통영유소년수영클럽",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'38\"24",
         "note": null,
         "original_match_no": "16-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 4,
         "name": "성예나",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'50\"59",
         "note": null,
         "original_match_no": "16-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -10729,41 +11373,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "정효빈",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'32\"92",
         "note": null,
         "original_match_no": "16-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 2,
         "name": "황부민",
         "team": "노블 TNV",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'37\"08",
         "note": null,
         "original_match_no": "16-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 3,
         "name": "김유희",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'40\"82",
         "note": null,
         "original_match_no": "16-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 4,
         "name": "박주하",
         "team": "거제찬스샤크",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "16-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -10794,41 +11442,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "안서현",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'54\"13",
         "note": null,
         "original_match_no": "16-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "이지우",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'48\"65",
         "note": null,
         "original_match_no": "16-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 3,
         "name": "남서희",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "16-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "정현서",
         "team": "삼성야호",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'41\"10",
         "note": null,
         "original_match_no": "17-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       }
     ],
     "division": "학생부",
@@ -10857,41 +11509,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "구윤",
         "team": "통영유소년수영클럽",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'39\"97",
         "note": null,
         "original_match_no": "17-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 2,
         "name": "이다은",
         "team": "삼성야호",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'43\"39",
         "note": null,
         "original_match_no": "17-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 3,
         "name": "지효진",
         "team": "거제찬스샤크",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'51\"33",
         "note": null,
         "original_match_no": "17-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 4,
         "name": "구아영",
         "team": "통영유소년수영클럽",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'35\"70",
         "note": null,
         "original_match_no": "17-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       }
     ],
     "division": "학생부",
@@ -10920,31 +11576,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 2,
         "name": "신유준",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "01'13\"01",
         "note": null,
         "original_match_no": "18-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 3,
         "name": "장서윤",
         "team": "IMD스위밍클럽",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'43\"77",
         "note": null,
         "original_match_no": "18-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "김도영",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "01'10\"15",
         "note": null,
         "original_match_no": "18-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       }
     ],
     "division": "학생부",
@@ -10973,31 +11632,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 2,
         "name": "정지운",
         "team": "오르카스위밍",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "01'01\"13",
         "note": null,
         "original_match_no": "18-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 3,
         "name": "조현진",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'55\"27",
         "note": null,
         "original_match_no": "18-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 4,
         "name": "백호준",
         "team": "거제찬스샤크",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "18-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -11026,41 +11688,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "이도윤",
         "team": "다람쥐특공대",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'52\"25",
         "note": null,
         "original_match_no": "19-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 2,
         "name": "진선우",
         "team": "프리라움샤크",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "01'00\"11",
         "note": null,
         "original_match_no": "19-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "손지호",
         "team": "IMD스위밍클럽",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'49\"79",
         "note": null,
         "original_match_no": "19-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 4,
         "name": "한서준",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'47\"34",
         "note": null,
         "original_match_no": "19-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       }
     ],
     "division": "학생부",
@@ -11089,41 +11755,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "안규담",
         "team": "IMD스위밍클럽",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'51\"63",
         "note": null,
         "original_match_no": "19-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 2,
         "name": "윤지섭",
         "team": "프리라움돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "12",
+        "record": "01'09\"96",
         "note": null,
         "original_match_no": "19-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "제유찬",
         "team": "통영유소년수영클럽",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'53\"02",
         "note": null,
         "original_match_no": "19-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 4,
         "name": "전주하",
         "team": "프리라움샤크",
-        "rank": null,
-        "record": null,
+        "rank": "14",
+        "record": "01'31\"37",
         "note": null,
         "original_match_no": "19-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -11152,41 +11822,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "오은우",
         "team": "진주스포츠클럽",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "01'01\"88",
         "note": null,
         "original_match_no": "19-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "박하준",
         "team": "통영유소년수영클럽",
-        "rank": null,
-        "record": null,
+        "rank": "11",
+        "record": "01'01\"94",
         "note": null,
         "original_match_no": "19-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "이서준",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'57\"22",
         "note": null,
         "original_match_no": "19-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "조유준",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "19-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -11215,31 +11889,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 2,
         "name": "하태우",
         "team": "IMD스위밍클럽",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'55\"93",
         "note": null,
         "original_match_no": "19-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "배건우",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "13",
+        "record": "01'12\"28",
         "note": null,
         "original_match_no": "19-4",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "조승우",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'45\"51",
         "note": null,
         "original_match_no": "19-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       }
     ],
     "division": "학생부",
@@ -11268,41 +11945,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "허준혁",
         "team": "프리라움샤크",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "01'00\"57",
         "note": null,
         "original_match_no": "20-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "손유준",
         "team": "IMD스위밍클럽",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'48\"83",
         "note": null,
         "original_match_no": "20-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 3,
         "name": "박지후",
         "team": "노블 TNV",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'39\"96",
         "note": null,
         "original_match_no": "20-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "이승하",
         "team": "오르카스위밍",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "20-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -11331,41 +12012,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "김민결",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'50\"36",
         "note": null,
         "original_match_no": "20-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 2,
         "name": "김대호",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "01'08\"99",
         "note": null,
         "original_match_no": "20-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "강민규",
         "team": "키튼드림팀",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'58\"84",
         "note": null,
         "original_match_no": "20-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "서이준",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'55\"84",
         "note": null,
         "original_match_no": "20-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       }
     ],
     "division": "학생부",
@@ -11394,41 +12079,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "이지석",
         "team": "금빛",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'53\"36",
         "note": null,
         "original_match_no": "20-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 2,
         "name": "안유겸",
         "team": "오르카스위밍",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'57\"55",
         "note": null,
         "original_match_no": "20-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "성예준",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "20-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "박원",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'42\"55",
         "note": null,
         "original_match_no": "20-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       }
     ],
     "division": "학생부",
@@ -11457,41 +12146,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "김건영",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "12",
+        "record": "00'48\"53",
         "note": null,
         "original_match_no": "21-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "박성원",
         "team": "거제찬스샤크",
-        "rank": null,
-        "record": null,
+        "rank": "13",
+        "record": "00'48\"63",
         "note": null,
         "original_match_no": "21-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "구노유",
         "team": "다람쥐특공대",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'45\"37",
         "note": null,
         "original_match_no": "21-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 4,
         "name": "손민재",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "00'46\"66",
         "note": null,
         "original_match_no": "21-1",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -11520,41 +12213,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "김태운",
         "team": "프리라움돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "17",
+        "record": "00'52\"65",
         "note": null,
         "original_match_no": "21-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "강서후",
         "team": "키튼드림팀",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'46\"24",
         "note": null,
         "original_match_no": "21-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "이시헌",
         "team": "금빛",
-        "rank": null,
-        "record": null,
+        "rank": "16",
+        "record": "00'51\"91",
         "note": null,
         "original_match_no": "21-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "김도현",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'45\"42",
         "note": null,
         "original_match_no": "21-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       }
     ],
     "division": "학생부",
@@ -11583,41 +12280,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "윤지유",
         "team": "프리라움샤크",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "21-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김해솔",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'40\"75",
         "note": null,
         "original_match_no": "21-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 3,
         "name": "심준용",
         "team": "거제야호",
-        "rank": null,
-        "record": null,
+        "rank": "11",
+        "record": "00'47\"20",
         "note": null,
         "original_match_no": "21-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "박정현",
         "team": "거제찬스샤크",
-        "rank": null,
-        "record": null,
+        "rank": "18",
+        "record": "00'53\"09",
         "note": null,
         "original_match_no": "21-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -11646,41 +12347,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "이승후",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "19",
+        "record": "00'59\"22",
         "note": null,
         "original_match_no": "21-4",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "박솔현",
         "team": "다람쥐특공대",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'45\"67",
         "note": null,
         "original_match_no": "21-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "정연우",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "14",
+        "record": "00'49\"51",
         "note": null,
         "original_match_no": "21-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "강리호",
         "team": "프리라움웨일",
-        "rank": null,
-        "record": null,
+        "rank": "20",
+        "record": "01'05\"60",
         "note": null,
         "original_match_no": "21-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -11709,31 +12414,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 2,
         "name": "전민준",
         "team": "통영유소년수영클럽",
-        "rank": null,
-        "record": null,
+        "rank": "15",
+        "record": "00'49\"65",
         "note": null,
         "original_match_no": "21-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "안률건",
         "team": "금빛",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'40\"37",
         "note": null,
         "original_match_no": "21-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 4,
         "name": "이효성",
         "team": "IMD스위밍클럽",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "21-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -11762,31 +12470,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "이준민",
         "team": "노블 TNV",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'39\"98",
         "note": null,
         "original_match_no": "21-6",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 2,
         "name": "김시호",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'44\"52",
         "note": null,
         "original_match_no": "21-6",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 3,
         "name": "강민준",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'45\"91",
         "note": null,
         "original_match_no": "21-6",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -11815,41 +12526,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "장현규",
         "team": "프리라움샤크",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'49\"82",
         "note": null,
         "original_match_no": "22-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "이도준",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'42\"53",
         "note": null,
         "original_match_no": "22-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 3,
         "name": "이리안",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'46\"47",
         "note": null,
         "original_match_no": "22-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "김도현",
         "team": "노블 TNV",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'40\"76",
         "note": null,
         "original_match_no": "22-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       }
     ],
     "division": "학생부",
@@ -11878,31 +12593,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "이우리",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "11",
+        "record": "00'56\"60",
         "note": null,
         "original_match_no": "22-2",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "이루하",
         "team": "금빛",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'38\"48",
         "note": null,
         "original_match_no": "22-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 3,
         "name": "김유신",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'44\"94",
         "note": null,
         "original_match_no": "22-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       }
     ],
     "division": "학생부",
@@ -11931,31 +12649,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 2,
         "name": "이준혁",
         "team": "거제야호",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "22-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "이시윤",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "00'55\"27",
         "note": null,
         "original_match_no": "22-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "김규빈",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'44\"09",
         "note": null,
         "original_match_no": "22-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       }
     ],
     "division": "학생부",
@@ -11984,31 +12705,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 2,
         "name": "황태인",
         "team": "프리라움돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'46\"89",
         "note": null,
         "original_match_no": "22-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "김하준",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "22-4",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "박범준",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'44\"77",
         "note": null,
         "original_match_no": "22-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       }
     ],
     "division": "학생부",
@@ -12037,41 +12761,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "박승현",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'38\"10",
         "note": null,
         "original_match_no": "23-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 2,
         "name": "정윤서",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'36\"98",
         "note": null,
         "original_match_no": "23-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 3,
         "name": "김현우",
         "team": "거제야호",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "23-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "정도현",
         "team": "다람쥐특공대",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'42\"61",
         "note": null,
         "original_match_no": "23-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       }
     ],
     "division": "학생부",
@@ -12100,31 +12828,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "김루민",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "00'56\"70",
         "note": null,
         "original_match_no": "23-2",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "곽동혁",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'54\"60",
         "note": null,
         "original_match_no": "23-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "그라함로건리",
         "team": "거제야호",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'46\"00",
         "note": null,
         "original_match_no": "23-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -12153,31 +12884,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 2,
         "name": "진시안",
         "team": "거제야호",
-        "rank": null,
-        "record": null,
+        "rank": "11",
+        "record": "01'01\"48",
         "note": null,
         "original_match_no": "23-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "김채완",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'38\"14",
         "note": null,
         "original_match_no": "23-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 4,
         "name": "이도현",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'44\"47",
         "note": null,
         "original_match_no": "23-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       }
     ],
     "division": "학생부",
@@ -12206,21 +12940,23 @@ export const STUDENT_RACES_DATA = [
         "lane": 2,
         "name": "김보겸",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'45\"51",
         "note": null,
         "original_match_no": "23-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "하민우",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'33\"41",
         "note": null,
         "original_match_no": "23-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       }
     ],
     "division": "학생부",
@@ -12249,41 +12985,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "김태하",
         "team": "노블 TNV",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'37\"99",
         "note": null,
         "original_match_no": "24-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 2,
         "name": "이선우",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'34\"97",
         "note": null,
         "original_match_no": "24-1",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 5
       },
       {
         "lane": 3,
         "name": "오성민",
         "team": "삼성야호",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'38\"86",
         "note": null,
         "original_match_no": "24-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 4,
         "name": "조현서",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'40\"84",
         "note": null,
         "original_match_no": "24-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       }
     ],
     "division": "학생부",
@@ -12312,31 +13052,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 2,
         "name": "이재원",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'33\"94",
         "note": null,
         "original_match_no": "24-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 3,
         "name": "양현준",
         "team": "삼성야호",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'43\"22",
         "note": null,
         "original_match_no": "24-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "여준석",
         "team": "노블 TNV",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'37\"08",
         "note": null,
         "original_match_no": "24-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       }
     ],
     "division": "학생부",
@@ -12365,41 +13108,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "여승아",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "01'11\"08",
         "note": null,
         "original_match_no": "25-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김루아",
         "team": "오르카스위밍",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'54\"15",
         "note": null,
         "original_match_no": "25-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 3,
         "name": "장하나",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "01'05\"48",
         "note": null,
         "original_match_no": "25-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 4,
         "name": "황다연",
         "team": "프리라움샤크",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "01'06\"91",
         "note": null,
         "original_match_no": "25-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       }
     ],
     "division": "학생부",
@@ -12428,31 +13175,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 2,
         "name": "이서빈",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "01'04\"06",
         "note": null,
         "original_match_no": "25-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 3,
         "name": "황다윤",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'58\"01",
         "note": null,
         "original_match_no": "25-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 4,
         "name": "김소은",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "01'00\"38",
         "note": null,
         "original_match_no": "25-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       }
     ],
     "division": "학생부",
@@ -12481,41 +13231,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "김하린",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "01'07\"06",
         "note": null,
         "original_match_no": "26-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김지율",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'52\"39",
         "note": null,
         "original_match_no": "26-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 3,
         "name": "김도연",
         "team": "IMD스위밍클럽",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'44\"91",
         "note": null,
         "original_match_no": "26-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "최아윤",
         "team": "거제찬스샤크",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "01'01\"62",
         "note": null,
         "original_match_no": "26-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -12544,41 +13298,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "최율",
         "team": "키튼드림팀",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "26-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "백미소",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "01'01\"43",
         "note": null,
         "original_match_no": "26-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "김리하",
         "team": "프리라움돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "11",
+        "record": "01'24\"92",
         "note": null,
         "original_match_no": "26-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "이설하",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "01'01\"15",
         "note": null,
         "original_match_no": "26-2",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 1
       }
     ],
     "division": "학생부",
@@ -12607,41 +13365,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "박시은",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "01'21\"87",
         "note": null,
         "original_match_no": "26-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "양지안",
         "team": "키튼드림팀",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'54\"39",
         "note": null,
         "original_match_no": "26-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 3,
         "name": "이하늬",
         "team": "금빛",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'49\"70",
         "note": null,
         "original_match_no": "26-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 4,
         "name": "정예율",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'53\"16",
         "note": null,
         "original_match_no": "26-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       }
     ],
     "division": "학생부",
@@ -12670,41 +13432,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "임수아B",
         "team": "프리라움돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "01'07\"51",
         "note": null,
         "original_match_no": "27-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "하이경",
         "team": "오르카스위밍",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'47\"95",
         "note": null,
         "original_match_no": "27-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 3,
         "name": "문정빈",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'41\"36",
         "note": null,
         "original_match_no": "27-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "김서하",
         "team": "프리라움샤크",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'53\"68",
         "note": null,
         "original_match_no": "27-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       }
     ],
     "division": "학생부",
@@ -12733,31 +13499,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 2,
         "name": "김지아",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'59\"16",
         "note": null,
         "original_match_no": "27-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 3,
         "name": "강시온",
         "team": "통영유소년수영클럽",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'54\"86",
         "note": null,
         "original_match_no": "27-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 4,
         "name": "김예진",
         "team": "금빛",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'52\"05",
         "note": null,
         "original_match_no": "27-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       }
     ],
     "division": "학생부",
@@ -12786,41 +13555,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "이서진",
         "team": "프리라움샤크",
-        "rank": null,
-        "record": null,
+        "rank": "20",
+        "record": "00'57\"48",
         "note": null,
         "original_match_no": "28-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김지우",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "14",
+        "record": "00'50\"74",
         "note": null,
         "original_match_no": "28-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "김지율",
         "team": "오르카스위밍",
-        "rank": null,
-        "record": null,
+        "rank": "16",
+        "record": "00'52\"40",
         "note": null,
         "original_match_no": "28-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "박채아",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'43\"44",
         "note": null,
         "original_match_no": "28-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       }
     ],
     "division": "학생부",
@@ -12849,41 +13622,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "한서정",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "00'46\"81",
         "note": null,
         "original_match_no": "28-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "이유빈",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "18",
+        "record": "00'52\"88",
         "note": null,
         "original_match_no": "28-2",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "김서연",
         "team": "노블 TNV",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'45\"90",
         "note": null,
         "original_match_no": "28-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 4,
         "name": "어지유",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "12",
+        "record": "00'48\"83",
         "note": null,
         "original_match_no": "28-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -12912,41 +13689,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "김하은",
         "team": "오르카스위밍",
-        "rank": null,
-        "record": null,
+        "rank": "17",
+        "record": "00'52\"73",
         "note": null,
         "original_match_no": "28-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "권새별",
         "team": "다람쥐특공대",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'45\"59",
         "note": null,
         "original_match_no": "28-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 3,
         "name": "강예서",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'40\"08",
         "note": null,
         "original_match_no": "28-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 4,
         "name": "한채아",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "15",
+        "record": "00'51\"99",
         "note": null,
         "original_match_no": "28-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -12975,31 +13756,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 2,
         "name": "강수아",
         "team": "거제야호",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'46\"72",
         "note": null,
         "original_match_no": "28-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "강서연",
         "team": "키튼드림팀",
-        "rank": null,
-        "record": null,
+        "rank": "13",
+        "record": "00'49\"80",
         "note": null,
         "original_match_no": "28-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "김다온",
         "team": "IMD스위밍클럽",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'46\"36",
         "note": null,
         "original_match_no": "28-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -13028,31 +13812,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "김라엘",
         "team": "거제야호",
-        "rank": null,
-        "record": null,
+        "rank": "11",
+        "record": "00'48\"70",
         "note": null,
         "original_match_no": "28-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "이지유",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "21",
+        "record": "00'57\"68",
         "note": null,
         "original_match_no": "28-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "오은세",
         "team": "진주스포츠클럽",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'44\"63",
         "note": null,
         "original_match_no": "28-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       }
     ],
     "division": "학생부",
@@ -13081,31 +13868,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 2,
         "name": "김유주",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'39\"43",
         "note": null,
         "original_match_no": "28-6",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 3,
         "name": "성하윤",
         "team": "진주스포츠클럽",
-        "rank": null,
-        "record": null,
+        "rank": "19",
+        "record": "00'55\"84",
         "note": null,
         "original_match_no": "28-6",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "윤지온",
         "team": "오르카스위밍",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'46\"55",
         "note": null,
         "original_match_no": "28-6",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -13134,41 +13924,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "김가온",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "29-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "이은서",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'43\"51",
         "note": null,
         "original_match_no": "29-1",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 3
       },
       {
         "lane": 3,
         "name": "박수아",
         "team": "다람쥐특공대",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "29-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "이효경",
         "team": "IMD스위밍클럽",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "29-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -13197,31 +13991,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 2,
         "name": "배수현",
         "team": "프리라움돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "00'54\"95",
         "note": null,
         "original_match_no": "29-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "정예람",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'47\"34",
         "note": null,
         "original_match_no": "29-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "오은서",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'47\"43",
         "note": null,
         "original_match_no": "29-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -13250,41 +14047,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "지혜람",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "11",
+        "record": "00'55\"73",
         "note": null,
         "original_match_no": "29-3",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "박유나",
         "team": "진주스포츠클럽",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'39\"26",
         "note": null,
         "original_match_no": "29-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 3,
         "name": "구은",
         "team": "통영유소년수영클럽",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'46\"78",
         "note": null,
         "original_match_no": "29-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 4,
         "name": "하늘사랑",
         "team": "프리라움돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "29-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -13313,41 +14114,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "이루비",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'42\"77",
         "note": null,
         "original_match_no": "29-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 2,
         "name": "윤정인",
         "team": "거제야호",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "29-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "이나라",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "12",
+        "record": "01'03\"84",
         "note": null,
         "original_match_no": "29-4",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "강다현",
         "team": "오르카스위밍",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'49\"33",
         "note": null,
         "original_match_no": "29-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -13378,41 +14183,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "반서현",
         "team": "거제야호",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'46\"04",
         "note": null,
         "original_match_no": "29-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 2,
         "name": "정이진",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "29-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "이하린",
         "team": "다람쥐특공대",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'38\"60",
         "note": null,
         "original_match_no": "29-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "김승아",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'41\"25",
         "note": null,
         "original_match_no": "30-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       }
     ],
     "division": "학생부",
@@ -13441,41 +14250,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "윤지민",
         "team": "통영유소년수영클럽",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'39\"00",
         "note": null,
         "original_match_no": "30-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 2,
         "name": "김지나",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'41\"30",
         "note": null,
         "original_match_no": "30-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 3,
         "name": "김도은",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "30-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "심지유",
         "team": "키튼드림팀",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'40\"25",
         "note": null,
         "original_match_no": "30-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       }
     ],
     "division": "학생부",
@@ -13504,41 +14317,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "제연서",
         "team": "통영유소년수영클럽",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'44\"83",
         "note": null,
         "original_match_no": "30-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김유희",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'40\"04",
         "note": null,
         "original_match_no": "30-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 3,
         "name": "정해린",
         "team": "거제야호",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'51\"17",
         "note": null,
         "original_match_no": "30-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "황부민",
         "team": "노블 TNV",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'38\"74",
         "note": null,
         "original_match_no": "30-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       }
     ],
     "division": "학생부",
@@ -13567,31 +14384,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "지효진",
         "team": "거제찬스샤크",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'48\"37",
         "note": null,
         "original_match_no": "31-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 2,
         "name": "강보경",
         "team": "키튼드림팀",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'41\"89",
         "note": null,
         "original_match_no": "31-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 3,
         "name": "안서윤",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "31-1",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -13620,31 +14440,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "김나연",
         "team": "삼성야호",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'45\"56",
         "note": null,
         "original_match_no": "31-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 2,
         "name": "조안나",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "31-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "구아영",
         "team": "통영유소년수영클럽",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'38\"94",
         "note": null,
         "original_match_no": "31-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       }
     ],
     "division": "학생부",
@@ -13673,31 +14496,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "황지후",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "01'19\"77",
         "note": null,
         "original_match_no": "32-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 2,
         "name": "박재준",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "01'15\"82",
         "note": null,
         "original_match_no": "32-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 3,
         "name": "김민재",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "01'12\"58",
         "note": null,
         "original_match_no": "32-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       }
     ],
     "division": "학생부",
@@ -13726,31 +14552,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "김가온",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "01'08\"47",
         "note": null,
         "original_match_no": "32-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 2,
         "name": "장서윤",
         "team": "IMD스위밍클럽",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'54\"79",
         "note": null,
         "original_match_no": "32-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 3,
         "name": "홍원준",
         "team": "노블 TNV",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'58\"00",
         "note": null,
         "original_match_no": "32-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       }
     ],
     "division": "학생부",
@@ -13779,41 +14608,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "서한",
         "team": "진주스포츠클럽",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'56\"29",
         "note": null,
         "original_match_no": "33-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 2,
         "name": "임서진",
         "team": "프리라움샤크",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "01'18\"68",
         "note": null,
         "original_match_no": "33-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "여승재",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'54\"78",
         "note": null,
         "original_match_no": "33-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 4,
         "name": "김호현",
         "team": "IMD스위밍클럽",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'57\"83",
         "note": null,
         "original_match_no": "33-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       }
     ],
     "division": "학생부",
@@ -13842,41 +14675,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "하태우",
         "team": "IMD스위밍클럽",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "01'00\"53",
         "note": null,
         "original_match_no": "33-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 2,
         "name": "박서진",
         "team": "거제찬스샤크",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "01'03\"41",
         "note": null,
         "original_match_no": "33-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "정연우",
         "team": "노블 TNV",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'56\"73",
         "note": null,
         "original_match_no": "33-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 4,
         "name": "박윤우",
         "team": "진주스포츠클럽",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'48\"50",
         "note": null,
         "original_match_no": "33-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       }
     ],
     "division": "학생부",
@@ -13905,41 +14742,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "김예준",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'56\"46",
         "note": null,
         "original_match_no": "34-1",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "허준우",
         "team": "프리라움샤크",
-        "rank": null,
-        "record": null,
+        "rank": "16",
+        "record": "01'10\"75",
         "note": null,
         "original_match_no": "34-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "박서진",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "11",
+        "record": "00'59\"61",
         "note": null,
         "original_match_no": "34-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "김건우",
         "team": "IMD스위밍클럽",
-        "rank": null,
-        "record": null,
-        "note": null,
+        "rank": "실격",
+        "record": "88'88\"88",
+        "note": "레이스도중 자,평반복",
         "original_match_no": "34-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -13968,41 +14809,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "손준호",
         "team": "프리라움웨일",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "34-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "정민재",
         "team": "키튼드림팀",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'54\"96",
         "note": null,
         "original_match_no": "34-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "김수혁",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "12",
+        "record": "01'01\"33",
         "note": null,
         "original_match_no": "34-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "김민결",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "00'56\"93",
         "note": null,
         "original_match_no": "34-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -14031,41 +14876,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "문지욱",
         "team": "프리라움돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "17",
+        "record": "01'16\"64",
         "note": null,
         "original_match_no": "34-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "정찬희",
         "team": "통영유소년수영클럽",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'51\"30",
         "note": null,
         "original_match_no": "34-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 3,
         "name": "정찬준",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'46\"82",
         "note": null,
         "original_match_no": "34-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 4,
         "name": "송승환",
         "team": "프리라움샤크",
-        "rank": null,
-        "record": null,
+        "rank": "14",
+        "record": "01'04\"88",
         "note": null,
         "original_match_no": "34-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -14094,41 +14943,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "강선우",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'53\"38",
         "note": null,
         "original_match_no": "34-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "임윤찬",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'48\"95",
         "note": null,
         "original_match_no": "34-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 3,
         "name": "안유겸",
         "team": "오르카스위밍",
-        "rank": null,
-        "record": null,
+        "rank": "15",
+        "record": "01'05\"35",
         "note": null,
         "original_match_no": "34-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "김신우",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "13",
+        "record": "01'03\"47",
         "note": null,
         "original_match_no": "34-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -14157,41 +15010,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "이해솔",
         "team": "IMD스위밍클럽",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'52\"92",
         "note": null,
         "original_match_no": "34-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 2,
         "name": "김태우",
         "team": "개인",
-        "rank": null,
-        "record": null,
-        "note": null,
+        "rank": "실격",
+        "record": "88'88\"88",
+        "note": "한손터치",
         "original_match_no": "34-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "한고준",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
-        "note": null,
+        "rank": "실격",
+        "record": "88'88\"88",
+        "note": "돌핀킥2번",
         "original_match_no": "34-5",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "최유강",
         "team": "프리라움돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "34-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -14220,21 +15077,23 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "신유찬",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'46\"61",
         "note": null,
         "original_match_no": "34-6",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 2,
         "name": "박원",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'47\"34",
         "note": null,
         "original_match_no": "34-6",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       }
     ],
     "division": "학생부",
@@ -14263,31 +15122,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 2,
         "name": "이수민",
         "team": "노블 TNV",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'43\"02",
         "note": null,
         "original_match_no": "35-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 3,
         "name": "백이안",
         "team": "거제찬스샤크",
-        "rank": null,
-        "record": null,
+        "rank": "16",
+        "record": "01'04\"47",
         "note": null,
         "original_match_no": "35-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "이시헌",
         "team": "금빛",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'51\"05",
         "note": null,
         "original_match_no": "35-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -14316,41 +15178,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "김로이",
         "team": "거제찬스샤크",
-        "rank": null,
-        "record": null,
+        "rank": "18",
+        "record": "01'09\"95",
         "note": null,
         "original_match_no": "35-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "문강현",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'47\"66",
         "note": null,
         "original_match_no": "35-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 3,
         "name": "최성현",
         "team": "프리라움샤크",
-        "rank": null,
-        "record": null,
+        "rank": "17",
+        "record": "01'07\"22",
         "note": null,
         "original_match_no": "35-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "최서진",
         "team": "거제야호",
-        "rank": null,
-        "record": null,
+        "rank": "15",
+        "record": "01'01\"96",
         "note": null,
         "original_match_no": "35-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -14379,41 +15245,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "전주안",
         "team": "프리라움샤크",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "35-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "임이준",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'50\"44",
         "note": null,
         "original_match_no": "35-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 3,
         "name": "김   결",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'47\"55",
         "note": null,
         "original_match_no": "35-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 4,
         "name": "이태호",
         "team": "키튼드림팀",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "00'54\"45",
         "note": null,
         "original_match_no": "35-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -14442,41 +15312,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "전민준",
         "team": "통영유소년수영클럽",
-        "rank": null,
-        "record": null,
+        "rank": "11",
+        "record": "00'55\"25",
         "note": null,
         "original_match_no": "35-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김건영",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "13",
+        "record": "00'59\"63",
         "note": null,
         "original_match_no": "35-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "임시환",
         "team": "프리라움돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'53\"87",
         "note": null,
         "original_match_no": "35-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "김시호",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'50\"01",
         "note": null,
         "original_match_no": "35-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       }
     ],
     "division": "학생부",
@@ -14505,41 +15379,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "박건우",
         "team": "프리라움돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "14",
+        "record": "01'01\"62",
         "note": null,
         "original_match_no": "35-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "구규빈",
         "team": "다람쥐특공대",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'52\"26",
         "note": null,
         "original_match_no": "35-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "김대현",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'48\"64",
         "note": null,
         "original_match_no": "35-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 4,
         "name": "이재우",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "12",
+        "record": "00'56\"42",
         "note": null,
         "original_match_no": "35-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -14568,41 +15446,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "박범준",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "00'51\"70",
         "note": null,
         "original_match_no": "36-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "이루하",
         "team": "금빛",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'43\"01",
         "note": null,
         "original_match_no": "36-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 3,
         "name": "김태한",
         "team": "통영유소년수영클럽",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "36-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "이승원",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'50\"09",
         "note": null,
         "original_match_no": "36-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -14631,31 +15513,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "양형준",
         "team": "다람쥐특공대",
-        "rank": null,
-        "record": null,
+        "rank": "12",
+        "record": "01'03\"66",
         "note": null,
         "original_match_no": "36-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "산지케난",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'51\"26",
         "note": null,
         "original_match_no": "36-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "최건호",
         "team": "프리라움샤크",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "36-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -14684,41 +15569,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "김규빈",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'44\"61",
         "note": null,
         "original_match_no": "36-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 2,
         "name": "황태인",
         "team": "프리라움돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "11",
+        "record": "01'01\"34",
         "note": null,
         "original_match_no": "36-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "박주혁",
         "team": "거제야호",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'51\"43",
         "note": null,
         "original_match_no": "36-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "김부진",
         "team": "키튼드림팀",
-        "rank": null,
-        "record": null,
-        "note": null,
+        "rank": "실격",
+        "record": "88'88\"88",
+        "note": "킥2번",
         "original_match_no": "36-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -14747,41 +15636,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "김하준",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "36-4",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김남우",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'47\"55",
         "note": null,
         "original_match_no": "36-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 3,
         "name": "이도준",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'47\"35",
         "note": null,
         "original_match_no": "36-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 4,
         "name": "성시명",
         "team": "금빛",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'46\"34",
         "note": null,
         "original_match_no": "36-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       }
     ],
     "division": "학생부",
@@ -14812,41 +15705,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "김세민",
         "team": "노블 TNV",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'42\"73",
         "note": null,
         "original_match_no": "36-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 2,
         "name": "김시윤",
         "team": "노블 TNV",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'39\"48",
         "note": null,
         "original_match_no": "37-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 3,
         "name": "송시우",
         "team": "거제야호",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'42\"03",
         "note": null,
         "original_match_no": "37-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 4,
         "name": "최재민",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'42\"76",
         "note": null,
         "original_match_no": "37-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       }
     ],
     "division": "학생부",
@@ -14875,41 +15772,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "양진혁",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'42\"49",
         "note": null,
         "original_match_no": "37-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 2,
         "name": "정도현",
         "team": "다람쥐특공대",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'40\"88",
         "note": null,
         "original_match_no": "37-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 3,
         "name": "문우찬",
         "team": "키튼드림팀",
-        "rank": null,
-        "record": null,
+        "rank": "12",
+        "record": "00'59\"34",
         "note": null,
         "original_match_no": "37-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "정선우",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "37-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -14938,31 +15839,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 2,
         "name": "그라함로건리",
         "team": "거제야호",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'49\"39",
         "note": null,
         "original_match_no": "37-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "박도현",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "11",
+        "record": "00'51\"43",
         "note": null,
         "original_match_no": "37-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "이지오",
         "team": "금빛",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'43\"52",
         "note": null,
         "original_match_no": "37-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       }
     ],
     "division": "학생부",
@@ -14991,41 +15895,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "진시안",
         "team": "거제야호",
-        "rank": null,
-        "record": null,
+        "rank": "13",
+        "record": "00'59\"94",
         "note": null,
         "original_match_no": "37-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "곽동혁",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'49\"67",
         "note": null,
         "original_match_no": "37-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "오태훈",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "00'50\"60",
         "note": null,
         "original_match_no": "37-4",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "이도현",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'44\"53",
         "note": null,
         "original_match_no": "37-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -15054,41 +15962,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "오성민",
         "team": "삼성야호",
-        "rank": null,
-        "record": null,
+        "rank": "12",
+        "record": "00'45\"75",
         "note": null,
         "original_match_no": "38-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "조현서",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
-        "note": null,
+        "rank": "실격",
+        "record": "88'88\"88",
+        "note": "한손터치",
         "original_match_no": "38-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "박현민",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "11",
+        "record": "00'44\"81",
         "note": null,
         "original_match_no": "38-1",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "임성현",
         "team": "노블 TNV",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'40\"09",
         "note": null,
         "original_match_no": "38-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       }
     ],
     "division": "학생부",
@@ -15117,41 +16029,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "여준석",
         "team": "노블 TNV",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'38\"65",
         "note": null,
         "original_match_no": "38-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 2,
         "name": "양현준",
         "team": "삼성야호",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "00'43\"13",
         "note": null,
         "original_match_no": "38-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "이재원",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'36\"08",
         "note": null,
         "original_match_no": "38-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 4,
         "name": "안상욱",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'41\"47",
         "note": null,
         "original_match_no": "38-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       }
     ],
     "division": "학생부",
@@ -15180,41 +16096,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "이다훈",
         "team": "삼성야호",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'41\"32",
         "note": null,
         "original_match_no": "38-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 2,
         "name": "곽민재",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'42\"36",
         "note": null,
         "original_match_no": "38-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "이지훈",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'42\"24",
         "note": null,
         "original_match_no": "38-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "김재우",
         "team": "삼성야호",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'35\"41",
         "note": null,
         "original_match_no": "38-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       }
     ],
     "division": "학생부",
@@ -15243,21 +16163,23 @@ export const STUDENT_RACES_DATA = [
         "lane": 2,
         "name": "심지완",
         "team": "키튼드림팀",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'43\"07",
         "note": null,
         "original_match_no": "38-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "진시우",
         "team": "삼성야호",
-        "rank": null,
-        "record": null,
+        "rank": "13",
+        "record": "00'54\"87",
         "note": null,
         "original_match_no": "38-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -15286,41 +16208,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "황다연",
         "team": "프리라움샤크",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "39-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "조유빈",
         "team": "오르카스위밍",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "01'02\"39",
         "note": null,
         "original_match_no": "39-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 3,
         "name": "원이솔",
         "team": "IMD스위밍클럽",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'59\"30",
         "note": null,
         "original_match_no": "39-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "하유주",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "01'26\"61",
         "note": null,
         "original_match_no": "39-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       }
     ],
     "division": "학생부",
@@ -15349,41 +16275,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "김단아",
         "team": "PSC",
-        "rank": null,
-        "record": null,
-        "note": null,
+        "rank": "실격",
+        "record": "88'88\"88",
+        "note": "영법변경",
         "original_match_no": "39-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김로아",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "01'08\"62",
         "note": null,
         "original_match_no": "39-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 3,
         "name": "이채현",
         "team": "키튼드림팀",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "01'08\"06",
         "note": null,
         "original_match_no": "39-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 4,
         "name": "김로하",
         "team": "프리라움돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "01'20\"69",
         "note": null,
         "original_match_no": "39-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       }
     ],
     "division": "학생부",
@@ -15412,41 +16342,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "강서아",
         "team": "키튼드림팀",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'56\"75",
         "note": null,
         "original_match_no": "40-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 2,
         "name": "백미소",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "01'08\"79",
         "note": null,
         "original_match_no": "40-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "김재이",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'58\"21",
         "note": null,
         "original_match_no": "40-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 4,
         "name": "정여원",
         "team": "거제찬스샤크",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "01'02\"66",
         "note": null,
         "original_match_no": "40-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -15475,41 +16409,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "박소율",
         "team": "프리라움샤크",
-        "rank": null,
-        "record": null,
+        "rank": "17",
+        "record": "01'31\"13",
         "note": null,
         "original_match_no": "40-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "박주희",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "13",
+        "record": "01'16\"72",
         "note": null,
         "original_match_no": "40-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "엄유민",
         "team": "거제야호",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'57\"91",
         "note": null,
         "original_match_no": "40-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 4,
         "name": "김도연",
         "team": "IMD스위밍클럽",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'56\"94",
         "note": null,
         "original_match_no": "40-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       }
     ],
     "division": "학생부",
@@ -15538,41 +16476,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "양지안",
         "team": "키튼드림팀",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "01'04\"05",
         "note": null,
         "original_match_no": "40-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김서빈",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'59\"72",
         "note": null,
         "original_match_no": "40-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 3,
         "name": "제인",
         "team": "프리라움샤크",
-        "rank": null,
-        "record": null,
+        "rank": "11",
+        "record": "01'13\"42",
         "note": null,
         "original_match_no": "40-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "김하린",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "16",
+        "record": "01'20\"07",
         "note": null,
         "original_match_no": "40-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -15601,31 +16543,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "정예율",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'55\"33",
         "note": null,
         "original_match_no": "40-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 2,
         "name": "박서우",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "01'03\"95",
         "note": null,
         "original_match_no": "40-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "우윤아",
         "team": "프리라움돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "12",
+        "record": "01'13\"70",
         "note": null,
         "original_match_no": "40-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -15654,21 +16599,23 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "지상희",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "14",
+        "record": "01'18\"16",
         "note": null,
         "original_match_no": "40-5",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "양수지",
         "team": "프리라움샤크",
-        "rank": null,
-        "record": null,
+        "rank": "15",
+        "record": "01'18\"34",
         "note": null,
         "original_match_no": "40-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -15697,41 +16644,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "김시아",
         "team": "프리라움샤크",
-        "rank": null,
-        "record": null,
-        "note": null,
+        "rank": "실격",
+        "record": "88'88\"88",
+        "note": "돌핀2번, 평킥2번",
         "original_match_no": "41-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "이아인A",
         "team": "키튼드림팀",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "01'03\"18",
         "note": null,
         "original_match_no": "41-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "하이경",
         "team": "오르카스위밍",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'53\"18",
         "note": null,
         "original_match_no": "41-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 4,
         "name": "류하윤",
         "team": "프리라움돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "11",
+        "record": "01'14\"14",
         "note": null,
         "original_match_no": "41-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -15760,41 +16711,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "조유나",
         "team": "오르카스위밍",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'53\"68",
         "note": null,
         "original_match_no": "41-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 2,
         "name": "하늘소망",
         "team": "프리라움돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "01'02\"28",
         "note": null,
         "original_match_no": "41-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 3,
         "name": "최시원",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "01'09\"98",
         "note": null,
         "original_match_no": "41-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "윤세연",
         "team": "프리라움샤크",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "01'06\"60",
         "note": null,
         "original_match_no": "41-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -15823,41 +16778,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "이아인B",
         "team": "진주스포츠클럽",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'51\"35",
         "note": null,
         "original_match_no": "41-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 2,
         "name": "홍새봄",
         "team": "거제찬스샤크",
-        "rank": null,
-        "record": null,
+        "rank": "12",
+        "record": "01'15\"30",
         "note": null,
         "original_match_no": "41-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "서호진",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "41-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "김서하",
         "team": "프리라움샤크",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "01'04\"94",
         "note": null,
         "original_match_no": "41-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -15886,21 +16845,23 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "신서인",
         "team": "키튼드림팀",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "01'00\"17",
         "note": null,
         "original_match_no": "41-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 2,
         "name": "김태연A",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'53\"28",
         "note": null,
         "original_match_no": "41-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       }
     ],
     "division": "학생부",
@@ -15929,21 +16890,23 @@ export const STUDENT_RACES_DATA = [
         "lane": 3,
         "name": "코라",
         "team": "프리라움샤크",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "42-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "어지유",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "12",
+        "record": "00'52\"66",
         "note": null,
         "original_match_no": "42-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -15972,41 +16935,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "손주아",
         "team": "프리라움샤크",
-        "rank": null,
-        "record": null,
+        "rank": "24",
+        "record": "01'10\"07",
         "note": null,
         "original_match_no": "42-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "권새별",
         "team": "다람쥐특공대",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'47\"17",
         "note": null,
         "original_match_no": "42-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 3,
         "name": "이아린",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "19",
+        "record": "00'59\"80",
         "note": null,
         "original_match_no": "42-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "김나은",
         "team": "노블 TNV",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'50\"02",
         "note": null,
         "original_match_no": "42-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -16035,41 +17002,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "김은서",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "14",
+        "record": "00'53\"74",
         "note": null,
         "original_match_no": "42-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김지율",
         "team": "오르카스위밍",
-        "rank": null,
-        "record": null,
+        "rank": "20",
+        "record": "01'00\"59",
         "note": null,
         "original_match_no": "42-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "윤지아",
         "team": "프리라움샤크",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "42-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "김재이",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "18",
+        "record": "00'57\"58",
         "note": null,
         "original_match_no": "42-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -16098,41 +17069,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "김려원",
         "team": "IMD스위밍클럽",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'51\"31",
         "note": null,
         "original_match_no": "42-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "조희진",
         "team": "거제찬스샤크",
-        "rank": null,
-        "record": null,
+        "rank": "21",
+        "record": "01'00\"86",
         "note": null,
         "original_match_no": "42-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "이채빈",
         "team": "노블 TNV",
-        "rank": null,
-        "record": null,
+        "rank": "13",
+        "record": "00'53\"13",
         "note": null,
         "original_match_no": "42-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "박서은",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'49\"89",
         "note": null,
         "original_match_no": "42-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       }
     ],
     "division": "학생부",
@@ -16161,41 +17136,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "한유주",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "23",
+        "record": "01'08\"87",
         "note": null,
         "original_match_no": "42-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김예지",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "22",
+        "record": "01'06\"78",
         "note": null,
         "original_match_no": "42-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "정은아",
         "team": "프리라움웨일",
-        "rank": null,
-        "record": null,
+        "rank": "16",
+        "record": "00'56\"43",
         "note": null,
         "original_match_no": "42-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "김서연",
         "team": "노블 TNV",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'47\"30",
         "note": null,
         "original_match_no": "42-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       }
     ],
     "division": "학생부",
@@ -16224,41 +17203,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "이다겸",
         "team": "다람쥐특공대",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "00'51\"55",
         "note": null,
         "original_match_no": "42-6",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김지우",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "15",
+        "record": "00'55\"87",
         "note": null,
         "original_match_no": "42-6",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "전아윤",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'48\"12",
         "note": null,
         "original_match_no": "42-6",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 4,
         "name": "강서연",
         "team": "키튼드림팀",
-        "rank": null,
-        "record": null,
+        "rank": "11",
+        "record": "00'51\"77",
         "note": null,
         "original_match_no": "42-6",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -16287,41 +17270,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "이지민",
         "team": "거제야호",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'50\"66",
         "note": null,
         "original_match_no": "42-7",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "한서정",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'46\"50",
         "note": null,
         "original_match_no": "42-7",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 3,
         "name": "최지원",
         "team": "거제찬스샤크",
-        "rank": null,
-        "record": null,
+        "rank": "17",
+        "record": "00'57\"35",
         "note": null,
         "original_match_no": "42-7",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "김하은",
         "team": "오르카스위밍",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'48\"38",
         "note": null,
         "original_match_no": "42-7",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       }
     ],
     "division": "학생부",
@@ -16350,31 +17337,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "구은",
         "team": "통영유소년수영클럽",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "00'52\"07",
         "note": null,
         "original_match_no": "43-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "박세은",
         "team": "거제야호",
-        "rank": null,
-        "record": null,
+        "rank": "11",
+        "record": "00'52\"08",
         "note": null,
         "original_match_no": "43-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "김서현",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'48\"32",
         "note": null,
         "original_match_no": "43-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       }
     ],
     "division": "학생부",
@@ -16403,41 +17393,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "정이진",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'51\"60",
         "note": null,
         "original_match_no": "43-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "전지예",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'41\"91",
         "note": null,
         "original_match_no": "43-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 3,
         "name": "한예진",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'49\"54",
         "note": null,
         "original_match_no": "43-2",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 2
       },
       {
         "lane": 4,
         "name": "박수아",
         "team": "다람쥐특공대",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "43-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -16466,41 +17460,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "류다윤",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'50\"15",
         "note": null,
         "original_match_no": "43-3",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "이효경",
         "team": "IMD스위밍클럽",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "43-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "김수진",
         "team": "키튼드림팀",
-        "rank": null,
-        "record": null,
+        "rank": "12",
+        "record": "00'59\"43",
         "note": null,
         "original_match_no": "43-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "강예지",
         "team": "금빛",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'45\"41",
         "note": null,
         "original_match_no": "43-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       }
     ],
     "division": "학생부",
@@ -16529,41 +17527,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "안채정",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'51\"06",
         "note": null,
         "original_match_no": "43-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김서윤",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'48\"02",
         "note": null,
         "original_match_no": "43-4",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 4
       },
       {
         "lane": 3,
         "name": "정예린",
         "team": "거제야호",
-        "rank": null,
-        "record": null,
-        "note": null,
+        "rank": "실격",
+        "record": "88'88\"88",
+        "note": "부정출발",
         "original_match_no": "43-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "정예람",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'49\"57",
         "note": null,
         "original_match_no": "43-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       }
     ],
     "division": "학생부",
@@ -16592,31 +17594,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 2,
         "name": "김하윤",
         "team": "프리라움샤크",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "44-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "이루리",
         "team": "거제야호",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "44-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "신유리",
         "team": "거제찬스샤크",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "44-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -16645,41 +17650,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "성예나",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "11",
+        "record": "00'54\"33",
         "note": null,
         "original_match_no": "44-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "심지유",
         "team": "키튼드림팀",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'45\"91",
         "note": null,
         "original_match_no": "44-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 3,
         "name": "허은유",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'45\"65",
         "note": null,
         "original_match_no": "44-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 4,
         "name": "김태연B",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'49\"79",
         "note": null,
         "original_match_no": "44-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -16708,41 +17717,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "정해린",
         "team": "거제야호",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "00'54\"30",
         "note": null,
         "original_match_no": "44-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "이지우",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'48\"37",
         "note": null,
         "original_match_no": "44-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 3,
         "name": "안지현",
         "team": "통영유소년수영클럽",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'43\"30",
         "note": null,
         "original_match_no": "44-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 4,
         "name": "산지베스테",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'46\"20",
         "note": null,
         "original_match_no": "44-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       }
     ],
     "division": "학생부",
@@ -16771,41 +17784,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "어서윤",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'41\"59",
         "note": null,
         "original_match_no": "44-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 2,
         "name": "제연서",
         "team": "통영유소년수영클럽",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'49\"22",
         "note": null,
         "original_match_no": "44-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "고하윤",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'49\"95",
         "note": null,
         "original_match_no": "44-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "이연진",
         "team": "프리라움샤크",
-        "rank": null,
-        "record": null,
+        "rank": "12",
+        "record": "01'01\"70",
         "note": null,
         "original_match_no": "44-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -16836,31 +17853,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "이하림",
         "team": "금빛",
-        "rank": null,
-        "record": null,
-        "note": null,
+        "rank": "실격",
+        "record": "88'88\"88",
+        "note": "돌핀2번",
         "original_match_no": "44-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "김가연",
         "team": "통영유소년수영클럽",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'41\"44",
         "note": null,
         "original_match_no": "45-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 4,
         "name": "김   단",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'37\"46",
         "note": null,
         "original_match_no": "45-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       }
     ],
     "division": "학생부",
@@ -16889,41 +17909,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "김나연",
         "team": "삼성야호",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'54\"82",
         "note": null,
         "original_match_no": "45-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 2,
         "name": "원지우",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'44\"40",
         "note": null,
         "original_match_no": "45-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 3,
         "name": "정채윤",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'41\"23",
         "note": null,
         "original_match_no": "45-2",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 5
       },
       {
         "lane": 4,
         "name": "이효민",
         "team": "IMD스위밍클럽",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "45-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -16952,41 +17976,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "박재준",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "11",
+        "record": "01'07\"16",
         "note": null,
         "original_match_no": "46-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "백호준",
         "team": "거제찬스샤크",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "46-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "정지운",
         "team": "오르카스위밍",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'47\"39",
         "note": null,
         "original_match_no": "46-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 4,
         "name": "송이안",
         "team": "노블 TNV",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'38\"22",
         "note": null,
         "original_match_no": "46-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       }
     ],
     "division": "학생부",
@@ -17015,41 +18043,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "민성준",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "01'02\"63",
         "note": null,
         "original_match_no": "46-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김도영",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "01'06\"68",
         "note": null,
         "original_match_no": "46-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "권율",
         "team": "프리라움샤크",
-        "rank": null,
-        "record": null,
+        "rank": "12",
+        "record": "01'10\"92",
         "note": null,
         "original_match_no": "46-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "김민재",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'59\"49",
         "note": null,
         "original_match_no": "46-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -17078,41 +18110,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "홍원준",
         "team": "노블 TNV",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'43\"16",
         "note": null,
         "original_match_no": "46-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 2,
         "name": "조현진",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'50\"13",
         "note": null,
         "original_match_no": "46-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 3,
         "name": "이지후",
         "team": "진주스포츠클럽",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'44\"01",
         "note": null,
         "original_match_no": "46-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 4,
         "name": "신유준",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'59\"59",
         "note": null,
         "original_match_no": "46-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -17143,31 +18179,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "김가온",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'53\"77",
         "note": null,
         "original_match_no": "46-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 3,
         "name": "이서빈",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "47-1",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "손지호",
         "team": "IMD스위밍클럽",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'44\"81",
         "note": null,
         "original_match_no": "47-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       }
     ],
     "division": "학생부",
@@ -17196,41 +18235,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "주윤재",
         "team": "다람쥐특공대",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'48\"17",
         "note": null,
         "original_match_no": "47-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김준수",
         "team": "IMD스위밍클럽",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'44\"67",
         "note": null,
         "original_match_no": "47-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 3,
         "name": "조은탁",
         "team": "진주스포츠클럽",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'47\"15",
         "note": null,
         "original_match_no": "47-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "박하준",
         "team": "통영유소년수영클럽",
-        "rank": null,
-        "record": null,
+        "rank": "16",
+        "record": "01'03\"32",
         "note": null,
         "original_match_no": "47-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -17259,41 +18302,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "한서준",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'40\"61",
         "note": null,
         "original_match_no": "47-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 2,
         "name": "윤지섭",
         "team": "프리라움돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "17",
+        "record": "01'03\"53",
         "note": null,
         "original_match_no": "47-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "이은후",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'41\"31",
         "note": null,
         "original_match_no": "47-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 4,
         "name": "임서진",
         "team": "프리라움샤크",
-        "rank": null,
-        "record": null,
+        "rank": "19",
+        "record": "01'29\"00",
         "note": null,
         "original_match_no": "47-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -17322,41 +18369,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "조유준",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "47-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "배건우",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "15",
+        "record": "01'00\"89",
         "note": null,
         "original_match_no": "47-4",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "김시원",
         "team": "IMD스위밍클럽",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "47-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "오은우",
         "team": "진주스포츠클럽",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'45\"29",
         "note": null,
         "original_match_no": "47-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       }
     ],
     "division": "학생부",
@@ -17385,41 +18436,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "윤주원",
         "team": "프리라움샤크",
-        "rank": null,
-        "record": null,
+        "rank": "18",
+        "record": "01'14\"37",
         "note": null,
         "original_match_no": "47-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "여승재",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "12",
+        "record": "00'49\"05",
         "note": null,
         "original_match_no": "47-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "안규담",
         "team": "IMD스위밍클럽",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'45\"84",
         "note": null,
         "original_match_no": "47-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "심도담",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "11",
+        "record": "00'48\"71",
         "note": null,
         "original_match_no": "47-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -17448,41 +18503,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "이   현",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "14",
+        "record": "00'51\"56",
         "note": null,
         "original_match_no": "47-6",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "이서준",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "13",
+        "record": "00'50\"91",
         "note": null,
         "original_match_no": "47-6",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "진시윤",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "00'48\"43",
         "note": null,
         "original_match_no": "47-6",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "김현우",
         "team": "다람쥐특공대",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'40\"32",
         "note": null,
         "original_match_no": "47-6",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       }
     ],
     "division": "학생부",
@@ -17511,41 +18570,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "박서진",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "15",
+        "record": "00'47\"12",
         "note": null,
         "original_match_no": "48-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김예준",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "48-1",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "허준혁",
         "team": "프리라움샤크",
-        "rank": null,
-        "record": null,
+        "rank": "20",
+        "record": "00'58\"08",
         "note": null,
         "original_match_no": "48-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "김라온",
         "team": "IMD스위밍클럽",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "48-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -17574,41 +18637,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "조연우",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'33\"35",
         "note": null,
         "original_match_no": "48-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 2,
         "name": "서이준",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "18",
+        "record": "00'50\"00",
         "note": null,
         "original_match_no": "48-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "한고준",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "21",
+        "record": "01'00\"02",
         "note": null,
         "original_match_no": "48-2",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "최유강",
         "team": "프리라움돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "48-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -17637,41 +18704,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "신유찬",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'39\"09",
         "note": null,
         "original_match_no": "48-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 2,
         "name": "박지후",
         "team": "노블 TNV",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'33\"69",
         "note": null,
         "original_match_no": "48-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 3,
         "name": "박서준",
         "team": "진주스포츠클럽",
-        "rank": null,
-        "record": null,
+        "rank": "17",
+        "record": "00'48\"55",
         "note": null,
         "original_match_no": "48-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "김수혁",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "19",
+        "record": "00'51\"53",
         "note": null,
         "original_match_no": "48-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -17700,41 +18771,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "김신우",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "12",
+        "record": "00'44\"06",
         "note": null,
         "original_match_no": "48-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "이지석",
         "team": "금빛",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'42\"73",
         "note": null,
         "original_match_no": "48-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "김태우",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'40\"67",
         "note": null,
         "original_match_no": "48-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 4,
         "name": "송승환",
         "team": "프리라움샤크",
-        "rank": null,
-        "record": null,
+        "rank": "16",
+        "record": "00'47\"37",
         "note": null,
         "original_match_no": "48-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -17763,31 +18838,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 2,
         "name": "이해솔",
         "team": "IMD스위밍클럽",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'42\"15",
         "note": null,
         "original_match_no": "48-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "이다온",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "11",
+        "record": "00'44\"02",
         "note": null,
         "original_match_no": "48-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "강민규",
         "team": "키튼드림팀",
-        "rank": null,
-        "record": null,
+        "rank": "13",
+        "record": "00'44\"65",
         "note": null,
         "original_match_no": "48-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -17816,31 +18894,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 2,
         "name": "손준호",
         "team": "프리라움웨일",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "48-6",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "노연준",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "00'43\"36",
         "note": null,
         "original_match_no": "48-6",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "김태양",
         "team": "통영유소년수영클럽",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'38\"56",
         "note": null,
         "original_match_no": "48-6",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       }
     ],
     "division": "학생부",
@@ -17869,31 +18950,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 2,
         "name": "강선우",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "14",
+        "record": "00'46\"34",
         "note": null,
         "original_match_no": "48-7",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "정찬희",
         "team": "통영유소년수영클럽",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'41\"56",
         "note": null,
         "original_match_no": "48-7",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "임윤찬",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'37\"74",
         "note": null,
         "original_match_no": "48-7",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       }
     ],
     "division": "학생부",
@@ -17922,41 +19006,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "박성준",
         "team": "프리라움돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "49-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김로이",
         "team": "거제찬스샤크",
-        "rank": null,
-        "record": null,
+        "rank": "32",
+        "record": "00'58\"77",
         "note": null,
         "original_match_no": "49-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "추승우",
         "team": "거제야호",
-        "rank": null,
-        "record": null,
+        "rank": "20",
+        "record": "00'42\"69",
         "note": null,
         "original_match_no": "49-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "이재우",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "17",
+        "record": "00'42\"17",
         "note": null,
         "original_match_no": "49-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -17985,41 +19073,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "구규빈",
         "team": "다람쥐특공대",
-        "rank": null,
-        "record": null,
+        "rank": "15",
+        "record": "00'41\"41",
         "note": null,
         "original_match_no": "49-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김대현",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'38\"51",
         "note": null,
         "original_match_no": "49-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "이승후",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "28",
+        "record": "00'51\"09",
         "note": null,
         "original_match_no": "49-2",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "진시원",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "11",
+        "record": "00'39\"85",
         "note": null,
         "original_match_no": "49-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -18048,41 +19140,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "이효성",
         "team": "IMD스위밍클럽",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "49-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "강리호",
         "team": "프리라움웨일",
-        "rank": null,
-        "record": null,
+        "rank": "29",
+        "record": "00'52\"87",
         "note": null,
         "original_match_no": "49-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "이준민",
         "team": "노블 TNV",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'35\"80",
         "note": null,
         "original_match_no": "49-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 4,
         "name": "백이안",
         "team": "거제찬스샤크",
-        "rank": null,
-        "record": null,
+        "rank": "27",
+        "record": "00'49\"19",
         "note": null,
         "original_match_no": "49-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -18111,41 +19207,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "안률건",
         "team": "금빛",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'36\"41",
         "note": null,
         "original_match_no": "49-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 2,
         "name": "정연우",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "18",
+        "record": "00'42\"22",
         "note": null,
         "original_match_no": "49-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "강서후",
         "team": "키튼드림팀",
-        "rank": null,
-        "record": null,
+        "rank": "21",
+        "record": "00'42\"72",
         "note": null,
         "original_match_no": "49-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "심준용",
         "team": "거제야호",
-        "rank": null,
-        "record": null,
+        "rank": "25",
+        "record": "00'45\"63",
         "note": null,
         "original_match_no": "49-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -18174,41 +19274,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "강민준",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "19",
+        "record": "00'42\"43",
         "note": null,
         "original_match_no": "49-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "윤지유",
         "team": "프리라움샤크",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "49-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "곽이룬",
         "team": "오르카스위밍",
-        "rank": null,
-        "record": null,
+        "rank": "30",
+        "record": "00'54\"14",
         "note": null,
         "original_match_no": "49-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "장이현",
         "team": "노블 TNV",
-        "rank": null,
-        "record": null,
+        "rank": "24",
+        "record": "00'44\"64",
         "note": null,
         "original_match_no": "49-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -18237,41 +19341,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "육상현",
         "team": "노블 TNV",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'34\"67",
         "note": null,
         "original_match_no": "49-6",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 2,
         "name": "강규민",
         "team": "금빛",
-        "rank": null,
-        "record": null,
+        "rank": "13",
+        "record": "00'40\"76",
         "note": null,
         "original_match_no": "49-6",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "임이준",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "12",
+        "record": "00'40\"60",
         "note": null,
         "original_match_no": "49-6",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "조은우",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'38\"70",
         "note": null,
         "original_match_no": "49-6",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -18300,41 +19408,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "김해솔",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'33\"77",
         "note": null,
         "original_match_no": "49-7",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 2,
         "name": "김   결",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "16",
+        "record": "00'41\"47",
         "note": null,
         "original_match_no": "49-7",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "이동하",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "14",
+        "record": "00'41\"33",
         "note": null,
         "original_match_no": "49-7",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "최서진",
         "team": "거제야호",
-        "rank": null,
-        "record": null,
+        "rank": "26",
+        "record": "00'47\"93",
         "note": null,
         "original_match_no": "49-7",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -18363,31 +19475,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "김도현",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "22",
+        "record": "00'42\"80",
         "note": null,
         "original_match_no": "49-8",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "임시환",
         "team": "프리라움돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "23",
+        "record": "00'43\"95",
         "note": null,
         "original_match_no": "49-8",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "류영준",
         "team": "통영유소년수영클럽",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'36\"18",
         "note": null,
         "original_match_no": "49-8",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       }
     ],
     "division": "학생부",
@@ -18416,41 +19531,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "박솔현",
         "team": "다람쥐특공대",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'38\"43",
         "note": null,
         "original_match_no": "49-9",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "최현도",
         "team": "IMD스위밍클럽",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "00'39\"43",
         "note": null,
         "original_match_no": "49-9",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "박정현",
         "team": "거제찬스샤크",
-        "rank": null,
-        "record": null,
+        "rank": "31",
+        "record": "00'55\"60",
         "note": null,
         "original_match_no": "49-9",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "손민재",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'35\"93",
         "note": null,
         "original_match_no": "49-9",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 3
       }
     ],
     "division": "학생부",
@@ -18479,41 +19598,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "성시명",
         "team": "금빛",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'33\"64",
         "note": null,
         "original_match_no": "50-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 2,
         "name": "이준혁",
         "team": "거제야호",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "50-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "김도윤",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "13",
+        "record": "00'38\"07",
         "note": null,
         "original_match_no": "50-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "민형찬",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'33\"72",
         "note": null,
         "original_match_no": "50-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       }
     ],
     "division": "학생부",
@@ -18542,41 +19665,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "이시윤",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "18",
+        "record": "00'44\"66",
         "note": null,
         "original_match_no": "50-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김유신",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "00'37\"27",
         "note": null,
         "original_match_no": "50-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "이우리",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "19",
+        "record": "00'49\"32",
         "note": null,
         "original_match_no": "50-2",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "김세민",
         "team": "노블 TNV",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'35\"73",
         "note": null,
         "original_match_no": "50-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -18605,41 +19732,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "천시후",
         "team": "프리라움웨일",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "50-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "장하준",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "15",
+        "record": "00'39\"96",
         "note": null,
         "original_match_no": "50-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "양서진",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "17",
+        "record": "00'42\"53",
         "note": null,
         "original_match_no": "50-3",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "이승원",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "12",
+        "record": "00'37\"55",
         "note": null,
         "original_match_no": "50-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -18668,41 +19799,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "서윤우",
         "team": "노블 TNV",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'35\"38",
         "note": null,
         "original_match_no": "50-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김도담",
         "team": "다람쥐특공대",
-        "rank": null,
-        "record": null,
+        "rank": "14",
+        "record": "00'38\"73",
         "note": null,
         "original_match_no": "50-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "김경민",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'36\"45",
         "note": null,
         "original_match_no": "50-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "김남우",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'32\"09",
         "note": null,
         "original_match_no": "50-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       }
     ],
     "division": "학생부",
@@ -18731,41 +19866,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "김부진",
         "team": "키튼드림팀",
-        "rank": null,
-        "record": null,
+        "rank": "20",
+        "record": "00'51\"28",
         "note": null,
         "original_match_no": "50-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "이현준",
         "team": "노블 TNV",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "50-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "박주혁",
         "team": "거제야호",
-        "rank": null,
-        "record": null,
+        "rank": "16",
+        "record": "00'40\"63",
         "note": null,
         "original_match_no": "50-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "임준후",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "11",
+        "record": "00'37\"44",
         "note": null,
         "original_match_no": "50-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -18794,31 +19933,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 2,
         "name": "오유준",
         "team": "금빛",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'34\"77",
         "note": null,
         "original_match_no": "50-6",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 3,
         "name": "하민성",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'34\"70",
         "note": null,
         "original_match_no": "50-6",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 4,
         "name": "조은호",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'34\"72",
         "note": null,
         "original_match_no": "50-6",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       }
     ],
     "division": "학생부",
@@ -18847,41 +19989,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "정윤서",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "11",
+        "record": "00'33\"53",
         "note": null,
         "original_match_no": "51-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "박승현",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'32\"91",
         "note": null,
         "original_match_no": "51-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "고건희",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "51-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "강진우",
         "team": "금빛",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'30\"76",
         "note": null,
         "original_match_no": "51-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       }
     ],
     "division": "학생부",
@@ -18910,41 +20056,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "마정우",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'31\"08",
         "note": null,
         "original_match_no": "51-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 2,
         "name": "오태훈",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "51-2",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "최재민",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "13",
+        "record": "00'35\"55",
         "note": null,
         "original_match_no": "51-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "김태완",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "12",
+        "record": "00'33\"98",
         "note": null,
         "original_match_no": "51-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -18973,41 +20123,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "전재우",
         "team": "진주스포츠클럽",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "51-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "정선우",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "51-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "이승원",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'31\"96",
         "note": null,
         "original_match_no": "51-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 4,
         "name": "송시우",
         "team": "거제야호",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'32\"79",
         "note": null,
         "original_match_no": "51-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -19036,41 +20190,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "김보겸",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "20",
+        "record": "00'40\"12",
         "note": null,
         "original_match_no": "51-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "문우찬",
         "team": "키튼드림팀",
-        "rank": null,
-        "record": null,
+        "rank": "23",
+        "record": "00'47\"41",
         "note": null,
         "original_match_no": "51-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "윤상흠",
         "team": "프리라움돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "51-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "안유찬",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'31\"92",
         "note": null,
         "original_match_no": "51-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       }
     ],
     "division": "학생부",
@@ -19099,41 +20257,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "이동근",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'32\"74",
         "note": null,
         "original_match_no": "51-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김시윤",
         "team": "노블 TNV",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "00'33\"00",
         "note": null,
         "original_match_no": "51-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "강한솔",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "14",
+        "record": "00'35\"94",
         "note": null,
         "original_match_no": "51-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "박도현",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "19",
+        "record": "00'39\"81",
         "note": null,
         "original_match_no": "51-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -19162,41 +20324,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "하민우",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'28\"50",
         "note": null,
         "original_match_no": "51-6",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 2,
         "name": "정준휘",
         "team": "통영유소년수영클럽",
-        "rank": null,
-        "record": null,
+        "rank": "16",
+        "record": "00'36\"54",
         "note": null,
         "original_match_no": "51-6",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "양진혁",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "15",
+        "record": "00'36\"15",
         "note": null,
         "original_match_no": "51-6",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "김루민",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "22",
+        "record": "00'40\"79",
         "note": null,
         "original_match_no": "51-6",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -19225,41 +20391,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "박서후",
         "team": "진주스포츠클럽",
-        "rank": null,
-        "record": null,
+        "rank": "21",
+        "record": "00'40\"27",
         "note": null,
         "original_match_no": "51-7",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "유승현",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'32\"35",
         "note": null,
         "original_match_no": "51-7",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 3,
         "name": "김채완",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "17",
+        "record": "00'37\"31",
         "note": null,
         "original_match_no": "51-7",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "이지오",
         "team": "금빛",
-        "rank": null,
-        "record": null,
+        "rank": "18",
+        "record": "00'38\"01",
         "note": null,
         "original_match_no": "51-7",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -19288,41 +20458,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "김재우",
         "team": "삼성야호",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'31\"16",
         "note": null,
         "original_match_no": "52-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김승기",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "00'31\"19",
         "note": null,
         "original_match_no": "52-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "임성현",
         "team": "노블 TNV",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'30\"63",
         "note": null,
         "original_match_no": "52-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 4,
         "name": "최준영",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'29\"21",
         "note": null,
         "original_match_no": "52-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       }
     ],
     "division": "학생부",
@@ -19351,41 +20525,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "박은규",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "15",
+        "record": "00'36\"25",
         "note": null,
         "original_match_no": "52-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "이동민",
         "team": "IMD스위밍클럽",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'27\"60",
         "note": null,
         "original_match_no": "52-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 3,
         "name": "김종원",
         "team": "삼성야호",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'29\"35",
         "note": null,
         "original_match_no": "52-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 4,
         "name": "곽민재",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "12",
+        "record": "00'33\"22",
         "note": null,
         "original_match_no": "52-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -19414,41 +20592,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "원유찬",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'27\"27",
         "note": null,
         "original_match_no": "52-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 2,
         "name": "이선우",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'30\"47",
         "note": null,
         "original_match_no": "52-3",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 2
       },
       {
         "lane": 3,
         "name": "안상욱",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "16",
+        "record": "00'37\"32",
         "note": null,
         "original_match_no": "52-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "진시우",
         "team": "삼성야호",
-        "rank": null,
-        "record": null,
+        "rank": "17",
+        "record": "00'45\"65",
         "note": null,
         "original_match_no": "52-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -19477,31 +20659,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 2,
         "name": "최예준",
         "team": "노블 TNV",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'31\"00",
         "note": null,
         "original_match_no": "52-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "김승후",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "11",
+        "record": "00'32\"74",
         "note": null,
         "original_match_no": "52-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "추승현",
         "team": "삼성야호",
-        "rank": null,
-        "record": null,
+        "rank": "14",
+        "record": "00'35\"69",
         "note": null,
         "original_match_no": "52-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -19530,21 +20715,23 @@ export const STUDENT_RACES_DATA = [
         "lane": 2,
         "name": "이다훈",
         "team": "삼성야호",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'30\"99",
         "note": null,
         "original_match_no": "52-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "이지훈",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "13",
+        "record": "00'34\"83",
         "note": null,
         "original_match_no": "52-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -19573,41 +20760,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "김로하",
         "team": "프리라움돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "15",
+        "record": "01'08\"84",
         "note": null,
         "original_match_no": "53-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김소은",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "01'02\"09",
         "note": null,
         "original_match_no": "53-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "황다윤",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "11",
+        "record": "01'06\"43",
         "note": null,
         "original_match_no": "53-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "조유빈",
         "team": "오르카스위밍",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'53\"96",
         "note": null,
         "original_match_no": "53-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       }
     ],
     "division": "학생부",
@@ -19636,41 +20827,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "백해인",
         "team": "노블 TNV",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'56\"30",
         "note": null,
         "original_match_no": "53-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 2,
         "name": "임승주",
         "team": "통영유소년수영클럽",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'59\"48",
         "note": null,
         "original_match_no": "53-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "장하나",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "12",
+        "record": "01'06\"48",
         "note": null,
         "original_match_no": "53-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "김가연",
         "team": "프리라움돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "16",
+        "record": "01'19\"57",
         "note": null,
         "original_match_no": "53-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -19699,41 +20894,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "여승아",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "13",
+        "record": "01'08\"14",
         "note": null,
         "original_match_no": "53-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김루아",
         "team": "오르카스위밍",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'53\"91",
         "note": null,
         "original_match_no": "53-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 3,
         "name": "이서빈",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'57\"89",
         "note": null,
         "original_match_no": "53-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 4,
         "name": "하유주",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "14",
+        "record": "01'08\"47",
         "note": null,
         "original_match_no": "53-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -19762,41 +20961,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "김다솔",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'48\"85",
         "note": null,
         "original_match_no": "53-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 2,
         "name": "김가람",
         "team": "키튼드림팀",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'48\"14",
         "note": null,
         "original_match_no": "53-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 3,
         "name": "김단아",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "01'00\"08",
         "note": null,
         "original_match_no": "53-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "김로아",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'59\"87",
         "note": null,
         "original_match_no": "53-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -19825,41 +21028,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "이하늬",
         "team": "금빛",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'47\"09",
         "note": null,
         "original_match_no": "54-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김지율",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'45\"57",
         "note": null,
         "original_match_no": "54-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 3,
         "name": "김서빈",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'45\"48",
         "note": null,
         "original_match_no": "54-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 4,
         "name": "정여원",
         "team": "거제찬스샤크",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'47\"07",
         "note": null,
         "original_match_no": "54-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       }
     ],
     "division": "학생부",
@@ -19888,41 +21095,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "지상희",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "11",
+        "record": "00'56\"27",
         "note": null,
         "original_match_no": "54-2",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "박시은",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "12",
+        "record": "00'56\"62",
         "note": null,
         "original_match_no": "54-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "최율",
         "team": "키튼드림팀",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "54-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "이유주",
         "team": "노블 TNV",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'44\"79",
         "note": null,
         "original_match_no": "54-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       }
     ],
     "division": "학생부",
@@ -19951,41 +21162,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "임하율",
         "team": "통영유소년수영클럽",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "00'54\"68",
         "note": null,
         "original_match_no": "54-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김재이",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'43\"39",
         "note": null,
         "original_match_no": "54-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 3,
         "name": "이연서",
         "team": "금빛",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'43\"25",
         "note": null,
         "original_match_no": "54-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "제인",
         "team": "프리라움샤크",
-        "rank": null,
-        "record": null,
+        "rank": "15",
+        "record": "01'07\"37",
         "note": null,
         "original_match_no": "54-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -20014,31 +21229,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "김태희",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "14",
+        "record": "01'04\"10",
         "note": null,
         "original_match_no": "54-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김리하",
         "team": "프리라움돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "54-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "최아윤",
         "team": "거제찬스샤크",
-        "rank": null,
-        "record": null,
+        "rank": "16",
+        "record": "01'12\"06",
         "note": null,
         "original_match_no": "54-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -20067,31 +21285,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 2,
         "name": "이설하",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'54\"23",
         "note": null,
         "original_match_no": "54-5",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "윤설아",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'54\"16",
         "note": null,
         "original_match_no": "54-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "양수지",
         "team": "프리라움샤크",
-        "rank": null,
-        "record": null,
+        "rank": "13",
+        "record": "01'00\"32",
         "note": null,
         "original_match_no": "54-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -20120,31 +21341,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "이아인A",
         "team": "키튼드림팀",
-        "rank": null,
-        "record": null,
+        "rank": "12",
+        "record": "00'58\"17",
         "note": null,
         "original_match_no": "55-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "최시원",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "00'50\"81",
         "note": null,
         "original_match_no": "55-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "허지우",
         "team": "IMD스위밍클럽",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'41\"56",
         "note": null,
         "original_match_no": "55-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       }
     ],
     "division": "학생부",
@@ -20173,41 +21397,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "윤세연",
         "team": "프리라움샤크",
-        "rank": null,
-        "record": null,
+        "rank": "14",
+        "record": "01'12\"62",
         "note": null,
         "original_match_no": "55-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "박해솔비",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'39\"56",
         "note": null,
         "original_match_no": "55-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 3,
         "name": "신서인",
         "team": "키튼드림팀",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'50\"66",
         "note": null,
         "original_match_no": "55-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "홍새봄",
         "team": "거제찬스샤크",
-        "rank": null,
-        "record": null,
+        "rank": "15",
+        "record": "01'13\"60",
         "note": null,
         "original_match_no": "55-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -20236,41 +21464,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "김지아",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'48\"81",
         "note": null,
         "original_match_no": "55-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "조유나",
         "team": "오르카스위밍",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'39\"47",
         "note": null,
         "original_match_no": "55-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 3,
         "name": "전아린",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'40\"09",
         "note": null,
         "original_match_no": "55-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 4,
         "name": "임수아A",
         "team": "프리라움샤크",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'50\"19",
         "note": null,
         "original_match_no": "55-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -20299,31 +21531,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "김라은",
         "team": "프리라움샤크",
-        "rank": null,
-        "record": null,
+        "rank": "13",
+        "record": "00'58\"71",
         "note": null,
         "original_match_no": "55-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "강시온",
         "team": "통영유소년수영클럽",
-        "rank": null,
-        "record": null,
+        "rank": "11",
+        "record": "00'54\"14",
         "note": null,
         "original_match_no": "55-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "김예진",
         "team": "금빛",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'42\"05",
         "note": null,
         "original_match_no": "55-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       }
     ],
     "division": "학생부",
@@ -20352,21 +21587,23 @@ export const STUDENT_RACES_DATA = [
         "lane": 2,
         "name": "김태연A",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'42\"02",
         "note": null,
         "original_match_no": "55-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 3,
         "name": "서호진",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "55-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -20395,41 +21632,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "주하윤",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "12",
+        "record": "00'41\"91",
         "note": null,
         "original_match_no": "56-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "최지원",
         "team": "거제찬스샤크",
-        "rank": null,
-        "record": null,
+        "rank": "18",
+        "record": "00'46\"86",
         "note": null,
         "original_match_no": "56-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "이유빈",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "15",
+        "record": "00'45\"68",
         "note": null,
         "original_match_no": "56-1",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "윤지아",
         "team": "프리라움샤크",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "56-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -20458,41 +21699,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "오은세",
         "team": "진주스포츠클럽",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'35\"77",
         "note": null,
         "original_match_no": "56-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 2,
         "name": "코라",
         "team": "프리라움샤크",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "56-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "김라엘",
         "team": "거제야호",
-        "rank": null,
-        "record": null,
+        "rank": "13",
+        "record": "00'42\"88",
         "note": null,
         "original_match_no": "56-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "박서은",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "21",
+        "record": "00'48\"62",
         "note": null,
         "original_match_no": "56-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -20521,41 +21766,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "이지윤",
         "team": "다람쥐특공대",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'37\"00",
         "note": null,
         "original_match_no": "56-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 2,
         "name": "김재이",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "56-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "이아린",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "14",
+        "record": "00'45\"40",
         "note": null,
         "original_match_no": "56-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "강수아",
         "team": "거제야호",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "00'41\"36",
         "note": null,
         "original_match_no": "56-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -20584,41 +21833,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "박채아",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'38\"62",
         "note": null,
         "original_match_no": "56-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "이지민",
         "team": "거제야호",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'36\"25",
         "note": null,
         "original_match_no": "56-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 3,
         "name": "김예지",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "22",
+        "record": "00'52\"73",
         "note": null,
         "original_match_no": "56-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "김유주",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'35\"04",
         "note": null,
         "original_match_no": "56-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       }
     ],
     "division": "학생부",
@@ -20647,41 +21900,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "한유주",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "23",
+        "record": "00'58\"10",
         "note": null,
         "original_match_no": "56-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "정유민",
         "team": "오르카스위밍",
-        "rank": null,
-        "record": null,
+        "rank": "17",
+        "record": "00'46\"60",
         "note": null,
         "original_match_no": "56-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "이지유",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "19",
+        "record": "00'47\"52",
         "note": null,
         "original_match_no": "56-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "손주아",
         "team": "프리라움샤크",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "56-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -20710,31 +21967,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "김려원",
         "team": "IMD스위밍클럽",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'37\"81",
         "note": null,
         "original_match_no": "56-6",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 2,
         "name": "전연서",
         "team": "통영유소년수영클럽",
-        "rank": null,
-        "record": null,
+        "rank": "16",
+        "record": "00'45\"97",
         "note": null,
         "original_match_no": "56-6",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "강예서",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'34\"18",
         "note": null,
         "original_match_no": "56-6",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       }
     ],
     "division": "학생부",
@@ -20763,31 +22023,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "정예은",
         "team": "금빛",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'39\"46",
         "note": null,
         "original_match_no": "56-7",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "이하경",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'38\"55",
         "note": null,
         "original_match_no": "56-7",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "이다겸",
         "team": "다람쥐특공대",
-        "rank": null,
-        "record": null,
+        "rank": "11",
+        "record": "00'41\"69",
         "note": null,
         "original_match_no": "56-7",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -20816,31 +22079,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 2,
         "name": "성하윤",
         "team": "진주스포츠클럽",
-        "rank": null,
-        "record": null,
+        "rank": "20",
+        "record": "00'48\"19",
         "note": null,
         "original_match_no": "56-8",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "조희진",
         "team": "거제찬스샤크",
-        "rank": null,
-        "record": null,
+        "rank": "24",
+        "record": "01'05\"34",
         "note": null,
         "original_match_no": "56-8",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "서지은",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "56-8",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -20869,31 +22135,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 2,
         "name": "류다윤",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'35\"42",
         "note": null,
         "original_match_no": "57-1",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 3
       },
       {
         "lane": 3,
         "name": "박유나",
         "team": "진주스포츠클럽",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'33\"85",
         "note": null,
         "original_match_no": "57-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 4,
         "name": "강예지",
         "team": "금빛",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'36\"07",
         "note": null,
         "original_match_no": "57-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       }
     ],
     "division": "학생부",
@@ -20922,41 +22191,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "박세은",
         "team": "거제야호",
-        "rank": null,
-        "record": null,
+        "rank": "18",
+        "record": "00'53\"11",
         "note": null,
         "original_match_no": "57-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "차세은",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'34\"27",
         "note": null,
         "original_match_no": "57-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 3,
         "name": "한예진",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "15",
+        "record": "00'42\"25",
         "note": null,
         "original_match_no": "57-2",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "강다현",
         "team": "오르카스위밍",
-        "rank": null,
-        "record": null,
+        "rank": "11",
+        "record": "00'39\"91",
         "note": null,
         "original_match_no": "57-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -20985,41 +22258,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "이윤서",
         "team": "오르카스위밍",
-        "rank": null,
-        "record": null,
+        "rank": "17",
+        "record": "00'45\"05",
         "note": null,
         "original_match_no": "57-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "이하린",
         "team": "다람쥐특공대",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'35\"36",
         "note": null,
         "original_match_no": "57-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 3,
         "name": "엄혜진",
         "team": "거제야호",
-        "rank": null,
-        "record": null,
+        "rank": "10",
+        "record": "00'39\"33",
         "note": null,
         "original_match_no": "57-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "지혜람",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "16",
+        "record": "00'42\"78",
         "note": null,
         "original_match_no": "57-3",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -21048,41 +22325,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "이나라",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "20",
+        "record": "00'54\"01",
         "note": null,
         "original_match_no": "57-4",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김가온",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "57-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "김다연",
         "team": "거제야호",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'37\"04",
         "note": null,
         "original_match_no": "57-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 4,
         "name": "최서윤",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "14",
+        "record": "00'41\"55",
         "note": null,
         "original_match_no": "57-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -21111,41 +22392,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "김수진",
         "team": "키튼드림팀",
-        "rank": null,
-        "record": null,
+        "rank": "19",
+        "record": "00'53\"81",
         "note": null,
         "original_match_no": "57-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "박지후",
         "team": "진주스포츠클럽",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'38\"62",
         "note": null,
         "original_match_no": "57-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "김서현",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "13",
+        "record": "00'40\"69",
         "note": null,
         "original_match_no": "57-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "반서현",
         "team": "거제야호",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'38\"38",
         "note": null,
         "original_match_no": "57-5",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -21174,31 +22459,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "안채정",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "12",
+        "record": "00'40\"47",
         "note": null,
         "original_match_no": "57-6",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "김서윤",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'38\"25",
         "note": null,
         "original_match_no": "57-6",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "윤정인",
         "team": "거제야호",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "57-6",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -21227,41 +22515,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "남서희",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "58-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "명지안",
         "team": "오르카스위밍",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'37\"55",
         "note": null,
         "original_match_no": "58-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "김태연B",
         "team": "개인",
-        "rank": null,
-        "record": null,
-        "note": null,
+        "rank": "실격",
+        "record": "88'88\"88",
+        "note": "중도포기",
         "original_match_no": "58-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "김하윤",
         "team": "프리라움샤크",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "58-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -21290,41 +22582,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "김승아",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'34\"35",
         "note": null,
         "original_match_no": "58-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 2,
         "name": "이하림",
         "team": "금빛",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'35\"86",
         "note": null,
         "original_match_no": "58-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 3,
         "name": "허은유",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'35\"82",
         "note": null,
         "original_match_no": "58-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 4,
         "name": "신유리",
         "team": "거제찬스샤크",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "58-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -21353,41 +22649,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "이루리",
         "team": "거제야호",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "58-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "안서현",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'38\"17",
         "note": null,
         "original_match_no": "58-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "안지현",
         "team": "통영유소년수영클럽",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'32\"45",
         "note": null,
         "original_match_no": "58-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 5
       },
       {
         "lane": 4,
         "name": "어서윤",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'34\"16",
         "note": null,
         "original_match_no": "58-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       }
     ],
     "division": "학생부",
@@ -21416,41 +22716,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "고하윤",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'46\"52",
         "note": null,
         "original_match_no": "58-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "박주하",
         "team": "거제찬스샤크",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "58-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "김도은",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "58-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
         "name": "정효빈",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'31\"16",
         "note": null,
         "original_match_no": "58-4",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       }
     ],
     "division": "학생부",
@@ -21479,31 +22783,34 @@ export const STUDENT_RACES_DATA = [
         "lane": 2,
         "name": "구윤",
         "team": "통영유소년수영클럽",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "00'35\"86",
         "note": null,
         "original_match_no": "59-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 1
       },
       {
         "lane": 3,
         "name": "정채윤",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "00'32\"98",
         "note": null,
         "original_match_no": "59-1",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 5
       },
       {
         "lane": 4,
         "name": "이다은",
         "team": "삼성야호",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "00'37\"27",
         "note": null,
         "original_match_no": "59-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -21532,41 +22839,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "김   단",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "00'32\"50",
         "note": null,
         "original_match_no": "59-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 7
       },
       {
         "lane": 2,
         "name": "안서윤",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "00'33\"68",
         "note": null,
         "original_match_no": "59-2",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 4
       },
       {
         "lane": 3,
         "name": "정현서",
         "team": "삼성야호",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "00'35\"06",
         "note": null,
         "original_match_no": "59-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 3
       },
       {
         "lane": 4,
         "name": "원지우",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "00'36\"36",
         "note": null,
         "original_match_no": "59-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -21595,41 +22906,45 @@ export const STUDENT_RACES_DATA = [
         "lane": 1,
         "name": "이효민",
         "team": "IMD스위밍클럽",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "59-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 2,
         "name": "조안나",
         "team": "개인",
-        "rank": null,
-        "record": null,
+        "rank": "불참",
+        "record": "99'99\"99",
         "note": null,
         "original_match_no": "59-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
         "name": "강보경",
         "team": "키튼드림팀",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "00'35\"41",
         "note": null,
         "original_match_no": "59-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 4,
         "name": "김가연",
         "team": "통영유소년수영클럽",
-        "rank": null,
-        "record": null,
+        "rank": "9",
+        "record": "00'39\"17",
         "note": null,
         "original_match_no": "59-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -21656,43 +22971,47 @@ export const STUDENT_RACES_DATA = [
     "lanes": [
       {
         "lane": 1,
-        "name": "",
+        "name": "김하준, 김예준, 양서진, 배건우",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "03'41\"82",
         "note": null,
         "original_match_no": "60-1",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       },
       {
         "lane": 2,
-        "name": "",
+        "name": "정연우, 이준민, 김도현, 김시윤",
         "team": "노블 TNV",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "02'35\"45",
         "note": null,
         "original_match_no": "60-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 14
       },
       {
         "lane": 3,
-        "name": "",
+        "name": "곽동혁, 여승재, 김보겸, 이다온",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "03'22\"63",
         "note": null,
         "original_match_no": "60-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 4,
-        "name": "",
+        "name": "김현우, 박솔현, 구노유, 정도현",
         "team": "다람쥐특공대",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "02'48\"32",
         "note": null,
         "original_match_no": "60-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 6
       }
     ],
     "division": "학생부",
@@ -21719,43 +23038,47 @@ export const STUDENT_RACES_DATA = [
     "lanes": [
       {
         "lane": 1,
-        "name": "",
+        "name": "제유찬, 정찬희, 김태양, 정준휘",
         "team": "통영유소년수영클럽",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "03'02\"35",
         "note": null,
         "original_match_no": "60-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 2,
-        "name": "",
+        "name": "유승현, 정윤서, 정찬준, 조승우",
         "team": "PSC",
-        "rank": null,
-        "record": null,
-        "note": null,
+        "rank": "실격",
+        "record": "88'88\"88",
+        "note": "부정출발",
         "original_match_no": "60-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
-        "name": "",
+        "name": "한서준, 문강현, 이도준, 김해솔",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "02'46\"42",
         "note": null,
         "original_match_no": "60-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 8
       },
       {
         "lane": 4,
-        "name": "",
+        "name": "박승현, 신유찬, 안유찬, 이은후",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "02'41\"14",
         "note": null,
         "original_match_no": "60-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 10
       }
     ],
     "division": "학생부",
@@ -21782,33 +23105,36 @@ export const STUDENT_RACES_DATA = [
     "lanes": [
       {
         "lane": 2,
-        "name": "",
+        "name": "조현서, 이재원, 원유찬, 김승기",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
-        "note": null,
+        "rank": "실격",
+        "record": "88'88\"88",
+        "note": "배영영법 터치부정",
         "original_match_no": "61",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
-        "name": "",
+        "name": "임성현, 최예준, 여준석, 김태하",
         "team": "노블 TNV",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "02'24\"65",
         "note": null,
         "original_match_no": "61",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 14
       },
       {
         "lane": 4,
-        "name": "",
+        "name": "이다훈, 김종원, 김재우, 오성민",
         "team": "삼성야호",
-        "rank": null,
-        "record": null,
-        "note": null,
+        "rank": "실격",
+        "record": "88'88\"88",
+        "note": "부정출발",
         "original_match_no": "61",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       }
     ],
     "division": "학생부",
@@ -21835,33 +23161,36 @@ export const STUDENT_RACES_DATA = [
     "lanes": [
       {
         "lane": 2,
-        "name": "",
+        "name": "강서연, 양지안, 심지유, 김가람",
         "team": "키튼드림팀",
-        "rank": null,
-        "record": null,
+        "rank": "7",
+        "record": "03'28\"97",
         "note": null,
         "original_match_no": "62-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 3,
-        "name": "",
+        "name": "김지나, 박서은, 최서윤, 김로아",
         "team": "거제찬스아이",
-        "rank": null,
-        "record": null,
+        "rank": "6",
+        "record": "03'15\"09",
         "note": null,
         "original_match_no": "62-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 2
       },
       {
         "lane": 4,
-        "name": "",
+        "name": "윤지민, 안지현, 전연서, 임하율",
         "team": "통영유소년수영클럽",
-        "rank": null,
-        "record": null,
+        "rank": "4",
+        "record": "03'04\"18",
         "note": null,
         "original_match_no": "62-1",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 6
       }
     ],
     "division": "학생부",
@@ -21888,33 +23217,36 @@ export const STUDENT_RACES_DATA = [
     "lanes": [
       {
         "lane": 2,
-        "name": "",
+        "name": "엄유민, 이지민, 엄혜진, 반서현",
         "team": "거제야호",
-        "rank": null,
-        "record": null,
+        "rank": "5",
+        "record": "03'10\"00",
         "note": null,
         "original_match_no": "62-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 4
       },
       {
         "lane": 3,
-        "name": "",
+        "name": "김유희, 이루비, 이하경, 정예율",
         "team": "PSC",
-        "rank": null,
-        "record": null,
+        "rank": "3",
+        "record": "02'57\"98",
         "note": null,
         "original_match_no": "62-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 8
       },
       {
         "lane": 4,
-        "name": "",
+        "name": "이유주, 김서연, 이채빈, 황부민",
         "team": "노블 TNV",
-        "rank": null,
-        "record": null,
+        "rank": "2",
+        "record": "02'53\"60",
         "note": null,
         "original_match_no": "62-2",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 10
       }
     ],
     "division": "학생부",
@@ -21941,33 +23273,36 @@ export const STUDENT_RACES_DATA = [
     "lanes": [
       {
         "lane": 2,
-        "name": "",
+        "name": "강예서, 전지예, 정효빈, 김지율",
         "team": "KJH디지스트",
-        "rank": null,
-        "record": null,
+        "rank": "1",
+        "record": "02'45\"32",
         "note": null,
         "original_match_no": "62-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 14
       },
       {
         "lane": 3,
-        "name": "",
+        "name": "오은서, 백미소, 안서현, 최시원",
         "team": "거제찬스돌핀",
-        "rank": null,
-        "record": null,
+        "rank": "8",
+        "record": "03'40\"80",
         "note": null,
         "original_match_no": "62-3",
-        "is_our_team": false
+        "is_our_team": false,
+        "points": 0
       },
       {
         "lane": 4,
-        "name": "",
+        "name": "김서윤, 이유빈, 류다윤, 이설하",
         "team": "거제야르",
-        "rank": null,
-        "record": null,
-        "note": null,
+        "rank": "실격",
+        "record": "88'88\"88",
+        "note": "레인잡고추진, 발이닫고 걸었음",
         "original_match_no": "62-3",
-        "is_our_team": true
+        "is_our_team": true,
+        "points": 0
       }
     ],
     "division": "학생부",

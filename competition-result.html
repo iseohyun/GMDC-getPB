@@ -1212,6 +1212,34 @@
       color: #0284c7;
     }
 
+    .btn-adult-mp4 {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 12px;
+      border-radius: 7px;
+      border: 1.5px solid #0f766e;
+      background: #f0fdfa;
+      color: #0f766e;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn-adult-mp4:hover:not(:disabled) {
+      background: #0f766e;
+      color: #ffffff;
+    }
+
+    .btn-adult-mp4:disabled {
+      opacity: 0.78;
+      cursor: wait;
+      background: #fef3c7;
+      border-color: #f59e0b;
+      color: #b45309;
+    }
+
     .adult-playback-slider-wrap {
       flex: 1;
       min-width: 220px;
@@ -1246,13 +1274,59 @@
       margin-bottom: 16px;
     }
 
+    .adult-hbar-scale-header {
+      display: grid;
+      grid-template-columns: 115px 1fr 72px;
+      align-items: center;
+      gap: 10px;
+      padding: 0 6px 8px 6px;
+      margin-bottom: 8px;
+      border-bottom: 1px dashed #cbd5e1;
+      font-size: 11.5px;
+      font-weight: 800;
+      color: #64748b;
+    }
+
+    .adult-hbar-scale-ticks {
+      position: relative;
+      height: 16px;
+      width: 100%;
+    }
+
+    .adult-hbar-scale-tick {
+      position: absolute;
+      top: 0;
+      transform: translateX(-50%);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+      color: #64748b;
+    }
+
+    .adult-hbar-scale-tick.is-start {
+      left: 0%;
+      transform: none;
+    }
+
+    .adult-hbar-scale-tick.is-end {
+      left: 100%;
+      transform: translateX(-100%);
+      color: #0284c7;
+      font-weight: 900;
+    }
+
     .adult-hbar-list {
-      display: flex;
-      flex-direction: column;
-      gap: 9px;
+      position: relative;
+      width: 100%;
+      transition: height 0.2s ease;
     }
 
     .adult-hbar-row {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      height: 29px;
+      box-sizing: border-box;
       display: grid;
       grid-template-columns: 115px 1fr 72px;
       align-items: center;
@@ -1261,7 +1335,8 @@
       padding: 3px 6px;
       border-radius: 7px;
       cursor: pointer;
-      transition: background 0.14s ease;
+      will-change: transform;
+      transition: transform 0.34s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.18s ease;
     }
 
     .adult-hbar-row:hover {
@@ -1291,9 +1366,14 @@
 
     .adult-hbar-fill {
       height: 100%;
-      min-width: 4px;
+      min-width: 0;
       border-radius: 6px;
-      transition: width 0.22s ease, background 0.22s ease;
+      will-change: width;
+      transition: width 0.28s cubic-bezier(0.22, 1, 0.36, 1), background 0.24s ease;
+    }
+
+    .adult-hbar-list.is-raf-playing .adult-hbar-fill {
+      transition: background 0.24s ease;
     }
 
     /* 1등: 금색, 2등: 은색, 3등: 동색, 나머지: 파란색 */
@@ -1573,8 +1653,8 @@
 
   </div>
 
-  <script type="module" src="competition-result.js?v=20261025_02"></script>
-  <script type="module" src="sidebar.js?v=20261025_02"></script>
+  <script type="module" src="competition-result.js?v=20261026_05"></script>
+  <script type="module" src="sidebar.js?v=20261026_05"></script>
 </body>
 
 </html>
