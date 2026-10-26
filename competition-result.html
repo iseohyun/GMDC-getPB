@@ -1267,6 +1267,32 @@
       display: inline-block;
     }
 
+    .btn-records-top-icon .col-edit-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 18px;
+      padding: 0 6px;
+      border-radius: 999px;
+      background: #0284c7;
+      color: #ffffff;
+      font-size: 10.5px;
+      font-weight: 900;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+
+    .btn-records-top-icon.is-active .col-edit-badge {
+      background: #ffffff;
+      color: #0284c7;
+    }
+
+    .record-table th.th-dynamic-rank {
+      color: #0284c7 !important;
+      background: #f0f9ff !important;
+    }
+
     /* 개별 패널(열설정 / 필터 / 검색): 한 번에 1개만 노출 */
     .records-db-single-panel {
       display: none;
@@ -2187,8 +2213,8 @@
 
   </div>
 
-  <script type="module" src="competition-result.js?v=20261026_15"></script>
-  <script type="module" src="sidebar.js?v=20261026_15"></script>
+  <script type="module" src="competition-result.js?v=20261026_17"></script>
+  <script type="module" src="sidebar.js?v=20261026_17"></script>
 </body>
 
 </html>

@@ -1896,6 +1896,37 @@ function sortRowsByRecordMode(rows, mode, getSecFn) {
   return cloned;
 }
 
+// 현재 표시된 테이블 내 유효 기록 기준 동적 랭킹(등수*) 계산 (동률 공동 순위 반영)
+function computeDisplayedTableRankMap(rows, getSecFn) {
+  const rankMap = new Map();
+  if (!Array.isArray(rows) || rows.length === 0) return rankMap;
+
+  const validEntries = [];
+  for (let i = 0; i < rows.length; i++) {
+    const r = rows[i];
+    const sec = getSecFn(r);
+    if (sec !== null && Number.isFinite(sec) && sec > 0) {
+      validEntries.push({ row: r, sec });
+    }
+  }
+
+  validEntries.sort((a, b) => a.sec - b.sec);
+
+  let prevSec = null;
+  let prevRank = 0;
+  for (let idx = 0; idx < validEntries.length; idx++) {
+    const { row, sec } = validEntries[idx];
+    const rank = (prevSec !== null && Math.abs(sec - prevSec) <= 1e-6)
+      ? prevRank
+      : (idx + 1);
+    rankMap.set(row, rank);
+    prevSec = sec;
+    prevRank = rank;
+  }
+
+  return rankMap;
+}
+
 const OUR_TEAM_COLUMNS = [
   { key: "matchNo", label: "경기번호", width: "74px", align: "center" },
   { key: "stroke",  label: "종목",     width: "110px", align: "center" },
@@ -1905,12 +1936,14 @@ const OUR_TEAM_COLUMNS = [
   { key: "name",    label: "이름",     width: "155px", align: "left" },
   { key: "team",    label: "소속팀",   width: "105px", align: "center" },
   { key: "record",  label: "기록",     width: "96px", align: "center" },
-  { key: "rank",    label: "순위",     width: "60px", align: "center" },
+  { key: "rank",    label: "등수",     width: "60px", align: "center" },
   { key: "points",  label: "점수",     width: "58px", align: "center" },
   { key: "note",    label: "비고",     width: "180px", align: "left" }
 ];
 
 let visibleOurTeamCols = new Set(OUR_TEAM_COLUMNS.map(c => c.key));
+
+const DEFAULT_COMPACT_RAW_COLS = ["stroke", "group", "name", "team", "record", "rank"];
 
 const RAW_SHEET_COLUMNS = [
   { key: "matchNo", label: "경기번호", width: "74px", align: "center" },
@@ -1919,17 +1952,17 @@ const RAW_SHEET_COLUMNS = [
   { key: "group",   label: "그룹",     width: "68px", align: "center" },
   { key: "lane",    label: "레인",     width: "54px", align: "center" },
   { key: "name",    label: "이름",     width: "150px", align: "left" },
-  { key: "team",    label: "단체/개인", width: "135px", align: "center" },
+  { key: "team",    label: "소속팀",   width: "135px", align: "center" },
   { key: "record",  label: "기록",     width: "96px", align: "center" },
-  { key: "rank",    label: "순위",     width: "60px", align: "center" },
+  { key: "rank",    label: "등수",     width: "60px", align: "center" },
   { key: "points",  label: "점수",     width: "58px", align: "center" },
   { key: "note",    label: "비고",     width: "150px", align: "left" }
 ];
 
-let visibleRawSheetCols = new Set(RAW_SHEET_COLUMNS.map(c => c.key));
+let visibleRawSheetCols = new Set(DEFAULT_COMPACT_RAW_COLS);
 
-// 종목 단축모드 토글 상태 (false: '종목' 전체 표기 / true: '종목*' 3글자 이내 축약)
-let isStrokeShortMode = false;
+// 종목 단축모드 토글 상태 (기본값 true: '종목*' 3글자 이내 축약 / false: '종목' 전체 표기)
+let isStrokeShortMode = true;
 
 function formatStrokeTableLabel(fullLabel, isShortMode) {
   const s = String(fullLabel || "").trim();
@@ -2587,6 +2620,9 @@ function renderOurTeamResultRows() {
           const lbl = getRecordSortHeaderLabel(c.label, ourTeamRecordSortMode);
           return `<th class="th-sortable-record ${isSorted ? "is-sorted" : ""}" data-our-record-sort-th="1" style="width:${c.width}; text-align:${c.align};" title="클릭하여 기록순 정렬 (오름차순 ▲ / 내림차순 ▼ / 기본순)">${escapeHtml(lbl)}</th>`;
         }
+        if (c.key === "rank" && ourTeamRecordSortMode !== "default") {
+          return `<th class="th-dynamic-rank" style="width:${c.width}; text-align:${c.align};" title="기록 정렬 적용 중: 현재 표시된 테이블 내 랭킹을 표시합니다">등수*</th>`;
+        }
         return `<th style="width:${c.width}; text-align:${c.align};">${escapeHtml(c.label)}</th>`;
       }).join("")}
     </tr>
@@ -2624,6 +2660,9 @@ function renderOurTeamResultRows() {
   }
 
   filtered = sortRowsByRecordMode(filtered, ourTeamRecordSortMode, getSortableRecordSecForSheetRow);
+  const ourTableRankMap = ourTeamRecordSortMode !== "default"
+    ? computeDisplayedTableRankMap(filtered, getSortableRecordSecForSheetRow)
+    : null;
 
   if (activeCols.length === 0) {
     tbody.innerHTML = `
@@ -2651,10 +2690,14 @@ function renderOurTeamResultRows() {
 
     const rawRankStr = String(item.rank ?? "").trim().replace("위", "");
     const isNumericRank = /^\d+$/.test(rawRankStr);
-    const rankNumHtml = isNumericRank
-      ? `<span style="font-weight:${Number(rawRankStr) <= 6 ? "900" : "700"}; color:${
-          rawRankStr === "1" ? "#b45309" : rawRankStr === "2" ? "#334155" : rawRankStr === "3" ? "#9a3412" : Number(rawRankStr) <= 6 ? "#0284c7" : "#475569"
-        }; font-variant-numeric:tabular-nums;">${rawRankStr}</span>`
+    const displayRankStr = ourTableRankMap
+      ? (ourTableRankMap.has(item) ? String(ourTableRankMap.get(item)) : "")
+      : rawRankStr;
+    const isDisplayNumericRank = /^\d+$/.test(displayRankStr);
+    const rankNumHtml = isDisplayNumericRank
+      ? `<span style="font-weight:${Number(displayRankStr) <= 6 ? "900" : "700"}; color:${
+          displayRankStr === "1" ? "#b45309" : displayRankStr === "2" ? "#334155" : displayRankStr === "3" ? "#9a3412" : Number(displayRankStr) <= 6 ? "#0284c7" : "#475569"
+        }; font-variant-numeric:tabular-nums;">${displayRankStr}</span>`
       : `<span style="color:#cbd5e1;">-</span>`;
 
     const pointsHtml = `<span style="font-weight:${item.points > 0 ? "900" : "600"}; color:${item.points > 0 ? "#1d4ed8" : "#94a3b8"}; font-variant-numeric:tabular-nums;">${item.points}</span>`;
@@ -2714,6 +2757,9 @@ function renderAllVerifiedSheetRows() {
           const lbl = getRecordSortHeaderLabel(c.label, rawSheetRecordSortMode);
           return `<th class="th-sortable-record ${isSorted ? "is-sorted" : ""}" data-raw-record-sort-th="1" style="width:${c.width}; text-align:${c.align};" title="클릭하여 기록순 정렬 (오름차순 ▲ / 내림차순 ▼ / 기본순)">${escapeHtml(lbl)}</th>`;
         }
+        if (c.key === "rank" && rawSheetRecordSortMode !== "default") {
+          return `<th class="th-dynamic-rank" style="width:${c.width}; text-align:${c.align};" title="기록 정렬 적용 중: 현재 표시된 테이블 내 랭킹을 표시합니다">등수*</th>`;
+        }
         return `<th style="width:${c.width}; text-align:${c.align};">${escapeHtml(c.label)}</th>`;
       }).join("")}
     </tr>
@@ -2761,6 +2807,9 @@ function renderAllVerifiedSheetRows() {
   }
 
   list = sortRowsByRecordMode(list, rawSheetRecordSortMode, getSortableRecordSecForSheetRow);
+  const rawTableRankMap = rawSheetRecordSortMode !== "default"
+    ? computeDisplayedTableRankMap(list, getSortableRecordSecForSheetRow)
+    : null;
 
   if (titleEl) {
     titleEl.textContent = `📄 학생부 공식 기록지 원문 전체 데이터 조회 (${list.length}건 표시 중 / 전체 ${VERIFIED_SHEET_RESULTS.length}건)`;
@@ -2807,10 +2856,14 @@ function renderAllVerifiedSheetRows() {
 
     const rawRankStr = String(r.rank ?? "").trim().replace("위", "");
     const isNumericRank = /^\d+$/.test(rawRankStr);
-    const rankNumHtml = isNumericRank
-      ? `<span style="font-weight:${Number(rawRankStr) <= 6 ? "900" : "700"}; color:${
-          rawRankStr === "1" ? "#b45309" : rawRankStr === "2" ? "#334155" : rawRankStr === "3" ? "#9a3412" : Number(rawRankStr) <= 6 ? "#0284c7" : "#475569"
-        }; font-variant-numeric:tabular-nums;">${rawRankStr}</span>`
+    const displayRankStr = rawTableRankMap
+      ? (rawTableRankMap.has(r) ? String(rawTableRankMap.get(r)) : "")
+      : rawRankStr;
+    const isDisplayNumericRank = /^\d+$/.test(displayRankStr);
+    const rankNumHtml = isDisplayNumericRank
+      ? `<span style="font-weight:${Number(displayRankStr) <= 6 ? "900" : "700"}; color:${
+          displayRankStr === "1" ? "#b45309" : displayRankStr === "2" ? "#334155" : displayRankStr === "3" ? "#9a3412" : Number(displayRankStr) <= 6 ? "#0284c7" : "#475569"
+        }; font-variant-numeric:tabular-nums;">${displayRankStr}</span>`
       : `<span style="color:#cbd5e1;">-</span>`;
 
     const noteParts = [];
@@ -2976,12 +3029,27 @@ function renderResultAnalysisView() {
     </section>
 
     <!-- =============================================================== -->
-    <!-- 2. 우리팀 (거제야르) 대회 결과 종합 요약 & 명예의 전당          -->
+    <!-- 2. 영법별 그룹 1위 기록 추이 꺾은선 그래프 (2x2 그리드)          -->
     <!-- =============================================================== -->
     <section class="progress-card-section">
       <div class="progress-sec-header">
         <div>
-          <h3>🏅 2. 우리팀 (거제야르) 학생부 대회 결과 종합 요약 & 명예의 전당</h3>
+          <h3>📈 2. 학생부 영법별 · 연령대 그룹별 1위 기록 추이 (단위: 초)</h3>
+          <span class="progress-sec-sub">가로축: 연령대(1그룹~7그룹) · 세로축: 1위 기록(초) · 좌상(접영) / 우상(배영) / 좌하(평영) / 우하(자유형) 전 종목 공식 기록 완비</span>
+        </div>
+      </div>
+      <div class="stroke-linecharts-grid">
+        ${renderStrokeFirstPlaceLineChartsHtml("student")}
+      </div>
+    </section>
+
+    <!-- =============================================================== -->
+    <!-- 3. 우리팀 (거제야르) 대회 결과 종합 요약 & 명예의 전당          -->
+    <!-- =============================================================== -->
+    <section class="progress-card-section">
+      <div class="progress-sec-header">
+        <div>
+          <h3>🏅 3. 우리팀 (거제야르) 학생부 대회 결과 종합 요약 & 명예의 전당</h3>
           <span class="progress-sec-sub">${escapeHtml(STUDENT_SHEET_META.scoringRuleIndiv)} / ${escapeHtml(STUDENT_SHEET_META.scoringRuleRelay)}</span>
         </div>
       </div>
@@ -3121,58 +3189,6 @@ function renderResultAnalysisView() {
       </div>
     </section>
 
-    <!-- =============================================================== -->
-    <!-- 3. 우리팀 (거제야르) 선수별·종목별 상세 성적표                  -->
-    <!-- =============================================================== -->
-    <section class="progress-card-section">
-      <div class="progress-sec-header">
-        <div>
-          <h3>🏊 3. 우리팀 (거제야르) 전체 53출전 종목별 상세 성적표</h3>
-          <span class="progress-sec-sub" id="ourTeamResultCountBadge">거제야르 전체 53출전 공식 기록 100% 확인 완료</span>
-        </div>
-        <div class="result-filter-pills" id="ourTeamResultFilterGroup">
-          <button type="button" class="result-filter-pill ${ourTeamResultFilterMode === "all" ? "active" : ""}" data-our-filter="all">🌐 전체 53출전 (개인 49 + 단체 4)</button>
-          <button type="button" class="result-filter-pill ${ourTeamResultFilterMode === "scoring" ? "active" : ""}" data-our-filter="scoring">🏅 입상·득점 경기만 (12건)</button>
-          <button type="button" class="result-filter-pill ${ourTeamResultFilterMode === "medal" ? "active" : ""}" data-our-filter="medal">🥈🥉 메달 입상만 (5건)</button>
-        </div>
-      </div>
-
-      <!-- 표시 열(항목) 선택 체크박스 칩 바 + 원클릭 프리셋 -->
-      <div class="col-toggle-bar" id="ourTeamColToggleBar">
-        <div class="col-toggle-left">
-          <span class="col-toggle-label">☑️ 표시 열 항목:</span>
-          ${ourColToggleChipsHtml}
-        </div>
-        <div class="col-toggle-presets">
-          <button type="button" class="col-preset-btn ${ourTeamRecordSortMode !== "default" ? "is-active-sort" : ""}" id="btnOurTeamSortRecordAsc" title="빠른 기록(오름차순)으로 정렬">${getRecordSortButtonLabel(ourTeamRecordSortMode)}</button>
-          <button type="button" class="col-preset-btn" data-our-col-preset="all">전체 열 표시</button>
-          <button type="button" class="col-preset-btn" data-our-col-preset="compact">핵심 열만 (모바일 추천)</button>
-        </div>
-      </div>
-
-      <div class="table-responsive">
-        <table class="record-table">
-          <thead id="ourTeamResultTableHead"></thead>
-          <tbody id="ourTeamResultTableBody"></tbody>
-        </table>
-      </div>
-    </section>
-
-    <!-- =============================================================== -->
-    <!-- 4. 영법별 그룹 1위 기록 추이 꺾은선 그래프 (2x2 그리드)          -->
-    <!-- =============================================================== -->
-    <section class="progress-card-section">
-      <div class="progress-sec-header">
-        <div>
-          <h3>📈 4. 학생부 영법별 · 연령대 그룹별 1위 기록 추이 (단위: 초)</h3>
-          <span class="progress-sec-sub">가로축: 연령대(1그룹~7그룹) · 세로축: 1위 기록(초) · 좌상(접영) / 우상(배영) / 좌하(평영) / 우하(자유형) 전 종목 공식 기록 완비</span>
-        </div>
-      </div>
-      <div class="stroke-linecharts-grid">
-        ${renderStrokeFirstPlaceLineChartsHtml("student")}
-      </div>
-    </section>
-
   `;
 
   renderStudentStandingsAndChartForCurrentStep();
@@ -3201,7 +3217,8 @@ const ADULT_RESULT_COLUMNS = [
   { key: "note",    label: "비고",     width: "160px", align: "left" }
 ];
 
-let visibleAdultResultCols = new Set(ADULT_RESULT_COLUMNS.map(c => c.key));
+const DEFAULT_COMPACT_ADULT_COLS = ["stroke", "group", "name", "team", "sec", "rank"];
+let visibleAdultResultCols = new Set(DEFAULT_COMPACT_ADULT_COLS);
 
 let adultResStrokeFilter = "all";
 let adultResGroupFilter = "all";
@@ -4545,14 +4562,27 @@ function recalculateAndPatchAdultResultsDOM() {
   const tbody = document.getElementById("adultResultScheduleTableBody");
   if (!tbody) return;
 
-  tbody.querySelectorAll("tr[data-adult-entry-key]").forEach(tr => {
+  const trList = [...tbody.querySelectorAll("tr[data-adult-entry-key]")];
+  let displayedRankByRowState = null;
+  if (adultResRecordSortMode !== "default") {
+    const displayedStates = trList.map(tr => calcMap.get(tr.dataset.adultEntryKey)).filter(Boolean);
+    displayedRankByRowState = computeDisplayedTableRankMap(
+      displayedStates,
+      (r) => (!r.isExcluded && r.secNum !== null && r.secNum > 0 ? r.secNum : null)
+    );
+  }
+
+  trList.forEach(tr => {
     const key = tr.dataset.adultEntryKey;
     const st = calcMap.get(key);
     if (!st) return;
 
     const rankCell = tr.querySelector("[data-adult-rank-cell]");
     if (rankCell) {
-      rankCell.innerHTML = getAdultRankCellInnerHtml(st);
+      const rankState = displayedRankByRowState
+        ? { isExcluded: st.isExcluded, rank: displayedRankByRowState.get(st) ?? null }
+        : st;
+      rankCell.innerHTML = getAdultRankCellInnerHtml(rankState);
     }
 
     const ptsCell = tr.querySelector("[data-adult-pts-cell]");
@@ -4616,6 +4646,9 @@ function renderAdultScheduleTableRows() {
           const lbl = getRecordSortHeaderLabel(c.label, adultResRecordSortMode);
           return `<th class="th-sortable-record ${isSorted ? "is-sorted" : ""}" data-adult-record-sort-th="1" style="width:${c.width}; text-align:${c.align};" title="클릭하여 기록순 정렬 (오름차순 ▲ / 내림차순 ▼ / 기본순)">${escapeHtml(lbl)}</th>`;
         }
+        if (c.key === "rank" && adultResRecordSortMode !== "default") {
+          return `<th class="th-dynamic-rank" style="width:${c.width}; text-align:${c.align};" title="기록 정렬 적용 중: 현재 표시된 테이블 내 랭킹을 표시합니다">등수*</th>`;
+        }
         return `<th style="width:${c.width}; text-align:${c.align};">${escapeHtml(c.label)}</th>`;
       }).join("")}
     </tr>
@@ -4677,11 +4710,15 @@ function renderAdultScheduleTableRows() {
     );
   }
 
+  const getAdultSecForSort = (r) => (!r.isExcluded && r.secNum !== null && r.secNum > 0 ? r.secNum : null);
   list = sortRowsByRecordMode(
     list,
     adultResRecordSortMode,
-    (r) => (!r.isExcluded && r.secNum !== null && r.secNum > 0 ? r.secNum : null)
+    getAdultSecForSort
   );
+  const adultTableRankMap = adultResRecordSortMode !== "default"
+    ? computeDisplayedTableRankMap(list, getAdultSecForSort)
+    : null;
 
   if (titleEl) {
     titleEl.textContent = `📋 성인부 공식 기록지 원문 전체 데이터 조회 (${list.length}건 표시 중 / 전체 ${totalCount}건)`;
@@ -4712,6 +4749,9 @@ function renderAdultScheduleTableRows() {
   const canEditAdult = isCurrentUserAdmin && isAdultEditMode;
 
   tbody.innerHTML = list.map(r => {
+    const rankDisplayState = adultTableRankMap
+      ? { isExcluded: r.isExcluded, rank: adultTableRankMap.get(r) ?? null }
+      : r;
     const rowCls = r.team === "거제몽꾸"
       ? "team-power-row row-team-mongkku"
       : r.team === "거제야르"
@@ -4748,7 +4788,7 @@ function renderAdultScheduleTableRows() {
       name:    `<td class="td-swimmer-name" style="text-align:left; font-weight:${r.isOurTeam ? "900" : "700"}; color:#0f172a;">${formatTableSwimmerNameHtml(r.name, r.isRelay)}</td>`,
       team:    `<td style="text-align:center; font-weight:${r.isOurTeam ? "900" : "700"}; color:${teamColor};">${escapeHtml(r.team)}</td>`,
       sec:     `<td style="text-align:center;">${secCellHtml}</td>`,
-      rank:    `<td style="text-align:center;" data-adult-rank-cell="${escapeHtml(r.entryKey)}">${getAdultRankCellInnerHtml(r)}</td>`,
+      rank:    `<td style="text-align:center;" data-adult-rank-cell="${escapeHtml(r.entryKey)}">${getAdultRankCellInnerHtml(rankDisplayState)}</td>`,
       points:  `<td style="text-align:center;" data-adult-pts-cell="${escapeHtml(r.entryKey)}">${getAdultPointsCellInnerHtml(r)}</td>`,
       note:    `<td style="text-align:left;">${noteCellHtml}</td>`
     };
@@ -4856,12 +4896,27 @@ function renderAdultResultAnalysisView(container) {
     </section>
 
     <!-- =============================================================== -->
-    <!-- 2. 우리팀 (거제몽꾸 · 거제야르) 성인부 대회 결과 종합 요약       -->
+    <!-- 2. 성인부 영법별 · 연령대 그룹별 1위 기록 추이 (6종목 그리드)    -->
     <!-- =============================================================== -->
     <section class="progress-card-section">
       <div class="progress-sec-header">
         <div>
-          <h3>🏅 2. 우리팀 (거제몽꾸 · 거제야르) 성인부 대회 결과 종합 요약 & 명예의 전당</h3>
+          <h3>📈 2. 성인부 영법별 · 연령대 그룹별 1위 기록 추이 (단위: 초)</h3>
+          <span class="progress-sec-sub">가로축: 연령대(1그룹~6그룹) · 세로축: 1위 기록(초) · 노란색 강조 점은 우리팀(거제몽꾸) 선수가 그룹 1위를 차지한 종목입니다.</span>
+        </div>
+      </div>
+      <div class="stroke-linecharts-grid">
+        ${renderStrokeFirstPlaceLineChartsHtml("adult")}
+      </div>
+    </section>
+
+    <!-- =============================================================== -->
+    <!-- 3. 우리팀 (거제몽꾸 · 거제야르) 성인부 대회 결과 종합 요약       -->
+    <!-- =============================================================== -->
+    <section class="progress-card-section">
+      <div class="progress-sec-header">
+        <div>
+          <h3>🏅 3. 우리팀 (거제몽꾸 · 거제야르) 성인부 대회 결과 종합 요약 & 명예의 전당</h3>
           <span class="progress-sec-sub">${escapeHtml(ADULT_SHEET_META.scoringRuleIndiv)} / ${escapeHtml(ADULT_SHEET_META.scoringRuleRelay)}</span>
         </div>
       </div>
@@ -5023,60 +5078,6 @@ function renderAdultResultAnalysisView(container) {
       <div class="podium-grid-cards" id="adultPodiumCardsContainer"></div>
     </section>
 
-    <!-- =============================================================== -->
-    <!-- 3. 우리팀 (거제몽꾸 · 거제야르) 성인부 종목별 상세 성적표        -->
-    <!-- =============================================================== -->
-    <section class="progress-card-section">
-      <div class="progress-sec-header">
-        <div>
-          <h3>🏊 3. 우리팀 (거제몽꾸 · 거제야르) 전체 87출전 종목별 상세 성적표</h3>
-          <span class="progress-sec-sub" id="ourTeamResultCountBadge">우리팀 전체 87출전 공식 기록 조회</span>
-        </div>
-        <div class="result-filter-pills" id="adultOurTeamTableFilterGroup">
-          <button type="button" class="result-filter-pill ${adultOurTableFilterMode === "all" ? "active" : ""}" data-adult-our-filter="all">🌐 우리팀 전체 (87건)</button>
-          <button type="button" class="result-filter-pill ${adultOurTableFilterMode === "거제몽꾸" ? "active" : ""}" data-adult-our-filter="거제몽꾸">🟠 거제몽꾸 (65건)</button>
-          <button type="button" class="result-filter-pill ${adultOurTableFilterMode === "거제야르" ? "active" : ""}" data-adult-our-filter="거제야르">🔵 거제야르 (22건)</button>
-          <button type="button" class="result-filter-pill ${adultOurTableFilterMode === "scoring" ? "active" : ""}" data-adult-our-filter="scoring">🏅 입상·득점만 (53건)</button>
-          <button type="button" class="result-filter-pill ${adultOurTableFilterMode === "medal" ? "active" : ""}" data-adult-our-filter="medal">🥇🥈🥉 메달만 (31건)</button>
-        </div>
-      </div>
-
-      <!-- 표시 열(항목) 선택 체크박스 칩 바 + 원클릭 프리셋 -->
-      <div class="col-toggle-bar" id="ourTeamColToggleBar">
-        <div class="col-toggle-left">
-          <span class="col-toggle-label">☑️ 표시 열 항목:</span>
-          ${ourColToggleChipsHtml}
-        </div>
-        <div class="col-toggle-presets">
-          <button type="button" class="col-preset-btn ${ourTeamRecordSortMode !== "default" ? "is-active-sort" : ""}" id="btnOurTeamSortRecordAsc" title="빠른 기록(오름차순)으로 정렬">${getRecordSortButtonLabel(ourTeamRecordSortMode)}</button>
-          <button type="button" class="col-preset-btn" data-our-col-preset="all">전체 열 표시</button>
-          <button type="button" class="col-preset-btn" data-our-col-preset="compact">핵심 열만 (모바일 추천)</button>
-        </div>
-      </div>
-
-      <div class="table-responsive">
-        <table class="record-table">
-          <thead id="ourTeamResultTableHead"></thead>
-          <tbody id="ourTeamResultTableBody"></tbody>
-        </table>
-      </div>
-    </section>
-
-    <!-- =============================================================== -->
-    <!-- 4. 성인부 영법별 · 연령대 그룹별 1위 기록 추이 (6종목 그리드)    -->
-    <!-- =============================================================== -->
-    <section class="progress-card-section">
-      <div class="progress-sec-header">
-        <div>
-          <h3>📈 4. 성인부 영법별 · 연령대 그룹별 1위 기록 추이 (단위: 초)</h3>
-          <span class="progress-sec-sub">가로축: 연령대(1그룹~6그룹) · 세로축: 1위 기록(초) · 노란색 강조 점은 우리팀(거제몽꾸) 선수가 그룹 1위를 차지한 종목입니다.</span>
-        </div>
-      </div>
-      <div class="stroke-linecharts-grid">
-        ${renderStrokeFirstPlaceLineChartsHtml("adult")}
-      </div>
-    </section>
-
   `;
 
   updateAdultSyncBadgeDOM();
@@ -5122,7 +5123,9 @@ function initCompResultAuthWatcher() {
 
 function getRecordsDbIndicatorFlags() {
   if (currentDivision === "adult") {
-    const hasCustomCols = visibleAdultResultCols.size !== ADULT_RESULT_COLUMNS.length;
+    const visibleColCount = visibleAdultResultCols.size;
+    const totalColCount = ADULT_RESULT_COLUMNS.length;
+    const hasCustomCols = visibleColCount !== totalColCount;
     const hasActiveFilter = (
       adultResStrokeFilter !== "all" ||
       adultResGroupFilter !== "all" ||
@@ -5132,9 +5135,11 @@ function getRecordsDbIndicatorFlags() {
       adultResRecordSortMode !== "default"
     );
     const hasSearchQuery = adultResSearchQuery.trim() !== "";
-    return { hasCustomCols, hasActiveFilter, hasSearchQuery };
+    return { hasCustomCols, visibleColCount, totalColCount, hasActiveFilter, hasSearchQuery };
   }
-  const hasCustomCols = visibleRawSheetCols.size !== RAW_SHEET_COLUMNS.length;
+  const visibleColCount = visibleRawSheetCols.size;
+  const totalColCount = RAW_SHEET_COLUMNS.length;
+  const hasCustomCols = visibleColCount !== totalColCount;
   const hasActiveFilter = (
     rawSheetStrokeFilter !== "all" ||
     rawSheetGroupFilter !== "all" ||
@@ -5143,12 +5148,12 @@ function getRecordsDbIndicatorFlags() {
     rawSheetRecordSortMode !== "default"
   );
   const hasSearchQuery = rawSheetSearchQuery.trim() !== "";
-  return { hasCustomCols, hasActiveFilter, hasSearchQuery };
+  return { hasCustomCols, visibleColCount, totalColCount, hasActiveFilter, hasSearchQuery };
 }
 
 function postRecordsDbHeaderStateToParent() {
   if (!window.parent || window.parent === window) return;
-  const { hasCustomCols, hasActiveFilter, hasSearchQuery } = getRecordsDbIndicatorFlags();
+  const { hasCustomCols, visibleColCount, totalColCount, hasActiveFilter, hasSearchQuery } = getRecordsDbIndicatorFlags();
   try {
     window.parent.postMessage({
       type: "GMDC_RECORDS_DB_HEADER_STATE",
@@ -5158,6 +5163,8 @@ function postRecordsDbHeaderStateToParent() {
       isAdmin: isCurrentUserAdmin,
       isEditMode: isCurrentUserAdmin && isAdultEditMode,
       hasCustomCols,
+      visibleColCount,
+      totalColCount,
       hasActiveFilter,
       hasSearchQuery
     }, "*");
@@ -5191,7 +5198,7 @@ function updateRecordsDbPanelsAndIconsDOM() {
   document.body.classList.toggle("is-parent-mobile", isParentMobile);
 
   const container = document.getElementById("viewContainerRecords");
-  const { hasCustomCols, hasActiveFilter, hasSearchQuery } = getRecordsDbIndicatorFlags();
+  const { hasCustomCols, visibleColCount, totalColCount, hasActiveFilter, hasSearchQuery } = getRecordsDbIndicatorFlags();
 
   if (container) {
     container.querySelectorAll("[data-records-panel-box]").forEach(box => {
@@ -5202,7 +5209,14 @@ function updateRecordsDbPanelsAndIconsDOM() {
     container.querySelectorAll("[data-records-panel-btn]").forEach(btn => {
       const pName = btn.getAttribute("data-records-panel-btn");
       btn.classList.toggle("is-active", pName === activeRecordsDbPanel);
-      if (pName === "columns") btn.classList.toggle("has-indicator", hasCustomCols);
+      if (pName === "columns") {
+        btn.classList.toggle("has-indicator", hasCustomCols);
+        const colBadge = btn.querySelector("[data-records-col-badge]");
+        if (colBadge) {
+          colBadge.style.display = hasCustomCols ? "inline-flex" : "none";
+          colBadge.textContent = `${visibleColCount}/${totalColCount}`;
+        }
+      }
       if (pName === "filter") btn.classList.toggle("has-indicator", hasActiveFilter);
       if (pName === "search") btn.classList.toggle("has-indicator", hasSearchQuery);
     });
@@ -5250,7 +5264,7 @@ function toggleAdultRecordsEditMode() {
 }
 
 function buildRecordsDbDesktopTopBarHtml() {
-  const { hasCustomCols, hasActiveFilter, hasSearchQuery } = getRecordsDbIndicatorFlags();
+  const { hasCustomCols, visibleColCount, totalColCount, hasActiveFilter, hasSearchQuery } = getRecordsDbIndicatorFlags();
   const canShowEdit = currentDivision === "adult" && isCurrentUserAdmin;
   const isEditOn = canShowEdit && isAdultEditMode;
 
@@ -5258,14 +5272,14 @@ function buildRecordsDbDesktopTopBarHtml() {
     <div class="records-db-desktop-bar">
       <span class="records-db-brand-title">🏊 거제시장배 2026</span>
       <div class="records-db-icon-group">
-        <button type="button" class="btn-records-top-icon ${activeRecordsDbPanel === "columns" ? "is-active" : ""} ${hasCustomCols ? "has-indicator" : ""}" data-records-panel-btn="columns" title="표시 열 설정 (열설정)">
+        <button type="button" class="btn-records-top-icon ${activeRecordsDbPanel === "columns" ? "is-active" : ""} ${hasCustomCols ? "has-indicator" : ""}" data-records-panel-btn="columns" title="표시 열 설정 (현재 ${visibleColCount}/${totalColCount}개 열 표시 중)">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
             <rect x="3" y="3" width="18" height="18" rx="2"></rect>
             <line x1="9" y1="3" x2="9" y2="21"></line>
             <line x1="15" y1="3" x2="15" y2="21"></line>
           </svg>
           <span class="btn-icon-label">표시열</span>
-          <span class="icon-dot"></span>
+          <span class="col-edit-badge" data-records-col-badge style="display: ${hasCustomCols ? "inline-flex" : "none"};">${visibleColCount}/${totalColCount}</span>
         </button>
         <button type="button" class="btn-records-top-icon ${activeRecordsDbPanel === "filter" ? "is-active" : ""} ${hasActiveFilter ? "has-indicator" : ""}" data-records-panel-btn="filter" title="조건 필터">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
@@ -5337,7 +5351,7 @@ function renderRecordsDbView() {
               </div>
               <div class="col-toggle-presets">
                 <button type="button" class="col-preset-btn" data-adult-col-preset="all">전체 열 표시</button>
-                <button type="button" class="col-preset-btn" data-adult-col-preset="compact">핵심 열만 (모바일 추천)</button>
+                <button type="button" class="col-preset-btn" data-adult-col-preset="compact">기본 열만 (6개)</button>
               </div>
             </div>
           </div>
@@ -5475,7 +5489,7 @@ function renderRecordsDbView() {
             </div>
             <div class="col-toggle-presets">
               <button type="button" class="col-preset-btn" data-col-preset="all">전체 열 표시</button>
-              <button type="button" class="col-preset-btn" data-col-preset="compact">핵심 열만 (모바일 추천)</button>
+              <button type="button" class="col-preset-btn" data-col-preset="compact">기본 열만 (6개)</button>
             </div>
           </div>
         </div>
@@ -5959,7 +5973,7 @@ function bindEvents() {
     if (adultPresetBtn) {
       const preset = adultPresetBtn.dataset.adultColPreset;
       if (preset === "compact") {
-        visibleAdultResultCols = new Set(["stroke", "group", "name", "team", "sec", "rank", "points"]);
+        visibleAdultResultCols = new Set(DEFAULT_COMPACT_ADULT_COLS);
       } else {
         visibleAdultResultCols = new Set(ADULT_RESULT_COLUMNS.map(c => c.key));
       }
@@ -5977,7 +5991,7 @@ function bindEvents() {
     if (presetBtn) {
       const preset = presetBtn.dataset.colPreset;
       if (preset === "compact") {
-        visibleRawSheetCols = new Set(["stroke", "group", "name", "team", "record", "rank"]);
+        visibleRawSheetCols = new Set(DEFAULT_COMPACT_RAW_COLS);
       } else {
         visibleRawSheetCols = new Set(RAW_SHEET_COLUMNS.map(c => c.key));
       }

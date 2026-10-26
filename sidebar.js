@@ -749,6 +749,17 @@ function updateMobileHeaderRecordsDbIcons(state) {
   if (btnCols) {
     btnCols.classList.toggle('is-active', activePanel === 'columns');
     btnCols.classList.toggle('has-indicator', Boolean(state.hasCustomCols));
+    const colBadge = document.getElementById('mobileHdrColsBadge');
+    if (colBadge) {
+      if (state.hasCustomCols) {
+        colBadge.style.display = 'inline-flex';
+        colBadge.textContent = (state.visibleColCount && state.totalColCount)
+          ? `${state.visibleColCount}/${state.totalColCount}`
+          : '편집';
+      } else {
+        colBadge.style.display = 'none';
+      }
+    }
   }
   if (btnFilter) {
     btnFilter.classList.toggle('is-active', activePanel === 'filter');
