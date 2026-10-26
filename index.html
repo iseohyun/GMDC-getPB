@@ -71,6 +71,62 @@
       font-size: 15px;
       font-weight: 800;
       letter-spacing: -0.02em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .spa-mobile-header-actions {
+      margin-left: auto;
+      display: none;
+      align-items: center;
+      gap: 6px;
+    }
+    .spa-mobile-header-actions.is-visible {
+      display: inline-flex;
+    }
+    .btn-mobile-header-icon {
+      position: relative;
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      background: rgba(30, 41, 59, 0.9);
+      color: #e2e8f0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      padding: 0;
+      transition: all 0.15s ease;
+    }
+    .btn-mobile-header-icon:hover {
+      background: rgba(51, 65, 85, 0.95);
+      color: #ffffff;
+    }
+    .btn-mobile-header-icon.is-active {
+      background: #0284c7;
+      border-color: #38bdf8;
+      color: #ffffff;
+      box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.28);
+    }
+    .btn-mobile-header-icon.is-edit-active {
+      background: #ea580c;
+      border-color: #fdba74;
+      color: #ffffff;
+      box-shadow: 0 0 0 2px rgba(251, 146, 60, 0.32);
+    }
+    .btn-mobile-header-icon .icon-dot {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: #38bdf8;
+      display: none;
+    }
+    .btn-mobile-header-icon.has-indicator .icon-dot {
+      display: block;
     }
     @media (max-width: 900px) {
       .spa-mobile-header {
@@ -95,13 +151,42 @@
         </svg>
       </button>
       <span class="mobile-app-title">🏊 거제시장배 2026</span>
+      <div class="spa-mobile-header-actions" id="spaMobileHeaderActions">
+        <button type="button" class="btn-mobile-header-icon" id="btnMobileHdrCols" data-records-header-cmd="columns" title="열설정" aria-label="열설정">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+            <line x1="9" y1="3" x2="9" y2="21"></line>
+            <line x1="15" y1="3" x2="15" y2="21"></line>
+          </svg>
+          <span class="icon-dot"></span>
+        </button>
+        <button type="button" class="btn-mobile-header-icon" id="btnMobileHdrFilter" data-records-header-cmd="filter" title="필터" aria-label="필터">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+          </svg>
+          <span class="icon-dot"></span>
+        </button>
+        <button type="button" class="btn-mobile-header-icon" id="btnMobileHdrSearch" data-records-header-cmd="search" title="검색" aria-label="검색">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <span class="icon-dot"></span>
+        </button>
+        <button type="button" class="btn-mobile-header-icon" id="btnMobileHdrEdit" data-records-header-cmd="toggle-edit" title="기록 수정모드 (관리자 전용)" aria-label="기록 수정모드" style="display: none;">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 20h9"></path>
+            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+          </svg>
+        </button>
+      </div>
     </header>
 
     <!-- Embedded View Frame -->
     <iframe id="spaFrame" class="spa-embedded-frame" title="GMDC 메인 콘텐츠" src="about:blank"></iframe>
   </div>
 
-  <script type="module" src="sidebar.js?v=20261026_11"></script>
+  <script type="module" src="sidebar.js?v=20261026_15"></script>
   <script>
     // 모바일 헤더 햄버거 메뉴 연결
     document.addEventListener('DOMContentLoaded', () => {

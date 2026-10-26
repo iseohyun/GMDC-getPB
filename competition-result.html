@@ -1147,7 +1147,17 @@
       color: #0284c7 !important;
     }
 
-    /* ─── 기록지DB 전용: 상단 Sticky 헤더 & 필터·열설정 모달 토글 & Sticky 테이블 ─── */
+    /* ─── 기록지DB 전용: 상단 Sticky 아이콘 바 & 1개씩만 열리는 개별 패널(열설정/필터/검색) & Sticky 테이블 ─── */
+    body.is-records-db-mode {
+      padding-top: 8px !important;
+      padding-bottom: 8px !important;
+    }
+
+    body.is-records-db-mode .app-container {
+      padding-top: 0 !important;
+      gap: 8px !important;
+    }
+
     .records-db-page-section {
       background: #ffffff;
       border: 1px solid #e2e8f0;
@@ -1167,108 +1177,191 @@
       -webkit-backdrop-filter: blur(8px);
       border-bottom: 1.5px solid #cbd5e1;
       border-radius: 14px 14px 0 0;
-      padding: 12px 16px;
+      padding: 8px 14px;
       box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
     }
 
-    .records-db-header-bar {
+    .records-db-sticky-shell.is-empty-shell {
+      padding: 0;
+      border-bottom: none;
+      box-shadow: none;
+    }
+
+    /* 데스크톱 또는 단독 페이지 실행 시 상단 '🏊 거제시장배 2026' + 우측 아이콘 바 */
+    .records-db-desktop-bar {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      flex-wrap: wrap;
       gap: 10px;
+      min-height: 36px;
     }
 
-    .records-db-title-wrap {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-      min-width: 0;
-    }
-
-    .records-db-title-wrap h3 {
-      font-size: 16px;
+    .records-db-brand-title {
+      font-size: 14.5px;
       font-weight: 900;
       color: #0f172a;
-      margin: 0;
       letter-spacing: -0.02em;
-    }
-
-    .records-db-header-actions {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .btn-toggle-records-modal {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 6px 12px;
+    }
+
+    .records-db-icon-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-left: auto;
+    }
+
+    .btn-records-top-icon {
+      position: relative;
+      height: 34px;
+      padding: 0 10px;
       border-radius: 8px;
-      border: 1.5px solid #0284c7;
-      background: #f0f9ff;
-      color: #0369a1;
+      border: 1.5px solid #cbd5e1;
+      background: #f8fafc;
+      color: #334155;
       font-size: 12px;
       font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
       cursor: pointer;
       transition: all 0.15s ease;
       white-space: nowrap;
     }
 
-    .btn-toggle-records-modal:hover {
-      background: #e0f2fe;
+    .btn-records-top-icon:hover {
+      background: #f1f5f9;
+      border-color: #94a3b8;
+      color: #0f172a;
     }
 
-    .btn-toggle-records-modal.is-open {
+    .btn-records-top-icon.is-active {
       background: #0284c7;
-      color: #ffffff;
       border-color: #0284c7;
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(2, 132, 199, 0.25);
     }
 
-    .records-db-controls-modal {
-      margin-top: 12px;
-      padding-top: 12px;
+    .btn-records-top-icon.is-edit-active {
+      background: #ea580c;
+      border-color: #ea580c;
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(234, 88, 12, 0.28);
+    }
+
+    .btn-records-top-icon .icon-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: #0284c7;
+      display: none;
+    }
+
+    .btn-records-top-icon.is-active .icon-dot {
+      background: #ffffff;
+    }
+
+    .btn-records-top-icon.has-indicator .icon-dot {
+      display: inline-block;
+    }
+
+    /* 개별 패널(열설정 / 필터 / 검색): 한 번에 1개만 노출 */
+    .records-db-single-panel {
+      display: none;
+      margin-top: 8px;
+      padding-top: 10px;
       border-top: 1px dashed #cbd5e1;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
     }
 
-    .records-db-controls-modal.is-collapsed {
-      display: none !important;
+    .records-db-single-panel.is-open {
+      display: block;
     }
 
-    .records-db-controls-modal .col-toggle-bar {
+    .records-db-single-panel .col-toggle-bar {
       margin-bottom: 0;
     }
 
-    .records-db-controls-modal .toolbar {
+    .records-db-single-panel .toolbar {
       margin-bottom: 0 !important;
     }
 
-    .records-db-mobile-modal-footer {
-      display: none;
-      justify-content: flex-end;
-      padding-top: 6px;
-      border-top: 1px dashed #e2e8f0;
+    .records-db-panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
     }
 
-    .btn-close-records-modal-mobile {
-      padding: 5px 12px;
-      border-radius: 7px;
+    .records-db-panel-title {
+      font-size: 12.5px;
+      font-weight: 900;
+      color: #0f172a;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .btn-records-panel-close {
       border: 1px solid #cbd5e1;
       background: #f8fafc;
-      color: #334155;
-      font-size: 12px;
+      color: #475569;
+      font-size: 11.5px;
       font-weight: 800;
+      padding: 3px 9px;
+      border-radius: 6px;
       cursor: pointer;
     }
 
+    .btn-records-panel-close:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
+    .records-db-admin-edit-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+      padding: 7px 12px;
+      border-radius: 8px;
+      background: #fff7ed;
+      border: 1px solid #fdba74;
+      color: #9a3412;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    /* 종목 헤더 클릭 단축 토글 (종목 <-> 종목*) */
+    .record-table th.th-clickable-stroke {
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.15s ease, color 0.15s ease;
+    }
+
+    .record-table th.th-clickable-stroke:hover {
+      background: #e0f2fe !important;
+      color: #0369a1 !important;
+    }
+
+    .record-table th.th-clickable-stroke.is-short-mode {
+      color: #0284c7;
+      background: #f0f9ff !important;
+    }
+
+    /* 이름 셀 줄바꿈 규칙 (개인 4글자 단위 줄바꿈 / 단체 콤마 뒤 줄바꿈) */
+    .td-swimmer-name {
+      white-space: nowrap;
+      word-break: keep-all;
+      line-height: 1.35;
+    }
+
     .records-db-table-scroll {
-      max-height: calc(100dvh - var(--records-sticky-offset, 220px));
+      max-height: calc(100dvh - var(--records-sticky-offset, 70px));
       overflow-x: auto;
       overflow-y: auto;
       border-radius: 0 0 14px 14px;
@@ -1282,24 +1375,29 @@
       box-shadow: 0 1px 0 #cbd5e1;
     }
 
-    @media (max-width: 768px) {
+    /* index.html 모바일 헤더(<=900px)가 실제로 표시 중인 경우에만 내부 상단 바를 숨김 (PC 모드에서는 항상 페이지 상단에 노출) */
+    body.is-parent-mobile .records-db-desktop-bar {
+      display: none;
+    }
+
+    body.is-parent-mobile .records-db-single-panel {
+      margin-top: 0;
+      padding-top: 4px;
+      border-top: none;
+    }
+
+    @media (max-width: 520px) {
       .records-db-sticky-shell {
-        padding: 10px 12px;
+        padding: 6px 10px;
       }
-      .records-db-title-wrap h3 {
-        font-size: 14px;
+      .records-db-sticky-shell.is-empty-shell {
+        padding: 0;
       }
-      .records-db-controls-modal {
-        background: #ffffff;
-        border: 1.5px solid #bae6fd;
-        border-radius: 12px;
-        padding: 10px 12px;
-        box-shadow: 0 12px 28px rgba(15, 23, 42, 0.16);
-        max-height: 68dvh;
-        overflow-y: auto;
+      .btn-records-top-icon .btn-icon-label {
+        display: none;
       }
-      .records-db-mobile-modal-footer {
-        display: flex;
+      .btn-records-top-icon {
+        padding: 0 8px;
       }
     }
 
@@ -1312,43 +1410,163 @@
       z-index: 1450;
       max-width: calc(100vw - 16px);
       width: max-content;
-      background: rgba(15, 23, 42, 0.94);
-      backdrop-filter: blur(8px);
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(10px);
       border: 1.5px solid rgba(148, 163, 184, 0.35);
       border-radius: 999px;
-      padding: 6px 10px 6px 12px;
+      padding: 6px 10px;
       box-shadow: 0 10px 28px rgba(15, 23, 42, 0.38);
       display: none;
+      transition: border-radius 0.18s ease, padding 0.18s ease;
     }
 
     .floating-stroke-bar.is-visible {
       display: block;
     }
 
+    .floating-stroke-bar.is-expanded {
+      border-radius: 16px;
+      padding: 12px 12px 8px 12px;
+      min-width: min(340px, calc(100vw - 20px));
+    }
+
+    /* 전체순서보기 확장 시 세로 순서도 영역 */
+    .fsb-vertical-panel {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      margin-bottom: 10px;
+      padding-bottom: 10px;
+      border-bottom: 1px dashed rgba(148, 163, 184, 0.32);
+      max-height: 58dvh;
+      overflow-y: auto;
+    }
+
+    .floating-stroke-bar.is-expanded .fsb-vertical-panel {
+      display: flex;
+    }
+
+    .fsb-vert-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      font-weight: 900;
+      color: #e2e8f0;
+      padding: 0 4px 4px 4px;
+    }
+
+    .fsb-vert-step {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      width: 100%;
+      padding: 7px 10px;
+      border-radius: 9px;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      background: rgba(30, 41, 59, 0.85);
+      color: #cbd5e1;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.15s ease;
+    }
+
+    .fsb-vert-step:hover {
+      border-color: #38bdf8;
+      background: rgba(2, 132, 199, 0.3);
+      color: #ffffff;
+    }
+
+    .fsb-vert-step.is-active {
+      background: linear-gradient(135deg, #ea580c 0%, #f97316 100%);
+      border-color: #fed7aa;
+      color: #ffffff;
+      font-weight: 900;
+      box-shadow: 0 2px 10px rgba(234, 88, 12, 0.45);
+    }
+
+    .fsb-vert-step-left {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      min-width: 0;
+    }
+
+    .fsb-vert-num {
+      width: 20px;
+      height: 20px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.55);
+      color: #94a3b8;
+      font-size: 11px;
+      font-weight: 900;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .fsb-vert-step.is-active .fsb-vert-num {
+      background: rgba(255, 255, 255, 0.24);
+      color: #ffffff;
+    }
+
+    .fsb-vert-title {
+      white-space: nowrap;
+    }
+
+    .fsb-vert-range {
+      font-size: 11px;
+      color: #94a3b8;
+      font-weight: 600;
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .fsb-vert-step.is-active .fsb-vert-range {
+      color: #ffedd5;
+      font-weight: 800;
+    }
+
     .fsb-inner {
       display: flex;
       align-items: center;
-      gap: 7px;
+      gap: 6px;
       max-width: 100%;
     }
 
-    .fsb-current-badge {
+    .fsb-btn-expand {
       flex-shrink: 0;
-      font-size: 11px;
+      font-size: 11.5px;
       font-weight: 900;
       color: #38bdf8;
       background: rgba(2, 132, 199, 0.22);
       border: 1px solid rgba(56, 189, 248, 0.45);
-      padding: 3px 7px;
+      padding: 4px 9px;
       border-radius: 999px;
       white-space: nowrap;
-      font-variant-numeric: tabular-nums;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .fsb-btn-expand:hover {
+      background: rgba(2, 132, 199, 0.42);
+      color: #ffffff;
+    }
+
+    .fsb-btn-expand.is-open {
+      background: #0284c7;
+      border-color: #7dd3fc;
+      color: #ffffff;
     }
 
     .fsb-steps-track {
       display: flex;
       align-items: center;
-      gap: 2px;
+      gap: 3px;
       overflow-x: auto;
       scrollbar-width: none;
       -ms-overflow-style: none;
@@ -1359,7 +1577,7 @@
       display: none;
     }
 
-    .fsb-step-sep {
+    .fsb-step-arrow {
       color: #64748b;
       font-size: 11px;
       font-weight: 800;
@@ -1374,7 +1592,7 @@
       color: #cbd5e1;
       font-size: 11.5px;
       font-weight: 700;
-      padding: 3px 7px;
+      padding: 4px 8px;
       border-radius: 6px;
       cursor: pointer;
       white-space: nowrap;
@@ -1387,7 +1605,7 @@
       background: rgba(2, 132, 199, 0.35);
     }
 
-    .fsb-step-chip.is-passed {
+    .fsb-step-chip.is-past {
       color: #94a3b8;
       background: rgba(15, 23, 42, 0.65);
       border-color: rgba(100, 116, 139, 0.25);
@@ -1399,7 +1617,7 @@
       border: 1.5px solid #fed7aa;
       font-weight: 900;
       font-size: 12px;
-      padding: 3px 9px;
+      padding: 4px 10px;
       box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.35), 0 2px 8px rgba(234, 88, 12, 0.5);
     }
 
@@ -1411,7 +1629,7 @@
       color: #f1f5f9;
       font-size: 11px;
       font-weight: 800;
-      padding: 3px 8px;
+      padding: 4px 8px;
       border-radius: 999px;
       cursor: pointer;
       white-space: nowrap;
@@ -1959,8 +2177,9 @@
 
     <!-- 스크롤 시 하단 플로팅 전체 종목 순서 네비게이터 바 -->
     <div class="floating-stroke-bar" id="compFloatingStrokeBar" role="region" aria-label="전체 종목 진행 순서">
+      <div class="fsb-vertical-panel" id="compFloatingVerticalPanel"></div>
       <div class="fsb-inner">
-        <span class="fsb-current-badge" id="compFloatingStrokeLabel">성인부</span>
+        <button type="button" class="fsb-btn-expand" id="btnToggleCompFloatingVertical" aria-expanded="false" title="클릭하여 전체 종목 순서도를 세로로 펼쳐 보기">전체순서보기 ▲</button>
         <div class="fsb-steps-track" id="compFloatingStrokeSteps"></div>
         <button type="button" class="fsb-btn-close" id="btnCloseCompFloatingStrokeBar" title="전체 순서 바 닫기 (다시 스크롤하면 나타납니다)">닫기 ✕</button>
       </div>
@@ -1968,8 +2187,8 @@
 
   </div>
 
-  <script type="module" src="competition-result.js?v=20261026_11"></script>
-  <script type="module" src="sidebar.js?v=20261026_11"></script>
+  <script type="module" src="competition-result.js?v=20261026_15"></script>
+  <script type="module" src="sidebar.js?v=20261026_15"></script>
 </body>
 
 </html>

@@ -184,9 +184,13 @@ const elToastMessage = document.getElementById('toastMessage');
 
 // Floating Stroke Order Bar DOM
 const elFloatingStrokeBar = document.getElementById('floatingStrokeOrderBar');
-const elFsbCurrentRaceBadge = document.getElementById('fsbCurrentRaceBadge');
+const elFsbVerticalPanel = document.getElementById('fsbVerticalPanel');
+const elBtnToggleFsbVertical = document.getElementById('btnToggleFsbVertical');
 const elFsbStepsTrack = document.getElementById('fsbStepsTrack');
 const elBtnCloseFloatingStrokeBar = document.getElementById('btnCloseFloatingStrokeBar');
+let isFsbExpanded = false;
+let fsbForcedStepKey = null;
+let fsbForcedStepUntil = 0;
 
 // 부별 실제 경기 진행 종목 순서 (성인부 9종목 / 학생부 6종목)
 const DIVISION_STROKE_STEPS = {
@@ -1622,20 +1626,37 @@ function bindEvents() {
     });
   }, { passive: true });
 
+  if (elBtnToggleFsbVertical) {
+    elBtnToggleFsbVertical.addEventListener('click', () => {
+      isFsbExpanded = !isFsbExpanded;
+      fsbLastActiveStepKey = null;
+      updateFloatingStrokeOrderBar(false);
+    });
+  }
+
   if (elBtnCloseFloatingStrokeBar) {
     elBtnCloseFloatingStrokeBar.addEventListener('click', () => {
       fsbClosedAtScrollY = window.scrollY || document.documentElement.scrollTop || 0;
+      isFsbExpanded = false;
       if (elFloatingStrokeBar) {
+        elFloatingStrokeBar.classList.remove('is-expanded');
         elFloatingStrokeBar.style.display = 'none';
       }
     });
   }
 
-  if (elFsbStepsTrack) {
-    elFsbStepsTrack.addEventListener('click', (e) => {
+  if (elFloatingStrokeBar) {
+    elFloatingStrokeBar.addEventListener('click', (e) => {
       const chip = e.target.closest('[data-fsb-first-race]');
       if (!chip) return;
       const targetRaceIdx = Number(chip.getAttribute('data-fsb-first-race')) || 1;
+      const stepKey = chip.getAttribute('data-fsb-step-key');
+      if (stepKey) {
+        fsbForcedStepKey = stepKey;
+        fsbForcedStepUntil = Date.now() + 900;
+        fsbLastActiveStepKey = null;
+        updateFloatingStrokeOrderBar(false);
+      }
       let targetEl = document.getElementById(`race-card-${targetRaceIdx}`);
       if (!targetEl && searchQuery) {
         if (elInputSearch) elInputSearch.value = '';
@@ -1645,7 +1666,10 @@ function bindEvents() {
         targetEl = document.getElementById(`race-card-${targetRaceIdx}`);
       }
       if (targetEl) {
-        targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        const ctrlBottom = elLiveControllerCard ? elLiveControllerCard.getBoundingClientRect().bottom : 80;
+        const rect = targetEl.getBoundingClientRect();
+        const targetY = Math.max(0, (window.scrollY || document.documentElement.scrollTop || 0) + rect.top - ctrlBottom - 12);
+        window.scrollTo({ top: targetY, behavior: 'smooth' });
       }
     });
   }
@@ -1659,7 +1683,7 @@ function getViewportFocusedRace() {
   if (!cards.length) return currentRaces[0] || null;
 
   const ctrlBottom = elLiveControllerCard ? elLiveControllerCard.getBoundingClientRect().bottom : 80;
-  const focalY = Math.max(ctrlBottom + 45, window.innerHeight * 0.36);
+  const focalY = ctrlBottom + 36;
 
   let bestCard = cards[0];
   let bestDist = Infinity;
@@ -1687,20 +1711,47 @@ function updateFloatingStrokeOrderBar(showIfHidden = false) {
   const focusedRace = getViewportFocusedRace();
   if (!focusedRace) return;
 
-  if (elFsbCurrentRaceBadge) {
-    elFsbCurrentRaceBadge.textContent = `#${focusedRace.race_index} (${focusedRace.primary_match_no}번)`;
-  }
-
-  const activeIdx = Math.max(0, steps.findIndex(s => s.key === focusedRace.stroke));
+  const currentStrokeKey = (fsbForcedStepKey && Date.now() < fsbForcedStepUntil)
+    ? fsbForcedStepKey
+    : focusedRace.stroke;
+  const activeIdx = Math.max(0, steps.findIndex(s => s.key === currentStrokeKey));
   const activeStep = steps[activeIdx] || steps[0];
+
+  elFloatingStrokeBar.classList.toggle('is-expanded', isFsbExpanded);
+  if (elBtnToggleFsbVertical) {
+    elBtnToggleFsbVertical.classList.toggle('is-open', isFsbExpanded);
+    elBtnToggleFsbVertical.setAttribute('aria-expanded', String(isFsbExpanded));
+    elBtnToggleFsbVertical.textContent = isFsbExpanded ? '전체순서접기 ▼' : '전체순서보기 ▲';
+  }
 
   if (fsbLastDivision !== currentDivision) {
     fsbLastDivision = currentDivision;
     fsbLastActiveStepKey = null;
     elFsbStepsTrack.innerHTML = steps.map((st, idx) => {
       const sep = idx > 0 ? `<span class="fsb-step-sep">-</span>` : '';
-      return `${sep}<button type="button" class="fsb-step-chip" data-fsb-step-key="${escapeHtml(st.key)}" data-fsb-first-race="${st.firstRaceIndex}" title="${escapeHtml(st.fullLabel)} 위치로 바로 이동">[${escapeHtml(st.shortLabel)}]</button>`;
+      return `${sep}<button type="button" class="fsb-step-chip" data-fsb-step-key="${escapeHtml(st.key)}" data-fsb-first-race="${st.firstRaceIndex}" title="${escapeHtml(st.fullLabel)} 위치로 바로 이동">${escapeHtml(st.shortLabel)}</button>`;
     }).join('');
+  }
+
+  if (elFsbVerticalPanel) {
+    const divTitle = currentDivision === 'adult' ? '성인부(25일) 전체 경기 순서' : '학생부(24일) 전체 경기 순서';
+    elFsbVerticalPanel.innerHTML = `
+      <div class="fsb-vert-header">
+        <span>📋 ${escapeHtml(divTitle)} (${steps.length}종목)</span>
+        <span style="font-size:11px; color:#94a3b8; font-weight:700;">클릭 시 해당 종목 이동</span>
+      </div>
+      ${steps.map((st, idx) => {
+        const isAct = idx === activeIdx;
+        return `
+          <button type="button" class="fsb-vert-step ${isAct ? 'is-active' : ''}" data-fsb-step-key="${escapeHtml(st.key)}" data-fsb-first-race="${st.firstRaceIndex}">
+            <span class="fsb-vert-step-left">
+              <span class="fsb-vert-num">${idx + 1}</span>
+              <span class="fsb-vert-title">${escapeHtml(st.fullLabel.replace(/^\d+\.\s*/, ''))}</span>
+            </span>
+          </button>
+        `;
+      }).join('')}
+    `;
   }
 
   if (fsbLastActiveStepKey !== activeStep.key) {
@@ -1713,7 +1764,7 @@ function updateFloatingStrokeOrderBar(showIfHidden = false) {
       chip.classList.toggle('is-passed', isPassed);
       const st = steps[idx];
       if (st) {
-        chip.textContent = `[${st.shortLabel}]`;
+        chip.textContent = st.shortLabel;
       }
       if (isAct && typeof chip.scrollIntoView === 'function') {
         chip.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });

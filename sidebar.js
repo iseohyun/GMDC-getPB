@@ -31,17 +31,17 @@ export const SPA_ROUTES = {
   '#/training-meeting':       { url: 'meeting_notes.html', title: '운영기록', catId: 'cat-training', itemId: 'meeting' },
   '#/competition-prospectus':    { url: 'prospectus.html', title: '모집요강', catId: 'cat-competition', itemId: 'prospectus' },
   '#/competition-coach-meeting': { url: 'coach-meeting.html?v=20261024_08', title: '감독자회의요강', catId: 'cat-competition', itemId: 'coach-meeting' },
-  '#/competition-live-student':  { url: 'live-schedule.html?div=student&v=20261026_10', title: '학생부 (24일)', catId: 'cat-competition', itemId: 'live-student' },
-  '#/competition-live-adult':    { url: 'live-schedule.html?div=adult&v=20261026_10', title: '성인부 (25일)', catId: 'cat-competition', itemId: 'live-adult' },
-  '#/competition-result':                  { url: 'competition-result.html?div=student&tab=entry&v=20261026_11', title: '학생부 접수 분석', catId: 'cat-competition', itemId: 'comp-res-student-entry', div: 'student', tab: 'entry' },
-  '#/competition-result-student-entry':    { url: 'competition-result.html?div=student&tab=entry&v=20261026_11', title: '학생부 접수 분석', catId: 'cat-competition', itemId: 'comp-res-student-entry', div: 'student', tab: 'entry' },
-  '#/competition-result-student-progress': { url: 'competition-result.html?div=student&tab=progress&v=20261026_11', title: '학생부 진행 요약', catId: 'cat-competition', itemId: 'comp-res-student-progress', div: 'student', tab: 'progress' },
-  '#/competition-result-student-result':   { url: 'competition-result.html?div=student&tab=result&v=20261026_11', title: '학생부 결과 분석', catId: 'cat-competition', itemId: 'comp-res-student-result', div: 'student', tab: 'result' },
-  '#/competition-result-student-records':  { url: 'competition-result.html?div=student&tab=records&v=20261026_11', title: '학생부 기록지DB', catId: 'cat-competition', itemId: 'comp-res-student-records', div: 'student', tab: 'records' },
-  '#/competition-result-adult-entry':      { url: 'competition-result.html?div=adult&tab=entry&v=20261026_11', title: '성인부 접수 분석', catId: 'cat-competition', itemId: 'comp-res-adult-entry', div: 'adult', tab: 'entry' },
-  '#/competition-result-adult-progress':   { url: 'competition-result.html?div=adult&tab=progress&v=20261026_11', title: '성인부 진행 요약', catId: 'cat-competition', itemId: 'comp-res-adult-progress', div: 'adult', tab: 'progress' },
-  '#/competition-result-adult-result':     { url: 'competition-result.html?div=adult&tab=result&v=20261026_11', title: '성인부 결과 분석', catId: 'cat-competition', itemId: 'comp-res-adult-result', div: 'adult', tab: 'result' },
-  '#/competition-result-adult-records':    { url: 'competition-result.html?div=adult&tab=records&v=20261026_11', title: '성인부 기록지DB', catId: 'cat-competition', itemId: 'comp-res-adult-records', div: 'adult', tab: 'records' },
+  '#/competition-live-student':  { url: 'live-schedule.html?div=student&v=20261026_15', title: '학생부 (24일)', catId: 'cat-competition', itemId: 'live-student' },
+  '#/competition-live-adult':    { url: 'live-schedule.html?div=adult&v=20261026_15', title: '성인부 (25일)', catId: 'cat-competition', itemId: 'live-adult' },
+  '#/competition-result':                  { url: 'competition-result.html?div=student&tab=entry&v=20261026_15', title: '학생부 접수 분석', catId: 'cat-competition', itemId: 'comp-res-student-entry', div: 'student', tab: 'entry' },
+  '#/competition-result-student-entry':    { url: 'competition-result.html?div=student&tab=entry&v=20261026_15', title: '학생부 접수 분석', catId: 'cat-competition', itemId: 'comp-res-student-entry', div: 'student', tab: 'entry' },
+  '#/competition-result-student-progress': { url: 'competition-result.html?div=student&tab=progress&v=20261026_15', title: '학생부 진행 요약', catId: 'cat-competition', itemId: 'comp-res-student-progress', div: 'student', tab: 'progress' },
+  '#/competition-result-student-result':   { url: 'competition-result.html?div=student&tab=result&v=20261026_15', title: '학생부 결과 분석', catId: 'cat-competition', itemId: 'comp-res-student-result', div: 'student', tab: 'result' },
+  '#/competition-result-student-records':  { url: 'competition-result.html?div=student&tab=records&v=20261026_15', title: '학생부 기록지DB', catId: 'cat-competition', itemId: 'comp-res-student-records', div: 'student', tab: 'records' },
+  '#/competition-result-adult-entry':      { url: 'competition-result.html?div=adult&tab=entry&v=20261026_15', title: '성인부 접수 분석', catId: 'cat-competition', itemId: 'comp-res-adult-entry', div: 'adult', tab: 'entry' },
+  '#/competition-result-adult-progress':   { url: 'competition-result.html?div=adult&tab=progress&v=20261026_15', title: '성인부 진행 요약', catId: 'cat-competition', itemId: 'comp-res-adult-progress', div: 'adult', tab: 'progress' },
+  '#/competition-result-adult-result':     { url: 'competition-result.html?div=adult&tab=result&v=20261026_15', title: '성인부 결과 분석', catId: 'cat-competition', itemId: 'comp-res-adult-result', div: 'adult', tab: 'result' },
+  '#/competition-result-adult-records':    { url: 'competition-result.html?div=adult&tab=records&v=20261026_15', title: '성인부 기록지DB', catId: 'cat-competition', itemId: 'comp-res-adult-records', div: 'adult', tab: 'records' },
   '#/admin-share':               { url: 'share.html?v=20261024_21', title: '홍보 및 공유', catId: 'cat-admin', itemId: 'admin-share' },
   '#/admin-settings':            { url: 'admin.html', title: '관리자 설정', catId: 'cat-admin', itemId: 'admin-settings', adminOnly: true }
 };
@@ -168,9 +168,11 @@ export function initSidebar() {
       onAuthChange: (authInfo) => {
         const user = authInfo ? (authInfo.user || null) : null;
         updateSidebarUserProfile(user);
+        notifySpaFrameAdminStatus();
       }
     });
     updateSidebarUserProfile(mod.getCurrentUser());
+    notifySpaFrameAdminStatus();
   }).catch(err => {
     console.warn("[Sidebar] Auth module load delayed:", err);
   });
@@ -502,6 +504,11 @@ export function navigateToRoute(hash) {
       route.url.startsWith('competition-result.html') &&
       spaFrame.contentWindow;
 
+    const mobileHeaderActions = document.getElementById('spaMobileHeaderActions');
+    if (mobileHeaderActions && route.tab !== 'records') {
+      mobileHeaderActions.classList.remove('is-visible');
+    }
+
     if (isSameCompResultPage) {
       spaFrame.setAttribute('data-current-hash', hash);
       try {
@@ -509,7 +516,8 @@ export function navigateToRoute(hash) {
           type: 'GMDC_COMP_RESULT_NAV',
           div: route.div || 'student',
           tab: route.tab || 'entry',
-          hash
+          hash,
+          isAdmin: authModRef ? Boolean(authModRef.isAdmin()) : false
         }, '*');
       } catch (err) {
         spaFrame.src = route.url;
@@ -575,9 +583,28 @@ function initSpaRouter() {
     }
   });
 
+  // 모바일 상단 헤더(거제시장배 2026) 우측 기록지DB 아이콘 클릭 -> iframe 전달
+  const mobileHeaderActions = document.getElementById('spaMobileHeaderActions');
+  if (mobileHeaderActions) {
+    mobileHeaderActions.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-records-header-cmd]');
+      if (!btn) return;
+      const cmd = btn.getAttribute('data-records-header-cmd');
+      if (spaFrame && spaFrame.contentWindow && cmd) {
+        try {
+          spaFrame.contentWindow.postMessage({
+            type: 'GMDC_RECORDS_DB_HEADER_CMD',
+            cmd
+          }, '*');
+        } catch (err) {}
+      }
+    });
+  }
+
   // iframe 내부(competition-result.html 등)에서 탭 전환 시 사이드바 하이라이트 및 해시 동기화
   window.addEventListener('message', (e) => {
-    if (e.data && e.data.type === 'GMDC_COMP_RESULT_TAB_CHANGED' && e.data.hash) {
+    if (!e.data) return;
+    if (e.data.type === 'GMDC_COMP_RESULT_TAB_CHANGED' && e.data.hash) {
       const targetHash = e.data.hash;
       const route = SPA_ROUTES[targetHash];
       if (route) {
@@ -587,6 +614,12 @@ function initSpaRouter() {
         spaFrame.setAttribute('data-current-hash', targetHash);
         highlightActiveItem(route.itemId, route.catId);
       }
+      if (e.data.tab !== 'records' && mobileHeaderActions) {
+        mobileHeaderActions.classList.remove('is-visible');
+      }
+      notifySpaFrameAdminStatus();
+    } else if (e.data.type === 'GMDC_RECORDS_DB_HEADER_STATE') {
+      updateMobileHeaderRecordsDbIcons(e.data);
     }
   });
 }
@@ -682,4 +715,51 @@ if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initSidebar);
 } else {
   initSidebar();
+}
+
+
+function notifySpaFrameAdminStatus() {
+  const spaFrame = document.getElementById('spaFrame');
+  if (!spaFrame || !spaFrame.contentWindow) return;
+  const isUserAdmin = authModRef ? Boolean(authModRef.isAdmin()) : false;
+  try {
+    spaFrame.contentWindow.postMessage({
+      type: 'GMDC_AUTH_STATE',
+      isAdmin: isUserAdmin
+    }, '*');
+  } catch (e) {}
+}
+
+function updateMobileHeaderRecordsDbIcons(state) {
+  const wrap = document.getElementById('spaMobileHeaderActions');
+  if (!wrap) return;
+  const isRecordsTab = Boolean(state && state.isRecordsTab);
+  wrap.classList.toggle('is-visible', isRecordsTab);
+  if (!isRecordsTab) return;
+
+  const activePanel = state.activePanel || null;
+  const isUserAdmin = Boolean(state.isAdmin) || (authModRef ? Boolean(authModRef.isAdmin()) : false);
+  const canShowEdit = isUserAdmin && state.division === 'adult';
+
+  const btnCols = document.getElementById('btnMobileHdrCols');
+  const btnFilter = document.getElementById('btnMobileHdrFilter');
+  const btnSearch = document.getElementById('btnMobileHdrSearch');
+  const btnEdit = document.getElementById('btnMobileHdrEdit');
+
+  if (btnCols) {
+    btnCols.classList.toggle('is-active', activePanel === 'columns');
+    btnCols.classList.toggle('has-indicator', Boolean(state.hasCustomCols));
+  }
+  if (btnFilter) {
+    btnFilter.classList.toggle('is-active', activePanel === 'filter');
+    btnFilter.classList.toggle('has-indicator', Boolean(state.hasActiveFilter));
+  }
+  if (btnSearch) {
+    btnSearch.classList.toggle('is-active', activePanel === 'search');
+    btnSearch.classList.toggle('has-indicator', Boolean(state.hasSearchQuery));
+  }
+  if (btnEdit) {
+    btnEdit.style.display = canShowEdit ? 'inline-flex' : 'none';
+    btnEdit.classList.toggle('is-edit-active', Boolean(state.isEditMode));
+  }
 }

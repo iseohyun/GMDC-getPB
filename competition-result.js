@@ -18,19 +18,19 @@ const ADULT_GROUPS = ["1그룹", "2그룹", "3그룹", "4그룹", "5그룹", "6�
 const STUDENT_GROUPS = ["1그룹", "2그룹", "3그룹", "4그룹", "5그룹", "6그룹", "7그룹"];
 
 const ADULT_STROKES = [
-  { key: "핀자유형", label: "핀자유형 50m", shortLabel: "핀자유", cls: "seg-fin-free", swatchCls: "swatch-fin-free" },
   { key: "핀접영",   label: "핀접영 50m",   shortLabel: "핀접영", cls: "seg-fin-fly",  swatchCls: "swatch-fin-fly" },
-  { key: "자유형",   label: "자유형 50m",   shortLabel: "자유형", cls: "seg-free",     swatchCls: "swatch-free" },
   { key: "배영",     label: "배영 50m",     shortLabel: "배영",   cls: "seg-back",     swatchCls: "swatch-back" },
+  { key: "접영",     label: "접영 50m",     shortLabel: "접영",   cls: "seg-fly",      swatchCls: "swatch-fly" },
+  { key: "핀자유형", label: "핀자유형 50m", shortLabel: "핀자유", cls: "seg-fin-free", swatchCls: "swatch-fin-free" },
   { key: "평영",     label: "평영 50m",     shortLabel: "평영",   cls: "seg-breast",   swatchCls: "swatch-breast" },
-  { key: "접영",     label: "접영 50m",     shortLabel: "접영",   cls: "seg-fly",      swatchCls: "swatch-fly" }
+  { key: "자유형",   label: "자유형 50m",   shortLabel: "자유형", cls: "seg-free",     swatchCls: "swatch-free" }
 ];
 
 const STUDENT_STROKES = [
-  { key: "자유형", label: "자유형 50m", shortLabel: "자유형", cls: "seg-free",   swatchCls: "swatch-free" },
+  { key: "접영",   label: "접영 50m",   shortLabel: "접영",   cls: "seg-fly",    swatchCls: "swatch-fly" },
   { key: "배영",   label: "배영 50m",   shortLabel: "배영",   cls: "seg-back",   swatchCls: "swatch-back" },
   { key: "평영",   label: "평영 50m",   shortLabel: "평영",   cls: "seg-breast", swatchCls: "swatch-breast" },
-  { key: "접영",   label: "접영 50m",   shortLabel: "접영",   cls: "seg-fly",    swatchCls: "swatch-fly" }
+  { key: "자유형", label: "자유형 50m", shortLabel: "자유형", cls: "seg-free",   swatchCls: "swatch-free" }
 ];
 
 const OUR_TEAMS = new Set(["거제몽꾸", "거제야르"]);
@@ -304,7 +304,8 @@ function renderTopNavigationHeader() {
     breadcrumb.textContent = `대회결과 > ${currentDivision === "student" ? "학생부" : "성인부"} > ${subLabel}`;
   }
 
-  // 기록지DB 탭에서는 전용 상단 Sticky 헤더가 표시되므로 상단 공통 헤더를 숨김
+  // 기록지DB 탭에서는 전용 상단 Sticky 헤더가 페이지 최상단에 표시되므로 상단 공통 헤더를 숨김
+  document.body.classList.toggle("is-records-db-mode", currentSubTab === "records");
   const commonHeader = document.querySelector(".comp-analysis-header");
   if (commonHeader) {
     commonHeader.style.display = currentSubTab === "records" ? "none" : "block";
@@ -1927,6 +1928,50 @@ const RAW_SHEET_COLUMNS = [
 
 let visibleRawSheetCols = new Set(RAW_SHEET_COLUMNS.map(c => c.key));
 
+// 종목 단축모드 토글 상태 (false: '종목' 전체 표기 / true: '종목*' 3글자 이내 축약)
+let isStrokeShortMode = false;
+
+function formatStrokeTableLabel(fullLabel, isShortMode) {
+  const s = String(fullLabel || "").trim();
+  if (!s) return "-";
+  if (!isShortMode) return s;
+  if (s.includes("혼성") && s.includes("핀")) return "혼성핀";
+  if (s.includes("혼계영")) return "혼계영";
+  if (s.includes("계영")) return "계영";
+  if (s.includes("핀접")) return "핀접영";
+  if (s.includes("핀자")) return "핀자유";
+  if (s.includes("자유")) return "자유형";
+  if (s.includes("배영")) return "배영";
+  if (s.includes("평영")) return "평영";
+  if (s.includes("접영")) return "접영";
+  const stripped = s.replace(/\s*\d+m.*$/i, "").trim();
+  return Array.from(stripped).slice(0, 3).join("");
+}
+
+function chunkBy4CharsHtml(str) {
+  const chars = Array.from(String(str ?? "").trim());
+  if (chars.length === 0) return "";
+  if (chars.length <= 4) return escapeHtml(chars.join(""));
+  const parts = [];
+  for (let i = 0; i < chars.length; i += 4) {
+    parts.push(escapeHtml(chars.slice(i, i + 4).join("")));
+  }
+  return parts.join("<br>");
+}
+
+function formatTableSwimmerNameHtml(rawName, isRelay = false) {
+  const raw = String(rawName ?? "").trim();
+  if (!raw) return "-";
+  if (isRelay || raw.includes(",")) {
+    if (raw.includes(",")) {
+      const tokens = raw.split(",").map(t => t.trim()).filter(Boolean);
+      return tokens.map(t => chunkBy4CharsHtml(t)).join(",<br>");
+    }
+    return chunkBy4CharsHtml(raw);
+  }
+  return chunkBy4CharsHtml(raw);
+}
+
 // 학생부 경기번호 진행에 따른 점수 변화 재생(Playback) 상태
 const STUDENT_TOTAL_RACES = STUDENT_RACES_DATA.length; // 232경기
 const HBAR_ROW_STRIDE = 36; // 29px row height + 7px vertical gap
@@ -2532,6 +2577,11 @@ function renderOurTeamResultRows() {
   thead.innerHTML = `
     <tr>
       ${activeCols.map(c => {
+        if (c.key === "stroke") {
+          const strokeHdr = isStrokeShortMode ? "종목*" : c.label;
+          const w = isStrokeShortMode ? "64px" : c.width;
+          return `<th class="th-clickable-stroke ${isStrokeShortMode ? "is-short-mode" : ""}" data-toggle-stroke-short="1" style="width:${w}; text-align:${c.align};" title="클릭하여 종목 단축모드(종목*) 토글">${escapeHtml(strokeHdr)}</th>`;
+        }
         if (c.key === "record") {
           const isSorted = ourTeamRecordSortMode !== "default";
           const lbl = getRecordSortHeaderLabel(c.label, ourTeamRecordSortMode);
@@ -2596,7 +2646,8 @@ function renderOurTeamResultRows() {
       ? `<span style="color:#94a3b8; font-size:12px;">${escapeHtml(item.record)}</span>`
       : `<strong style="color:#0f172a; font-variant-numeric:tabular-nums;">${escapeHtml(item.record)}</strong>`;
 
-    const strokeLabel = item.isRelay ? item.stroke : `${item.stroke} ${item.distance}`;
+    const rawStrokeLabel = item.isRelay ? item.stroke : `${item.stroke} ${item.distance}`;
+    const strokeLabel = formatStrokeTableLabel(rawStrokeLabel, isStrokeShortMode);
 
     const rawRankStr = String(item.rank ?? "").trim().replace("위", "");
     const isNumericRank = /^\d+$/.test(rawRankStr);
@@ -2622,11 +2673,11 @@ function renderOurTeamResultRows() {
 
     const cellMap = {
       matchNo: `<td style="text-align:center; font-weight:800; color:#0284c7; font-variant-numeric:tabular-nums;">#${escapeHtml(item.matchNo)}</td>`,
-      stroke:  `<td style="text-align:center; font-weight:700; color:#334155;">${escapeHtml(strokeLabel)}</td>`,
+      stroke:  `<td style="text-align:center; font-weight:700; color:#334155; white-space:nowrap;">${escapeHtml(strokeLabel)}</td>`,
       gender:  `<td style="text-align:center; font-weight:700; color:#334155;">${escapeHtml(item.gender)}</td>`,
       group:   `<td style="text-align:center; font-weight:700; color:#334155; font-variant-numeric:tabular-nums;">${escapeHtml(groupNumOnly)}</td>`,
       lane:    `<td style="text-align:center; font-weight:800; color:#334155; font-variant-numeric:tabular-nums;">${item.lane}</td>`,
-      name:    `<td style="text-align:left; font-weight:800; color:#0f172a;">${escapeHtml(item.name)}</td>`,
+      name:    `<td class="td-swimmer-name" style="text-align:left; font-weight:800; color:#0f172a;">${formatTableSwimmerNameHtml(item.name, item.isRelay)}</td>`,
       team:    `<td style="text-align:center; font-weight:900; color:${teamColor};">${escapeHtml(item.team)}</td>`,
       record:  `<td style="text-align:center;">${recordDisplay}</td>`,
       rank:    `<td style="text-align:center;">${rankNumHtml}</td>`,
@@ -2653,6 +2704,11 @@ function renderAllVerifiedSheetRows() {
   thead.innerHTML = `
     <tr>
       ${activeCols.map(c => {
+        if (c.key === "stroke") {
+          const strokeHdr = isStrokeShortMode ? "종목*" : c.label;
+          const w = isStrokeShortMode ? "64px" : c.width;
+          return `<th class="th-clickable-stroke ${isStrokeShortMode ? "is-short-mode" : ""}" data-toggle-stroke-short="1" style="width:${w}; text-align:${c.align};" title="클릭하여 종목 단축모드(종목*) 토글">${escapeHtml(strokeHdr)}</th>`;
+        }
         if (c.key === "record") {
           const isSorted = rawSheetRecordSortMode !== "default";
           const lbl = getRecordSortHeaderLabel(c.label, rawSheetRecordSortMode);
@@ -2739,7 +2795,8 @@ function renderAllVerifiedSheetRows() {
       ? `<span style="color:#94a3b8; font-size:12px;">${escapeHtml(r.record)}</span>`
       : `<strong style="color:#0f172a; font-variant-numeric:tabular-nums;">${escapeHtml(r.record)}</strong>`;
 
-    const strokeDisplay = r.isRelay ? r.stroke : `${r.stroke} 50m`;
+    const rawStrokeDisplay = r.isRelay ? r.stroke : `${r.stroke} 50m`;
+    const strokeDisplay = formatStrokeTableLabel(rawStrokeDisplay, isStrokeShortMode);
     const teamColor = r.team === "거제몽꾸"
       ? "#c2410c"
       : r.team === "거제야르"
@@ -2763,11 +2820,11 @@ function renderAllVerifiedSheetRows() {
 
     const cellMap = {
       matchNo: `<td style="text-align:center; font-weight:800; color:#0284c7; font-variant-numeric:tabular-nums;">#${escapeHtml(r.matchNo)}</td>`,
-      stroke:  `<td style="text-align:center; font-weight:700; color:#334155;">${escapeHtml(strokeDisplay)}</td>`,
+      stroke:  `<td style="text-align:center; font-weight:700; color:#334155; white-space:nowrap;">${escapeHtml(strokeDisplay)}</td>`,
       gender:  `<td style="text-align:center; font-weight:700; color:#334155;">${escapeHtml(genderShort)}</td>`,
       group:   `<td style="text-align:center; font-weight:700; color:#334155; font-variant-numeric:tabular-nums;">${escapeHtml(groupNumOnly)}</td>`,
       lane:    `<td style="text-align:center; font-weight:800; color:#334155; font-variant-numeric:tabular-nums;">${r.lane}</td>`,
-      name:    `<td style="text-align:left; font-weight:${isOurTeam ? "900" : "700"}; color:#0f172a;">${escapeHtml(r.name)}</td>`,
+      name:    `<td class="td-swimmer-name" style="text-align:left; font-weight:${isOurTeam ? "900" : "700"}; color:#0f172a;">${formatTableSwimmerNameHtml(r.name, r.isRelay)}</td>`,
       team:    `<td style="text-align:center; font-weight:${isOurTeam ? "900" : "700"}; color:${teamColor};">${escapeHtml(r.team)}</td>`,
       record:  `<td style="text-align:center;">${recordHtml}</td>`,
       rank:    `<td style="text-align:center;">${rankNumHtml}</td>`,
@@ -2781,6 +2838,9 @@ function renderAllVerifiedSheetRows() {
       </tr>
     `;
   }).join("");
+  if (currentSubTab === "records") {
+    updateRecordsDbPanelsAndIconsDOM();
+  }
 }
 
 function renderResultAnalysisView() {
@@ -4546,6 +4606,11 @@ function renderAdultScheduleTableRows() {
   thead.innerHTML = `
     <tr>
       ${activeCols.map(c => {
+        if (c.key === "stroke") {
+          const strokeHdr = isStrokeShortMode ? "종목*" : c.label;
+          const w = isStrokeShortMode ? "64px" : c.width;
+          return `<th class="th-clickable-stroke ${isStrokeShortMode ? "is-short-mode" : ""}" data-toggle-stroke-short="1" style="width:${w}; text-align:${c.align};" title="클릭하여 종목 단축모드(종목*) 토글">${escapeHtml(strokeHdr)}</th>`;
+        }
         if (c.key === "sec") {
           const isSorted = adultResRecordSortMode !== "default";
           const lbl = getRecordSortHeaderLabel(c.label, adultResRecordSortMode);
@@ -4644,6 +4709,8 @@ function renderAdultScheduleTableRows() {
     return;
   }
 
+  const canEditAdult = isCurrentUserAdmin && isAdultEditMode;
+
   tbody.innerHTML = list.map(r => {
     const rowCls = r.team === "거제몽꾸"
       ? "team-power-row row-team-mongkku"
@@ -4656,18 +4723,34 @@ function renderAdultScheduleTableRows() {
         ? "#0369a1"
         : "#334155";
 
+    const strokeLabel = formatStrokeTableLabel(r.strokeDisplay, isStrokeShortMode);
+    const secPlainHtml = (!r.rawSec || !r.rawSec.trim())
+      ? `<span style="color:#cbd5e1;">-</span>`
+      : (r.rawSec === "99'99\"99" || r.rawSec === "88'88\"88")
+        ? `<span style="color:#94a3b8; font-size:12px;">${escapeHtml(r.rawSec)}</span>`
+        : `<strong style="color:#0f172a; font-variant-numeric:tabular-nums;">${escapeHtml(r.rawSec)}</strong>`;
+    const secCellHtml = canEditAdult
+      ? `<input type="text" inputmode="decimal" class="adult-sec-input ${r.secNum !== null && r.secNum > 0 ? "has-value" : ""}" data-adult-sec="${escapeHtml(r.entryKey)}" value="${escapeHtml(r.rawSec)}" placeholder="초 (예:28.45)" autocomplete="off">`
+      : secPlainHtml;
+
+    const notePlainText = (r.rawNote && r.rawNote.trim()) ? r.rawNote.trim() : "-";
+    const notePlainHtml = `<span style="font-size:12px; color:${r.isExcluded ? "#be123c" : "#475569"}; font-weight:${r.isExcluded || r.points > 0 ? "700" : "500"};">${escapeHtml(notePlainText)}</span>`;
+    const noteCellHtml = canEditAdult
+      ? `<input type="text" class="adult-note-input ${r.isExcluded ? "is-excluded-note" : ""}" data-adult-note="${escapeHtml(r.entryKey)}" value="${escapeHtml(r.rawNote)}" placeholder="실격/불참/비고" autocomplete="off">`
+      : notePlainHtml;
+
     const cellMap = {
       matchNo: `<td style="text-align:center; font-weight:800; color:#0284c7; font-variant-numeric:tabular-nums;">#${escapeHtml(r.matchNo)}</td>`,
-      stroke:  `<td style="text-align:center; font-weight:700; color:#334155;">${escapeHtml(r.strokeDisplay)}</td>`,
+      stroke:  `<td style="text-align:center; font-weight:700; color:#334155; white-space:nowrap;">${escapeHtml(strokeLabel)}</td>`,
       gender:  `<td style="text-align:center; font-weight:700; color:#334155;">${escapeHtml(r.genderShort)}</td>`,
       group:   `<td style="text-align:center; font-weight:700; color:#334155; font-variant-numeric:tabular-nums;">${escapeHtml(r.groupNum)}</td>`,
       lane:    `<td style="text-align:center; font-weight:800; color:#334155; font-variant-numeric:tabular-nums;">${r.lane}</td>`,
-      name:    `<td style="text-align:left; font-weight:${r.isOurTeam ? "900" : "700"}; color:#0f172a;">${escapeHtml(r.name)}</td>`,
+      name:    `<td class="td-swimmer-name" style="text-align:left; font-weight:${r.isOurTeam ? "900" : "700"}; color:#0f172a;">${formatTableSwimmerNameHtml(r.name, r.isRelay)}</td>`,
       team:    `<td style="text-align:center; font-weight:${r.isOurTeam ? "900" : "700"}; color:${teamColor};">${escapeHtml(r.team)}</td>`,
-      sec:     `<td style="text-align:center;"><input type="text" inputmode="decimal" class="adult-sec-input ${r.secNum !== null && r.secNum > 0 ? "has-value" : ""}" data-adult-sec="${escapeHtml(r.entryKey)}" value="${escapeHtml(r.rawSec)}" placeholder="초 (예:28.45)" autocomplete="off"></td>`,
+      sec:     `<td style="text-align:center;">${secCellHtml}</td>`,
       rank:    `<td style="text-align:center;" data-adult-rank-cell="${escapeHtml(r.entryKey)}">${getAdultRankCellInnerHtml(r)}</td>`,
       points:  `<td style="text-align:center;" data-adult-pts-cell="${escapeHtml(r.entryKey)}">${getAdultPointsCellInnerHtml(r)}</td>`,
-      note:    `<td style="text-align:left;"><input type="text" class="adult-note-input ${r.isExcluded ? "is-excluded-note" : ""}" data-adult-note="${escapeHtml(r.entryKey)}" value="${escapeHtml(r.rawNote)}" placeholder="실격/불참/비고" autocomplete="off"></td>`
+      note:    `<td style="text-align:left;">${noteCellHtml}</td>`
     };
 
     return `
@@ -4676,6 +4759,9 @@ function renderAdultScheduleTableRows() {
       </tr>
     `;
   }).join("");
+  if (currentSubTab === "records") {
+    updateRecordsDbPanelsAndIconsDOM();
+  }
 }
 
 function renderAdultResultAnalysisView(container) {
@@ -5002,32 +5088,210 @@ function renderAdultResultAnalysisView(container) {
 
 // ==========================================================================
 // 🗄️ TAB 4: 기록지DB (학생부 843건 / 성인부 492건 공식 기록지 원문 전체 데이터 조회)
-// 상단 Sticky 헤더 + 표시 열 항목 & 검색·필터 모달(모바일 헤더 토글) + Sticky 테이블 헤더
+// 상단 '🏊 거제시장배 2026' 우측 아이콘 바 (열설정 / 필터 / 검색 / 관리자 수정모드)
+// 한 번에 1개 패널만 열림 (기본: 모두 닫힘)
 // ==========================================================================
-let isRecordsDbModalOpen = true;
+let activeRecordsDbPanel = null; // null | 'columns' | 'filter' | 'search'
+let isCurrentUserAdmin = false;
+let isAdultEditMode = false;
+
+function initCompResultAuthWatcher() {
+  import("./auth.js?v=20260909_03").then(mod => {
+    const applyAuth = () => {
+      const nextAdmin = Boolean(mod.isAdmin());
+      const changed = nextAdmin !== isCurrentUserAdmin;
+      isCurrentUserAdmin = nextAdmin;
+      if (!isCurrentUserAdmin && isAdultEditMode) {
+        isAdultEditMode = false;
+      }
+      if (changed) {
+        updateRecordsDbPanelsAndIconsDOM();
+        if (currentSubTab === "records" && currentDivision === "adult") {
+          renderAdultScheduleTableRows();
+        }
+      } else {
+        postRecordsDbHeaderStateToParent();
+      }
+    };
+    mod.initAuth({
+      onAuthChange: () => applyAuth()
+    });
+    applyAuth();
+  }).catch(() => {});
+}
+
+function getRecordsDbIndicatorFlags() {
+  if (currentDivision === "adult") {
+    const hasCustomCols = visibleAdultResultCols.size !== ADULT_RESULT_COLUMNS.length;
+    const hasActiveFilter = (
+      adultResStrokeFilter !== "all" ||
+      adultResGroupFilter !== "all" ||
+      adultResGenderFilter !== "all" ||
+      adultResTeamFilter !== "all" ||
+      adultResStatusFilter !== "all" ||
+      adultResRecordSortMode !== "default"
+    );
+    const hasSearchQuery = adultResSearchQuery.trim() !== "";
+    return { hasCustomCols, hasActiveFilter, hasSearchQuery };
+  }
+  const hasCustomCols = visibleRawSheetCols.size !== RAW_SHEET_COLUMNS.length;
+  const hasActiveFilter = (
+    rawSheetStrokeFilter !== "all" ||
+    rawSheetGroupFilter !== "all" ||
+    rawSheetTeamFilter !== "all" ||
+    rawSheetRankFilter !== "all" ||
+    rawSheetRecordSortMode !== "default"
+  );
+  const hasSearchQuery = rawSheetSearchQuery.trim() !== "";
+  return { hasCustomCols, hasActiveFilter, hasSearchQuery };
+}
+
+function postRecordsDbHeaderStateToParent() {
+  if (!window.parent || window.parent === window) return;
+  const { hasCustomCols, hasActiveFilter, hasSearchQuery } = getRecordsDbIndicatorFlags();
+  try {
+    window.parent.postMessage({
+      type: "GMDC_RECORDS_DB_HEADER_STATE",
+      isRecordsTab: currentSubTab === "records",
+      division: currentDivision,
+      activePanel: activeRecordsDbPanel,
+      isAdmin: isCurrentUserAdmin,
+      isEditMode: isCurrentUserAdmin && isAdultEditMode,
+      hasCustomCols,
+      hasActiveFilter,
+      hasSearchQuery
+    }, "*");
+  } catch (e) {}
+}
+
+function isParentMobileHeaderVisible() {
+  if (window.self === window.top) return false;
+  try {
+    const parentDoc = window.top.document;
+    const mobileHdr = parentDoc && parentDoc.querySelector(".spa-mobile-header");
+    if (mobileHdr) {
+      return window.top.getComputedStyle(mobileHdr).display !== "none";
+    }
+    return window.top.innerWidth <= 900;
+  } catch (e) {
+    return false;
+  }
+}
 
 function syncRecordsDbStickyOffset() {
   if (currentSubTab !== "records") return;
   const shell = document.getElementById("recordsDbStickyShell");
   if (!shell) return;
-  const h = Math.ceil(shell.getBoundingClientRect().height + 28);
-  document.documentElement.style.setProperty("--records-sticky-offset", `${h}px`);
+  const h = Math.ceil(shell.getBoundingClientRect().height + 24);
+  document.documentElement.style.setProperty("--records-sticky-offset", `${Math.max(16, h)}px`);
 }
 
-function updateRecordsDbModalToggleDOM() {
-  const modal = document.getElementById("recordsDbControlsModal");
-  const btn = document.getElementById("btnToggleRecordsDbModal");
-  if (modal) {
-    modal.classList.toggle("is-collapsed", !isRecordsDbModalOpen);
+function updateRecordsDbPanelsAndIconsDOM() {
+  const isParentMobile = isParentMobileHeaderVisible();
+  document.body.classList.toggle("is-parent-mobile", isParentMobile);
+
+  const container = document.getElementById("viewContainerRecords");
+  const { hasCustomCols, hasActiveFilter, hasSearchQuery } = getRecordsDbIndicatorFlags();
+
+  if (container) {
+    container.querySelectorAll("[data-records-panel-box]").forEach(box => {
+      const pName = box.getAttribute("data-records-panel-box");
+      box.classList.toggle("is-open", pName === activeRecordsDbPanel);
+    });
+
+    container.querySelectorAll("[data-records-panel-btn]").forEach(btn => {
+      const pName = btn.getAttribute("data-records-panel-btn");
+      btn.classList.toggle("is-active", pName === activeRecordsDbPanel);
+      if (pName === "columns") btn.classList.toggle("has-indicator", hasCustomCols);
+      if (pName === "filter") btn.classList.toggle("has-indicator", hasActiveFilter);
+      if (pName === "search") btn.classList.toggle("has-indicator", hasSearchQuery);
+    });
+
+    const editBtn = container.querySelector("#btnRecordsDesktopEditToggle");
+    if (editBtn) {
+      const canShowEdit = currentDivision === "adult" && isCurrentUserAdmin;
+      editBtn.style.display = canShowEdit ? "inline-flex" : "none";
+      editBtn.classList.toggle("is-edit-active", isCurrentUserAdmin && isAdultEditMode);
+    }
+
+    const editBanner = container.querySelector("#recordsDbAdminEditBanner");
+    if (editBanner) {
+      editBanner.style.display = (currentDivision === "adult" && isCurrentUserAdmin && isAdultEditMode) ? "flex" : "none";
+    }
+
+    const shell = container.querySelector("#recordsDbStickyShell");
+    if (shell) {
+      const hasOpenContent = Boolean(activeRecordsDbPanel) || (currentDivision === "adult" && isCurrentUserAdmin && isAdultEditMode);
+      shell.classList.toggle("is-empty-shell", isParentMobile && !hasOpenContent);
+    }
   }
-  if (btn) {
-    btn.classList.toggle("is-open", isRecordsDbModalOpen);
-    btn.setAttribute("aria-expanded", String(isRecordsDbModalOpen));
-    btn.innerHTML = isRecordsDbModalOpen
-      ? `<span class="toggle-icon">🎛️</span><span class="toggle-text">필터·열설정 닫기 ▲</span>`
-      : `<span class="toggle-icon">🎛️</span><span class="toggle-text">필터·열설정 열기 ▼</span>`;
-  }
+
+  postRecordsDbHeaderStateToParent();
   requestAnimationFrame(() => syncRecordsDbStickyOffset());
+}
+
+function toggleRecordsDbPanel(panelName) {
+  if (!["columns", "filter", "search"].includes(panelName)) return;
+  activeRecordsDbPanel = activeRecordsDbPanel === panelName ? null : panelName;
+  updateRecordsDbPanelsAndIconsDOM();
+  if (activeRecordsDbPanel === "search") {
+    requestAnimationFrame(() => {
+      const inp = document.getElementById(currentDivision === "adult" ? "adultResSearchInput" : "rawSheetSearchInput");
+      inp?.focus();
+    });
+  }
+}
+
+function toggleAdultRecordsEditMode() {
+  if (!isCurrentUserAdmin || currentDivision !== "adult") return;
+  isAdultEditMode = !isAdultEditMode;
+  updateRecordsDbPanelsAndIconsDOM();
+  renderAdultScheduleTableRows();
+}
+
+function buildRecordsDbDesktopTopBarHtml() {
+  const { hasCustomCols, hasActiveFilter, hasSearchQuery } = getRecordsDbIndicatorFlags();
+  const canShowEdit = currentDivision === "adult" && isCurrentUserAdmin;
+  const isEditOn = canShowEdit && isAdultEditMode;
+
+  return `
+    <div class="records-db-desktop-bar">
+      <span class="records-db-brand-title">🏊 거제시장배 2026</span>
+      <div class="records-db-icon-group">
+        <button type="button" class="btn-records-top-icon ${activeRecordsDbPanel === "columns" ? "is-active" : ""} ${hasCustomCols ? "has-indicator" : ""}" data-records-panel-btn="columns" title="표시 열 설정 (열설정)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+            <line x1="9" y1="3" x2="9" y2="21"></line>
+            <line x1="15" y1="3" x2="15" y2="21"></line>
+          </svg>
+          <span class="btn-icon-label">표시열</span>
+          <span class="icon-dot"></span>
+        </button>
+        <button type="button" class="btn-records-top-icon ${activeRecordsDbPanel === "filter" ? "is-active" : ""} ${hasActiveFilter ? "has-indicator" : ""}" data-records-panel-btn="filter" title="조건 필터">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+          </svg>
+          <span class="btn-icon-label">필터</span>
+          <span class="icon-dot"></span>
+        </button>
+        <button type="button" class="btn-records-top-icon ${activeRecordsDbPanel === "search" ? "is-active" : ""} ${hasSearchQuery ? "has-indicator" : ""}" data-records-panel-btn="search" title="선수·팀·경기번호 검색">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <span class="btn-icon-label">검색</span>
+          <span class="icon-dot"></span>
+        </button>
+        <button type="button" class="btn-records-top-icon ${isEditOn ? "is-edit-active" : ""}" id="btnRecordsDesktopEditToggle" data-records-edit-toggle="1" title="기록 수정모드 토글 (관리자 전용)" style="display: ${canShowEdit ? "inline-flex" : "none"};">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 20h9"></path>
+            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+          </svg>
+          <span class="btn-icon-label">수정모드</span>
+        </button>
+      </div>
+    </div>
+  `;
 }
 
 function renderRecordsDbView() {
@@ -5049,46 +5313,43 @@ function renderRecordsDbView() {
       `;
     }).join("");
 
+    const canEditAdult = isCurrentUserAdmin && isAdultEditMode;
+
     container.innerHTML = `
       <section class="records-db-page-section" id="adultScheduleTableSection">
         <div class="records-db-sticky-shell" id="recordsDbStickyShell">
-          <div class="records-db-header-bar">
-            <div class="records-db-title-wrap">
-              <h3 id="adultResultTableTitle">📋 성인부 공식 기록지 원문 전체 데이터 조회 (492건 표시 중 / 전체 492건)</h3>
-              <span class="comp-breadcrumb-badge">대회결과 &gt; 성인부 &gt; 기록지DB</span>
-            </div>
-            <div class="records-db-header-actions">
-              <button type="button" class="col-preset-btn" id="btnResetAdultOfficialRecords" title="공식 기록지 원문 기록으로 전체 복원">🔄 공식 기록 원문 복원</button>
-              <button type="button" class="btn-toggle-records-modal ${isRecordsDbModalOpen ? "is-open" : ""}" id="btnToggleRecordsDbModal" aria-expanded="${isRecordsDbModalOpen}">
-                <span class="toggle-icon">🎛️</span>
-                <span class="toggle-text">${isRecordsDbModalOpen ? "필터·열설정 닫기 ▲" : "필터·열설정 열기 ▼"}</span>
-              </button>
-            </div>
+          ${buildRecordsDbDesktopTopBarHtml()}
+
+          <div class="records-db-admin-edit-banner" id="recordsDbAdminEditBanner" style="display: ${canEditAdult ? "flex" : "none"};">
+            <span>✏️ 관리자 기록 수정모드 활성화 중 (기록·비고 입력 시 즉시 반영)</span>
+            <button type="button" class="col-preset-btn" id="btnResetAdultOfficialRecords" title="공식 기록지 원문 기록으로 전체 복원">🔄 공식 기록 원문 복원</button>
           </div>
 
-          <div class="records-db-controls-modal ${isRecordsDbModalOpen ? "" : "is-collapsed"}" id="recordsDbControlsModal">
+          <!-- 1. 열설정 패널 -->
+          <div class="records-db-single-panel ${activeRecordsDbPanel === "columns" ? "is-open" : ""}" data-records-panel-box="columns">
+            <div class="records-db-panel-header">
+              <span class="records-db-panel-title">☑️ 표시 열 항목 설정</span>
+              <button type="button" class="btn-records-panel-close" data-close-records-panel="1">닫기 ✕</button>
+            </div>
             <div class="col-toggle-bar" id="adultResultColToggleBar">
               <div class="col-toggle-left">
-                <span class="col-toggle-label">☑️ 표시 열 항목:</span>
                 ${colToggleChipsHtml}
               </div>
               <div class="col-toggle-presets">
-                <button type="button" class="col-preset-btn ${adultResRecordSortMode !== "default" ? "is-active-sort" : ""}" id="btnAdultResSortRecordAsc" title="빠른 기록(오름차순)으로 정렬">${getRecordSortButtonLabel(adultResRecordSortMode)}</button>
                 <button type="button" class="col-preset-btn" data-adult-col-preset="all">전체 열 표시</button>
                 <button type="button" class="col-preset-btn" data-adult-col-preset="compact">핵심 열만 (모바일 추천)</button>
               </div>
             </div>
+          </div>
 
+          <!-- 2. 필터 패널 -->
+          <div class="records-db-single-panel ${activeRecordsDbPanel === "filter" ? "is-open" : ""}" data-records-panel-box="filter">
+            <div class="records-db-panel-header">
+              <span class="records-db-panel-title">🌪️ 조건별 필터 및 정렬</span>
+              <button type="button" class="btn-records-panel-close" data-close-records-panel="1">닫기 ✕</button>
+            </div>
             <section class="toolbar">
               <div class="toolbar-left">
-                <div class="search-box">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="11" cy="11" r="8"></circle>
-                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                  </svg>
-                  <input type="text" id="adultResSearchInput" value="${escapeHtml(adultResSearchQuery)}" placeholder="선수명, 소속팀, 경기번호(#1, #3-1) 검색..." autocomplete="off">
-                </div>
-
                 <div class="filter-group">
                   <select id="adultResStrokeSelect" class="filter-select" aria-label="성인부 종목 필터">
                     <option value="all" ${adultResStrokeFilter === "all" ? "selected" : ""}>전체 종목</option>
@@ -5147,10 +5408,25 @@ function renderRecordsDbView() {
                 </div>
               </div>
             </section>
+          </div>
 
-            <div class="records-db-mobile-modal-footer">
-              <button type="button" class="btn-close-records-modal-mobile" id="btnCloseRecordsDbModalMobile">▲ 필터·열설정 닫기</button>
+          <!-- 3. 검색 패널 -->
+          <div class="records-db-single-panel ${activeRecordsDbPanel === "search" ? "is-open" : ""}" data-records-panel-box="search">
+            <div class="records-db-panel-header">
+              <span class="records-db-panel-title">🔍 선수명 · 소속팀 · 경기번호 검색</span>
+              <button type="button" class="btn-records-panel-close" data-close-records-panel="1">닫기 ✕</button>
             </div>
+            <section class="toolbar">
+              <div class="toolbar-left" style="width: 100%;">
+                <div class="search-box" style="flex: 1; max-width: 100%;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                  </svg>
+                  <input type="text" id="adultResSearchInput" value="${escapeHtml(adultResSearchQuery)}" placeholder="선수명, 소속팀, 경기번호(#1, #3-1) 검색..." autocomplete="off">
+                </div>
+              </div>
+            </section>
           </div>
         </div>
 
@@ -5164,7 +5440,7 @@ function renderRecordsDbView() {
     `;
 
     renderAdultScheduleTableRows();
-    requestAnimationFrame(() => syncRecordsDbStickyOffset());
+    updateRecordsDbPanelsAndIconsDOM();
     return;
   }
 
@@ -5185,42 +5461,33 @@ function renderRecordsDbView() {
   container.innerHTML = `
     <section class="records-db-page-section" id="studentRawSheetSection">
       <div class="records-db-sticky-shell" id="recordsDbStickyShell">
-        <div class="records-db-header-bar">
-          <div class="records-db-title-wrap">
-            <h3 id="verifiedSheetTableTitle">📄 학생부 공식 기록지 원문 전체 데이터 조회 (843건 표시 중 / 전체 843건)</h3>
-            <span class="comp-breadcrumb-badge">대회결과 &gt; 학생부 &gt; 기록지DB</span>
-          </div>
-          <div class="records-db-header-actions">
-            <button type="button" class="btn-toggle-records-modal ${isRecordsDbModalOpen ? "is-open" : ""}" id="btnToggleRecordsDbModal" aria-expanded="${isRecordsDbModalOpen}">
-              <span class="toggle-icon">🎛️</span>
-              <span class="toggle-text">${isRecordsDbModalOpen ? "필터·열설정 닫기 ▲" : "필터·열설정 열기 ▼"}</span>
-            </button>
-          </div>
-        </div>
+        ${buildRecordsDbDesktopTopBarHtml()}
 
-        <div class="records-db-controls-modal ${isRecordsDbModalOpen ? "" : "is-collapsed"}" id="recordsDbControlsModal">
+        <!-- 1. 열설정 패널 -->
+        <div class="records-db-single-panel ${activeRecordsDbPanel === "columns" ? "is-open" : ""}" data-records-panel-box="columns">
+          <div class="records-db-panel-header">
+            <span class="records-db-panel-title">☑️ 표시 열 항목 설정</span>
+            <button type="button" class="btn-records-panel-close" data-close-records-panel="1">닫기 ✕</button>
+          </div>
           <div class="col-toggle-bar" id="rawSheetColToggleBar">
             <div class="col-toggle-left">
-              <span class="col-toggle-label">☑️ 표시 열 항목:</span>
               ${colToggleChipsHtml}
             </div>
             <div class="col-toggle-presets">
-              <button type="button" class="col-preset-btn ${rawSheetRecordSortMode !== "default" ? "is-active-sort" : ""}" id="btnRawSheetSortRecordAsc" title="빠른 기록(오름차순)으로 정렬">${getRecordSortButtonLabel(rawSheetRecordSortMode)}</button>
               <button type="button" class="col-preset-btn" data-col-preset="all">전체 열 표시</button>
               <button type="button" class="col-preset-btn" data-col-preset="compact">핵심 열만 (모바일 추천)</button>
             </div>
           </div>
+        </div>
 
+        <!-- 2. 필터 패널 -->
+        <div class="records-db-single-panel ${activeRecordsDbPanel === "filter" ? "is-open" : ""}" data-records-panel-box="filter">
+          <div class="records-db-panel-header">
+            <span class="records-db-panel-title">🌪️ 조건별 필터 및 정렬</span>
+            <button type="button" class="btn-records-panel-close" data-close-records-panel="1">닫기 ✕</button>
+          </div>
           <section class="toolbar">
             <div class="toolbar-left">
-              <div class="search-box">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <circle cx="11" cy="11" r="8"></circle>
-                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                </svg>
-                <input type="text" id="rawSheetSearchInput" placeholder="선수 이름, 소속팀, 경기번호(예: 45-2) 검색..." autocomplete="off" value="${escapeHtml(rawSheetSearchQuery)}">
-              </div>
-
               <div class="filter-group">
                 <select id="rawSheetStrokeSelect" class="filter-select" aria-label="기록지 종목 필터">
                   <option value="all" ${rawSheetStrokeFilter === "all" ? "selected" : ""}>전체 종목 (6종목)</option>
@@ -5266,10 +5533,25 @@ function renderRecordsDbView() {
               </div>
             </div>
           </section>
+        </div>
 
-          <div class="records-db-mobile-modal-footer">
-            <button type="button" class="btn-close-records-modal-mobile" id="btnCloseRecordsDbModalMobile">▲ 필터·열설정 닫기</button>
+        <!-- 3. 검색 패널 -->
+        <div class="records-db-single-panel ${activeRecordsDbPanel === "search" ? "is-open" : ""}" data-records-panel-box="search">
+          <div class="records-db-panel-header">
+            <span class="records-db-panel-title">🔍 선수명 · 소속팀 · 경기번호 검색</span>
+            <button type="button" class="btn-records-panel-close" data-close-records-panel="1">닫기 ✕</button>
           </div>
+          <section class="toolbar">
+            <div class="toolbar-left" style="width: 100%;">
+              <div class="search-box" style="flex: 1; max-width: 100%;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" id="rawSheetSearchInput" placeholder="선수 이름, 소속팀, 경기번호(예: 45-2) 검색..." autocomplete="off" value="${escapeHtml(rawSheetSearchQuery)}">
+              </div>
+            </div>
+          </section>
         </div>
       </div>
 
@@ -5283,7 +5565,7 @@ function renderRecordsDbView() {
   `;
 
   renderAllVerifiedSheetRows();
-  requestAnimationFrame(() => syncRecordsDbStickyOffset());
+  updateRecordsDbPanelsAndIconsDOM();
 }
 
 function renderAll() {
@@ -5306,18 +5588,33 @@ function renderAll() {
   } else if (currentSubTab === "records") {
     renderRecordsDbView();
   }
+  if (currentSubTab !== "records") {
+    postRecordsDbHeaderStateToParent();
+  }
   updateCompFloatingStrokeBar();
 }
 
 function bindEvents() {
   window.addEventListener("resize", () => {
-    syncRecordsDbStickyOffset();
+    updateRecordsDbPanelsAndIconsDOM();
   });
+  try {
+    if (window.self !== window.top && window.top) {
+      window.top.addEventListener("resize", () => {
+        updateRecordsDbPanelsAndIconsDOM();
+      });
+    }
+  } catch (e) {}
 
   window.addEventListener("message", (e) => {
-    if (e.data && e.data.type === "GMDC_COMP_RESULT_NAV") {
+    if (!e.data) return;
+    if (e.data.type === "GMDC_COMP_RESULT_NAV") {
       const nextDiv = e.data.div === "adult" ? "adult" : "student";
       const nextTab = ["entry", "progress", "result", "records"].includes(e.data.tab) ? e.data.tab : "entry";
+      if (typeof e.data.isAdmin === "boolean") {
+        isCurrentUserAdmin = e.data.isAdmin;
+        if (!isCurrentUserAdmin) isAdultEditMode = false;
+      }
       if (nextDiv !== currentDivision) {
         selectedTeamFilter = "all";
         selectedGroupFilter = "all";
@@ -5326,6 +5623,25 @@ function bindEvents() {
       currentDivision = nextDiv;
       currentSubTab = nextTab;
       renderAll();
+      postRecordsDbHeaderStateToParent();
+    } else if (e.data.type === "GMDC_AUTH_STATE") {
+      const nextAdmin = Boolean(e.data.isAdmin);
+      const changed = nextAdmin !== isCurrentUserAdmin;
+      isCurrentUserAdmin = nextAdmin;
+      if (!isCurrentUserAdmin) isAdultEditMode = false;
+      if (changed) {
+        updateRecordsDbPanelsAndIconsDOM();
+        if (currentSubTab === "records" && currentDivision === "adult") {
+          renderAdultScheduleTableRows();
+        }
+      }
+    } else if (e.data.type === "GMDC_RECORDS_DB_HEADER_CMD") {
+      const cmd = e.data.cmd;
+      if (cmd === "columns" || cmd === "filter" || cmd === "search") {
+        toggleRecordsDbPanel(cmd);
+      } else if (cmd === "toggle-edit") {
+        toggleAdultRecordsEditMode();
+      }
     }
   });
 
@@ -5411,14 +5727,32 @@ function bindEvents() {
   const bindDynamicContainerEvents = (resultContainer) => {
     if (!resultContainer) return;
     resultContainer.addEventListener("click", (e) => {
-      if (e.target.closest("#btnToggleRecordsDbModal")) {
-        isRecordsDbModalOpen = !isRecordsDbModalOpen;
-        updateRecordsDbModalToggleDOM();
+      const panelBtn = e.target.closest("[data-records-panel-btn]");
+      if (panelBtn) {
+        const pName = panelBtn.getAttribute("data-records-panel-btn");
+        toggleRecordsDbPanel(pName);
         return;
       }
-      if (e.target.closest("#btnCloseRecordsDbModalMobile")) {
-        isRecordsDbModalOpen = false;
-        updateRecordsDbModalToggleDOM();
+      if (e.target.closest("[data-close-records-panel]")) {
+        activeRecordsDbPanel = null;
+        updateRecordsDbPanelsAndIconsDOM();
+        return;
+      }
+      if (e.target.closest("[data-records-edit-toggle]")) {
+        toggleAdultRecordsEditMode();
+        return;
+      }
+      if (e.target.closest("[data-toggle-stroke-short]")) {
+        isStrokeShortMode = !isStrokeShortMode;
+        if (currentSubTab === "result") {
+          renderOurTeamResultRows();
+        } else if (currentSubTab === "records") {
+          if (currentDivision === "adult") {
+            renderAdultScheduleTableRows();
+          } else {
+            renderAllVerifiedSheetRows();
+          }
+        }
         return;
       }
     const filterBtn = e.target.closest("[data-our-filter]");
@@ -5850,44 +6184,46 @@ function initFromUrl() {
 // 🧭 하단 플로팅 종목 진행 순서 바 (스크롤 감지 표시 + 현재 종목 하이라이트 + 닫기)
 // 성인부(25일) 공식 9개 종목 순서:
 //   [핀접] - [배영] - [계영] - [접영] - [핀자] - [평영] - [혼계영] - [자유형] - [혼성핀]
-// 학생부(24일) 공식 7개 종목 순서:
-//   [핀자] - [접영] - [배영] - [계영] - [평영] - [혼계영] - [자유형]
+// 학생부(24일) 공식 6개 종목 순서:
+//   [계영] - [접영] - [배영] - [평영] - [자유형] - [혼계영]
 // ==========================================================================
 const COMP_DIVISION_STROKE_STEPS = {
   adult: [
-    { key: "핀접",   fullLabel: "핀접영 50m",        matchKey: "핀접영",          rangeLabel: "#1~#20 (경기 1~10-2)",     startRaceIdx: 1 },
-    { key: "배영",   fullLabel: "배영 50m",          matchKey: "배영",            rangeLabel: "#21~#35 (경기 11~20-3)",   startRaceIdx: 21 },
-    { key: "계영",   fullLabel: "계영 200m",         matchKey: "계영 200m",       rangeLabel: "#36~#39 (경기 21-1~22-2)", startRaceIdx: 36 },
-    { key: "접영",   fullLabel: "접영 50m",          matchKey: "접영",            rangeLabel: "#40~#59 (경기 23~33-2)",   startRaceIdx: 40 },
-    { key: "핀자",   fullLabel: "핀자유형 50m",      matchKey: "핀자유형",        rangeLabel: "#60~#83 (경기 34~43-3)",   startRaceIdx: 60 },
-    { key: "평영",   fullLabel: "평영 50m",          matchKey: "평영",            rangeLabel: "#84~#105 (경기 44~55-3)",  startRaceIdx: 84 },
+    { key: "핀접",   fullLabel: "핀접영 50m",        matchKey: "핀접영",          rangeLabel: "#1~#20 (경기 1~10-2)",       startRaceIdx: 1 },
+    { key: "배영",   fullLabel: "배영 50m",          matchKey: "배영",            rangeLabel: "#21~#35 (경기 11~20-3)",     startRaceIdx: 21 },
+    { key: "계영",   fullLabel: "계영 200m",         matchKey: "계영 200m",       rangeLabel: "#36~#39 (경기 21-1~22-2)",   startRaceIdx: 36 },
+    { key: "접영",   fullLabel: "접영 50m",          matchKey: "접영",            rangeLabel: "#40~#59 (경기 23~33-2)",     startRaceIdx: 40 },
+    { key: "핀자",   fullLabel: "핀자유형 50m",      matchKey: "핀자유형",        rangeLabel: "#60~#83 (경기 34~43-3)",     startRaceIdx: 60 },
+    { key: "평영",   fullLabel: "평영 50m",          matchKey: "평영",            rangeLabel: "#84~#105 (경기 44~55-3)",    startRaceIdx: 84 },
     { key: "혼계영", fullLabel: "혼계영 200m",       matchKey: "혼계영 200m",     rangeLabel: "#106~#109 (경기 56-1~57-2)", startRaceIdx: 106 },
-    { key: "자유형", fullLabel: "자유형 50m",        matchKey: "자유형",          rangeLabel: "#110~#139 (경기 58~68)",   startRaceIdx: 110 },
+    { key: "자유형", fullLabel: "자유형 50m",        matchKey: "자유형",          rangeLabel: "#110~#139 (경기 58~68)",     startRaceIdx: 110 },
     { key: "혼성핀", fullLabel: "혼성 핀계영 300m",  matchKey: "혼성 핀계영 300m", rangeLabel: "#140~#141 (경기 69-1~69-2)", startRaceIdx: 140 }
   ],
   student: [
-    { key: "핀자",   fullLabel: "핀자유형 50m",      matchKey: "핀자유형",        rangeLabel: "#1~#3 (경기 1~3)",         startRaceIdx: 1 },
-    { key: "접영",   fullLabel: "접영 50m",          matchKey: "접영",            rangeLabel: "#4~#45 (경기 4~36)",       startRaceIdx: 4 },
-    { key: "배영",   fullLabel: "배영 50m",          matchKey: "배영",            rangeLabel: "#46~#98 (경기 37~77)",     startRaceIdx: 46 },
-    { key: "계영",   fullLabel: "계영 200m",         matchKey: "계영 200m",       rangeLabel: "#99~#100 (경기 78~79)",    startRaceIdx: 99 },
-    { key: "평영",   fullLabel: "평영 50m",          matchKey: "평영",            rangeLabel: "#101~#153 (경기 80~118)",  startRaceIdx: 101 },
-    { key: "혼계영", fullLabel: "혼계영 200m",       matchKey: "혼계영 200m",     rangeLabel: "#154~#156 (경기 119~120)", startRaceIdx: 154 },
-    { key: "자유형", fullLabel: "자유형 50m",        matchKey: "자유형",          rangeLabel: "#157~#232 (경기 121~162)", startRaceIdx: 157 }
+    { key: "계영",   fullLabel: "계영 200m",         matchKey: "계영 200m",       rangeLabel: "#1~#6 (경기 1-1~3-3)",       startRaceIdx: 1 },
+    { key: "접영",   fullLabel: "접영 50m",          matchKey: "접영",            rangeLabel: "#7~#46 (경기 4~17-2)",       startRaceIdx: 7 },
+    { key: "배영",   fullLabel: "배영 50m",          matchKey: "배영",            rangeLabel: "#47~#93 (경기 18-1~31-2)",   startRaceIdx: 47 },
+    { key: "평영",   fullLabel: "평영 50m",          matchKey: "평영",            rangeLabel: "#94~#148 (경기 32-1~45-2)",  startRaceIdx: 94 },
+    { key: "자유형", fullLabel: "자유형 50m",        matchKey: "자유형",          rangeLabel: "#149~#226 (경기 46-1~59-3)", startRaceIdx: 149 },
+    { key: "혼계영", fullLabel: "혼계영 200m",       matchKey: "혼계영 200m",     rangeLabel: "#227~#232 (경기 60-1~62-3)", startRaceIdx: 227 }
   ]
 };
 
 let isCompFloatingStrokeBarVisible = false;
+let isCompFloatingStrokeExpanded = false;
 let lastCompDismissedScrollY = null;
 let compFloatingScrollTicking = false;
+let forcedActiveStrokeKey = null;
+let forcedActiveStrokeUntil = 0;
 
 function mapRawStrokeToStepKey(divKey, rawStroke) {
   const s = String(rawStroke || "").trim();
   if (!s) return null;
-  if (s.includes("혼성") && s.includes("핀계영")) return "혼성핀";
+  if (s.includes("혼성") && s.includes("핀")) return "혼성핀";
   if (s.includes("혼계영")) return "혼계영";
   if (s.includes("계영")) return "계영";
   if (s.includes("핀접영") || s === "핀접") return "핀접";
-  if (s.includes("핀자유형") || s === "핀자") return "핀자";
+  if (s.includes("핀자유형") || s.includes("핀자유") || s === "핀자") return "핀자";
   if (s.includes("배영")) return "배영";
   if (s.includes("접영")) return "접영";
   if (s.includes("평영")) return "평영";
@@ -5897,35 +6233,101 @@ function mapRawStrokeToStepKey(divKey, rawStroke) {
   return found ? found.key : null;
 }
 
-function detectFocusedStrokeInCompViewport(divKey) {
-  const rows = document.querySelectorAll("tr[data-row-stroke]");
-  if (rows.length > 0) {
-    const viewportMidY = window.innerHeight * 0.42;
-    let bestRow = null;
-    let bestDist = Infinity;
-    for (const tr of rows) {
-      const rect = tr.getBoundingClientRect();
-      if (rect.height === 0) continue;
-      if (rect.bottom < 60 || rect.top > window.innerHeight - 60) continue;
-      const mid = (rect.top + rect.bottom) * 0.5;
-      const dist = Math.abs(mid - viewportMidY);
-      if (dist < bestDist) {
-        bestDist = dist;
-        bestRow = tr;
-      }
+function getActiveTableRowsForStrokeDetection() {
+  if (currentSubTab === "records") {
+    const tblScroll = document.getElementById("recordsDbTableScroll");
+    if (tblScroll) {
+      return {
+        scrollEl: tblScroll,
+        rows: tblScroll.querySelectorAll("tbody tr[data-row-stroke]")
+      };
     }
-    if (bestRow) {
-      const stepKey = mapRawStrokeToStepKey(divKey, bestRow.dataset.rowStroke);
-      if (stepKey) {
-        return {
-          stepKey,
-          matchNo: bestRow.dataset.rowMatch || ""
-        };
+  } else if (currentSubTab === "result") {
+    const ourTbody = document.getElementById("ourTeamResultTableBody");
+    if (ourTbody) {
+      return {
+        scrollEl: null,
+        rows: ourTbody.querySelectorAll("tr[data-row-stroke]")
+      };
+    }
+  }
+  return {
+    scrollEl: null,
+    rows: document.querySelectorAll("tr[data-row-stroke]")
+  };
+}
+
+function detectFocusedStrokeInCompViewport(divKey) {
+  if (forcedActiveStrokeKey && Date.now() < forcedActiveStrokeUntil) {
+    return { stepKey: forcedActiveStrokeKey, matchNo: "" };
+  }
+
+  const { scrollEl, rows } = getActiveTableRowsForStrokeDetection();
+  if (rows && rows.length > 0) {
+    if (scrollEl) {
+      // 기록지DB 내부 스크롤 컨테이너 기준: 맨 아래 도달 시 마지막 종목 하이라이트
+      if (scrollEl.scrollTop > 0 && scrollEl.scrollHeight - scrollEl.clientHeight - scrollEl.scrollTop <= 18) {
+        const lastRow = rows[rows.length - 1];
+        const lastKey = mapRawStrokeToStepKey(divKey, lastRow?.dataset?.rowStroke);
+        if (lastKey) return { stepKey: lastKey, matchNo: lastRow.dataset.rowMatch || "" };
+      }
+
+      const scrollRect = scrollEl.getBoundingClientRect();
+      const thead = scrollEl.querySelector("thead");
+      const headerH = thead ? thead.getBoundingClientRect().height : 38;
+      // 테이블 헤더 바로 아래(상단 약 42px 지점)를 기준선으로 삼아 스크롤 이동 시 즉시 해당 종목이 인식되도록 함
+      const targetLineY = scrollRect.top + headerH + 42;
+
+      let bestRow = null;
+      let bestDist = Infinity;
+      for (const tr of rows) {
+        const rect = tr.getBoundingClientRect();
+        if (rect.height === 0) continue;
+        if (rect.bottom < scrollRect.top + headerH || rect.top > scrollRect.bottom) continue;
+        const mid = (rect.top + rect.bottom) * 0.5;
+        const dist = Math.abs(mid - targetLineY);
+        if (dist < bestDist) {
+          bestDist = dist;
+          bestRow = tr;
+        }
+      }
+      if (bestRow) {
+        const stepKey = mapRawStrokeToStepKey(divKey, bestRow.dataset.rowStroke);
+        if (stepKey) {
+          return {
+            stepKey,
+            matchNo: bestRow.dataset.rowMatch || ""
+          };
+        }
+      }
+    } else {
+      const viewportLineY = window.innerHeight * 0.32;
+      let bestRow = null;
+      let bestDist = Infinity;
+      for (const tr of rows) {
+        const rect = tr.getBoundingClientRect();
+        if (rect.height === 0) continue;
+        if (rect.bottom < 40 || rect.top > window.innerHeight - 40) continue;
+        const mid = (rect.top + rect.bottom) * 0.5;
+        const dist = Math.abs(mid - viewportLineY);
+        if (dist < bestDist) {
+          bestDist = dist;
+          bestRow = tr;
+        }
+      }
+      if (bestRow) {
+        const stepKey = mapRawStrokeToStepKey(divKey, bestRow.dataset.rowStroke);
+        if (stepKey) {
+          return {
+            stepKey,
+            matchNo: bestRow.dataset.rowMatch || ""
+          };
+        }
       }
     }
   }
 
-  // 표 행이 화면 중앙에 없을 때는 현재 재생 슬라이더 위치 또는 종목 필터 기준
+  // 표 행이 화면에 없을 때는 현재 재생 슬라이더 위치 또는 종목 필터 기준
   if (divKey === "adult") {
     if (adultResStrokeFilter && adultResStrokeFilter !== "all" && adultResStrokeFilter !== "RELAY_ALL") {
       const k = mapRawStrokeToStepKey("adult", adultResStrokeFilter);
@@ -5957,41 +6359,59 @@ function detectFocusedStrokeInCompViewport(divKey) {
 function updateCompFloatingStrokeBar() {
   const barEl = document.getElementById("compFloatingStrokeBar");
   const stepsContainer = document.getElementById("compFloatingStrokeSteps");
-  const labelEl = document.getElementById("compFloatingStrokeLabel");
+  const vertPanel = document.getElementById("compFloatingVerticalPanel");
+  const expandBtn = document.getElementById("btnToggleCompFloatingVertical");
   if (!barEl || !stepsContainer) return;
 
   const divKey = currentDivision === "adult" ? "adult" : "student";
   const steps = COMP_DIVISION_STROKE_STEPS[divKey] || COMP_DIVISION_STROKE_STEPS.adult;
-  const { stepKey: activeStepKey, matchNo } = detectFocusedStrokeInCompViewport(divKey);
+  const { stepKey: activeStepKey } = detectFocusedStrokeInCompViewport(divKey);
   const activeIdx = Math.max(0, steps.findIndex(s => s.key === activeStepKey));
-  const activeStepObj = steps[activeIdx] || steps[0];
 
-  if (labelEl) {
-    const divTitle = divKey === "adult" ? "성인부(25일)" : "학생부(24일)";
-    const subInfo = matchNo
-      ? `현재 #${matchNo} (${activeStepObj.fullLabel})`
-      : `${activeStepObj.fullLabel} (${activeStepObj.rangeLabel})`;
-    labelEl.textContent = `🧭 ${divTitle} 전체 순서 (${activeIdx + 1}/${steps.length}) · ${subInfo}`;
+  if (expandBtn) {
+    expandBtn.classList.toggle("is-open", isCompFloatingStrokeExpanded);
+    expandBtn.setAttribute("aria-expanded", String(isCompFloatingStrokeExpanded));
+    expandBtn.textContent = isCompFloatingStrokeExpanded ? "전체순서접기 ▼" : "전체순서보기 ▲";
+  }
+
+  if (vertPanel) {
+    const divTitle = divKey === "adult" ? "성인부(25일) 전체 경기 순서" : "학생부(24일) 전체 경기 순서";
+    vertPanel.innerHTML = `
+      <div class="fsb-vert-header">
+        <span>📋 ${escapeHtml(divTitle)} (${steps.length}종목)</span>
+        <span style="font-size:11px; color:#94a3b8; font-weight:700;">항목 클릭 시 해당 종목으로 이동</span>
+      </div>
+      ${steps.map((st, idx) => {
+        const isCurrent = st.key === activeStepKey;
+        return `
+          <button type="button" class="fsb-vert-step ${isCurrent ? "is-active" : ""}" data-comp-fsb-stroke-idx="${idx}">
+            <span class="fsb-vert-step-left">
+              <span class="fsb-vert-num">${idx + 1}</span>
+              <span class="fsb-vert-title">${escapeHtml(st.fullLabel)}</span>
+            </span>
+            <span class="fsb-vert-range">${escapeHtml(st.rangeLabel)}</span>
+          </button>
+        `;
+      }).join("")}
+    `;
   }
 
   stepsContainer.innerHTML = steps.map((st, idx) => {
     const isCurrent = st.key === activeStepKey;
     const isPast = idx < activeIdx;
     const cls = isCurrent ? "is-active" : (isPast ? "is-past" : "");
-    const bracketText = isCurrent
-      ? `[[${st.key}]★현재]`
-      : `[${st.key}]`;
     const arrowHtml = idx < steps.length - 1
       ? `<span class="fsb-step-arrow">-</span>`
       : "";
     return `
       <button type="button" class="fsb-step-chip ${cls}" data-comp-fsb-stroke-idx="${idx}" title="${escapeHtml(st.fullLabel)} (${escapeHtml(st.rangeLabel)}) 구간으로 이동">
-        ${escapeHtml(bracketText)}
+        ${escapeHtml(st.key)}
       </button>${arrowHtml}
     `;
   }).join("");
 
   barEl.classList.toggle("is-visible", isCompFloatingStrokeBarVisible);
+  barEl.classList.toggle("is-expanded", isCompFloatingStrokeExpanded);
 
   const activeChip = stepsContainer.querySelector(".fsb-step-chip.is-active");
   if (activeChip && typeof activeChip.scrollIntoView === "function") {
@@ -6002,12 +6422,93 @@ function updateCompFloatingStrokeBar() {
 function getActiveCompScrollTop() {
   if (currentSubTab === "records") {
     const tblScroll = document.getElementById("recordsDbTableScroll");
-    if (tblScroll && tblScroll.scrollTop > 0) return tblScroll.scrollTop;
+    if (tblScroll) return tblScroll.scrollTop;
   }
   return window.scrollY || document.documentElement.scrollTop || 0;
 }
 
+function scrollToStrokeStepByIdx(idx) {
+  const divKey = currentDivision === "adult" ? "adult" : "student";
+  const steps = COMP_DIVISION_STROKE_STEPS[divKey] || COMP_DIVISION_STROKE_STEPS.adult;
+  const targetStep = steps[idx];
+  if (!targetStep) return;
+
+  if (currentSubTab !== "records" && currentSubTab !== "result") {
+    currentSubTab = "records";
+    renderAll();
+    syncRouteWithParentAndUrl();
+  }
+
+  // 전체 종목 순서대로 스크롤 탐색할 수 있도록 종목 필터가 다른 종목에 잠겨 있으면 전체로 해제
+  if (divKey === "adult" && adultResStrokeFilter !== "all") {
+    adultResStrokeFilter = "all";
+    const sel = document.getElementById("adultResStrokeSelect");
+    if (sel) sel.value = "all";
+    renderAdultScheduleTableRows();
+  } else if (divKey === "student" && rawSheetStrokeFilter !== "all") {
+    rawSheetStrokeFilter = "all";
+    const sel = document.getElementById("rawSheetStrokeSelect");
+    if (sel) sel.value = "all";
+    renderAllVerifiedSheetRows();
+  }
+
+  // 클릭 즉시 해당 종목 하이라이트 고정 (스크롤 애니메이션 중 이전 종목으로 튀는 현상 방지)
+  forcedActiveStrokeKey = targetStep.key;
+  forcedActiveStrokeUntil = Date.now() + 950;
+  updateCompFloatingStrokeBar();
+
+  const tableBodyId = currentSubTab === "result"
+    ? "ourTeamResultTableBody"
+    : (divKey === "adult" ? "adultResultScheduleTableBody" : "verifiedSheetTableBody");
+  const tbody = document.getElementById(tableBodyId);
+  if (tbody) {
+    const rows = tbody.querySelectorAll("tr[data-row-stroke]");
+    let matchedRow = null;
+    for (const tr of rows) {
+      if (mapRawStrokeToStepKey(divKey, tr.dataset.rowStroke) === targetStep.key) {
+        matchedRow = tr;
+        break;
+      }
+    }
+    if (matchedRow) {
+      if (currentSubTab === "records") {
+        const tblScroll = document.getElementById("recordsDbTableScroll");
+        if (tblScroll) {
+          const scrollRect = tblScroll.getBoundingClientRect();
+          const rowRect = matchedRow.getBoundingClientRect();
+          const thead = tblScroll.querySelector("thead");
+          const headerH = thead ? thead.getBoundingClientRect().height : 38;
+          const targetTop = Math.max(0, tblScroll.scrollTop + (rowRect.top - scrollRect.top) - headerH - 4);
+          tblScroll.scrollTo({ top: targetTop, behavior: "smooth" });
+        } else {
+          matchedRow.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      } else {
+        const rowRect = matchedRow.getBoundingClientRect();
+        const targetWinY = Math.max(0, (window.scrollY || document.documentElement.scrollTop || 0) + rowRect.top - 90);
+        window.scrollTo({ top: targetWinY, behavior: "smooth" });
+      }
+
+      matchedRow.style.transition = "background-color 0.4s ease";
+      const origBg = matchedRow.style.backgroundColor;
+      matchedRow.style.backgroundColor = "#fef08a";
+      setTimeout(() => {
+        matchedRow.style.backgroundColor = origBg;
+      }, 1200);
+    }
+  }
+}
+
 function bindCompFloatingStrokeBarEvents() {
+  const clearForceOnManualInput = () => {
+    if (forcedActiveStrokeKey && Date.now() > forcedActiveStrokeUntil - 650) {
+      forcedActiveStrokeKey = null;
+      forcedActiveStrokeUntil = 0;
+    }
+  };
+  window.addEventListener("wheel", clearForceOnManualInput, { passive: true });
+  window.addEventListener("touchmove", clearForceOnManualInput, { passive: true });
+
   window.addEventListener("scroll", () => {
     if (compFloatingScrollTicking) return;
     compFloatingScrollTicking = true;
@@ -6026,72 +6527,41 @@ function bindCompFloatingStrokeBarEvents() {
     });
   }, { capture: true, passive: true });
 
-  document.getElementById("btnCloseCompFloatingStrokeBar")?.addEventListener("click", () => {
-    isCompFloatingStrokeBarVisible = false;
-    lastCompDismissedScrollY = getActiveCompScrollTop();
-    const barEl = document.getElementById("compFloatingStrokeBar");
-    if (barEl) barEl.classList.remove("is-visible");
+  document.getElementById("btnToggleCompFloatingVertical")?.addEventListener("click", () => {
+    isCompFloatingStrokeExpanded = !isCompFloatingStrokeExpanded;
+    updateCompFloatingStrokeBar();
   });
 
-  document.getElementById("compFloatingStrokeSteps")?.addEventListener("click", (e) => {
+  document.getElementById("btnCloseCompFloatingStrokeBar")?.addEventListener("click", () => {
+    isCompFloatingStrokeBarVisible = false;
+    isCompFloatingStrokeExpanded = false;
+    lastCompDismissedScrollY = getActiveCompScrollTop();
+    const barEl = document.getElementById("compFloatingStrokeBar");
+    if (barEl) {
+      barEl.classList.remove("is-visible", "is-expanded");
+    }
+  });
+
+  document.getElementById("compFloatingStrokeBar")?.addEventListener("click", (e) => {
     const chip = e.target.closest("[data-comp-fsb-stroke-idx]");
     if (!chip) return;
-    const divKey = currentDivision === "adult" ? "adult" : "student";
-    const steps = COMP_DIVISION_STROKE_STEPS[divKey] || COMP_DIVISION_STROKE_STEPS.adult;
     const idx = Number(chip.dataset.compFsbStrokeIdx);
-    const targetStep = steps[idx];
-    if (!targetStep) return;
-
-    if (currentSubTab !== "records" && currentSubTab !== "result") {
-      currentSubTab = "records";
-      renderAll();
-      syncRouteWithParentAndUrl();
+    if (Number.isFinite(idx)) {
+      scrollToStrokeStepByIdx(idx);
     }
-
-    // 전체 종목 순서대로 스크롤 탐색할 수 있도록 종목 필터가 다른 종목에 잠겨 있으면 전체로 해제
-    if (divKey === "adult" && adultResStrokeFilter !== "all") {
-      adultResStrokeFilter = "all";
-      const sel = document.getElementById("adultResStrokeSelect");
-      if (sel) sel.value = "all";
-      renderAdultScheduleTableRows();
-    } else if (divKey === "student" && rawSheetStrokeFilter !== "all") {
-      rawSheetStrokeFilter = "all";
-      const sel = document.getElementById("rawSheetStrokeSelect");
-      if (sel) sel.value = "all";
-      renderAllVerifiedSheetRows();
-    }
-
-    const tableBodyId = currentSubTab === "result"
-      ? "ourTeamResultTableBody"
-      : (divKey === "adult" ? "adultResultScheduleTableBody" : "verifiedSheetTableBody");
-    const tbody = document.getElementById(tableBodyId);
-    if (tbody) {
-      const rows = tbody.querySelectorAll("tr[data-row-stroke]");
-      let matchedRow = null;
-      for (const tr of rows) {
-        if (mapRawStrokeToStepKey(divKey, tr.dataset.rowStroke) === targetStep.key) {
-          matchedRow = tr;
-          break;
-        }
-      }
-      if (matchedRow) {
-        matchedRow.scrollIntoView({ behavior: "smooth", block: "center" });
-        matchedRow.style.transition = "background-color 0.4s ease";
-        const origBg = matchedRow.style.backgroundColor;
-        matchedRow.style.backgroundColor = "#fef08a";
-        setTimeout(() => {
-          matchedRow.style.backgroundColor = origBg;
-        }, 1200);
-      }
-    }
-    setTimeout(() => updateCompFloatingStrokeBar(), 350);
   });
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  if (window.self !== window.top) {
+    document.body.classList.add("is-embedded-iframe");
+    document.body.classList.toggle("is-parent-mobile", isParentMobileHeaderVisible());
+  }
   initFromUrl();
+  initCompResultAuthWatcher();
   bindEvents();
   bindCompFloatingStrokeBarEvents();
   renderAll();
   syncRouteWithParentAndUrl();
+  postRecordsDbHeaderStateToParent();
 });
