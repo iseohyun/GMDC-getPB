@@ -31,15 +31,17 @@ export const SPA_ROUTES = {
   '#/training-meeting':       { url: 'meeting_notes.html', title: '운영기록', catId: 'cat-training', itemId: 'meeting' },
   '#/competition-prospectus':    { url: 'prospectus.html', title: '모집요강', catId: 'cat-competition', itemId: 'prospectus' },
   '#/competition-coach-meeting': { url: 'coach-meeting.html?v=20261024_08', title: '감독자회의요강', catId: 'cat-competition', itemId: 'coach-meeting' },
-  '#/competition-live-student':  { url: 'live-schedule.html?div=student&v=20261026_01', title: '학생부 (24일)', catId: 'cat-competition', itemId: 'live-student' },
-  '#/competition-live-adult':    { url: 'live-schedule.html?div=adult&v=20261026_01', title: '성인부 (25일)', catId: 'cat-competition', itemId: 'live-adult' },
-  '#/competition-result':                  { url: 'competition-result.html?div=student&tab=entry&v=20261026_05', title: '학생부 접수 분석', catId: 'cat-competition', itemId: 'comp-res-student-entry', div: 'student', tab: 'entry' },
-  '#/competition-result-student-entry':    { url: 'competition-result.html?div=student&tab=entry&v=20261026_05', title: '학생부 접수 분석', catId: 'cat-competition', itemId: 'comp-res-student-entry', div: 'student', tab: 'entry' },
-  '#/competition-result-student-progress': { url: 'competition-result.html?div=student&tab=progress&v=20261026_05', title: '학생부 진행 요약', catId: 'cat-competition', itemId: 'comp-res-student-progress', div: 'student', tab: 'progress' },
-  '#/competition-result-student-result':   { url: 'competition-result.html?div=student&tab=result&v=20261026_05', title: '학생부 결과 분석', catId: 'cat-competition', itemId: 'comp-res-student-result', div: 'student', tab: 'result' },
-  '#/competition-result-adult-entry':      { url: 'competition-result.html?div=adult&tab=entry&v=20261026_05', title: '성인부 접수 분석', catId: 'cat-competition', itemId: 'comp-res-adult-entry', div: 'adult', tab: 'entry' },
-  '#/competition-result-adult-progress':   { url: 'competition-result.html?div=adult&tab=progress&v=20261026_05', title: '성인부 진행 요약', catId: 'cat-competition', itemId: 'comp-res-adult-progress', div: 'adult', tab: 'progress' },
-  '#/competition-result-adult-result':     { url: 'competition-result.html?div=adult&tab=result&v=20261026_05', title: '성인부 결과 분석', catId: 'cat-competition', itemId: 'comp-res-adult-result', div: 'adult', tab: 'result' },
+  '#/competition-live-student':  { url: 'live-schedule.html?div=student&v=20261026_10', title: '학생부 (24일)', catId: 'cat-competition', itemId: 'live-student' },
+  '#/competition-live-adult':    { url: 'live-schedule.html?div=adult&v=20261026_10', title: '성인부 (25일)', catId: 'cat-competition', itemId: 'live-adult' },
+  '#/competition-result':                  { url: 'competition-result.html?div=student&tab=entry&v=20261026_11', title: '학생부 접수 분석', catId: 'cat-competition', itemId: 'comp-res-student-entry', div: 'student', tab: 'entry' },
+  '#/competition-result-student-entry':    { url: 'competition-result.html?div=student&tab=entry&v=20261026_11', title: '학생부 접수 분석', catId: 'cat-competition', itemId: 'comp-res-student-entry', div: 'student', tab: 'entry' },
+  '#/competition-result-student-progress': { url: 'competition-result.html?div=student&tab=progress&v=20261026_11', title: '학생부 진행 요약', catId: 'cat-competition', itemId: 'comp-res-student-progress', div: 'student', tab: 'progress' },
+  '#/competition-result-student-result':   { url: 'competition-result.html?div=student&tab=result&v=20261026_11', title: '학생부 결과 분석', catId: 'cat-competition', itemId: 'comp-res-student-result', div: 'student', tab: 'result' },
+  '#/competition-result-student-records':  { url: 'competition-result.html?div=student&tab=records&v=20261026_11', title: '학생부 기록지DB', catId: 'cat-competition', itemId: 'comp-res-student-records', div: 'student', tab: 'records' },
+  '#/competition-result-adult-entry':      { url: 'competition-result.html?div=adult&tab=entry&v=20261026_11', title: '성인부 접수 분석', catId: 'cat-competition', itemId: 'comp-res-adult-entry', div: 'adult', tab: 'entry' },
+  '#/competition-result-adult-progress':   { url: 'competition-result.html?div=adult&tab=progress&v=20261026_11', title: '성인부 진행 요약', catId: 'cat-competition', itemId: 'comp-res-adult-progress', div: 'adult', tab: 'progress' },
+  '#/competition-result-adult-result':     { url: 'competition-result.html?div=adult&tab=result&v=20261026_11', title: '성인부 결과 분석', catId: 'cat-competition', itemId: 'comp-res-adult-result', div: 'adult', tab: 'result' },
+  '#/competition-result-adult-records':    { url: 'competition-result.html?div=adult&tab=records&v=20261026_11', title: '성인부 기록지DB', catId: 'cat-competition', itemId: 'comp-res-adult-records', div: 'adult', tab: 'records' },
   '#/admin-share':               { url: 'share.html?v=20261024_21', title: '홍보 및 공유', catId: 'cat-admin', itemId: 'admin-share' },
   '#/admin-settings':            { url: 'admin.html', title: '관리자 설정', catId: 'cat-admin', itemId: 'admin-settings', adminOnly: true }
 };
@@ -91,7 +93,8 @@ const MENU_CATEGORIES = [
             items: [
               { id: "comp-res-student-entry",    title: "접수 분석", hash: "#/competition-result-student-entry",    icon: "📊" },
               { id: "comp-res-student-progress", title: "진행 요약", hash: "#/competition-result-student-progress", icon: "⏱️" },
-              { id: "comp-res-student-result",   title: "결과 분석", hash: "#/competition-result-student-result",   icon: "🏅" }
+              { id: "comp-res-student-result",   title: "결과 분석", hash: "#/competition-result-student-result",   icon: "🏅" },
+              { id: "comp-res-student-records",  title: "기록지DB",  hash: "#/competition-result-student-records",  icon: "🗄️" }
             ]
           },
           {
@@ -101,7 +104,8 @@ const MENU_CATEGORIES = [
             items: [
               { id: "comp-res-adult-entry",    title: "접수 분석", hash: "#/competition-result-adult-entry",    icon: "📊" },
               { id: "comp-res-adult-progress", title: "진행 요약", hash: "#/competition-result-adult-progress", icon: "⏱️" },
-              { id: "comp-res-adult-result",   title: "결과 분석", hash: "#/competition-result-adult-result",   icon: "🏅" }
+              { id: "comp-res-adult-result",   title: "결과 분석", hash: "#/competition-result-adult-result",   icon: "🏅" },
+              { id: "comp-res-adult-records",  title: "기록지DB",  hash: "#/competition-result-adult-records",  icon: "🗄️" }
             ]
           }
         ]
@@ -595,7 +599,7 @@ function highlightMenuFromUrl() {
   if (file === 'competition-result.html') {
     const params = new URLSearchParams(search);
     const div = params.get('div') === 'adult' ? 'adult' : 'student';
-    const tab = ['entry', 'progress', 'result'].includes(params.get('tab')) ? params.get('tab') : 'entry';
+    const tab = ['entry', 'progress', 'result', 'records'].includes(params.get('tab')) ? params.get('tab') : 'entry';
     highlightActiveItem(`comp-res-${div}-${tab}`, 'cat-competition');
     return;
   }

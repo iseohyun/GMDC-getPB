@@ -290,7 +290,8 @@ function renderTopNavigationHeader() {
   const subLabelMap = {
     entry: "접수 분석",
     progress: "진행 요약",
-    result: "결과 분석"
+    result: "결과 분석",
+    records: "기록지DB"
   };
   const subLabel = subLabelMap[currentSubTab] || "접수 분석";
 
@@ -303,6 +304,12 @@ function renderTopNavigationHeader() {
     breadcrumb.textContent = `대회결과 > ${currentDivision === "student" ? "학생부" : "성인부"} > ${subLabel}`;
   }
 
+  // 기록지DB 탭에서는 전용 상단 Sticky 헤더가 표시되므로 상단 공통 헤더를 숨김
+  const commonHeader = document.querySelector(".comp-analysis-header");
+  if (commonHeader) {
+    commonHeader.style.display = currentSubTab === "records" ? "none" : "block";
+  }
+
   // 팀별 전력 필터 칩 박스는 '접수 분석' 페이지에서만 노출
   const entryFilterBox = document.getElementById("entryTeamFilterBox");
   if (entryFilterBox) {
@@ -312,10 +319,12 @@ function renderTopNavigationHeader() {
   const viewEntry = document.getElementById("viewContainerEntry");
   const viewProgress = document.getElementById("viewContainerProgress");
   const viewResult = document.getElementById("viewContainerResult");
+  const viewRecords = document.getElementById("viewContainerRecords");
 
   if (viewEntry) viewEntry.style.display = currentSubTab === "entry" ? "block" : "none";
   if (viewProgress) viewProgress.style.display = currentSubTab === "progress" ? "block" : "none";
   if (viewResult) viewResult.style.display = currentSubTab === "result" ? "block" : "none";
+  if (viewRecords) viewRecords.style.display = currentSubTab === "records" ? "block" : "none";
 }
 
 // ==========================================================================
@@ -823,21 +832,534 @@ function renderSwimmersDetailTable() {
 // ==========================================================================
 // ⏱️ TAB 2: 진행 요약 (학생부: 2번, 4번, 5-2번, 5-3번 시각화·표 / 성인부: 추후 업데이트 예정)
 // ==========================================================================
+
+function renderAdultProgressSummaryView(container) {
+  const fmtMMSS = (sec) => {
+    const s = Math.round(sec);
+    const m = Math.floor(s / 60);
+    const rem = s % 60;
+    return `${String(m).padStart(2, "0")}:${String(rem).padStart(2, "0")}`;
+  };
+
+  // 성인부 (2026-10-25, 141경기: 개인 131 + 단체 10) 그룹 × 영법 매트릭스
+  // (#1~#2 오전 개시 대기 구간은 순수 경기 페이스 84초 기준으로 차트 스케일 보정, 전체 평균은 실측 병기)
+  const adultGroupMatrixRows = [
+    { group: "1그룹 (29세 이하)", races: 9,  finFly: 84,  back: 122, fly: 100, finFree: 83, breast: 80, free: 70, avg: 86.9, avgStr: "01:27", note: "#1 개시 대기 제외 순수 평균" },
+    { group: "2그룹 (30~39세)",   races: 16, finFly: 80,  back: 88,  fly: 81,  finFree: null, breast: 80, free: 70, avg: 77.5, avgStr: "01:18", note: "" },
+    { group: "3그룹 (40~49세)",   races: 28, finFly: 80,  back: 89,  fly: 80,  finFree: 72, breast: 80, free: 70, avg: 77.6, avgStr: "01:18", note: "#2 개시 대기 제외 순수 평균" },
+    { group: "4그룹 (50~59세)",   races: 45, finFly: 82,  back: 105, fly: 78,  finFree: 81, breast: 80, free: 70, avg: 80.9, avgStr: "01:21", note: "최다 출전 그룹 (45경기)" },
+    { group: "5그룹 (60~69세)",   races: 30, finFly: 92,  back: 188, fly: 88,  finFree: 95, breast: 80, free: 70, avg: 99.3, avgStr: "01:39", note: "배영 수중 입수·정렬 시간 증가" },
+    { group: "6그룹 (70세 이상)", races: 3,  finFly: 80,  back: null, fly: null, finFree: null, breast: 80, free: 70, avg: 76.7, avgStr: "01:17", note: "소수 정예 (3경기)" }
+  ];
+
+  const maxStrokeSec = 190;
+  const vchartColsHtml = adultGroupMatrixRows.map(r => {
+    const shortGrp = r.group.split(" ")[0];
+    const ageNote = r.group.replace(/^[^\s]+\s*/, "");
+    const bars = [
+      { label: "핀접영 50m", val: r.finFly, color: "#9333ea" },
+      { label: "배영 50m",   val: r.back,   color: "#16a34a" },
+      { label: "접영 50m",   val: r.fly,    color: "#e11d48" },
+      { label: "핀자유형 50m", val: r.finFree, color: "#0891b2" },
+      { label: "평영 50m",   val: r.breast, color: "#d97706" },
+      { label: "자유형 50m", val: r.free,   color: "#2563eb" }
+    ].filter(b => b.val !== null);
+
+    const barsHtml = bars.map(b => {
+      const hPct = Math.min(100, Math.max(12, Math.round((b.val / maxStrokeSec) * 100)));
+      return `
+        <div class="vbar-item" style="height:${hPct}%; background:${b.color};" title="${r.group} ${b.label}: ${b.val}초 (${fmtMMSS(b.val)})">
+          <span class="vbar-num">${b.val}s</span>
+        </div>
+      `;
+    }).join("");
+
+    return `
+      <div class="vchart-col">
+        <div class="vchart-bars-cluster">
+          ${barsHtml}
+        </div>
+        <div class="vchart-col-footer">
+          <span class="vchart-grp-title">${escapeHtml(shortGrp)} <small style="color:#64748b;font-weight:600;">${escapeHtml(ageNote)}</small></span>
+          <span class="vchart-grp-avg">평균 ${r.avg}초 (${r.avgStr})</span>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  const renderCell = (val) => {
+    if (val === null || val === undefined) {
+      return `<td style="text-align:center; color:#cbd5e1;">-</td>`;
+    }
+    const cls = val >= 120 ? "dur-cell-slow" : (val <= 75 ? "dur-cell-fast" : "");
+    return `<td class="${cls}" style="text-align:center; font-weight:700;">${val}초 <span style="color:#64748b;font-size:11.5px;">(${fmtMMSS(val)})</span></td>`;
+  };
+
+  const matrixBodyHtml = adultGroupMatrixRows.map(r => {
+    const groupNumOnly = String(r.group || "").split(" ")[0].replace(/[^0-9]/g, "") || "-";
+    return `
+      <tr>
+        <td style="text-align:center; font-weight:800; color:#334155; font-variant-numeric:tabular-nums;">${escapeHtml(groupNumOnly)}</td>
+        <td style="text-align:center; font-weight:700; color:#475569;">${r.races}경기</td>
+        ${renderCell(r.finFly)}
+        ${renderCell(r.back)}
+        ${renderCell(r.fly)}
+        ${renderCell(r.finFree)}
+        ${renderCell(r.breast)}
+        ${renderCell(r.free)}
+        <td class="dur-cell-avg" style="text-align:center;">${r.avg}초 (${r.avgStr})</td>
+      </tr>
+    `;
+  }).join("");
+
+  container.innerHTML = `
+    <!-- =============================================================== -->
+    <!-- 1. 성인부 전체 타임라인 요약 (08:30 ~ 13:31)                     -->
+    <!-- =============================================================== -->
+    <section class="progress-card-section">
+      <div class="progress-sec-header">
+        <div>
+          <h3>⏱️ 1. 성인부 전체 타임라인 요약 (08:30 ~ 13:31)</h3>
+          <span class="progress-sec-sub">2026년 10월 25일(일) · 총 141경기 (개인전 131경기 + 단체전 10경기) 및 공식 휴게 3회 실측·일정 복원 기준</span>
+        </div>
+      </div>
+
+      <div class="kpi-grid-4">
+        <div class="kpi-stat-card highlight-blue">
+          <span class="kpi-label">🏁 전체 대회 소요 시간</span>
+          <span class="kpi-value">5시간 01분 00초</span>
+          <span class="kpi-sub">08:30:00 ~ 13:31:00 (총 18,060초)</span>
+        </div>
+        <div class="kpi-stat-card">
+          <span class="kpi-label">🏊 순수 경기 진행 시간</span>
+          <span class="kpi-value">3시간 44분 44초</span>
+          <span class="kpi-sub">총 13,484초 · 141경기 (경기당 평균 01:36)</span>
+        </div>
+        <div class="kpi-stat-card highlight-emerald">
+          <span class="kpi-label">☕ 총 휴게 시간 (3회 합산)</span>
+          <span class="kpi-value">1시간 16분 16초</span>
+          <span class="kpi-sub">개회식 29분 49초 + 중식·휴식 31분 27초 + 혼성계영 전 15분</span>
+        </div>
+        <div class="kpi-stat-card">
+          <span class="kpi-label">⚡ 개인전 vs 단체전 평균</span>
+          <span class="kpi-value">01:31 / 02:38</span>
+          <span class="kpi-sub">개인 131경기(90.9초) · 단체 10경기(158.0초)</span>
+        </div>
+      </div>
+
+      <!-- 타임라인 구성 비율 바 -->
+      <div class="timeline-ratio-wrap">
+        <div class="timeline-ratio-title">
+          <span>🕒 시간대별 진행 구성 비율 (08:30 ~ 13:31, 총 301분)</span>
+          <span>순수 경기 74.7% (224.7분) · 휴게 25.3% (76.3분)</span>
+        </div>
+        <div class="timeline-ratio-bar">
+          <div class="tl-seg seg-morning" style="width: 24.2%;" title="1부 경기 (#1~#35 핀접영·배영): 08:30:00 ~ 09:42:49 (1시간 12분 49초)">1부 #1~#35 (1h 13m)</div>
+          <div class="tl-seg seg-break1" style="width: 9.9%;" title="휴게 1 (개회식): 09:42:49 ~ 10:12:38 (29분 49초)">휴게1 (30m)</div>
+          <div class="tl-seg seg-afternoon" style="width: 21.9%;" title="2부 경기 (#36~#83 계영·접영·핀자유형): 10:12:38 ~ 11:18:32 (1시간 05분 54초)">2부 #36~#83 (1h 06m)</div>
+          <div class="tl-seg seg-break2" style="width: 10.4%; background:#059669;" title="휴게 2 (중식·휴식): 11:18:32 ~ 11:50:00 (31분 27초)">휴게2 (31m)</div>
+          <div class="tl-seg seg-morning" style="width: 25.6%; background:#1d4ed8;" title="3부 경기 (#84~#139 평영·혼계영·자유형): 11:50:00 ~ 13:07:00 (1시간 17분 00초)">3부 #84~#139 (1h 17m)</div>
+          <div class="tl-seg seg-break1" style="width: 5.0%;" title="휴게 3 (혼성 핀계영 300m 준비): 13:07:00 ~ 13:22:00 (15분 00초)">휴게3</div>
+          <div class="tl-seg seg-relay" style="width: 3.0%;" title="혼성 핀계영 300m (#140~#141): 13:22:00 ~ 13:31:00 (9분 00초)">피날레</div>
+        </div>
+        <div class="timeline-legend-row">
+          <span><i class="tl-dot" style="background:#0284c7;"></i>1부 (#1~#35 핀접영·배영, 08:30~09:42)</span>
+          <span><i class="tl-dot" style="background:#10b981;"></i>휴게 1·개회식 (09:42~10:12, 30분)</span>
+          <span><i class="tl-dot" style="background:#2563eb;"></i>2부 (#36~#83 계영·접영·핀자유형, 10:12~11:18)</span>
+          <span><i class="tl-dot" style="background:#059669;"></i>휴게 2·중식/휴식 (11:18~11:50, 31분)</span>
+          <span><i class="tl-dot" style="background:#1d4ed8;"></i>3부 (#84~#139 평영·혼계영·자유형, 11:50~13:07)</span>
+          <span><i class="tl-dot" style="background:#10b981;"></i>휴게 3·혼성계영 준비 (13:07~13:22, 15분)</span>
+          <span><i class="tl-dot" style="background:#7c3aed;"></i>혼성 핀계영 300m (#140~#141, 13:22~13:31)</span>
+        </div>
+      </div>
+
+      <!-- 전체 타임라인 요약 표 -->
+      <div class="table-responsive">
+        <table class="record-table">
+          <thead>
+            <tr>
+              <th style="min-width: 185px; text-align:left;">구분</th>
+              <th style="min-width: 195px; text-align:center;">시각 / 구간</th>
+              <th style="min-width: 150px; text-align:center;">소요 시간</th>
+              <th style="width: 100px; text-align:center;">경기 수</th>
+              <th style="min-width: 135px; text-align:center;">평균 소요시간</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="text-align:left; font-weight:800; color:#0f172a;">전체 대회 시간</td>
+              <td style="text-align:center; font-weight:700;">08:30:00 ~ 13:31:00</td>
+              <td style="text-align:center; font-weight:800; color:#0f172a;">5시간 01분 00초 (18,060초)</td>
+              <td style="text-align:center; font-weight:700;">141경기 + 휴게 3회</td>
+              <td style="text-align:center; color:#94a3b8;">-</td>
+            </tr>
+            <tr style="background:#f0fdf4;">
+              <td style="text-align:left; font-weight:800; color:#15803d;">☕ 휴게 1 (개회식 및 정비)</td>
+              <td style="text-align:center; font-weight:700;">#35 배영 종료 후 (09:42:49 ~ 10:12:38)</td>
+              <td style="text-align:center; font-weight:800; color:#15803d;">29분 49초 (1,789초)</td>
+              <td style="text-align:center; color:#94a3b8;">-</td>
+              <td style="text-align:center; color:#94a3b8;">-</td>
+            </tr>
+            <tr style="background:#f0fdf4;">
+              <td style="text-align:left; font-weight:800; color:#15803d;">☕ 휴게 2 (중식 및 휴식)</td>
+              <td style="text-align:center; font-weight:700;">#83 핀자유형 종료 후 (11:18:32 ~ 11:50:00)</td>
+              <td style="text-align:center; font-weight:800; color:#15803d;">31분 27초 (1,887초)</td>
+              <td style="text-align:center; color:#94a3b8;">-</td>
+              <td style="text-align:center; color:#94a3b8;">-</td>
+            </tr>
+            <tr style="background:#f0fdf4;">
+              <td style="text-align:left; font-weight:800; color:#15803d;">☕ 휴게 3 (혼성 핀계영 300m 준비)</td>
+              <td style="text-align:center; font-weight:700;">#139 자유형 종료 후 (13:07:00 ~ 13:22:00)</td>
+              <td style="text-align:center; font-weight:800; color:#15803d;">15분 00초 (900초)</td>
+              <td style="text-align:center; color:#94a3b8;">-</td>
+              <td style="text-align:center; color:#94a3b8;">-</td>
+            </tr>
+            <tr style="background:#f0f9ff;">
+              <td style="text-align:left; font-weight:900; color:#0369a1;">🏊 순수 경기 진행 시간</td>
+              <td style="text-align:center; font-weight:700;">휴게 3회 (76분 16초) 제외</td>
+              <td style="text-align:center; font-weight:900; color:#0369a1;">3시간 44분 44초 (13,484초)</td>
+              <td style="text-align:center; font-weight:900; color:#0369a1;">141경기</td>
+              <td style="text-align:center; font-weight:900; color:#0369a1;">01:36 (95.6초)</td>
+            </tr>
+            <tr>
+              <td style="text-align:left; padding-left:22px; font-weight:700; color:#334155;">├─ 개인전 (50m 6종목 합계)</td>
+              <td style="text-align:center; color:#475569;">핀접영·배영·접영·핀자유형·평영·자유형</td>
+              <td style="text-align:center; font-weight:700;">3시간 18분 24초 (11,904초)</td>
+              <td style="text-align:center; font-weight:700;">131경기</td>
+              <td style="text-align:center; font-weight:800; color:#0284c7;">01:31 (90.9초)</td>
+            </tr>
+            <tr>
+              <td style="text-align:left; padding-left:22px; font-weight:700; color:#334155;">└─ 단체전 (계영·혼계영·혼성핀계영 합계)</td>
+              <td style="text-align:center; color:#475569;">#36~#39 (계영) · #106~#109 (혼계영) · #140~#141 (혼성핀계영)</td>
+              <td style="text-align:center; font-weight:700;">26분 20초 (1,580초)</td>
+              <td style="text-align:center; font-weight:700;">10경기</td>
+              <td style="text-align:center; font-weight:800; color:#7c3aed;">02:38 (158.0초)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- =============================================================== -->
+    <!-- 2. 영법별(종목별) 평균 소요시간 (막대그래프 + 상세 표)           -->
+    <!-- =============================================================== -->
+    <section class="progress-card-section">
+      <div class="progress-sec-header">
+        <div>
+          <h3>🌊 2. 영법별(종목별) 평균 소요시간</h3>
+          <span class="progress-sec-sub">자유형(70.0초) &lt; 평영(80.0초) &lt; 핀자유형(83.5초) &lt; 접영(83.6초) &lt; 배영(122.8초) &lt; 핀접영(126.4초, 개시 대기 제외 시 84.1초)</span>
+        </div>
+      </div>
+
+      <div class="charts-two-col">
+        <div class="hbar-chart-box">
+          <h4 class="hbar-chart-title">
+            <span>📊 개인전 50m 6종목 평균 소요시간 비교</span>
+            <span style="font-size:11.5px; color:#64748b;">개인전 전체 평균 90.9초 (01:31)</span>
+          </h4>
+          <div class="hbar-list">
+            <div class="hbar-row">
+              <span class="hbar-label">1. 자유형 50m</span>
+              <div class="hbar-track"><div class="hbar-fill" style="width: 55.4%; background:#2563eb;">30경기</div></div>
+              <span class="hbar-val">01:10 (70.0s)</span>
+            </div>
+            <div class="hbar-row">
+              <span class="hbar-label">2. 평영 50m</span>
+              <div class="hbar-track"><div class="hbar-fill" style="width: 63.3%; background:#d97706;">22경기</div></div>
+              <span class="hbar-val">01:20 (80.0s)</span>
+            </div>
+            <div class="hbar-row">
+              <span class="hbar-label">3. 핀자유형 50m</span>
+              <div class="hbar-track"><div class="hbar-fill" style="width: 66.1%; background:#0891b2;">24경기</div></div>
+              <span class="hbar-val">01:23 (83.5s)</span>
+            </div>
+            <div class="hbar-row">
+              <span class="hbar-label">4. 접영 50m</span>
+              <div class="hbar-track"><div class="hbar-fill" style="width: 66.2%; background:#e11d48;">20경기</div></div>
+              <span class="hbar-val">01:24 (83.6s)</span>
+            </div>
+            <div class="hbar-row">
+              <span class="hbar-label">5. 배영 50m</span>
+              <div class="hbar-track"><div class="hbar-fill" style="width: 97.2%; background:#16a34a;">15경기</div></div>
+              <span class="hbar-val">02:03 (122.8s)</span>
+            </div>
+            <div class="hbar-row">
+              <span class="hbar-label">6. 핀접영 50m</span>
+              <div class="hbar-track"><div class="hbar-fill" style="width: 100%; background:#9333ea;">20경기 (#3~#20 평균 84.1s)</div></div>
+              <span class="hbar-val">02:06 (126.4s)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hbar-chart-box">
+          <h4 class="hbar-chart-title">
+            <span>🤝 단체전 3종목 평균 소요시간 비교</span>
+            <span style="font-size:11.5px; color:#64748b;">단체전 전체 평균 158.0초 (02:38)</span>
+          </h4>
+          <div class="hbar-list">
+            <div class="hbar-row">
+              <span class="hbar-label">계영 200m</span>
+              <div class="hbar-track"><div class="hbar-fill" style="width: 35.0%; background:#0284c7;">4경기 (#36~#39)</div></div>
+              <span class="hbar-val">01:10 (70.0s)</span>
+            </div>
+            <div class="hbar-row">
+              <span class="hbar-label">혼계영 200m</span>
+              <div class="hbar-track"><div class="hbar-fill" style="width: 70.4%; background:#7c3aed;">4경기 (#106~#109)</div></div>
+              <span class="hbar-val">03:10 (190.0s)</span>
+            </div>
+            <div class="hbar-row">
+              <span class="hbar-label">혼성 핀계영 300m</span>
+              <div class="hbar-track"><div class="hbar-fill" style="width: 100%; background:#db2777;">2경기 (#140~#141, 6인×50m)</div></div>
+              <span class="hbar-val">04:30 (270.0s)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 영법별 평균 소요시간 상세 표 -->
+      <div class="table-responsive">
+        <table class="record-table">
+          <thead>
+            <tr>
+              <th style="width: 110px; text-align:center;">순위</th>
+              <th style="width: 165px; text-align:left;">종목 (영법)</th>
+              <th style="width: 90px; text-align:center;">경기 수</th>
+              <th style="width: 140px; text-align:center;">평균 소요시간 (분:초)</th>
+              <th style="width: 110px; text-align:center;">평균 (초)</th>
+              <th style="min-width: 280px; text-align:left;">실측 및 일정 특성 분석</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="text-align:center; font-weight:800; color:#1d4ed8;">1 (가장 빠름)</td>
+              <td style="text-align:left; font-weight:700; color:#334155;">자유형 50m</td>
+              <td style="text-align:center; font-weight:700;">30경기</td>
+              <td style="text-align:center; font-weight:900; color:#1d4ed8;">01:10</td>
+              <td style="text-align:center; font-weight:800;">70.0초</td>
+              <td style="text-align:left; font-size:12.5px; color:#334155;">3부 마지막 개인전 구간(#110~#139, 12:32~13:07)으로 가장 빠른 템포로 진행</td>
+            </tr>
+            <tr>
+              <td style="text-align:center; font-weight:800; color:#64748b;">2</td>
+              <td style="text-align:left; font-weight:700; color:#334155;">평영 50m</td>
+              <td style="text-align:center; font-weight:700;">22경기</td>
+              <td style="text-align:center; font-weight:900; color:#0f172a;">01:20</td>
+              <td style="text-align:center; font-weight:800;">80.0초</td>
+              <td style="text-align:left; font-size:12.5px; color:#334155;">11:50 휴게 종료 직후 재개 구간(#84~#105, 11:50~12:19)으로 예정 페이스(80초) 정시 진행</td>
+            </tr>
+            <tr>
+              <td style="text-align:center; font-weight:800; color:#64748b;">3</td>
+              <td style="text-align:left; font-weight:700; color:#334155;">핀자유형 50m</td>
+              <td style="text-align:center; font-weight:700;">24경기</td>
+              <td style="text-align:center; font-weight:900; color:#0f172a;">01:23</td>
+              <td style="text-align:center; font-weight:800;">83.5초</td>
+              <td style="text-align:left; font-size:12.5px; color:#334155;">오리발 착용으로 수영 속도는 매우 빠르나 출발 전 오리발 착용·점검 시간 포함 (#60~#83 실측)</td>
+            </tr>
+            <tr>
+              <td style="text-align:center; font-weight:800; color:#64748b;">4</td>
+              <td style="text-align:left; font-weight:700; color:#334155;">접영 50m</td>
+              <td style="text-align:center; font-weight:700;">20경기</td>
+              <td style="text-align:center; font-weight:900; color:#0f172a;">01:24</td>
+              <td style="text-align:center; font-weight:800;">83.6초</td>
+              <td style="text-align:left; font-size:12.5px; color:#334155;">2부 개인전 구간(#40~#59, 10:17~10:45) 실측 평균</td>
+            </tr>
+            <tr>
+              <td style="text-align:center; font-weight:800; color:#be123c;">5</td>
+              <td style="text-align:left; font-weight:700; color:#334155;">배영 50m</td>
+              <td style="text-align:center; font-weight:700;">15경기</td>
+              <td style="text-align:center; font-weight:900; color:#be123c;">02:03</td>
+              <td style="text-align:center; font-weight:800;">122.8초</td>
+              <td style="text-align:left; font-size:12.5px; color:#334155;">수중 입수 출발 및 시니어(5그룹) 구간 신중한 입수·정렬로 소요시간 증가 (#21~#35 실측)</td>
+            </tr>
+            <tr>
+              <td style="text-align:center; font-weight:800; color:#9333ea;">6 (개시 포함)</td>
+              <td style="text-align:left; font-weight:700; color:#334155;">핀접영 50m</td>
+              <td style="text-align:center; font-weight:700;">20경기</td>
+              <td style="text-align:center; font-weight:900; color:#9333ea;">02:06</td>
+              <td style="text-align:center; font-weight:800;">126.4초</td>
+              <td style="text-align:left; font-size:12.5px; color:#334155;">오전 08:30 대회 개시 정렬(#1~#2) 포함 평균이며, <strong>#3~#20 18경기 순수 실측 평균은 01:24 (84.1초)</strong></td>
+            </tr>
+            <tr style="background:#f0f9ff;">
+              <td style="text-align:center; font-weight:800; color:#0369a1;">단체전 1</td>
+              <td style="text-align:left; font-weight:800; color:#0369a1;">계영 200m (단체)</td>
+              <td style="text-align:center; font-weight:700;">4경기</td>
+              <td style="text-align:center; font-weight:900; color:#0369a1;">01:10</td>
+              <td style="text-align:center; font-weight:800;">70.0초</td>
+              <td style="text-align:left; font-size:12.5px; color:#334155;">개회식 직후(#36~#39, 10:12~10:17) 사전 소집 완료 상태에서 빠르게 연속 진행</td>
+            </tr>
+            <tr style="background:#faf5ff;">
+              <td style="text-align:center; font-weight:800; color:#7c3aed;">단체전 2</td>
+              <td style="text-align:left; font-weight:800; color:#6d28d9;">혼계영 200m (단체)</td>
+              <td style="text-align:center; font-weight:700;">4경기</td>
+              <td style="text-align:center; font-weight:900; color:#6d28d9;">03:10</td>
+              <td style="text-align:center; font-weight:800;">190.0초</td>
+              <td style="text-align:left; font-size:12.5px; color:#334155;">평영 종료 직후(#106~#109, 12:19~12:32) 남·여 4×50m 혼계영 진행</td>
+            </tr>
+            <tr style="background:#fdf2f8;">
+              <td style="text-align:center; font-weight:800; color:#db2777;">단체전 3</td>
+              <td style="text-align:left; font-weight:800; color:#be185d;">혼성 핀계영 300m (단체)</td>
+              <td style="text-align:center; font-weight:700;">2경기</td>
+              <td style="text-align:center; font-weight:900; color:#be185d;">04:30</td>
+              <td style="text-align:center; font-weight:800;">270.0초</td>
+              <td style="text-align:left; font-size:12.5px; color:#334155;">15분 휴식 후 대회 대미를 장식한 6인×50m 혼성 단체전 (#140~#141, 13:22~13:31)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- =============================================================== -->
+    <!-- 3. 그룹 × 영법 상세 매트릭스 (연령대별 막대그래프 + 매트릭스 표) -->
+    <!-- =============================================================== -->
+    <section class="progress-card-section">
+      <div class="progress-sec-header">
+        <div>
+          <h3>🏊 3. 그룹 × 영법 상세 매트릭스 (단위: 평균 초)</h3>
+          <span class="progress-sec-sub">성인부 1그룹(20대) ~ 6그룹(70대 이상) 구간별 · 6대 개인 종목 평균 소요시간 비교</span>
+        </div>
+      </div>
+
+      <div class="group-stroke-vchart-wrap">
+        <div class="vchart-top-bar">
+          <strong style="font-size:13.5px; color:#0f172a;">📊 성인부 연령대 그룹별 · 6대 개인 종목 평균 소요시간 비교 그래프 (단위: 초)</strong>
+          <div class="vchart-legend">
+            <span><i class="tl-dot" style="background:#9333ea;"></i>핀접영 50m</span>
+            <span><i class="tl-dot" style="background:#16a34a;"></i>배영 50m</span>
+            <span><i class="tl-dot" style="background:#e11d48;"></i>접영 50m</span>
+            <span><i class="tl-dot" style="background:#0891b2;"></i>핀자유형 50m</span>
+            <span><i class="tl-dot" style="background:#d97706;"></i>평영 50m</span>
+            <span><i class="tl-dot" style="background:#2563eb;"></i>자유형 50m</span>
+          </div>
+        </div>
+        <div class="vchart-grid">
+          ${vchartColsHtml}
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="record-table">
+          <thead>
+            <tr>
+              <th style="width: 90px; text-align:center;">그룹</th>
+              <th style="width: 85px; text-align:center;">경기 수</th>
+              <th style="min-width: 110px; text-align:center;">핀접영 50m</th>
+              <th style="min-width: 110px; text-align:center;">배영 50m</th>
+              <th style="min-width: 110px; text-align:center;">접영 50m</th>
+              <th style="min-width: 110px; text-align:center;">핀자유형 50m</th>
+              <th style="min-width: 110px; text-align:center;">평영 50m</th>
+              <th style="min-width: 110px; text-align:center;">자유형 50m</th>
+              <th style="min-width: 130px; text-align:center;">그룹 순수 평균</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${matrixBodyHtml}
+          </tbody>
+          <tfoot>
+            <tr style="background:#f1f5f9; font-weight:900;">
+              <td style="text-align:center; color:#0f172a;">전체</td>
+              <td style="text-align:center; color:#0f172a;">131경기</td>
+              <td style="text-align:center; color:#7e22ce;">84.1초 (#3~#20)</td>
+              <td style="text-align:center; color:#15803d;">122.8초 (02:03)</td>
+              <td style="text-align:center; color:#be123c;">83.6초 (01:24)</td>
+              <td style="text-align:center; color:#0e7490;">83.5초 (01:23)</td>
+              <td style="text-align:center; color:#b45309;">80.0초 (01:20)</td>
+              <td style="text-align:center; color:#1d4ed8;">70.0초 (01:10)</td>
+              <td style="text-align:center; color:#0284c7; background:#e0f2fe;">90.9초 (01:31)</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </section>
+
+    <!-- =============================================================== -->
+    <!-- 4. 성별 개인전 평균 소요시간 (막대그래프 + 비교 표)              -->
+    <!-- =============================================================== -->
+    <section class="progress-card-section">
+      <div class="progress-sec-header">
+        <div>
+          <h3>🚻 4. 성별 개인전 평균 소요시간</h3>
+          <span class="progress-sec-sub">남자 01:31 (90.6초) vs 여자 01:31 (91.1초) — 성별 간 차이는 0.5초 이내로 완전히 동일한 템포로 진행</span>
+        </div>
+      </div>
+
+      <div class="charts-two-col">
+        <div class="hbar-chart-box">
+          <h4 class="hbar-chart-title">
+            <span>📊 성별 개인전 전체 평균 소요시간 비교</span>
+            <span style="font-size:11.5px; color:#64748b;">차이 0.5초 (동일)</span>
+          </h4>
+          <div class="hbar-list">
+            <div class="hbar-row">
+              <span class="hbar-label">👨 남자 (70경기)</span>
+              <div class="hbar-track"><div class="hbar-fill" style="width: 88.0%; background:#0284c7;">총 1시간 45분 45초 (6,345초)</div></div>
+              <span class="hbar-val">01:31 (90.6s)</span>
+            </div>
+            <div class="hbar-row">
+              <span class="hbar-label">👩 여자 (61경기)</span>
+              <div class="hbar-track"><div class="hbar-fill" style="width: 88.5%; background:#ec4899;">총 1시간 32분 39초 (5,559초)</div></div>
+              <span class="hbar-val">01:31 (91.1s)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hbar-chart-box" style="display:flex; flex-direction:column; justify-content:center; gap:8px;">
+          <h4 class="hbar-chart-title" style="margin-bottom:4px;">💡 성인부 진행 핵심 결론</h4>
+          <p style="margin:0; font-size:13px; color:#334155; line-height:1.6; font-weight:600;">
+            • <strong>남자 (70경기)</strong>: 평균 <strong>01:31 (90.6초)</strong> / <strong>여자 (61경기)</strong>: 평균 <strong>01:31 (91.1초)</strong><br>
+            • 11:50 휴게 종료 후 3부(#84~#139) 평영·혼계영·자유형 56경기가 지연 없이 정시 페이스로 진행되었으며, 13:07~13:22 15분 휴식 후 혼성 핀계영 300m 2경기를 끝으로 <strong>13:31에 전 경기가 성황리에 종료</strong>되었습니다.
+          </p>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="record-table">
+          <thead>
+            <tr>
+              <th style="width: 120px; text-align:center;">성별</th>
+              <th style="width: 100px; text-align:center;">개인전 경기 수</th>
+              <th style="width: 170px; text-align:center;">총 소요시간</th>
+              <th style="width: 140px; text-align:center;">평균 소요시간 (분:초)</th>
+              <th style="width: 110px; text-align:center;">평균 (초)</th>
+              <th style="min-width: 240px; text-align:left;">비고</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="text-align:center; font-weight:700; color:#334155;">남자</td>
+              <td style="text-align:center; font-weight:800;">70경기</td>
+              <td style="text-align:center; font-weight:700;">1시간 45분 45초 (6,345초)</td>
+              <td style="text-align:center; font-weight:900; color:#0284c7;">01:31</td>
+              <td style="text-align:center; font-weight:800;">90.6초</td>
+              <td style="text-align:left; font-size:12.5px; color:#334155;">3·4·5그룹 주력 출전, 전 종목 일정한 진행 속도 유지</td>
+            </tr>
+            <tr>
+              <td style="text-align:center; font-weight:700; color:#334155;">여자</td>
+              <td style="text-align:center; font-weight:800;">61경기</td>
+              <td style="text-align:center; font-weight:700;">1시간 32분 39초 (5,559초)</td>
+              <td style="text-align:center; font-weight:900; color:#db2777;">01:31</td>
+              <td style="text-align:center; font-weight:800;">91.1초</td>
+              <td style="text-align:left; font-size:12.5px; color:#334155;">남자부와 0.5초 차이로 사실상 동일한 경기 진행 템포 기록</td>
+            </tr>
+            <tr style="background:#f8fafc; font-weight:900;">
+              <td style="text-align:center; color:#0f172a;">개인전 전체</td>
+              <td style="text-align:center; color:#0f172a;">131경기</td>
+              <td style="text-align:center; color:#0f172a;">3시간 18분 24초 (11,904초)</td>
+              <td style="text-align:center; color:#0f172a;">01:31</td>
+              <td style="text-align:center; color:#0f172a;">90.9초</td>
+              <td style="text-align:left; font-size:12.5px; color:#475569;">학생부 개인전 평균(94.3초) 대비 경기당 3.4초 빠르게 진행</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  `;
+}
+
 function renderProgressSummaryView() {
   const container = document.getElementById("viewContainerProgress");
   if (!container) return;
 
   if (currentDivision === "adult") {
-    container.innerHTML = `
-      <section class="pending-update-card">
-        <span class="pending-icon">⏱️</span>
-        <h3 class="pending-title">성인부 (25일) 진행 요약 — 추후 업데이트 예정</h3>
-        <p class="pending-desc" style="margin-bottom: 0;">
-          성인부 경기는 <strong>2026년 10월 25일(일) 08:30</strong>부터 진행됩니다.<br>
-          전 경기 종료 후 실제 경기 타임라인, 영법별·그룹별·성별 평균 소요시간 분석 데이터가 이곳에 업데이트될 예정입니다.
-        </p>
-      </section>
-    `;
+    renderAdultProgressSummaryView(container);
     return;
   }
 
@@ -1322,6 +1844,57 @@ let rawSheetTeamFilter = "all";
 let rawSheetRankFilter = "all";
 let rawSheetSearchQuery = "";
 
+let ourTeamRecordSortMode = "default";  // 'default' | 'record_asc' | 'record_desc'
+let rawSheetRecordSortMode = "default"; // 'default' | 'record_asc' | 'record_desc'
+let adultResRecordSortMode = "default"; // 'default' | 'record_asc' | 'record_desc'
+
+function cycleRecordSortMode(mode) {
+  if (mode === "default") return "record_asc";
+  if (mode === "record_asc") return "record_desc";
+  return "default";
+}
+
+function getRecordSortHeaderLabel(baseLabel, mode) {
+  if (mode === "record_asc") return `${baseLabel} ▲`;
+  if (mode === "record_desc") return `${baseLabel} ▼`;
+  return `${baseLabel} ↕`;
+}
+
+function getRecordSortButtonLabel(mode) {
+  if (mode === "record_asc") return "⏱️ 기록 오름차순 ▲ (적용중)";
+  if (mode === "record_desc") return "⏱️ 기록 내림차순 ▼ (적용중)";
+  return "⏱️ 기록 오름차순 정렬";
+}
+
+function getSortableRecordSecForSheetRow(row) {
+  if (!row) return null;
+  const rStr = String(row.rank ?? "").trim();
+  if (rStr === "실격" || rStr === "불참") return null;
+  if (isAdultNoteExcludedFromRanking(row.note, row.record)) return null;
+  const sec = parseRecordToSeconds(row.record) ?? parseAdultRecordInputToSeconds(row.record);
+  return (sec !== null && sec > 0) ? sec : null;
+}
+
+function sortRowsByRecordMode(rows, mode, getSecFn) {
+  if (!mode || mode === "default") return rows;
+  const cloned = [...rows];
+  cloned.sort((a, b) => {
+    const sA = getSecFn(a);
+    const sB = getSecFn(b);
+    const validA = sA !== null && Number.isFinite(sA) && sA > 0;
+    const validB = sB !== null && Number.isFinite(sB) && sB > 0;
+    if (validA && !validB) return -1;
+    if (!validA && validB) return 1;
+    if (!validA && !validB) {
+      return (a.raceIndex || 0) - (b.raceIndex || 0) || (a.lane || 0) - (b.lane || 0);
+    }
+    const diff = mode === "record_asc" ? (sA - sB) : (sB - sA);
+    if (Math.abs(diff) > 1e-6) return diff;
+    return (a.raceIndex || 0) - (b.raceIndex || 0) || (a.lane || 0) - (b.lane || 0);
+  });
+  return cloned;
+}
+
 const OUR_TEAM_COLUMNS = [
   { key: "matchNo", label: "경기번호", width: "74px", align: "center" },
   { key: "stroke",  label: "종목",     width: "110px", align: "center" },
@@ -1591,12 +2164,20 @@ function getStudentPlaybackRaceLabel(raceIdx) {
 
 function updateStudentPlaybackControlsDOM() {
   const playBtn = document.getElementById("btnStudentPlaybackToggle");
+  const prevBtn = document.getElementById("btnStudentPlaybackPrev");
+  const nextBtn = document.getElementById("btnStudentPlaybackNext");
   const slider = document.getElementById("studentPlaybackSlider");
   const infoEl = document.getElementById("studentPlaybackMatchInfo");
 
   if (playBtn) {
     playBtn.classList.toggle("is-playing", isStudentPlaybackRunning);
     playBtn.innerHTML = isStudentPlaybackRunning ? "⏸️ 일시정지" : "▶️ 재생";
+  }
+  if (prevBtn) {
+    prevBtn.disabled = studentPlaybackRaceIndex <= 0;
+  }
+  if (nextBtn) {
+    nextBtn.disabled = studentPlaybackRaceIndex >= STUDENT_TOTAL_RACES;
   }
   if (slider && Number(slider.value) !== studentPlaybackRaceIndex) {
     slider.value = String(studentPlaybackRaceIndex);
@@ -1710,14 +2291,15 @@ function updateStudentHBarChartSmooth(progressVal) {
   const existingRows = hbarBox.querySelectorAll(".adult-hbar-row[data-student-vbar-team]");
   if (existingRows.length !== displayStandings.length) {
     hbarBox.innerHTML = displayStandings.map((c, idx) => {
-      const rowHighlight = c.isOurTeam ? "background:#f0f9ff; border:1px solid #7dd3fc;" : "";
+      const rowHighlight = c.isOurTeam ? "background:#fff7ed; border:1px solid #fdba74;" : "";
+      const barColorCls = c.isOurTeam ? "is-our-orange" : "is-blue";
       return `
-        <div class="adult-hbar-row" style="${rowHighlight} transform:translate3d(0, ${idx * HBAR_ROW_STRIDE}px, 0);" data-student-vbar-team="${escapeHtml(c.team)}" title="클릭 시 [${escapeHtml(c.team)}] 기록지 필터링">
-          <span class="adult-hbar-team" data-role="team-label" style="color:${c.isOurTeam ? "#0369a1" : "#0f172a"};"></span>
+        <div class="adult-hbar-row" style="${rowHighlight} transform:translate3d(0, ${idx * HBAR_ROW_STRIDE}px, 0);" data-student-vbar-team="${escapeHtml(c.team)}">
+          <span class="adult-hbar-team" data-role="team-label" style="color:${c.isOurTeam ? "#c2410c" : "#0f172a"};"></span>
           <div class="adult-hbar-track">
-            <div class="adult-hbar-fill is-blue" data-role="bar-fill" style="width:0%;"></div>
+            <div class="adult-hbar-fill ${barColorCls}" data-role="bar-fill" style="width:0%;"></div>
           </div>
-          <span class="adult-hbar-score" data-role="score-label" style="color:${c.isOurTeam ? "#0284c7" : "#0f172a"};">0점</span>
+          <span class="adult-hbar-score" data-role="score-label" style="color:${c.isOurTeam ? "#c2410c" : "#0f172a"};">0점</span>
         </div>
       `;
     }).join("");
@@ -1735,13 +2317,7 @@ function updateStudentHBarChartSmooth(progressVal) {
     const widthPct = c.interpPoints > 0
       ? Math.min(100, Math.max(0.35, (c.interpPoints / finalMaxPts) * 100))
       : 0;
-    const barColorCls = idx === 0
-      ? "is-gold"
-      : idx === 1
-        ? "is-silver"
-        : idx === 2
-          ? "is-bronze"
-          : "is-blue";
+    const barColorCls = c.isOurTeam ? "is-our-orange" : "is-blue";
 
     rowEl.style.transform = `translate3d(0, ${idx * HBAR_ROW_STRIDE}px, 0)`;
     rowEl.classList.toggle("is-active-filter", rawSheetTeamFilter === c.team);
@@ -1774,7 +2350,7 @@ function renderStudentMedalTableAtRace(raceIdx) {
     const teamTextColor = c.team === "거제몽꾸" ? "#c2410c" : c.team === "거제야르" ? "#0369a1" : "#334155";
 
     return `
-      <tr class="${rowCls}" data-student-vbar-team="${escapeHtml(c.team)}" title="클릭 시 [${escapeHtml(c.team)}] 기록지 필터링">
+      <tr class="${rowCls}" data-student-vbar-team="${escapeHtml(c.team)}">
         <td style="text-align:center; font-weight:800; color:${c.isOurTeam ? "#0284c7" : "#475569"}; font-variant-numeric:tabular-nums;">${idx + 1}</td>
         <td style="text-align:left; font-weight:${c.isOurTeam ? "900" : "700"}; color:${teamTextColor};">${escapeHtml(c.team)}</td>
         <td style="text-align:center; font-weight:800; color:${c.gold > 0 ? "#b45309" : "#cbd5e1"}; font-variant-numeric:tabular-nums;">${c.gold}</td>
@@ -1955,9 +2531,22 @@ function renderOurTeamResultRows() {
 
   thead.innerHTML = `
     <tr>
-      ${activeCols.map(c => `<th style="width:${c.width}; text-align:${c.align};">${escapeHtml(c.label)}</th>`).join("")}
+      ${activeCols.map(c => {
+        if (c.key === "record") {
+          const isSorted = ourTeamRecordSortMode !== "default";
+          const lbl = getRecordSortHeaderLabel(c.label, ourTeamRecordSortMode);
+          return `<th class="th-sortable-record ${isSorted ? "is-sorted" : ""}" data-our-record-sort-th="1" style="width:${c.width}; text-align:${c.align};" title="클릭하여 기록순 정렬 (오름차순 ▲ / 내림차순 ▼ / 기본순)">${escapeHtml(lbl)}</th>`;
+        }
+        return `<th style="width:${c.width}; text-align:${c.align};">${escapeHtml(c.label)}</th>`;
+      }).join("")}
     </tr>
   `;
+
+  const ourSortBtn = document.getElementById("btnOurTeamSortRecordAsc");
+  if (ourSortBtn) {
+    ourSortBtn.classList.toggle("is-active-sort", ourTeamRecordSortMode !== "default");
+    ourSortBtn.textContent = getRecordSortButtonLabel(ourTeamRecordSortMode);
+  }
 
   const allOurEntries = isAdult ? buildAdultOurTeamFullEntriesWithResults() : buildOurTeamFullEntriesWithResults();
   let filtered = allOurEntries;
@@ -1983,6 +2572,8 @@ function renderOurTeamResultRows() {
       countBadge.textContent = `${filtered.length}건 표시 중 (거제야르 전체 53출전 100% 확인 완료 · 입상 12건 · 메달 5건)`;
     }
   }
+
+  filtered = sortRowsByRecordMode(filtered, ourTeamRecordSortMode, getSortableRecordSecForSheetRow);
 
   if (activeCols.length === 0) {
     tbody.innerHTML = `
@@ -2044,7 +2635,7 @@ function renderOurTeamResultRows() {
     };
 
     return `
-      <tr style="${rowBg}">
+      <tr style="${rowBg}" data-row-stroke="${escapeHtml(item.stroke)}" data-row-match="${escapeHtml(item.matchNo)}">
         ${activeCols.map(c => cellMap[c.key]).join("")}
       </tr>
     `;
@@ -2061,9 +2652,26 @@ function renderAllVerifiedSheetRows() {
 
   thead.innerHTML = `
     <tr>
-      ${activeCols.map(c => `<th style="width:${c.width}; text-align:${c.align};">${escapeHtml(c.label)}</th>`).join("")}
+      ${activeCols.map(c => {
+        if (c.key === "record") {
+          const isSorted = rawSheetRecordSortMode !== "default";
+          const lbl = getRecordSortHeaderLabel(c.label, rawSheetRecordSortMode);
+          return `<th class="th-sortable-record ${isSorted ? "is-sorted" : ""}" data-raw-record-sort-th="1" style="width:${c.width}; text-align:${c.align};" title="클릭하여 기록순 정렬 (오름차순 ▲ / 내림차순 ▼ / 기본순)">${escapeHtml(lbl)}</th>`;
+        }
+        return `<th style="width:${c.width}; text-align:${c.align};">${escapeHtml(c.label)}</th>`;
+      }).join("")}
     </tr>
   `;
+
+  const rawSortBtn = document.getElementById("btnRawSheetSortRecordAsc");
+  if (rawSortBtn) {
+    rawSortBtn.classList.toggle("is-active-sort", rawSheetRecordSortMode !== "default");
+    rawSortBtn.textContent = getRecordSortButtonLabel(rawSheetRecordSortMode);
+  }
+  const rawSortSel = document.getElementById("rawSheetSortSelect");
+  if (rawSortSel && rawSortSel.value !== rawSheetRecordSortMode) {
+    rawSortSel.value = rawSheetRecordSortMode;
+  }
 
   let list = [...VERIFIED_SHEET_RESULTS];
 
@@ -2096,8 +2704,10 @@ function renderAllVerifiedSheetRows() {
     );
   }
 
+  list = sortRowsByRecordMode(list, rawSheetRecordSortMode, getSortableRecordSecForSheetRow);
+
   if (titleEl) {
-    titleEl.textContent = `📄 5. 학생부 공식 기록지 원문 전체 데이터 조회 (${list.length}건 표시 중 / 전체 ${VERIFIED_SHEET_RESULTS.length}건)`;
+    titleEl.textContent = `📄 학생부 공식 기록지 원문 전체 데이터 조회 (${list.length}건 표시 중 / 전체 ${VERIFIED_SHEET_RESULTS.length}건)`;
   }
 
   if (activeCols.length === 0) {
@@ -2166,7 +2776,7 @@ function renderAllVerifiedSheetRows() {
     };
 
     return `
-      <tr class="${rowCls}">
+      <tr class="${rowCls}" data-row-stroke="${escapeHtml(r.stroke)}" data-row-match="${escapeHtml(r.matchNo)}">
         ${activeCols.map(c => cellMap[c.key]).join("")}
       </tr>
     `;
@@ -2249,7 +2859,7 @@ function renderResultAnalysisView() {
       <div class="progress-sec-header">
         <div>
           <h3>📊 1. 학생부 참가 클럽별 점수 및 메달·우승 집계 (전 경기 232레이스 · 843엔트리 공식 결과)</h3>
-          <span class="progress-sec-sub">재생 버튼을 누르면 경기번호가 진행됨(1~232경기)에 따라 19개 클럽의 점수 변화를 보여주며, 1·2·3등은 금·은·동 색, 나머지는 파란색 막대로 표시됩니다.</span>
+          <span class="progress-sec-sub">재생 버튼을 누르면 경기번호가 진행됨(1~232경기)에 따라 19개 클럽의 점수 변화를 보여주며, 우리팀(거제야르)은 주황색 하이라이트, 다른 팀은 파란색 막대로 표시됩니다.</span>
         </div>
         <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
           <span class="adult-sync-badge is-synced">✅ 공식 기록지 843 / 843건 (100% 반영 완료)</span>
@@ -2261,6 +2871,8 @@ function renderResultAnalysisView() {
         <div class="adult-playback-controls">
           <button type="button" class="btn-adult-play" id="btnStudentPlaybackToggle">▶️ 재생</button>
           <button type="button" class="btn-adult-step" id="btnStudentPlaybackReset" title="0번 초기 상태로 이동">⏮️ 처음</button>
+          <button type="button" class="btn-adult-step" id="btnStudentPlaybackPrev" title="한 스텝(1경기) 이전으로 이동">◀ 이전</button>
+          <button type="button" class="btn-adult-step" id="btnStudentPlaybackNext" title="한 스텝(1경기) 이후로 이동">다음 ▶</button>
           <button type="button" class="btn-adult-step" id="btnStudentPlaybackEnd" title="최종 경기로 이동">⏭️ 최종</button>
           <button type="button" class="btn-adult-mp4" id="btnStudentDownloadMp4" title="유튜브 업로드용 Full HD(1920×1080, 16:9, 60fps) 고화질 MP4 영상으로 다운로드합니다">🎬 HD MP4 저장 (1080p)</button>
         </div>
@@ -2472,6 +3084,7 @@ function renderResultAnalysisView() {
           ${ourColToggleChipsHtml}
         </div>
         <div class="col-toggle-presets">
+          <button type="button" class="col-preset-btn ${ourTeamRecordSortMode !== "default" ? "is-active-sort" : ""}" id="btnOurTeamSortRecordAsc" title="빠른 기록(오름차순)으로 정렬">${getRecordSortButtonLabel(ourTeamRecordSortMode)}</button>
           <button type="button" class="col-preset-btn" data-our-col-preset="all">전체 열 표시</button>
           <button type="button" class="col-preset-btn" data-our-col-preset="compact">핵심 열만 (모바일 추천)</button>
         </div>
@@ -2500,90 +3113,11 @@ function renderResultAnalysisView() {
       </div>
     </section>
 
-    <!-- =============================================================== -->
-    <!-- 5. 공식 기록지 원문 전체 데이터 조회 (843개 레이스 엔트리)      -->
-    <!-- =============================================================== -->
-    <section class="progress-card-section" id="studentRawSheetSection">
-      <div class="progress-sec-header">
-        <div>
-          <h3 id="verifiedSheetTableTitle">📄 5. 학생부 공식 기록지 원문 전체 데이터 조회 (843건)</h3>
-          <span class="progress-sec-sub">성별·그룹 및 점수·비고 분리 / 레인·순위는 숫자만 출력 / 상단 클럽 막대나 집계표 행을 클릭하면 해당 클럽으로 자동 필터링됩니다.</span>
-        </div>
-      </div>
-
-      <!-- 표시 열(항목) 선택 체크박스 칩 바 + 원클릭 프리셋 -->
-      <div class="col-toggle-bar" id="rawSheetColToggleBar">
-        <div class="col-toggle-left">
-          <span class="col-toggle-label">☑️ 표시 열 항목:</span>
-          ${colToggleChipsHtml}
-        </div>
-        <div class="col-toggle-presets">
-          <button type="button" class="col-preset-btn" data-col-preset="all">전체 열 표시</button>
-          <button type="button" class="col-preset-btn" data-col-preset="compact">핵심 열만 (모바일 추천)</button>
-        </div>
-      </div>
-
-      <section class="toolbar" style="margin-bottom: 12px;">
-        <div class="toolbar-left">
-          <div class="search-box">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="11" cy="11" r="8"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-            <input type="text" id="rawSheetSearchInput" placeholder="선수 이름, 소속팀, 경기번호(예: 45-2) 검색..." autocomplete="off" value="${escapeHtml(rawSheetSearchQuery)}">
-          </div>
-
-          <div class="filter-group">
-            <select id="rawSheetStrokeSelect" class="filter-select" aria-label="기록지 종목 필터">
-              <option value="all" ${rawSheetStrokeFilter === "all" ? "selected" : ""}>전체 종목 (6종목)</option>
-              <option value="계영 200m" ${rawSheetStrokeFilter === "계영 200m" ? "selected" : ""}>계영 200m (단체)</option>
-              <option value="접영" ${rawSheetStrokeFilter === "접영" ? "selected" : ""}>접영 50m</option>
-              <option value="배영" ${rawSheetStrokeFilter === "배영" ? "selected" : ""}>배영 50m</option>
-              <option value="평영" ${rawSheetStrokeFilter === "평영" ? "selected" : ""}>평영 50m</option>
-              <option value="자유형" ${rawSheetStrokeFilter === "자유형" ? "selected" : ""}>자유형 50m</option>
-              <option value="혼계영 200m" ${rawSheetStrokeFilter === "혼계영 200m" ? "selected" : ""}>혼계영 200m (단체)</option>
-            </select>
-          </div>
-
-          <div class="filter-group">
-            <select id="rawSheetGroupSelect" class="filter-select" aria-label="기록지 그룹 필터">
-              <option value="all" ${rawSheetGroupFilter === "all" ? "selected" : ""}>모든 성별·그룹</option>
-              ${uniqueGroups.map(g => `<option value="${escapeHtml(g)}" ${rawSheetGroupFilter === g ? "selected" : ""}>${escapeHtml(g)}</option>`).join("")}
-            </select>
-          </div>
-
-          <div class="filter-group">
-            <select id="rawSheetTeamSelect" class="filter-select" aria-label="기록지 소속팀 필터">
-              <option value="all" ${rawSheetTeamFilter === "all" ? "selected" : ""}>모든 소속팀</option>
-              <option value="거제야르" ${rawSheetTeamFilter === "거제야르" ? "selected" : ""}>🏊 거제야르 (우리팀)</option>
-              ${uniqueTeams.filter(t => t !== "거제야르").map(t => `<option value="${escapeHtml(t)}" ${rawSheetTeamFilter === t ? "selected" : ""}>${escapeHtml(t)}</option>`).join("")}
-            </select>
-          </div>
-
-          <div class="filter-group">
-            <select id="rawSheetRankSelect" class="filter-select" aria-label="기록지 순위 필터">
-              <option value="all" ${rawSheetRankFilter === "all" ? "selected" : ""}>전체 순위 결과</option>
-              <option value="top6" ${rawSheetRankFilter === "top6" ? "selected" : ""}>🏅 1~6위 입상(득점)자만</option>
-              <option value="medal" ${rawSheetRankFilter === "medal" ? "selected" : ""}>🥇🥈🥉 1~3위 메달리스트만</option>
-              <option value="dq_dns" ${rawSheetRankFilter === "dq_dns" ? "selected" : ""}>⚠️ 실격 · 불참만</option>
-            </select>
-          </div>
-        </div>
-      </section>
-
-      <div class="table-responsive">
-        <table class="record-table">
-          <thead id="verifiedSheetTableHead"></thead>
-          <tbody id="verifiedSheetTableBody"></tbody>
-        </table>
-      </div>
-    </section>
   `;
 
   renderStudentStandingsAndChartForCurrentStep();
   updateStudentPlaybackControlsDOM();
   renderOurTeamResultRows();
-  renderAllVerifiedSheetRows();
 }
 
 // ==========================================================================
@@ -2793,7 +3327,7 @@ function startAdultResultsFirestoreListener() {
 
       if (hasChanged) {
         saveAdultResultsToLocal();
-        if (currentDivision === "adult" && currentSubTab === "result") {
+        if (currentDivision === "adult" && (currentSubTab === "result" || currentSubTab === "records")) {
           patchAdultInputsAndResultsFromState();
         }
       }
@@ -3116,12 +3650,20 @@ function getAdultPlaybackRaceLabel(raceIdx) {
 
 function updateAdultPlaybackControlsDOM() {
   const playBtn = document.getElementById("btnAdultPlaybackToggle");
+  const prevBtn = document.getElementById("btnAdultPlaybackPrev");
+  const nextBtn = document.getElementById("btnAdultPlaybackNext");
   const slider = document.getElementById("adultPlaybackSlider");
   const infoEl = document.getElementById("adultPlaybackMatchInfo");
 
   if (playBtn) {
     playBtn.classList.toggle("is-playing", isAdultPlaybackRunning);
     playBtn.innerHTML = isAdultPlaybackRunning ? "⏸️ 일시정지" : "▶️ 재생";
+  }
+  if (prevBtn) {
+    prevBtn.disabled = adultPlaybackRaceIndex <= 0;
+  }
+  if (nextBtn) {
+    nextBtn.disabled = adultPlaybackRaceIndex >= ADULT_TOTAL_RACES;
   }
   if (slider && Number(slider.value) !== adultPlaybackRaceIndex) {
     slider.value = String(adultPlaybackRaceIndex);
@@ -3235,18 +3777,15 @@ function updateAdultHBarChartSmooth(progressVal) {
   const existingRows = hbarBox.querySelectorAll(".adult-hbar-row[data-adult-vbar-team]");
   if (existingRows.length !== displayStandings.length) {
     hbarBox.innerHTML = displayStandings.map((c, idx) => {
-      const rowHighlight = c.team === "거제몽꾸"
-        ? "background:#fff7ed; border:1px solid #fdba74;"
-        : c.team === "거제야르"
-          ? "background:#f0f9ff; border:1px solid #7dd3fc;"
-          : "";
-      const teamColor = c.team === "거제몽꾸" ? "#c2410c" : c.team === "거제야르" ? "#0369a1" : "#0f172a";
-      const scoreColor = c.team === "거제몽꾸" ? "#c2410c" : c.team === "거제야르" ? "#0284c7" : "#0f172a";
+      const rowHighlight = c.isOurTeam ? "background:#fff7ed; border:1px solid #fdba74;" : "";
+      const teamColor = c.isOurTeam ? "#c2410c" : "#0f172a";
+      const scoreColor = c.isOurTeam ? "#c2410c" : "#0f172a";
+      const barColorCls = c.isOurTeam ? "is-our-orange" : "is-blue";
       return `
-        <div class="adult-hbar-row" style="${rowHighlight} transform:translate3d(0, ${idx * HBAR_ROW_STRIDE}px, 0);" data-adult-vbar-team="${escapeHtml(c.team)}" title="클릭 시 [${escapeHtml(c.team)}] 대진표 필터링">
+        <div class="adult-hbar-row" style="${rowHighlight} transform:translate3d(0, ${idx * HBAR_ROW_STRIDE}px, 0);" data-adult-vbar-team="${escapeHtml(c.team)}">
           <span class="adult-hbar-team" data-role="team-label" style="color:${teamColor};"></span>
           <div class="adult-hbar-track">
-            <div class="adult-hbar-fill is-blue" data-role="bar-fill" style="width:0%;"></div>
+            <div class="adult-hbar-fill ${barColorCls}" data-role="bar-fill" style="width:0%;"></div>
           </div>
           <span class="adult-hbar-score" data-role="score-label" style="color:${scoreColor};">0점</span>
         </div>
@@ -3266,13 +3805,7 @@ function updateAdultHBarChartSmooth(progressVal) {
     const widthPct = c.interpPoints > 0
       ? Math.min(100, Math.max(0.35, (c.interpPoints / finalMaxPts) * 100))
       : 0;
-    const barColorCls = idx === 0
-      ? "is-gold"
-      : idx === 1
-        ? "is-silver"
-        : idx === 2
-          ? "is-bronze"
-          : "is-blue";
+    const barColorCls = c.isOurTeam ? "is-our-orange" : "is-blue";
 
     rowEl.style.transform = `translate3d(0, ${idx * HBAR_ROW_STRIDE}px, 0)`;
     rowEl.classList.toggle("is-active-filter", adultResTeamFilter === c.team);
@@ -3319,7 +3852,7 @@ function renderAdultMedalTableAtRace(raceIdx) {
         : "#334155";
 
     return `
-      <tr class="${rowCls}" data-adult-vbar-team="${escapeHtml(c.team)}" title="클릭 시 [${escapeHtml(c.team)}] 대진표 필터링">
+      <tr class="${rowCls}" data-adult-vbar-team="${escapeHtml(c.team)}">
         <td style="text-align:center; font-weight:800; color:#475569; font-variant-numeric:tabular-nums;">${idx + 1}</td>
         <td style="text-align:left; font-weight:${c.isOurTeam ? "900" : "700"}; color:${teamTextColor};">${escapeHtml(c.team)}</td>
         <td style="text-align:center; font-weight:800; color:${c.gold > 0 ? "#b45309" : "#cbd5e1"}; font-variant-numeric:tabular-nums;">${c.gold}</td>
@@ -3536,32 +4069,21 @@ function renderBarRaceFrameToCanvas(ctx, cfg) {
     const rowPad = isAdult ? 8 : 4;
     const rowH = barHeight + rowPad * 2;
 
-    // 우리팀 행 하이라이트 배경
-    if (c.team === "거제몽꾸") {
+    // 우리팀(거제몽꾸·거제야르) 행 주황색 하이라이트 배경
+    if (c.isOurTeam) {
       drawRoundedRectPath(ctx, 42, currY - rowPad, W - 84, rowH, 10);
       ctx.fillStyle = "#fff7ed";
       ctx.fill();
       ctx.strokeStyle = "#fdba74";
       ctx.lineWidth = 2;
       ctx.stroke();
-    } else if (c.team === "거제야르") {
-      drawRoundedRectPath(ctx, 42, currY - rowPad, W - 84, rowH, 10);
-      ctx.fillStyle = "#f0f9ff";
-      ctx.fill();
-      ctx.strokeStyle = "#7dd3fc";
-      ctx.lineWidth = 2;
-      ctx.stroke();
     }
 
     const centerY = currY + barHeight / 2;
 
-    // 클럽명 텍스트 (단순 텍스트 + 거제몽꾸/거제야르 팀 컬러)
+    // 클럽명 텍스트 (우리팀 주황색 하이라이트 / 다른 팀 기본 진회색)
     ctx.font = `${c.isOurTeam ? "900" : "800"} ${fontSizeLabel}px ${fontStack}`;
-    ctx.fillStyle = c.team === "거제몽꾸"
-      ? "#c2410c"
-      : c.team === "거제야르"
-        ? "#0369a1"
-        : "#0f172a";
+    ctx.fillStyle = c.isOurTeam ? "#c2410c" : "#0f172a";
     ctx.textAlign = "left";
     ctx.textBaseline = "middle";
     const teamLabel = `${idx + 1}. ${c.team}`;
@@ -3572,20 +4094,14 @@ function renderBarRaceFrameToCanvas(ctx, cfg) {
     ctx.fillStyle = "#e2e8f0";
     ctx.fill();
 
-    // 막대 채우기 (최종 최대값 finalMaxPts 고정 기준)
+    // 막대 채우기 (우리팀: 주황색 / 다른 팀: 파란색 통일)
     const ratio = finalMaxPts > 0 ? Math.max(0, Math.min(1, c.interpPoints / finalMaxPts)) : 0;
     const fillW = c.interpPoints > 0 ? Math.max(6, trackW * ratio) : 0;
     if (fillW > 0) {
       const grad = ctx.createLinearGradient(trackX, 0, trackX + fillW, 0);
-      if (idx === 0) {
-        grad.addColorStop(0, "#eab308");
-        grad.addColorStop(1, "#facc15");
-      } else if (idx === 1) {
-        grad.addColorStop(0, "#94a3b8");
-        grad.addColorStop(1, "#cbd5e1");
-      } else if (idx === 2) {
-        grad.addColorStop(0, "#b45309");
-        grad.addColorStop(1, "#f59e0b");
+      if (c.isOurTeam) {
+        grad.addColorStop(0, "#ea580c");
+        grad.addColorStop(1, "#f97316");
       } else {
         grad.addColorStop(0, "#1d4ed8");
         grad.addColorStop(1, "#3b82f6");
@@ -3597,11 +4113,7 @@ function renderBarRaceFrameToCanvas(ctx, cfg) {
 
     // 점수 텍스트
     ctx.font = `900 ${fontSizeScore}px ${fontStack}`;
-    ctx.fillStyle = c.team === "거제몽꾸"
-      ? "#c2410c"
-      : c.team === "거제야르"
-        ? "#0284c7"
-        : "#0f172a";
+    ctx.fillStyle = c.isOurTeam ? "#c2410c" : "#0f172a";
     ctx.textAlign = "right";
     ctx.fillText(`${c.displayPoints}점`, scoreColRightX, centerY);
   }
@@ -4033,9 +4545,26 @@ function renderAdultScheduleTableRows() {
   const activeCols = ADULT_RESULT_COLUMNS.filter(c => visibleAdultResultCols.has(c.key));
   thead.innerHTML = `
     <tr>
-      ${activeCols.map(c => `<th style="width:${c.width}; text-align:${c.align};">${escapeHtml(c.label)}</th>`).join("")}
+      ${activeCols.map(c => {
+        if (c.key === "sec") {
+          const isSorted = adultResRecordSortMode !== "default";
+          const lbl = getRecordSortHeaderLabel(c.label, adultResRecordSortMode);
+          return `<th class="th-sortable-record ${isSorted ? "is-sorted" : ""}" data-adult-record-sort-th="1" style="width:${c.width}; text-align:${c.align};" title="클릭하여 기록순 정렬 (오름차순 ▲ / 내림차순 ▼ / 기본순)">${escapeHtml(lbl)}</th>`;
+        }
+        return `<th style="width:${c.width}; text-align:${c.align};">${escapeHtml(c.label)}</th>`;
+      }).join("")}
     </tr>
   `;
+
+  const adultSortBtn = document.getElementById("btnAdultResSortRecordAsc");
+  if (adultSortBtn) {
+    adultSortBtn.classList.toggle("is-active-sort", adultResRecordSortMode !== "default");
+    adultSortBtn.textContent = getRecordSortButtonLabel(adultResRecordSortMode);
+  }
+  const adultSortSel = document.getElementById("adultResSortSelect");
+  if (adultSortSel && adultSortSel.value !== adultResRecordSortMode) {
+    adultSortSel.value = adultResRecordSortMode;
+  }
 
   let list = [...calcMap.values()];
 
@@ -4083,8 +4612,14 @@ function renderAdultScheduleTableRows() {
     );
   }
 
+  list = sortRowsByRecordMode(
+    list,
+    adultResRecordSortMode,
+    (r) => (!r.isExcluded && r.secNum !== null && r.secNum > 0 ? r.secNum : null)
+  );
+
   if (titleEl) {
-    titleEl.textContent = `📋 5. 성인부 공식 기록지 및 대진표 상세분석 (${list.length}건 표시 중 / 전체 ${totalCount}건)`;
+    titleEl.textContent = `📋 성인부 공식 기록지 원문 전체 데이터 조회 (${list.length}건 표시 중 / 전체 ${totalCount}건)`;
   }
 
   if (activeCols.length === 0) {
@@ -4136,7 +4671,7 @@ function renderAdultScheduleTableRows() {
     };
 
     return `
-      <tr class="${rowCls}" data-adult-entry-key="${escapeHtml(r.entryKey)}">
+      <tr class="${rowCls}" data-adult-entry-key="${escapeHtml(r.entryKey)}" data-row-stroke="${escapeHtml(r.strokeRaw)}" data-row-match="${escapeHtml(r.matchNo)}">
         ${activeCols.map(c => cellMap[c.key]).join("")}
       </tr>
     `;
@@ -4177,7 +4712,7 @@ function renderAdultResultAnalysisView(container) {
       <div class="progress-sec-header">
         <div>
           <h3>📊 1. 성인부 팀별 점수 및 메달·우승 집계 (전 경기 141레이스 · 492엔트리 공식 결과)</h3>
-          <span class="progress-sec-sub">재생 버튼을 누르면 경기번호가 진행됨(1~141경기)에 따라 팀별 점수 변화를 보여주며, 1·2·3등은 금·은·동 색, 나머지는 파란색 막대로 표시됩니다.</span>
+          <span class="progress-sec-sub">재생 버튼을 누르면 경기번호가 진행됨(1~141경기)에 따라 팀별 점수 변화를 보여주며, 우리팀(거제몽꾸·거제야르)은 주황색 하이라이트, 다른 팀은 파란색 막대로 표시됩니다.</span>
         </div>
         <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
           <span id="adultResultEnteredProgressBadge" class="adult-sync-badge" style="background:#eff6ff; border-color:#bfdbfe; color:#1d4ed8;">기록 입력: 492 / 492건 (100.0%)</span>
@@ -4190,6 +4725,8 @@ function renderAdultResultAnalysisView(container) {
         <div class="adult-playback-controls">
           <button type="button" class="btn-adult-play" id="btnAdultPlaybackToggle">▶️ 재생</button>
           <button type="button" class="btn-adult-step" id="btnAdultPlaybackReset" title="0번 초기 상태로 이동">⏮️ 처음</button>
+          <button type="button" class="btn-adult-step" id="btnAdultPlaybackPrev" title="한 스텝(1경기) 이전으로 이동">◀ 이전</button>
+          <button type="button" class="btn-adult-step" id="btnAdultPlaybackNext" title="한 스텝(1경기) 이후로 이동">다음 ▶</button>
           <button type="button" class="btn-adult-step" id="btnAdultPlaybackEnd" title="최종 경기로 이동">⏭️ 최종</button>
           <button type="button" class="btn-adult-mp4" id="btnAdultDownloadMp4" title="유튜브 업로드용 Full HD(1920×1080, 16:9, 60fps) 고화질 MP4 영상으로 다운로드합니다">🎬 HD MP4 저장 (1080p)</button>
         </div>
@@ -4425,6 +4962,7 @@ function renderAdultResultAnalysisView(container) {
           ${ourColToggleChipsHtml}
         </div>
         <div class="col-toggle-presets">
+          <button type="button" class="col-preset-btn ${ourTeamRecordSortMode !== "default" ? "is-active-sort" : ""}" id="btnOurTeamSortRecordAsc" title="빠른 기록(오름차순)으로 정렬">${getRecordSortButtonLabel(ourTeamRecordSortMode)}</button>
           <button type="button" class="col-preset-btn" data-our-col-preset="all">전체 열 표시</button>
           <button type="button" class="col-preset-btn" data-our-col-preset="compact">핵심 열만 (모바일 추천)</button>
         </div>
@@ -4453,104 +4991,299 @@ function renderAdultResultAnalysisView(container) {
       </div>
     </section>
 
-    <!-- =============================================================== -->
-    <!-- 5. 성인부 공식 기록지 및 대진표 상세분석 (492건)                -->
-    <!-- =============================================================== -->
-    <section class="progress-card-section" id="adultScheduleTableSection">
-      <div class="progress-sec-header">
-        <div>
-          <h3 id="adultResultTableTitle">📋 5. 성인부 공식 기록지 및 대진표 상세분석 (492건)</h3>
-          <span class="progress-sec-sub">공식 기록지 492건의 기록과 비고가 모두 반영되어 있으며, 값을 수정하면 타임레이스 기준으로 등수·점수가 즉시 재계산됩니다.</span>
-        </div>
-        <button type="button" class="col-preset-btn" id="btnResetAdultOfficialRecords" title="공식 기록지 원문 기록으로 전체 복원">🔄 공식 기록 원문 복원</button>
-      </div>
-
-      <!-- 표시 열(항목) 선택 체크박스 칩 바 + 원클릭 프리셋 -->
-      <div class="col-toggle-bar" id="adultResultColToggleBar">
-        <div class="col-toggle-left">
-          <span class="col-toggle-label">☑️ 표시 열 항목:</span>
-          ${colToggleChipsHtml}
-        </div>
-        <div class="col-toggle-presets">
-          <button type="button" class="col-preset-btn" data-adult-col-preset="all">전체 열 표시</button>
-          <button type="button" class="col-preset-btn" data-adult-col-preset="compact">핵심 열만 (모바일 추천)</button>
-        </div>
-      </div>
-
-      <section class="toolbar" style="margin-bottom: 12px;">
-        <div class="toolbar-left">
-          <div class="search-box">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="11" cy="11" r="8"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-            <input type="text" id="adultResSearchInput" value="${escapeHtml(adultResSearchQuery)}" placeholder="선수명, 소속팀, 경기번호(#1, #3-1) 검색..." autocomplete="off">
-          </div>
-
-          <div class="filter-group">
-            <select id="adultResStrokeSelect" class="filter-select" aria-label="성인부 종목 필터">
-              <option value="all" ${adultResStrokeFilter === "all" ? "selected" : ""}>전체 종목</option>
-              <option value="핀접영" ${adultResStrokeFilter === "핀접영" ? "selected" : ""}>핀접영 50m</option>
-              <option value="배영" ${adultResStrokeFilter === "배영" ? "selected" : ""}>배영 50m</option>
-              <option value="접영" ${adultResStrokeFilter === "접영" ? "selected" : ""}>접영 50m</option>
-              <option value="핀자유형" ${adultResStrokeFilter === "핀자유형" ? "selected" : ""}>핀자유형 50m</option>
-              <option value="평영" ${adultResStrokeFilter === "평영" ? "selected" : ""}>평영 50m</option>
-              <option value="자유형" ${adultResStrokeFilter === "자유형" ? "selected" : ""}>자유형 50m</option>
-              <option value="RELAY_ALL" ${adultResStrokeFilter === "RELAY_ALL" ? "selected" : ""}>단체전 전체 (계영·혼계영·핀계영)</option>
-            </select>
-          </div>
-
-          <div class="filter-group">
-            <select id="adultResGroupSelect" class="filter-select" aria-label="성인부 그룹 필터">
-              <option value="all" ${adultResGroupFilter === "all" ? "selected" : ""}>모든 그룹</option>
-              ${ADULT_GROUPS.map(g => `<option value="${g}" ${adultResGroupFilter === g ? "selected" : ""}>${g}</option>`).join("")}
-              <option value="단체" ${adultResGroupFilter === "단체" ? "selected" : ""}>단체전</option>
-            </select>
-          </div>
-
-          <div class="filter-group">
-            <select id="adultResGenderSelect" class="filter-select" aria-label="성인부 성별 필터">
-              <option value="all" ${adultResGenderFilter === "all" ? "selected" : ""}>전체 성별</option>
-              <option value="남자" ${adultResGenderFilter === "남자" ? "selected" : ""}>남자</option>
-              <option value="여자" ${adultResGenderFilter === "여자" ? "selected" : ""}>여자</option>
-              <option value="혼성" ${adultResGenderFilter === "혼성" ? "selected" : ""}>혼성</option>
-            </select>
-          </div>
-
-          <div class="filter-group">
-            <select id="adultResTeamSelect" class="filter-select" aria-label="성인부 소속팀 필터">
-              <option value="all" ${adultResTeamFilter === "all" ? "selected" : ""}>모든 소속팀</option>
-              <option value="OUR_ALL" ${adultResTeamFilter === "OUR_ALL" ? "selected" : ""}>🏊 우리팀 전체 (거제몽꾸 + 거제야르)</option>
-              <option value="거제몽꾸" ${adultResTeamFilter === "거제몽꾸" ? "selected" : ""}>🟠 거제몽꾸</option>
-              <option value="거제야르" ${adultResTeamFilter === "거제야르" ? "selected" : ""}>🔵 거제야르</option>
-              ${allTeamNames.filter(t => !OUR_TEAMS.has(t)).map(t => `<option value="${escapeHtml(t)}" ${adultResTeamFilter === t ? "selected" : ""}>${escapeHtml(t)}</option>`).join("")}
-            </select>
-          </div>
-
-          <div class="filter-group">
-            <select id="adultResStatusSelect" class="filter-select" aria-label="성인부 입력 상태 필터">
-              <option value="all" ${adultResStatusFilter === "all" ? "selected" : ""}>전체 엔트리 (492건)</option>
-              <option value="top6" ${adultResStatusFilter === "top6" ? "selected" : ""}>🏅 1~6위 입상(득점)자만</option>
-              <option value="medal" ${adultResStatusFilter === "medal" ? "selected" : ""}>🥇🥈🥉 1~3위 메달리스트만</option>
-              <option value="dq_dns" ${adultResStatusFilter === "dq_dns" ? "selected" : ""}>⚠️ 실격 · 불참만</option>
-            </select>
-          </div>
-        </div>
-      </section>
-
-      <div class="table-responsive">
-        <table class="record-table">
-          <thead id="adultResultScheduleTableHead"></thead>
-          <tbody id="adultResultScheduleTableBody"></tbody>
-        </table>
-      </div>
-    </section>
   `;
 
   updateAdultSyncBadgeDOM();
   renderAdultPodiumCardsDOM();
   renderOurTeamResultRows();
-  renderAdultScheduleTableRows();
+  renderAdultStandingsAndChartForCurrentStep();
+  updateAdultPlaybackControlsDOM();
+}
+
+// ==========================================================================
+// 🗄️ TAB 4: 기록지DB (학생부 843건 / 성인부 492건 공식 기록지 원문 전체 데이터 조회)
+// 상단 Sticky 헤더 + 표시 열 항목 & 검색·필터 모달(모바일 헤더 토글) + Sticky 테이블 헤더
+// ==========================================================================
+let isRecordsDbModalOpen = true;
+
+function syncRecordsDbStickyOffset() {
+  if (currentSubTab !== "records") return;
+  const shell = document.getElementById("recordsDbStickyShell");
+  if (!shell) return;
+  const h = Math.ceil(shell.getBoundingClientRect().height + 28);
+  document.documentElement.style.setProperty("--records-sticky-offset", `${h}px`);
+}
+
+function updateRecordsDbModalToggleDOM() {
+  const modal = document.getElementById("recordsDbControlsModal");
+  const btn = document.getElementById("btnToggleRecordsDbModal");
+  if (modal) {
+    modal.classList.toggle("is-collapsed", !isRecordsDbModalOpen);
+  }
+  if (btn) {
+    btn.classList.toggle("is-open", isRecordsDbModalOpen);
+    btn.setAttribute("aria-expanded", String(isRecordsDbModalOpen));
+    btn.innerHTML = isRecordsDbModalOpen
+      ? `<span class="toggle-icon">🎛️</span><span class="toggle-text">필터·열설정 닫기 ▲</span>`
+      : `<span class="toggle-icon">🎛️</span><span class="toggle-text">필터·열설정 열기 ▼</span>`;
+  }
+  requestAnimationFrame(() => syncRecordsDbStickyOffset());
+}
+
+function renderRecordsDbView() {
+  const container = document.getElementById("viewContainerRecords");
+  if (!container) return;
+
+  if (currentDivision === "adult") {
+    startAdultResultsFirestoreListener();
+    const adultDivData = getDivisionData("adult");
+    const allTeamNames = adultDivData.teams.map(t => t.team);
+
+    const colToggleChipsHtml = ADULT_RESULT_COLUMNS.map(col => {
+      const isChecked = visibleAdultResultCols.has(col.key);
+      return `
+        <label class="col-toggle-chip ${isChecked ? "is-checked" : ""}">
+          <input type="checkbox" data-adult-col-key="${col.key}" ${isChecked ? "checked" : ""}>
+          <span>${escapeHtml(col.label)}</span>
+        </label>
+      `;
+    }).join("");
+
+    container.innerHTML = `
+      <section class="records-db-page-section" id="adultScheduleTableSection">
+        <div class="records-db-sticky-shell" id="recordsDbStickyShell">
+          <div class="records-db-header-bar">
+            <div class="records-db-title-wrap">
+              <h3 id="adultResultTableTitle">📋 성인부 공식 기록지 원문 전체 데이터 조회 (492건 표시 중 / 전체 492건)</h3>
+              <span class="comp-breadcrumb-badge">대회결과 &gt; 성인부 &gt; 기록지DB</span>
+            </div>
+            <div class="records-db-header-actions">
+              <button type="button" class="col-preset-btn" id="btnResetAdultOfficialRecords" title="공식 기록지 원문 기록으로 전체 복원">🔄 공식 기록 원문 복원</button>
+              <button type="button" class="btn-toggle-records-modal ${isRecordsDbModalOpen ? "is-open" : ""}" id="btnToggleRecordsDbModal" aria-expanded="${isRecordsDbModalOpen}">
+                <span class="toggle-icon">🎛️</span>
+                <span class="toggle-text">${isRecordsDbModalOpen ? "필터·열설정 닫기 ▲" : "필터·열설정 열기 ▼"}</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="records-db-controls-modal ${isRecordsDbModalOpen ? "" : "is-collapsed"}" id="recordsDbControlsModal">
+            <div class="col-toggle-bar" id="adultResultColToggleBar">
+              <div class="col-toggle-left">
+                <span class="col-toggle-label">☑️ 표시 열 항목:</span>
+                ${colToggleChipsHtml}
+              </div>
+              <div class="col-toggle-presets">
+                <button type="button" class="col-preset-btn ${adultResRecordSortMode !== "default" ? "is-active-sort" : ""}" id="btnAdultResSortRecordAsc" title="빠른 기록(오름차순)으로 정렬">${getRecordSortButtonLabel(adultResRecordSortMode)}</button>
+                <button type="button" class="col-preset-btn" data-adult-col-preset="all">전체 열 표시</button>
+                <button type="button" class="col-preset-btn" data-adult-col-preset="compact">핵심 열만 (모바일 추천)</button>
+              </div>
+            </div>
+
+            <section class="toolbar">
+              <div class="toolbar-left">
+                <div class="search-box">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                  </svg>
+                  <input type="text" id="adultResSearchInput" value="${escapeHtml(adultResSearchQuery)}" placeholder="선수명, 소속팀, 경기번호(#1, #3-1) 검색..." autocomplete="off">
+                </div>
+
+                <div class="filter-group">
+                  <select id="adultResStrokeSelect" class="filter-select" aria-label="성인부 종목 필터">
+                    <option value="all" ${adultResStrokeFilter === "all" ? "selected" : ""}>전체 종목</option>
+                    <option value="핀접영" ${adultResStrokeFilter === "핀접영" ? "selected" : ""}>핀접영 50m</option>
+                    <option value="배영" ${adultResStrokeFilter === "배영" ? "selected" : ""}>배영 50m</option>
+                    <option value="접영" ${adultResStrokeFilter === "접영" ? "selected" : ""}>접영 50m</option>
+                    <option value="핀자유형" ${adultResStrokeFilter === "핀자유형" ? "selected" : ""}>핀자유형 50m</option>
+                    <option value="평영" ${adultResStrokeFilter === "평영" ? "selected" : ""}>평영 50m</option>
+                    <option value="자유형" ${adultResStrokeFilter === "자유형" ? "selected" : ""}>자유형 50m</option>
+                    <option value="RELAY_ALL" ${adultResStrokeFilter === "RELAY_ALL" ? "selected" : ""}>단체전 전체 (계영·혼계영·핀계영)</option>
+                  </select>
+                </div>
+
+                <div class="filter-group">
+                  <select id="adultResGroupSelect" class="filter-select" aria-label="성인부 그룹 필터">
+                    <option value="all" ${adultResGroupFilter === "all" ? "selected" : ""}>모든 그룹</option>
+                    ${ADULT_GROUPS.map(g => `<option value="${g}" ${adultResGroupFilter === g ? "selected" : ""}>${g}</option>`).join("")}
+                    <option value="단체" ${adultResGroupFilter === "단체" ? "selected" : ""}>단체전</option>
+                  </select>
+                </div>
+
+                <div class="filter-group">
+                  <select id="adultResGenderSelect" class="filter-select" aria-label="성인부 성별 필터">
+                    <option value="all" ${adultResGenderFilter === "all" ? "selected" : ""}>전체 성별</option>
+                    <option value="남자" ${adultResGenderFilter === "남자" ? "selected" : ""}>남자</option>
+                    <option value="여자" ${adultResGenderFilter === "여자" ? "selected" : ""}>여자</option>
+                    <option value="혼성" ${adultResGenderFilter === "혼성" ? "selected" : ""}>혼성</option>
+                  </select>
+                </div>
+
+                <div class="filter-group">
+                  <select id="adultResTeamSelect" class="filter-select" aria-label="성인부 소속팀 필터">
+                    <option value="all" ${adultResTeamFilter === "all" ? "selected" : ""}>모든 소속팀</option>
+                    <option value="OUR_ALL" ${adultResTeamFilter === "OUR_ALL" ? "selected" : ""}>🏊 우리팀 전체 (거제몽꾸 + 거제야르)</option>
+                    <option value="거제몽꾸" ${adultResTeamFilter === "거제몽꾸" ? "selected" : ""}>🟠 거제몽꾸</option>
+                    <option value="거제야르" ${adultResTeamFilter === "거제야르" ? "selected" : ""}>🔵 거제야르</option>
+                    ${allTeamNames.filter(t => !OUR_TEAMS.has(t)).map(t => `<option value="${escapeHtml(t)}" ${adultResTeamFilter === t ? "selected" : ""}>${escapeHtml(t)}</option>`).join("")}
+                  </select>
+                </div>
+
+                <div class="filter-group">
+                  <select id="adultResStatusSelect" class="filter-select" aria-label="성인부 입력 상태 필터">
+                    <option value="all" ${adultResStatusFilter === "all" ? "selected" : ""}>전체 엔트리 (492건)</option>
+                    <option value="top6" ${adultResStatusFilter === "top6" ? "selected" : ""}>🏅 1~6위 입상(득점)자만</option>
+                    <option value="medal" ${adultResStatusFilter === "medal" ? "selected" : ""}>🥇🥈🥉 1~3위 메달리스트만</option>
+                    <option value="dq_dns" ${adultResStatusFilter === "dq_dns" ? "selected" : ""}>⚠️ 실격 · 불참만</option>
+                  </select>
+                </div>
+
+                <div class="filter-group">
+                  <select id="adultResSortSelect" class="filter-select" aria-label="성인부 정렬 방식">
+                    <option value="default" ${adultResRecordSortMode === "default" ? "selected" : ""}>정렬: 경기번호순 (기본)</option>
+                    <option value="record_asc" ${adultResRecordSortMode === "record_asc" ? "selected" : ""}>⏱️ 기록 오름차순 (빠른순 ▲)</option>
+                    <option value="record_desc" ${adultResRecordSortMode === "record_desc" ? "selected" : ""}>⏱️ 기록 내림차순 (느린순 ▼)</option>
+                  </select>
+                </div>
+              </div>
+            </section>
+
+            <div class="records-db-mobile-modal-footer">
+              <button type="button" class="btn-close-records-modal-mobile" id="btnCloseRecordsDbModalMobile">▲ 필터·열설정 닫기</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-responsive records-db-table-scroll" id="recordsDbTableScroll">
+          <table class="record-table">
+            <thead id="adultResultScheduleTableHead"></thead>
+            <tbody id="adultResultScheduleTableBody"></tbody>
+          </table>
+        </div>
+      </section>
+    `;
+
+    renderAdultScheduleTableRows();
+    requestAnimationFrame(() => syncRecordsDbStickyOffset());
+    return;
+  }
+
+  // 학생부 기록지DB (843건)
+  const uniqueGroups = [...new Set(VERIFIED_SHEET_RESULTS.map(r => `${r.gender} ${r.group}`))];
+  const uniqueTeams = [...new Set(VERIFIED_SHEET_RESULTS.map(r => r.team.replace("(중등)", "").trim()))].sort((a, b) => a.localeCompare(b, "ko"));
+
+  const colToggleChipsHtml = RAW_SHEET_COLUMNS.map(col => {
+    const isChecked = visibleRawSheetCols.has(col.key);
+    return `
+      <label class="col-toggle-chip ${isChecked ? "is-checked" : ""}">
+        <input type="checkbox" data-raw-col-key="${col.key}" ${isChecked ? "checked" : ""}>
+        <span>${escapeHtml(col.label)}</span>
+      </label>
+    `;
+  }).join("");
+
+  container.innerHTML = `
+    <section class="records-db-page-section" id="studentRawSheetSection">
+      <div class="records-db-sticky-shell" id="recordsDbStickyShell">
+        <div class="records-db-header-bar">
+          <div class="records-db-title-wrap">
+            <h3 id="verifiedSheetTableTitle">📄 학생부 공식 기록지 원문 전체 데이터 조회 (843건 표시 중 / 전체 843건)</h3>
+            <span class="comp-breadcrumb-badge">대회결과 &gt; 학생부 &gt; 기록지DB</span>
+          </div>
+          <div class="records-db-header-actions">
+            <button type="button" class="btn-toggle-records-modal ${isRecordsDbModalOpen ? "is-open" : ""}" id="btnToggleRecordsDbModal" aria-expanded="${isRecordsDbModalOpen}">
+              <span class="toggle-icon">🎛️</span>
+              <span class="toggle-text">${isRecordsDbModalOpen ? "필터·열설정 닫기 ▲" : "필터·열설정 열기 ▼"}</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="records-db-controls-modal ${isRecordsDbModalOpen ? "" : "is-collapsed"}" id="recordsDbControlsModal">
+          <div class="col-toggle-bar" id="rawSheetColToggleBar">
+            <div class="col-toggle-left">
+              <span class="col-toggle-label">☑️ 표시 열 항목:</span>
+              ${colToggleChipsHtml}
+            </div>
+            <div class="col-toggle-presets">
+              <button type="button" class="col-preset-btn ${rawSheetRecordSortMode !== "default" ? "is-active-sort" : ""}" id="btnRawSheetSortRecordAsc" title="빠른 기록(오름차순)으로 정렬">${getRecordSortButtonLabel(rawSheetRecordSortMode)}</button>
+              <button type="button" class="col-preset-btn" data-col-preset="all">전체 열 표시</button>
+              <button type="button" class="col-preset-btn" data-col-preset="compact">핵심 열만 (모바일 추천)</button>
+            </div>
+          </div>
+
+          <section class="toolbar">
+            <div class="toolbar-left">
+              <div class="search-box">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" id="rawSheetSearchInput" placeholder="선수 이름, 소속팀, 경기번호(예: 45-2) 검색..." autocomplete="off" value="${escapeHtml(rawSheetSearchQuery)}">
+              </div>
+
+              <div class="filter-group">
+                <select id="rawSheetStrokeSelect" class="filter-select" aria-label="기록지 종목 필터">
+                  <option value="all" ${rawSheetStrokeFilter === "all" ? "selected" : ""}>전체 종목 (6종목)</option>
+                  <option value="계영 200m" ${rawSheetStrokeFilter === "계영 200m" ? "selected" : ""}>계영 200m (단체)</option>
+                  <option value="접영" ${rawSheetStrokeFilter === "접영" ? "selected" : ""}>접영 50m</option>
+                  <option value="배영" ${rawSheetStrokeFilter === "배영" ? "selected" : ""}>배영 50m</option>
+                  <option value="평영" ${rawSheetStrokeFilter === "평영" ? "selected" : ""}>평영 50m</option>
+                  <option value="자유형" ${rawSheetStrokeFilter === "자유형" ? "selected" : ""}>자유형 50m</option>
+                  <option value="혼계영 200m" ${rawSheetStrokeFilter === "혼계영 200m" ? "selected" : ""}>혼계영 200m (단체)</option>
+                </select>
+              </div>
+
+              <div class="filter-group">
+                <select id="rawSheetGroupSelect" class="filter-select" aria-label="기록지 그룹 필터">
+                  <option value="all" ${rawSheetGroupFilter === "all" ? "selected" : ""}>모든 성별·그룹</option>
+                  ${uniqueGroups.map(g => `<option value="${escapeHtml(g)}" ${rawSheetGroupFilter === g ? "selected" : ""}>${escapeHtml(g)}</option>`).join("")}
+                </select>
+              </div>
+
+              <div class="filter-group">
+                <select id="rawSheetTeamSelect" class="filter-select" aria-label="기록지 소속팀 필터">
+                  <option value="all" ${rawSheetTeamFilter === "all" ? "selected" : ""}>모든 소속팀</option>
+                  <option value="거제야르" ${rawSheetTeamFilter === "거제야르" ? "selected" : ""}>🏊 거제야르 (우리팀)</option>
+                  ${uniqueTeams.filter(t => t !== "거제야르").map(t => `<option value="${escapeHtml(t)}" ${rawSheetTeamFilter === t ? "selected" : ""}>${escapeHtml(t)}</option>`).join("")}
+                </select>
+              </div>
+
+              <div class="filter-group">
+                <select id="rawSheetRankSelect" class="filter-select" aria-label="기록지 순위 필터">
+                  <option value="all" ${rawSheetRankFilter === "all" ? "selected" : ""}>전체 순위 결과</option>
+                  <option value="top6" ${rawSheetRankFilter === "top6" ? "selected" : ""}>🏅 1~6위 입상(득점)자만</option>
+                  <option value="medal" ${rawSheetRankFilter === "medal" ? "selected" : ""}>🥇🥈🥉 1~3위 메달리스트만</option>
+                  <option value="dq_dns" ${rawSheetRankFilter === "dq_dns" ? "selected" : ""}>⚠️ 실격 · 불참만</option>
+                </select>
+              </div>
+
+              <div class="filter-group">
+                <select id="rawSheetSortSelect" class="filter-select" aria-label="기록지 정렬 방식">
+                  <option value="default" ${rawSheetRecordSortMode === "default" ? "selected" : ""}>정렬: 경기번호순 (기본)</option>
+                  <option value="record_asc" ${rawSheetRecordSortMode === "record_asc" ? "selected" : ""}>⏱️ 기록 오름차순 (빠른순 ▲)</option>
+                  <option value="record_desc" ${rawSheetRecordSortMode === "record_desc" ? "selected" : ""}>⏱️ 기록 내림차순 (느린순 ▼)</option>
+                </select>
+              </div>
+            </div>
+          </section>
+
+          <div class="records-db-mobile-modal-footer">
+            <button type="button" class="btn-close-records-modal-mobile" id="btnCloseRecordsDbModalMobile">▲ 필터·열설정 닫기</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="table-responsive records-db-table-scroll" id="recordsDbTableScroll">
+        <table class="record-table">
+          <thead id="verifiedSheetTableHead"></thead>
+          <tbody id="verifiedSheetTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+  `;
+
+  renderAllVerifiedSheetRows();
+  requestAnimationFrame(() => syncRecordsDbStickyOffset());
 }
 
 function renderAll() {
@@ -4570,14 +5303,21 @@ function renderAll() {
     renderProgressSummaryView();
   } else if (currentSubTab === "result") {
     renderResultAnalysisView();
+  } else if (currentSubTab === "records") {
+    renderRecordsDbView();
   }
+  updateCompFloatingStrokeBar();
 }
 
 function bindEvents() {
+  window.addEventListener("resize", () => {
+    syncRecordsDbStickyOffset();
+  });
+
   window.addEventListener("message", (e) => {
     if (e.data && e.data.type === "GMDC_COMP_RESULT_NAV") {
       const nextDiv = e.data.div === "adult" ? "adult" : "student";
-      const nextTab = ["entry", "progress", "result"].includes(e.data.tab) ? e.data.tab : "entry";
+      const nextTab = ["entry", "progress", "result", "records"].includes(e.data.tab) ? e.data.tab : "entry";
       if (nextDiv !== currentDivision) {
         selectedTeamFilter = "all";
         selectedGroupFilter = "all";
@@ -4667,9 +5407,20 @@ function bindEvents() {
     renderSwimmersDetailTable();
   });
 
-  // 결과 분석 (TAB 3) 내부 이벤트 위임
-  const resultContainer = document.getElementById("viewContainerResult");
-  resultContainer?.addEventListener("click", (e) => {
+  // 결과 분석 (TAB 3) & 기록지DB (TAB 4) 내부 이벤트 위임
+  const bindDynamicContainerEvents = (resultContainer) => {
+    if (!resultContainer) return;
+    resultContainer.addEventListener("click", (e) => {
+      if (e.target.closest("#btnToggleRecordsDbModal")) {
+        isRecordsDbModalOpen = !isRecordsDbModalOpen;
+        updateRecordsDbModalToggleDOM();
+        return;
+      }
+      if (e.target.closest("#btnCloseRecordsDbModalMobile")) {
+        isRecordsDbModalOpen = false;
+        updateRecordsDbModalToggleDOM();
+        return;
+      }
     const filterBtn = e.target.closest("[data-our-filter]");
     if (filterBtn) {
       ourTeamResultFilterMode = filterBtn.dataset.ourFilter || "all";
@@ -4697,6 +5448,24 @@ function bindEvents() {
         b.classList.toggle("active", b.dataset.adultOurFilter === adultOurTableFilterMode);
       });
       renderOurTeamResultRows();
+      return;
+    }
+
+    if (e.target.closest("[data-our-record-sort-th]") || e.target.closest("#btnOurTeamSortRecordAsc")) {
+      ourTeamRecordSortMode = cycleRecordSortMode(ourTeamRecordSortMode);
+      renderOurTeamResultRows();
+      return;
+    }
+
+    if (e.target.closest("[data-raw-record-sort-th]") || e.target.closest("#btnRawSheetSortRecordAsc")) {
+      rawSheetRecordSortMode = cycleRecordSortMode(rawSheetRecordSortMode);
+      renderAllVerifiedSheetRows();
+      return;
+    }
+
+    if (e.target.closest("[data-adult-record-sort-th]") || e.target.closest("#btnAdultResSortRecordAsc")) {
+      adultResRecordSortMode = cycleRecordSortMode(adultResRecordSortMode);
+      renderAdultScheduleTableRows();
       return;
     }
 
@@ -4732,6 +5501,24 @@ function bindEvents() {
       stopStudentPlayback();
       studentPlaybackRaceIndex = 0;
       studentPlaybackProgress = 0;
+      renderStudentStandingsAndChartForCurrentStep();
+      updateStudentPlaybackControlsDOM();
+      return;
+    }
+
+    if (e.target.closest("#btnStudentPlaybackPrev")) {
+      stopStudentPlayback();
+      studentPlaybackRaceIndex = Math.max(0, studentPlaybackRaceIndex - 1);
+      studentPlaybackProgress = studentPlaybackRaceIndex;
+      renderStudentStandingsAndChartForCurrentStep();
+      updateStudentPlaybackControlsDOM();
+      return;
+    }
+
+    if (e.target.closest("#btnStudentPlaybackNext")) {
+      stopStudentPlayback();
+      studentPlaybackRaceIndex = Math.min(STUDENT_TOTAL_RACES, studentPlaybackRaceIndex + 1);
+      studentPlaybackProgress = studentPlaybackRaceIndex;
       renderStudentStandingsAndChartForCurrentStep();
       updateStudentPlaybackControlsDOM();
       return;
@@ -4778,6 +5565,24 @@ function bindEvents() {
       stopAdultPlayback();
       adultPlaybackRaceIndex = 0;
       adultPlaybackProgress = 0;
+      renderAdultStandingsAndChartForCurrentStep();
+      updateAdultPlaybackControlsDOM();
+      return;
+    }
+
+    if (e.target.closest("#btnAdultPlaybackPrev")) {
+      stopAdultPlayback();
+      adultPlaybackRaceIndex = Math.max(0, adultPlaybackRaceIndex - 1);
+      adultPlaybackProgress = adultPlaybackRaceIndex;
+      renderAdultStandingsAndChartForCurrentStep();
+      updateAdultPlaybackControlsDOM();
+      return;
+    }
+
+    if (e.target.closest("#btnAdultPlaybackNext")) {
+      stopAdultPlayback();
+      adultPlaybackRaceIndex = Math.min(ADULT_TOTAL_RACES, adultPlaybackRaceIndex + 1);
+      adultPlaybackProgress = adultPlaybackRaceIndex;
       renderAdultStandingsAndChartForCurrentStep();
       updateAdultPlaybackControlsDOM();
       return;
@@ -4915,6 +5720,9 @@ function bindEvents() {
     } else if (id === "rawSheetRankSelect") {
       rawSheetRankFilter = e.target.value;
       renderAllVerifiedSheetRows();
+    } else if (id === "rawSheetSortSelect") {
+      rawSheetRecordSortMode = e.target.value || "default";
+      renderAllVerifiedSheetRows();
     } else if (id === "adultResStrokeSelect") {
       adultResStrokeFilter = e.target.value;
       renderAdultScheduleTableRows();
@@ -4929,6 +5737,9 @@ function bindEvents() {
       renderAdultScheduleTableRows();
     } else if (id === "adultResStatusSelect") {
       adultResStatusFilter = e.target.value;
+      renderAdultScheduleTableRows();
+    } else if (id === "adultResSortSelect") {
+      adultResRecordSortMode = e.target.value || "default";
       renderAdultScheduleTableRows();
     }
   });
@@ -5011,6 +5822,10 @@ function bindEvents() {
       }
     }
   });
+  };
+
+  bindDynamicContainerEvents(document.getElementById("viewContainerResult"));
+  bindDynamicContainerEvents(document.getElementById("viewContainerRecords"));
 }
 
 function initFromUrl() {
@@ -5024,16 +5839,259 @@ function initFromUrl() {
     currentDivision = "student";
   }
 
-  if (["entry", "progress", "result"].includes(tabParam)) {
+  if (["entry", "progress", "result", "records"].includes(tabParam)) {
     currentSubTab = tabParam;
   } else {
     currentSubTab = "entry";
   }
 }
 
+// ==========================================================================
+// 🧭 하단 플로팅 종목 진행 순서 바 (스크롤 감지 표시 + 현재 종목 하이라이트 + 닫기)
+// 성인부(25일) 공식 9개 종목 순서:
+//   [핀접] - [배영] - [계영] - [접영] - [핀자] - [평영] - [혼계영] - [자유형] - [혼성핀]
+// 학생부(24일) 공식 7개 종목 순서:
+//   [핀자] - [접영] - [배영] - [계영] - [평영] - [혼계영] - [자유형]
+// ==========================================================================
+const COMP_DIVISION_STROKE_STEPS = {
+  adult: [
+    { key: "핀접",   fullLabel: "핀접영 50m",        matchKey: "핀접영",          rangeLabel: "#1~#20 (경기 1~10-2)",     startRaceIdx: 1 },
+    { key: "배영",   fullLabel: "배영 50m",          matchKey: "배영",            rangeLabel: "#21~#35 (경기 11~20-3)",   startRaceIdx: 21 },
+    { key: "계영",   fullLabel: "계영 200m",         matchKey: "계영 200m",       rangeLabel: "#36~#39 (경기 21-1~22-2)", startRaceIdx: 36 },
+    { key: "접영",   fullLabel: "접영 50m",          matchKey: "접영",            rangeLabel: "#40~#59 (경기 23~33-2)",   startRaceIdx: 40 },
+    { key: "핀자",   fullLabel: "핀자유형 50m",      matchKey: "핀자유형",        rangeLabel: "#60~#83 (경기 34~43-3)",   startRaceIdx: 60 },
+    { key: "평영",   fullLabel: "평영 50m",          matchKey: "평영",            rangeLabel: "#84~#105 (경기 44~55-3)",  startRaceIdx: 84 },
+    { key: "혼계영", fullLabel: "혼계영 200m",       matchKey: "혼계영 200m",     rangeLabel: "#106~#109 (경기 56-1~57-2)", startRaceIdx: 106 },
+    { key: "자유형", fullLabel: "자유형 50m",        matchKey: "자유형",          rangeLabel: "#110~#139 (경기 58~68)",   startRaceIdx: 110 },
+    { key: "혼성핀", fullLabel: "혼성 핀계영 300m",  matchKey: "혼성 핀계영 300m", rangeLabel: "#140~#141 (경기 69-1~69-2)", startRaceIdx: 140 }
+  ],
+  student: [
+    { key: "핀자",   fullLabel: "핀자유형 50m",      matchKey: "핀자유형",        rangeLabel: "#1~#3 (경기 1~3)",         startRaceIdx: 1 },
+    { key: "접영",   fullLabel: "접영 50m",          matchKey: "접영",            rangeLabel: "#4~#45 (경기 4~36)",       startRaceIdx: 4 },
+    { key: "배영",   fullLabel: "배영 50m",          matchKey: "배영",            rangeLabel: "#46~#98 (경기 37~77)",     startRaceIdx: 46 },
+    { key: "계영",   fullLabel: "계영 200m",         matchKey: "계영 200m",       rangeLabel: "#99~#100 (경기 78~79)",    startRaceIdx: 99 },
+    { key: "평영",   fullLabel: "평영 50m",          matchKey: "평영",            rangeLabel: "#101~#153 (경기 80~118)",  startRaceIdx: 101 },
+    { key: "혼계영", fullLabel: "혼계영 200m",       matchKey: "혼계영 200m",     rangeLabel: "#154~#156 (경기 119~120)", startRaceIdx: 154 },
+    { key: "자유형", fullLabel: "자유형 50m",        matchKey: "자유형",          rangeLabel: "#157~#232 (경기 121~162)", startRaceIdx: 157 }
+  ]
+};
+
+let isCompFloatingStrokeBarVisible = false;
+let lastCompDismissedScrollY = null;
+let compFloatingScrollTicking = false;
+
+function mapRawStrokeToStepKey(divKey, rawStroke) {
+  const s = String(rawStroke || "").trim();
+  if (!s) return null;
+  if (s.includes("혼성") && s.includes("핀계영")) return "혼성핀";
+  if (s.includes("혼계영")) return "혼계영";
+  if (s.includes("계영")) return "계영";
+  if (s.includes("핀접영") || s === "핀접") return "핀접";
+  if (s.includes("핀자유형") || s === "핀자") return "핀자";
+  if (s.includes("배영")) return "배영";
+  if (s.includes("접영")) return "접영";
+  if (s.includes("평영")) return "평영";
+  if (s.includes("자유형")) return "자유형";
+  const steps = COMP_DIVISION_STROKE_STEPS[divKey] || COMP_DIVISION_STROKE_STEPS.adult;
+  const found = steps.find(st => st.key === s || st.matchKey === s);
+  return found ? found.key : null;
+}
+
+function detectFocusedStrokeInCompViewport(divKey) {
+  const rows = document.querySelectorAll("tr[data-row-stroke]");
+  if (rows.length > 0) {
+    const viewportMidY = window.innerHeight * 0.42;
+    let bestRow = null;
+    let bestDist = Infinity;
+    for (const tr of rows) {
+      const rect = tr.getBoundingClientRect();
+      if (rect.height === 0) continue;
+      if (rect.bottom < 60 || rect.top > window.innerHeight - 60) continue;
+      const mid = (rect.top + rect.bottom) * 0.5;
+      const dist = Math.abs(mid - viewportMidY);
+      if (dist < bestDist) {
+        bestDist = dist;
+        bestRow = tr;
+      }
+    }
+    if (bestRow) {
+      const stepKey = mapRawStrokeToStepKey(divKey, bestRow.dataset.rowStroke);
+      if (stepKey) {
+        return {
+          stepKey,
+          matchNo: bestRow.dataset.rowMatch || ""
+        };
+      }
+    }
+  }
+
+  // 표 행이 화면 중앙에 없을 때는 현재 재생 슬라이더 위치 또는 종목 필터 기준
+  if (divKey === "adult") {
+    if (adultResStrokeFilter && adultResStrokeFilter !== "all" && adultResStrokeFilter !== "RELAY_ALL") {
+      const k = mapRawStrokeToStepKey("adult", adultResStrokeFilter);
+      if (k) return { stepKey: k, matchNo: "" };
+    }
+    const rIdx = Math.max(1, Math.min(ADULT_TOTAL_RACES, adultPlaybackRaceIndex || 1));
+    const race = ADULT_RACES_DATA[rIdx - 1];
+    if (race) {
+      const k = mapRawStrokeToStepKey("adult", race.title);
+      if (k) return { stepKey: k, matchNo: race.primary_match_no || "" };
+    }
+  } else {
+    if (rawSheetStrokeFilter && rawSheetStrokeFilter !== "all") {
+      const k = mapRawStrokeToStepKey("student", rawSheetStrokeFilter);
+      if (k) return { stepKey: k, matchNo: "" };
+    }
+    const rIdx = Math.max(1, Math.min(STUDENT_TOTAL_RACES, studentPlaybackRaceIndex || 1));
+    const race = STUDENT_RACES_DATA[rIdx - 1];
+    if (race) {
+      const k = mapRawStrokeToStepKey("student", race.title);
+      if (k) return { stepKey: k, matchNo: race.primary_match_no || "" };
+    }
+  }
+
+  const steps = COMP_DIVISION_STROKE_STEPS[divKey] || COMP_DIVISION_STROKE_STEPS.adult;
+  return { stepKey: steps[0].key, matchNo: "" };
+}
+
+function updateCompFloatingStrokeBar() {
+  const barEl = document.getElementById("compFloatingStrokeBar");
+  const stepsContainer = document.getElementById("compFloatingStrokeSteps");
+  const labelEl = document.getElementById("compFloatingStrokeLabel");
+  if (!barEl || !stepsContainer) return;
+
+  const divKey = currentDivision === "adult" ? "adult" : "student";
+  const steps = COMP_DIVISION_STROKE_STEPS[divKey] || COMP_DIVISION_STROKE_STEPS.adult;
+  const { stepKey: activeStepKey, matchNo } = detectFocusedStrokeInCompViewport(divKey);
+  const activeIdx = Math.max(0, steps.findIndex(s => s.key === activeStepKey));
+  const activeStepObj = steps[activeIdx] || steps[0];
+
+  if (labelEl) {
+    const divTitle = divKey === "adult" ? "성인부(25일)" : "학생부(24일)";
+    const subInfo = matchNo
+      ? `현재 #${matchNo} (${activeStepObj.fullLabel})`
+      : `${activeStepObj.fullLabel} (${activeStepObj.rangeLabel})`;
+    labelEl.textContent = `🧭 ${divTitle} 전체 순서 (${activeIdx + 1}/${steps.length}) · ${subInfo}`;
+  }
+
+  stepsContainer.innerHTML = steps.map((st, idx) => {
+    const isCurrent = st.key === activeStepKey;
+    const isPast = idx < activeIdx;
+    const cls = isCurrent ? "is-active" : (isPast ? "is-past" : "");
+    const bracketText = isCurrent
+      ? `[[${st.key}]★현재]`
+      : `[${st.key}]`;
+    const arrowHtml = idx < steps.length - 1
+      ? `<span class="fsb-step-arrow">-</span>`
+      : "";
+    return `
+      <button type="button" class="fsb-step-chip ${cls}" data-comp-fsb-stroke-idx="${idx}" title="${escapeHtml(st.fullLabel)} (${escapeHtml(st.rangeLabel)}) 구간으로 이동">
+        ${escapeHtml(bracketText)}
+      </button>${arrowHtml}
+    `;
+  }).join("");
+
+  barEl.classList.toggle("is-visible", isCompFloatingStrokeBarVisible);
+
+  const activeChip = stepsContainer.querySelector(".fsb-step-chip.is-active");
+  if (activeChip && typeof activeChip.scrollIntoView === "function") {
+    activeChip.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+  }
+}
+
+function getActiveCompScrollTop() {
+  if (currentSubTab === "records") {
+    const tblScroll = document.getElementById("recordsDbTableScroll");
+    if (tblScroll && tblScroll.scrollTop > 0) return tblScroll.scrollTop;
+  }
+  return window.scrollY || document.documentElement.scrollTop || 0;
+}
+
+function bindCompFloatingStrokeBarEvents() {
+  window.addEventListener("scroll", () => {
+    if (compFloatingScrollTicking) return;
+    compFloatingScrollTicking = true;
+    requestAnimationFrame(() => {
+      compFloatingScrollTicking = false;
+      const currY = getActiveCompScrollTop();
+      if (!isCompFloatingStrokeBarVisible) {
+        if (lastCompDismissedScrollY === null || Math.abs(currY - lastCompDismissedScrollY) > 36) {
+          isCompFloatingStrokeBarVisible = true;
+          lastCompDismissedScrollY = null;
+        }
+      }
+      if (isCompFloatingStrokeBarVisible) {
+        updateCompFloatingStrokeBar();
+      }
+    });
+  }, { capture: true, passive: true });
+
+  document.getElementById("btnCloseCompFloatingStrokeBar")?.addEventListener("click", () => {
+    isCompFloatingStrokeBarVisible = false;
+    lastCompDismissedScrollY = getActiveCompScrollTop();
+    const barEl = document.getElementById("compFloatingStrokeBar");
+    if (barEl) barEl.classList.remove("is-visible");
+  });
+
+  document.getElementById("compFloatingStrokeSteps")?.addEventListener("click", (e) => {
+    const chip = e.target.closest("[data-comp-fsb-stroke-idx]");
+    if (!chip) return;
+    const divKey = currentDivision === "adult" ? "adult" : "student";
+    const steps = COMP_DIVISION_STROKE_STEPS[divKey] || COMP_DIVISION_STROKE_STEPS.adult;
+    const idx = Number(chip.dataset.compFsbStrokeIdx);
+    const targetStep = steps[idx];
+    if (!targetStep) return;
+
+    if (currentSubTab !== "records" && currentSubTab !== "result") {
+      currentSubTab = "records";
+      renderAll();
+      syncRouteWithParentAndUrl();
+    }
+
+    // 전체 종목 순서대로 스크롤 탐색할 수 있도록 종목 필터가 다른 종목에 잠겨 있으면 전체로 해제
+    if (divKey === "adult" && adultResStrokeFilter !== "all") {
+      adultResStrokeFilter = "all";
+      const sel = document.getElementById("adultResStrokeSelect");
+      if (sel) sel.value = "all";
+      renderAdultScheduleTableRows();
+    } else if (divKey === "student" && rawSheetStrokeFilter !== "all") {
+      rawSheetStrokeFilter = "all";
+      const sel = document.getElementById("rawSheetStrokeSelect");
+      if (sel) sel.value = "all";
+      renderAllVerifiedSheetRows();
+    }
+
+    const tableBodyId = currentSubTab === "result"
+      ? "ourTeamResultTableBody"
+      : (divKey === "adult" ? "adultResultScheduleTableBody" : "verifiedSheetTableBody");
+    const tbody = document.getElementById(tableBodyId);
+    if (tbody) {
+      const rows = tbody.querySelectorAll("tr[data-row-stroke]");
+      let matchedRow = null;
+      for (const tr of rows) {
+        if (mapRawStrokeToStepKey(divKey, tr.dataset.rowStroke) === targetStep.key) {
+          matchedRow = tr;
+          break;
+        }
+      }
+      if (matchedRow) {
+        matchedRow.scrollIntoView({ behavior: "smooth", block: "center" });
+        matchedRow.style.transition = "background-color 0.4s ease";
+        const origBg = matchedRow.style.backgroundColor;
+        matchedRow.style.backgroundColor = "#fef08a";
+        setTimeout(() => {
+          matchedRow.style.backgroundColor = origBg;
+        }, 1200);
+      }
+    }
+    setTimeout(() => updateCompFloatingStrokeBar(), 350);
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   initFromUrl();
   bindEvents();
+  bindCompFloatingStrokeBarEvents();
   renderAll();
   syncRouteWithParentAndUrl();
 });

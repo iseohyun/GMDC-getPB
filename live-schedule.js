@@ -4,13 +4,13 @@
 // 2열: [1레인선수(들)] [2레인선수(들)] [3레인선수(들)] [4레인선수(들)]
 // ==========================================================================
 
-import { ADULT_RACES_DATA, STUDENT_RACES_DATA } from "./races-data.js?v=20261026_01";
+import { ADULT_RACES_DATA, STUDENT_RACES_DATA } from "./races-data.js?v=20261026_06";
 import { 
   subscribeLiveStatus, subscribeRosterDoc, fetchLiveStatus, getDefaultLiveStatus, getInitialLiveStatus,
   startRaceAt, cancelRaceAt, startBreak, endBreak, cancelBreak,
   finishAllRaces, cancelFinishAllRaces,
   calculateScheduleEstimates, formatMMSS, formatTimeHM
-} from "./live-service.js?v=20261024_19";
+} from "./live-service.js?v=20261026_06";
 
 // 모집요강(5. 경기 일정 및 순서) 기준 부별 종목 순서 매핑
 const PROSPECTUS_EVENT_ORDER = {
@@ -181,6 +181,40 @@ const elModalCopyHint = document.getElementById('modalCopyHint');
 // Toast DOM
 const elLiveToastBar = document.getElementById('liveToastBar');
 const elToastMessage = document.getElementById('toastMessage');
+
+// Floating Stroke Order Bar DOM
+const elFloatingStrokeBar = document.getElementById('floatingStrokeOrderBar');
+const elFsbCurrentRaceBadge = document.getElementById('fsbCurrentRaceBadge');
+const elFsbStepsTrack = document.getElementById('fsbStepsTrack');
+const elBtnCloseFloatingStrokeBar = document.getElementById('btnCloseFloatingStrokeBar');
+
+// 부별 실제 경기 진행 종목 순서 (성인부 9종목 / 학생부 6종목)
+const DIVISION_STROKE_STEPS = {
+  adult: [
+    { key: '핀접영',     shortLabel: '핀접',   fullLabel: '1. 핀접영 50m (#1~#20)',         firstRaceIndex: 1 },
+    { key: '배영',       shortLabel: '배영',   fullLabel: '2. 배영 50m (#21~#35)',          firstRaceIndex: 21 },
+    { key: '계영',       shortLabel: '계영',   fullLabel: '3. 계영 200m (#36~#39)',         firstRaceIndex: 36 },
+    { key: '접영',       shortLabel: '접영',   fullLabel: '4. 접영 50m (#40~#59)',          firstRaceIndex: 40 },
+    { key: '핀자유형',   shortLabel: '핀자',   fullLabel: '5. 핀자유형 50m (#60~#83)',      firstRaceIndex: 60 },
+    { key: '평영',       shortLabel: '평영',   fullLabel: '6. 평영 50m (#84~#105)',         firstRaceIndex: 84 },
+    { key: '혼계영',     shortLabel: '혼계영', fullLabel: '7. 혼계영 200m (#106~#109)',     firstRaceIndex: 106 },
+    { key: '자유형',     shortLabel: '자유형', fullLabel: '8. 자유형 50m (#110~#139)',      firstRaceIndex: 110 },
+    { key: '혼성핀계영', shortLabel: '혼성핀', fullLabel: '9. 혼성 핀계영 300m (#140~#141)', firstRaceIndex: 140 }
+  ],
+  student: [
+    { key: '계영',   shortLabel: '계영',   fullLabel: '1. 계영 200m (#1~#6)',      firstRaceIndex: 1 },
+    { key: '접영',   shortLabel: '접영',   fullLabel: '2. 접영 50m (#7~#46)',      firstRaceIndex: 7 },
+    { key: '배영',   shortLabel: '배영',   fullLabel: '3. 배영 50m (#47~#93)',     firstRaceIndex: 47 },
+    { key: '평영',   shortLabel: '평영',   fullLabel: '4. 평영 50m (#94~#148)',    firstRaceIndex: 94 },
+    { key: '자유형', shortLabel: '자유형', fullLabel: '5. 자유형 50m (#149~#226)', firstRaceIndex: 149 },
+    { key: '혼계영', shortLabel: '혼계영', fullLabel: '6. 혼계영 200m (#227~#232)', firstRaceIndex: 227 }
+  ]
+};
+
+let fsbClosedAtScrollY = null;
+let fsbLastActiveStepKey = null;
+let fsbLastDivision = null;
+let fsbScrollRafId = null;
 
 // ──────────────────────────────────────────────────────────────────────────
 // 🚀 Initialization
@@ -1572,6 +1606,119 @@ function bindEvents() {
   }
   if (elBtnCopyStudentPhone) {
     elBtnCopyStudentPhone.addEventListener('click', copyStudentPhone);
+  }
+
+  // 스크롤 시 하단 플로팅 전체 종목 순서 바 표시 및 업데이트
+  window.addEventListener('scroll', () => {
+    const curY = window.scrollY || document.documentElement.scrollTop || 0;
+    if (fsbClosedAtScrollY !== null && Math.abs(curY - fsbClosedAtScrollY) < 24) {
+      return;
+    }
+    fsbClosedAtScrollY = null;
+    if (fsbScrollRafId) return;
+    fsbScrollRafId = requestAnimationFrame(() => {
+      fsbScrollRafId = null;
+      updateFloatingStrokeOrderBar(true);
+    });
+  }, { passive: true });
+
+  if (elBtnCloseFloatingStrokeBar) {
+    elBtnCloseFloatingStrokeBar.addEventListener('click', () => {
+      fsbClosedAtScrollY = window.scrollY || document.documentElement.scrollTop || 0;
+      if (elFloatingStrokeBar) {
+        elFloatingStrokeBar.style.display = 'none';
+      }
+    });
+  }
+
+  if (elFsbStepsTrack) {
+    elFsbStepsTrack.addEventListener('click', (e) => {
+      const chip = e.target.closest('[data-fsb-first-race]');
+      if (!chip) return;
+      const targetRaceIdx = Number(chip.getAttribute('data-fsb-first-race')) || 1;
+      let targetEl = document.getElementById(`race-card-${targetRaceIdx}`);
+      if (!targetEl && searchQuery) {
+        if (elInputSearch) elInputSearch.value = '';
+        if (elBtnClearSearch) elBtnClearSearch.style.display = 'none';
+        searchQuery = '';
+        updateUI();
+        targetEl = document.getElementById(`race-card-${targetRaceIdx}`);
+      }
+      if (targetEl) {
+        targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    });
+  }
+}
+
+function getViewportFocusedRace() {
+  if (!elRacesContainer || !Array.isArray(currentRaces) || currentRaces.length === 0) {
+    return currentRaces[0] || null;
+  }
+  const cards = elRacesContainer.querySelectorAll('.race-card[data-race-index]');
+  if (!cards.length) return currentRaces[0] || null;
+
+  const ctrlBottom = elLiveControllerCard ? elLiveControllerCard.getBoundingClientRect().bottom : 80;
+  const focalY = Math.max(ctrlBottom + 45, window.innerHeight * 0.36);
+
+  let bestCard = cards[0];
+  let bestDist = Infinity;
+  for (const card of cards) {
+    const rect = card.getBoundingClientRect();
+    const centerY = (rect.top + rect.bottom) * 0.5;
+    const dist = Math.abs(centerY - focalY);
+    if (dist < bestDist) {
+      bestDist = dist;
+      bestCard = card;
+    }
+  }
+  const rIdx = Number(bestCard.getAttribute('data-race-index')) || 1;
+  return currentRaces[rIdx - 1] || currentRaces[0] || null;
+}
+
+function updateFloatingStrokeOrderBar(showIfHidden = false) {
+  if (!elFloatingStrokeBar || !elFsbStepsTrack) return;
+  if (showIfHidden && elFloatingStrokeBar.style.display === 'none') {
+    elFloatingStrokeBar.style.display = 'block';
+  }
+  if (elFloatingStrokeBar.style.display === 'none') return;
+
+  const steps = DIVISION_STROKE_STEPS[currentDivision] || DIVISION_STROKE_STEPS.adult;
+  const focusedRace = getViewportFocusedRace();
+  if (!focusedRace) return;
+
+  if (elFsbCurrentRaceBadge) {
+    elFsbCurrentRaceBadge.textContent = `#${focusedRace.race_index} (${focusedRace.primary_match_no}번)`;
+  }
+
+  const activeIdx = Math.max(0, steps.findIndex(s => s.key === focusedRace.stroke));
+  const activeStep = steps[activeIdx] || steps[0];
+
+  if (fsbLastDivision !== currentDivision) {
+    fsbLastDivision = currentDivision;
+    fsbLastActiveStepKey = null;
+    elFsbStepsTrack.innerHTML = steps.map((st, idx) => {
+      const sep = idx > 0 ? `<span class="fsb-step-sep">-</span>` : '';
+      return `${sep}<button type="button" class="fsb-step-chip" data-fsb-step-key="${escapeHtml(st.key)}" data-fsb-first-race="${st.firstRaceIndex}" title="${escapeHtml(st.fullLabel)} 위치로 바로 이동">[${escapeHtml(st.shortLabel)}]</button>`;
+    }).join('');
+  }
+
+  if (fsbLastActiveStepKey !== activeStep.key) {
+    fsbLastActiveStepKey = activeStep.key;
+    const chips = elFsbStepsTrack.querySelectorAll('.fsb-step-chip');
+    chips.forEach((chip, idx) => {
+      const isAct = idx === activeIdx;
+      const isPassed = idx < activeIdx;
+      chip.classList.toggle('is-active', isAct);
+      chip.classList.toggle('is-passed', isPassed);
+      const st = steps[idx];
+      if (st) {
+        chip.textContent = `[${st.shortLabel}]`;
+      }
+      if (isAct && typeof chip.scrollIntoView === 'function') {
+        chip.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      }
+    });
   }
 }
 

@@ -3,8 +3,9 @@
 // 대회 당일 실시간 경기 순서, 시간 추론, 로컬 우선(Offline-First) & 스마트 병합 서비스
 // ==========================================================================
 
-import { ADULT_RACES_DATA, STUDENT_RACES_DATA } from "./races-data.js?v=20261024_19";
-import { RESTORED_STUDENT_LIVE_STATUS_2026 } from "./student-live-restored-2026.js?v=20261024_19";
+import { ADULT_RACES_DATA, STUDENT_RACES_DATA } from "./races-data.js?v=20261026_03";
+import { RESTORED_STUDENT_LIVE_STATUS_2026 } from "./student-live-restored-2026.js?v=20261026_03";
+import { RESTORED_ADULT_LIVE_STATUS_2026 } from "./adult-live-restored-2026.js?v=20261026_03";
 
 // 배포된 Firestore 보안 규칙(match /attendance/{docId})과 즉시 호환되도록 attendance 컬렉션 내 전용 문서 사용
 export const LIVE_COL_NAME = "attendance";
@@ -184,6 +185,9 @@ export function getDefaultLiveStatus(division = 'adult') {
   if (division === 'student') {
     return JSON.parse(JSON.stringify(RESTORED_STUDENT_LIVE_STATUS_2026));
   }
+  if (division === 'adult') {
+    return JSON.parse(JSON.stringify(RESTORED_ADULT_LIVE_STATUS_2026));
+  }
   return {
     division, // 'adult' | 'student'
     status: 'ready', // 'ready' | 'running' | 'paused' | 'finished'
@@ -209,11 +213,20 @@ export function getDefaultLiveStatus(division = 'adult') {
 export function getInitialLiveStatus(division = 'adult') {
   const localData = readLocalCache(division);
   if (division === 'student') {
-    if (localData && Array.isArray(localData.history) && localData.history.length >= 232) {
+    if (localData && Array.isArray(localData.history) && localData.history.length >= 232 && localData.status === 'finished') {
       return localData;
     }
     const restored = getDefaultLiveStatus('student');
     writeLocalCache('student', restored);
+    return restored;
+  }
+
+  if (division === 'adult') {
+    if (localData && Array.isArray(localData.history) && localData.history.length >= 141 && localData.status === 'finished') {
+      return localData;
+    }
+    const restored = getDefaultLiveStatus('adult');
+    writeLocalCache('adult', restored);
     return restored;
   }
 
@@ -559,7 +572,7 @@ export function subscribeLiveStatus(division, callback) {
 
   // 2. 백그라운드에서 Firestore 실시간 구독 연결
   getFirestoreDeps()
-    .then(({ db, doc, onSnapshot }) => {
+    .then(({ db, doc, setDoc, onSnapshot }) => {
       if (isCancelled) return;
       const docRef = doc(db, LIVE_COL_NAME, getLiveDocId(division));
       unsubFirestore = onSnapshot(docRef, (snap) => {
@@ -569,8 +582,14 @@ export function subscribeLiveStatus(division, callback) {
         if (snap.exists()) {
           const remoteData = snap.data();
           let merged = mergeLiveStatuses(remoteData, localData, division);
-          if (division === 'student' && (!Array.isArray(merged?.history) || merged.history.length < 232)) {
+          if (division === 'student' && (!Array.isArray(merged?.history) || merged.history.length < 232 || merged.status !== 'finished')) {
             merged = getDefaultLiveStatus('student');
+          }
+          if (division === 'adult' && (!Array.isArray(merged?.history) || merged.history.length < 141 || merged.status !== 'finished')) {
+            merged = getDefaultLiveStatus('adult');
+            if (!Array.isArray(remoteData?.history) || remoteData.history.length < 141 || remoteData.status !== 'finished') {
+              setDoc(docRef, merged, { merge: true }).catch(() => {});
+            }
           }
           writeLocalCache(division, merged);
           notifyStatusListeners(division, merged);
@@ -668,8 +687,11 @@ export async function fetchLiveStatus(division) {
     hasEverFetchedRemote[division] = true;
     if (snap.exists()) {
       let merged = mergeLiveStatuses(snap.data(), readLocalCache(division) || localData, division);
-      if (division === 'student' && (!Array.isArray(merged?.history) || merged.history.length < 232)) {
+      if (division === 'student' && (!Array.isArray(merged?.history) || merged.history.length < 232 || merged.status !== 'finished')) {
         merged = getDefaultLiveStatus('student');
+      }
+      if (division === 'adult' && (!Array.isArray(merged?.history) || merged.history.length < 141 || merged.status !== 'finished')) {
+        merged = getDefaultLiveStatus('adult');
       }
       writeLocalCache(division, merged);
       notifyStatusListeners(division, merged);

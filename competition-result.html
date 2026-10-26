@@ -1119,6 +1119,310 @@
       color: #0284c7;
     }
 
+    .col-preset-btn.is-active-sort {
+      background: #0284c7;
+      border-color: #0284c7;
+      color: #ffffff;
+    }
+
+    .col-preset-btn.is-active-sort:hover {
+      background: #0369a1;
+      border-color: #0369a1;
+      color: #ffffff;
+    }
+
+    .th-sortable-record {
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.15s ease, color 0.15s ease;
+    }
+
+    .th-sortable-record:hover {
+      background: #e0f2fe !important;
+      color: #0369a1 !important;
+    }
+
+    .th-sortable-record.is-sorted {
+      background: #e0f2fe !important;
+      color: #0284c7 !important;
+    }
+
+    /* ─── 기록지DB 전용: 상단 Sticky 헤더 & 필터·열설정 모달 토글 & Sticky 테이블 ─── */
+    .records-db-page-section {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+      display: flex;
+      flex-direction: column;
+      overflow: visible;
+    }
+
+    .records-db-sticky-shell {
+      position: sticky;
+      top: 0;
+      z-index: 90;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-bottom: 1.5px solid #cbd5e1;
+      border-radius: 14px 14px 0 0;
+      padding: 12px 16px;
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
+    }
+
+    .records-db-header-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .records-db-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      min-width: 0;
+    }
+
+    .records-db-title-wrap h3 {
+      font-size: 16px;
+      font-weight: 900;
+      color: #0f172a;
+      margin: 0;
+      letter-spacing: -0.02em;
+    }
+
+    .records-db-header-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn-toggle-records-modal {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1.5px solid #0284c7;
+      background: #f0f9ff;
+      color: #0369a1;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .btn-toggle-records-modal:hover {
+      background: #e0f2fe;
+    }
+
+    .btn-toggle-records-modal.is-open {
+      background: #0284c7;
+      color: #ffffff;
+      border-color: #0284c7;
+    }
+
+    .records-db-controls-modal {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px dashed #cbd5e1;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .records-db-controls-modal.is-collapsed {
+      display: none !important;
+    }
+
+    .records-db-controls-modal .col-toggle-bar {
+      margin-bottom: 0;
+    }
+
+    .records-db-controls-modal .toolbar {
+      margin-bottom: 0 !important;
+    }
+
+    .records-db-mobile-modal-footer {
+      display: none;
+      justify-content: flex-end;
+      padding-top: 6px;
+      border-top: 1px dashed #e2e8f0;
+    }
+
+    .btn-close-records-modal-mobile {
+      padding: 5px 12px;
+      border-radius: 7px;
+      border: 1px solid #cbd5e1;
+      background: #f8fafc;
+      color: #334155;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .records-db-table-scroll {
+      max-height: calc(100dvh - var(--records-sticky-offset, 220px));
+      overflow-x: auto;
+      overflow-y: auto;
+      border-radius: 0 0 14px 14px;
+    }
+
+    .records-db-table-scroll .record-table th {
+      position: sticky;
+      top: 0;
+      z-index: 25;
+      background: #f1f5f9;
+      box-shadow: 0 1px 0 #cbd5e1;
+    }
+
+    @media (max-width: 768px) {
+      .records-db-sticky-shell {
+        padding: 10px 12px;
+      }
+      .records-db-title-wrap h3 {
+        font-size: 14px;
+      }
+      .records-db-controls-modal {
+        background: #ffffff;
+        border: 1.5px solid #bae6fd;
+        border-radius: 12px;
+        padding: 10px 12px;
+        box-shadow: 0 12px 28px rgba(15, 23, 42, 0.16);
+        max-height: 68dvh;
+        overflow-y: auto;
+      }
+      .records-db-mobile-modal-footer {
+        display: flex;
+      }
+    }
+
+    /* ─── 스크롤 시 하단 플로팅 전체 종목 순서 네비게이터 바 ─── */
+    .floating-stroke-bar {
+      position: fixed;
+      bottom: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1450;
+      max-width: calc(100vw - 16px);
+      width: max-content;
+      background: rgba(15, 23, 42, 0.94);
+      backdrop-filter: blur(8px);
+      border: 1.5px solid rgba(148, 163, 184, 0.35);
+      border-radius: 999px;
+      padding: 6px 10px 6px 12px;
+      box-shadow: 0 10px 28px rgba(15, 23, 42, 0.38);
+      display: none;
+    }
+
+    .floating-stroke-bar.is-visible {
+      display: block;
+    }
+
+    .fsb-inner {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      max-width: 100%;
+    }
+
+    .fsb-current-badge {
+      flex-shrink: 0;
+      font-size: 11px;
+      font-weight: 900;
+      color: #38bdf8;
+      background: rgba(2, 132, 199, 0.22);
+      border: 1px solid rgba(56, 189, 248, 0.45);
+      padding: 3px 7px;
+      border-radius: 999px;
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .fsb-steps-track {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      padding: 2px 0;
+    }
+
+    .fsb-steps-track::-webkit-scrollbar {
+      display: none;
+    }
+
+    .fsb-step-sep {
+      color: #64748b;
+      font-size: 11px;
+      font-weight: 800;
+      user-select: none;
+      flex-shrink: 0;
+    }
+
+    .fsb-step-chip {
+      flex-shrink: 0;
+      border: 1px solid rgba(148, 163, 184, 0.32);
+      background: rgba(30, 41, 59, 0.85);
+      color: #cbd5e1;
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 3px 7px;
+      border-radius: 6px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+    }
+
+    .fsb-step-chip:hover {
+      border-color: #38bdf8;
+      color: #ffffff;
+      background: rgba(2, 132, 199, 0.35);
+    }
+
+    .fsb-step-chip.is-passed {
+      color: #94a3b8;
+      background: rgba(15, 23, 42, 0.65);
+      border-color: rgba(100, 116, 139, 0.25);
+    }
+
+    .fsb-step-chip.is-active {
+      background: linear-gradient(135deg, #ea580c 0%, #f97316 100%);
+      color: #ffffff;
+      border: 1.5px solid #fed7aa;
+      font-weight: 900;
+      font-size: 12px;
+      padding: 3px 9px;
+      box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.35), 0 2px 8px rgba(234, 88, 12, 0.5);
+    }
+
+    .fsb-btn-close {
+      flex-shrink: 0;
+      margin-left: 2px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: rgba(51, 65, 85, 0.85);
+      color: #f1f5f9;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 999px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .fsb-btn-close:hover {
+      background: #dc2626;
+      border-color: #fca5a5;
+      color: #ffffff;
+    }
+
     /* ─── 성인부 결과 분석: 팀별 세로 순위 막대그래프 & 실시간 기록 입력 스타일 ─── */
     .adult-sync-badge {
       display: inline-flex;
@@ -1207,9 +1511,14 @@
       cursor: pointer;
     }
 
-    .btn-adult-step:hover {
+    .btn-adult-step:hover:not(:disabled) {
       border-color: #0284c7;
       color: #0284c7;
+    }
+
+    .btn-adult-step:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
     }
 
     .btn-adult-mp4 {
@@ -1376,17 +1685,9 @@
       transition: background 0.24s ease;
     }
 
-    /* 1등: 금색, 2등: 은색, 3등: 동색, 나머지: 파란색 */
-    .adult-hbar-fill.is-gold {
-      background: linear-gradient(90deg, #eab308 0%, #facc15 100%);
-    }
-
-    .adult-hbar-fill.is-silver {
-      background: linear-gradient(90deg, #94a3b8 0%, #cbd5e1 100%);
-    }
-
-    .adult-hbar-fill.is-bronze {
-      background: linear-gradient(90deg, #b45309 0%, #f59e0b 100%);
+    /* 우리팀(거제몽꾸·거제야르): 주황색 하이라이트, 다른 팀: 파란색 통일 */
+    .adult-hbar-fill.is-our-orange {
+      background: linear-gradient(90deg, #ea580c 0%, #f97316 100%);
     }
 
     .adult-hbar-fill.is-blue {
@@ -1651,10 +1952,24 @@
     <!-- =================================================================== -->
     <div id="viewContainerResult" style="display: none;"></div>
 
+    <!-- =================================================================== -->
+    <!-- VIEW 4: 기록지DB (학생부 > 기록지DB / 성인부 > 기록지DB)             -->
+    <!-- =================================================================== -->
+    <div id="viewContainerRecords" style="display: none;"></div>
+
+    <!-- 스크롤 시 하단 플로팅 전체 종목 순서 네비게이터 바 -->
+    <div class="floating-stroke-bar" id="compFloatingStrokeBar" role="region" aria-label="전체 종목 진행 순서">
+      <div class="fsb-inner">
+        <span class="fsb-current-badge" id="compFloatingStrokeLabel">성인부</span>
+        <div class="fsb-steps-track" id="compFloatingStrokeSteps"></div>
+        <button type="button" class="fsb-btn-close" id="btnCloseCompFloatingStrokeBar" title="전체 순서 바 닫기 (다시 스크롤하면 나타납니다)">닫기 ✕</button>
+      </div>
+    </div>
+
   </div>
 
-  <script type="module" src="competition-result.js?v=20261026_05"></script>
-  <script type="module" src="sidebar.js?v=20261026_05"></script>
+  <script type="module" src="competition-result.js?v=20261026_11"></script>
+  <script type="module" src="sidebar.js?v=20261026_11"></script>
 </body>
 
 </html>
